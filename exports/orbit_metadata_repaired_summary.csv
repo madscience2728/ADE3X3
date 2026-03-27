@@ -1,0 +1,8 @@
+schema,orbit_count,old_signature_count,repaired_signature_count,changed,orbit_complete
+XX,56,20,48,yes,no
+CX,8,4,8,yes,yes
+XC,8,4,8,yes,yes
+CC,4,3,4,yes,yes
+AX,10,3,8,yes,no
+BX,10,8,8,no,no
+CXC,50,50,50,no,yes

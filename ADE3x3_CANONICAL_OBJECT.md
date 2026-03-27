@@ -2,9 +2,9 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-27 14:15:24
-Generator: ade3x3_step13_md_dossier_generator.py
-Source: Current warehouse state (steps 1-12)
+Generated: 2026-03-27 18:29:56
+Generator: ade3x3_step13d_debias_md_dossier_generator.py
+Source: Current warehouse state (steps 1-24, repairs 10b/13b, exports 14-24)
 
 This is a canonical technical dossier of the current object state.
 ----------------------------------------------------------------------
@@ -13,28 +13,29 @@ This is a canonical technical dossier of the current object state.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-27 14:15:24
-**Generator Script:** step13_md_dossier_generator.py
-**Provenance:** Built from steps 1-12 of the ADE3x3 project
+**Generated:** 2026-03-27 18:29:56
+**Generator Script:** ade3x3_step13d_debias_md_dossier_generator.py
+**Provenance:** Built from steps 1-24, with orbit metadata repair (step 10b)
 
-## 2. MISSION AND NON-GOALS
+## 2. SCOPE AND PRINCIPLES
 
-### Mission
+### Scope
 [GROUND_TRUTH]
 
-This project is gathering full-object exact data about the ambient bilinear
-universe for 3x3 matrix multiplication structure discovery.
+This project records and organizes exact data about the ambient bilinear
+universe for 3x3 matrix multiplication. The current work is analysis and
+cataloging of the object as it is.
 
-The current source of truth is the full object as stored in the warehouse,
-not a reduced model or compressed surrogate.
+The source of truth is the object stored in the warehouse — not a reduced
+model, not a surrogate, not a compressed summary.
 
-### Non-Goals
+### Principles
 [GROUND_TRUTH]
 
-- This dossier is NOT a compression-first document
-- This is NOT a low-rank analysis document
-- This is NOT an optimization target specification
-- Downstream derivations may reduce later, but this preserves fidelity first
+- This dossier records the object without privileging any particular use
+- Structure is cataloged faithfully; no reduced view is assumed as default
+- Any future view of the object must explicitly state what it omits
+- Current work is object-first, not reduction-first
 
 ## 3. GROUND-TRUTH RAW OBJECT
 
@@ -85,26 +86,32 @@ Role overlay mechanism is ready for typed schema attachment.
 [GROUND_TRUTH]
 
 - **Compatible Symmetry Group Size**: 216
-- **Group Type**: S3 × S3 × S3 with compatibility constraint pi_cA == pi_rB
+- **Group Type**: S3 x S3 x S3 with compatibility constraint pi_cA == pi_rB
 - **Action Scope**: Acts on A, B, C, and X atoms
 - **Canonicalization**: All core schemas are canonicalized under group action
 
 ## 6. TYPED SCHEMAS CURRENTLY BUILT
 
-[GROUND_TRUTH]
+[GROUND_TRUTH] / [MEASURED_FROM_CODE]
 
-| Schema | Typed Arity | Raw Arity | Count | Orbits | Bridged |
-|--------|-------------|-----------|-------|--------|---------|
-| A      | 1           | 1         | 9     | -      | -       |
-| B      | 1           | 1         | 9     | -      | -       |
-| C      | 1           | 1         | 9     | -      | Yes     |
-| X      | 1           | 2         | 81    | -      | -       |
-| CC     | 2           | 2         | 81    | 4      | Yes     |
-| CX     | 2           | 3         | 729   | 8      | Yes     |
-| XC     | 2           | 3         | 729   | 8      | Yes     |
-| AX     | 2           | 3         | 729   | 10     | Yes     |
-| BX     | 2           | 3         | 729   | 18     | Yes     |
-| CXC    | 3           | 4         | 6,561 | 50     | Yes     |
+| Schema | Typed Arity | Raw Arity | Count | Orbits | Bridged | Notes |
+|--------|-------------|-----------|-------|--------|---------|-------|
+| A      | 1           | 1         | 9     | -      | Yes     | direct embed |
+| B      | 1           | 1         | 9     | -      | Yes     | direct embed |
+| C      | 1           | 1         | 9     | -      | Yes     | direct embed |
+| X      | 1           | 2         | 81    | -      | Yes*    | expands to 2 slots |
+| CC     | 2           | 2         | 81    | 4      | Yes     | direct embed |
+| CX     | 2           | 3         | 729   | 8      | Yes     | X expands |
+| XC     | 2           | 3         | 729   | 8      | Yes     | X expands |
+| AX     | 2           | 3         | 729   | 10     | Yes     | X expands |
+| BX     | 2           | 3         | 729   | 10     | Yes     | X expands |
+| CXC    | 3           | 4         | 6,561 | 50     | Yes     | X expands |
+| XX     | 2           | 4         | 6,561 | 56     | Yes     | X x X, each X expands to 2 slots |
+| CXXC   | 4           | 6         | 531,441 | -    | Yes     | first arity-4 schema |
+
+Note: All typed schemas including XX are now bridged into the raw warehouse.
+X bridge marked Yes* because X expands to 2 raw slots (A_idx, B_idx), per Section 7 bridge rules.
+CXXC is the first typed schema beyond the arity-3 core.
 
 ## 7. TYPED/RAW BRIDGE
 
@@ -119,6 +126,8 @@ Role overlay mechanism is ready for typed schema attachment.
 
 ### Bridge Summary
 
+[GROUND_TRUTH]
+
 | Schema | Typed Arity | Raw Arity | Role Overlay | Injectivity |
 |--------|-------------|-----------|--------------|-------------|
 | C      | 1           | 1         | (C,)         | yes         |
@@ -128,9 +137,15 @@ Role overlay mechanism is ready for typed schema attachment.
 | AX     | 2           | 3         | (A, A_X, B_X)| yes         |
 | BX     | 2           | 3         | (B, A_X, B_X)| yes         |
 | CXC    | 3           | 4         | (C, A_X, B_X, C) | yes    |
+| XX     | 2           | 4         | (A_X1, B_X1, A_X2, B_X2) | yes |
+| CXXC   | 4           | 6         | (C, A_X1, B_X1, A_X2, B_X2, C) | yes |
 
-Note: Raw arity 3 shows 400% occupancy across multiple schemas because
-different role overlays (CX, XC, AX, BX) occupy the same raw tuple positions.
+[INTERPRETATION]
+Raw arity 3 occupancy: When summing overlay image counts across CX, XC, AX, BX,
+the total is 2916 (729 x 4 schemas). Divided by unique raw tuples (729), this gives
+400%. This is NOT a physical occupancy claim; it reflects aggregate overlay images
+across multiple schemas with different role overlays occupying the same positions.
+See Section 15 for the explicit raw-arity-3 cross-schema alignment export.
 
 ## 8. WAREHOUSE INFRASTRUCTURE STATUS
 
@@ -141,10 +156,15 @@ different role overlays (CX, XC, AX, BX) occupy the same raw tuple positions.
 - In-memory object DB with atomic species
 - Raw config bulk-loading for arity-2 and arity-3 core schemas
 - Symmetry-aware canonicalization for all typed schemas
-- Orbit metadata cache for all schemas
-- Signature caches per orbit
-- Full raw 9-slot warehouse (steps 1-11)
-- Typed/raw bridge (step 12)
+- Orbit metadata cache for all schemas (repaired, step 10b)
+- Signature caches per orbit (repaired, step 10b)
+- Stabilizer element lists exported for all schemas
+- Full raw base-9 warehouse through arity 9
+- Typed/raw bridge for all schemas including XX and CXXC
+- Orbit-signature export tables
+- Cross-schema raw alignment export
+- Corrected orbit-based composition export
+- First arity-4 typed schema (CXXC) registered and bridged
 
 ## 9. EXACT MEASURED COUNTS AND MEMORY
 
@@ -165,14 +185,29 @@ different role overlays (CX, XC, AX, BX) occupy the same raw tuple positions.
 | Schema | Raw Configs | Orbits | Avg Size | Stabilizer Range |
 |--------|-------------|--------|----------|------------------|
 | XX     | 6,561       | 56     | 117.2    | 1-8              |
-| CX     | 729         | 8      | 91.1     | 2-8              |
-| XC     | 729         | 8      | 91.1     | 2-8              |
-| CC     | 81          | 4      | 20.2     | 12-24            |
-| AX     | 729         | 10     | 72.9     | 4-8              |
-| BX     | 729         | 18     | 40.5     | 4-8              |
+| CX     | 729         | 8      | 91.1     | 1-8              |
+| XC     | 729         | 8      | 91.1     | 1-8              |
+| CC     | 81          | 4      | 20.2     | 6-24             |
+| AX     | 729         | 10     | 72.9     | 2-8              |
+| BX     | 729         | 10     | 72.9     | 2-8              |
 | CXC    | 6,561       | 50     | 131.2    | 1-8              |
 
-All orbit × stabilizer = 216 verified.
+All orbit x stabilizer = 216 verified.
+Stabilizer element sets (not just sizes) are now explicitly exported.
+
+### Repaired Signature Summary
+
+[MEASURED_FROM_CODE] / [REPAIRED]
+
+| Schema | Orbit Count | Distinct Signatures | Orbit Complete |
+|--------|-------------|---------------------|----------------|
+| XX     |          56 |                  48 |             no |
+| CX     |           8 |                   8 |            yes |
+| XC     |           8 |                   8 |            yes |
+| CC     |           4 |                   4 |            yes |
+| AX     |          10 |                   8 |             no |
+| BX     |          10 |                   8 |             no |
+| CXC    |          50 |                  50 |            yes |
 
 ## 10. EXACT DERIVED RESULTS CURRENTLY KNOWN
 
@@ -184,51 +219,78 @@ All orbit × stabilizer = 216 verified.
 - Classification by: row equality, column equality, one of 6 shared-index patterns
 - Full resolution with refined signature tuple (row_eq, col_eq, shared_pattern)
 
-### CX x XC -> CC Composition Result
+### CX x XC -> CC Composition Result (Corrected Orbit-Based)
 
-- 256 possible (alpha, beta) pairs
-- 64 realized
-- 36 deterministic (single gamma result)
-- 28 mixed (multiple gamma results)
+[EXACT_DERIVED] / [REPAIRED]
+
+- CX orbits = 8, XC orbits = 8, CC orbits = 4
+- Possible orbit-pairs = 64
+- Realized keys = 32
+- Deterministic = 18
+- Mixed = 14
+
+An older type-based layer reported 256/64/36/28. Those counts used a different
+type system and are now superseded by the corrected orbit-based counts above.
 
 ### Refinement Engine Result
 
-- Single separator 'r1_eq_r' resolves ALL 28 mixed composition keys
-- Also resolved by 'u1_eq_u', 'x_live', 'c1_equals_target', 'c2_equals_target', 'contracted'
+[MEASURED_FROM_CODE]
+
+- Single separator r1_eq_r resolves ALL 28 mixed composition keys (older layer)
+- Also resolved by u1_eq_u, x_live, c1_equals_target, c2_equals_target
 - Best 2-tuple: [r1_eq_r, u1_eq_u]
 
-### CXC Orbit Signatures
+### Orbit-Complete Schemas (Repaired)
 
-- 50 orbits -> 50 distinct signatures
-- Signatures are orbit-complete at current cache level
+[EXACT_DERIVED] / [REPAIRED]
 
-### XX Orbit/Signature Gap
+- CX: 8 orbits, 8 distinct signatures
+- XC: 8 orbits, 8 distinct signatures
+- CC: 4 orbits, 4 distinct signatures
+- CXC: 50 orbits, 50 distinct signatures
 
-- 56 orbits collapse to 20 current cached signatures
-- Signatures do not fully separate XX orbits
+### Schemas with Coarse Signatures (Repaired)
+
+[EXACT_DERIVED] / [REPAIRED]
+
+- XX: 56 orbits, 48 distinct signatures
+- AX: 10 orbits, 8 distinct signatures
+- BX: 10 orbits, 8 distinct signatures
+
+### Cross-Schema Raw Arity-3 Alignment
+
+[MEASURED_FROM_CODE]
+
+- Schemas CX, XC, AX, BX all bridge to raw arity 3
+- Each image size = 729
+- Distinct raw tuples occupied = 729
+- Aggregate image count = 2,916
+- Occupancy ratio = 4.0 (all four images coincide exactly)
 
 ## 11. OBJECT VS LENS DISTINCTION
 
 [GROUND_TRUTH]
 
-### The Object (Ground Truth)
+### The Object
 
 - Full raw base-9 warehouse (all 9^k tuples)
 - Typed species A, B, C, X
-- Typed schema definitions
+- Typed schema definitions including first arity-4 schema CXXC
 - Primitive exact rules (live/dead, fibers)
-- Typed/raw bridge embeddings
+- Typed/raw bridge embeddings for all schemas
 
-### Lens/Infrastructure (Not the Object)
+### Organizational Lenses (Not the Object)
 
 - Orbit metadata caches
 - Signature caches
+- Stabilizer element lists
 - Canonicalization tables
 - Projection metadata
 - Composition caches
+- Cross-schema alignment tables
 
-**Critical:** Downstream agents must distinguish object facts from lens facts.
-Lens updates do not change the underlying object.
+**Critical:** Object facts and lens facts must be kept distinct.
+A lens update does not change the underlying object.
 
 ## 12. PROVENANCE / EVIDENCE LABELS
 
@@ -236,80 +298,202 @@ Lens updates do not change the underlying object.
 
 Evidence taxonomy used in this document:
 
-- `[GROUND_TRUTH]` - Core definition, object structure
-- `[EXACT_DERIVED]` - Results derived from ground truth by exact computation
-- `[MEASURED_FROM_CODE]` - Measured numeric outputs from executed code
-- `[INTERPRETATION]` - Analysis or interpretation, not ground truth
-- `[OPEN_FRONT]` - Known gaps or incomplete areas
+- [GROUND_TRUTH] - Core definition, object structure
+- [EXACT_DERIVED] - Results derived from ground truth by exact computation
+- [MEASURED_FROM_CODE] - Measured numeric outputs from executed code
+- [REPAIRED] - Corrected after bug fix in orbit metadata cache
+- [INTERPRETATION] - Analysis or interpretation, not ground truth
+- [OPEN_FRONT] - Known gaps or incomplete areas
 
 ## 13. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
-- Full orbit-complete signatures not yet known for XX schema
+- First arity-4 typed schema exists (CXXC); broader higher-arity typed schema
+  family expansion remains open
+- Full orbit-complete signatures not yet known for XX, AX, BX schemas
 - Unified raw-backed composition caches not yet built
-- Higher-arity typed overlays beyond current core schemas not yet embedded
 - Closure/refinement not yet globally rerun inside unified raw-backed warehouse
 
 These are genuine incompletions, not promises.
 
-## 14. INSTRUCTIONS FOR DOWNSTREAM AGENTS
+## 14. HOW TO READ THIS DOSSIER
 
 [GROUND_TRUTH]
 
-### Usage Guidelines
+### Reading Rules
 
-1. **Do NOT replace the full object with a reduced surrogate**
-2. **Distinguish object facts from lens facts** in any derivation
-3. **Cite exact sections/facts** used in any derivation
-4. **If proposing compression** or quotients, state explicitly what raw distinctions are being discarded
-5. **Prefer additions** that preserve fidelity unless reduction is explicitly the task
+1. **Distinguish object facts from lens facts.** The object is the raw
+   warehouse, typed species, schemas, rules, and bridge embeddings.
+   Caches, orbits, signatures, and alignment tables are organizational
+   lenses, not the object itself.
+2. **Cite sections precisely.** Any reference to facts in this dossier
+   should name the section and the specific claim used.
+3. **Do not confuse a lens with the ground truth.** Orbit metadata is a
+   computed view. Signature counts are a computed view. Neither replaces
+   the raw config data.
+4. **Any reduced view must state what it omits.** If a future document
+   presents a simplified picture of the object, it must say explicitly
+   which raw distinctions have been dropped.
 
-### Basis for Reasoning
+### Scope Reminder
 
-This dossier provides the canonical basis. Any downstream derivation should
-explicitly reference which sections are being used and which are being assumed.
+This dossier records the object as built. It does not prescribe how the
+object should be viewed, used, or simplified. Those are separate decisions
+that must be made consciously and stated explicitly.
 
-## 15. APPENDIX: COMPACT FACT TABLES
+## 15. CROSS-SCHEMA RAW ALIGNMENT
 
-[GROUND_TRUTH] / [MEASURED_FROM_CODE]
+[MEASURED_FROM_CODE]
 
-### Raw Layer Counts
+### Raw Arity-3 Alignment (CX, XC, AX, BX)
 
-| k | 9^k |
-|---|------|
-|1|9|
-|2|81|
-|3|729|
-|4|6561|
-|5|59049|
-|6|531441|
-|7|4782969|
-|8|43046721|
-|9|387420489|
+All four schemas bridge to raw arity 3 under different role overlays:
 
-### Current Schema Counts
+| Schema | Role Overlay |
+|--------|--------------|
+| CX | (C, A_X, B_X) |
+| XC | (A_X, B_X, C) |
+| AX | (A, A_X, B_X) |
+| BX | (B, A_X, B_X) |
 
-| Schema | Count |
-|--------|-------|
-| A | 9 |
-| B | 9 |
-| C | 9 |
-| X | 81 |
-| CC | 81 |
-| CX | 729 |
-| XC | 729 |
-| AX | 729 |
-| BX | 729 |
-| CXC | 6561 |
+Alignment facts:
 
-### Bridge Summary
+- Each schema image size = 729
+- Distinct raw tuples occupied = 729
+- Aggregate image count = 2,916
+- Occupancy ratio = 4.0
+- All four schema images coincide exactly on raw tuple support
 
-All bridges are injective and support exact roundtrip.
+Supporting artifacts: exports/raw3_alignment.csv, exports/raw3_alignment.md
 
-### Memory Summary
+## 16. CORRECTION NOTE: ORBIT METADATA REPAIR
 
-Total warehouse footprint: ~30 MB
+[REPAIRED]
+
+### Bug
+
+The original step10 orbit metadata cache keyed records by orbit_id and
+implicitly used orbit_id as a config_id index into the configs list.
+Since orbit_id != canonical representative config_id for most orbits,
+every signature was computed from the wrong representative config.
+
+### Impact
+
+Old cached signature counts were partly wrong:
+
+| Schema | Old (buggy) | Repaired | Changed |
+|--------|-------------|----------|---------|
+| XX     | 20          | 48       | yes     |
+| CX     | 4           | 8        | yes     |
+| XC     | 4           | 8        | yes     |
+| CC     | 3           | 4        | yes     |
+| AX     | 3           | 8        | yes     |
+| BX     | 8           | 8        | no      |
+| CXC    | 50          | 50       | no      |
+
+Additionally, the earlier BX orbit count of 18 was wrong due to a
+separate bug (identity B-action). The corrected BX orbit count is 10.
+
+### Resolution
+
+- Repaired orbit metadata now uses actual canonical orbit representatives
+- Signatures are computed from the correct representative config
+- See exports/orbit_metadata_repair_report.md for full details
+- Old cached signature counts are superseded
+
+## 17. SUPPORTING EXPORT ARTIFACTS
+
+[MEASURED_FROM_CODE]
+
+The following evidence tables have been exported alongside this dossier:
+
+**Atomic / Raw Tables:**
+- `exports/X_atoms.csv`
+- `exports/X_atoms.md`
+- `exports/C_fibers.csv`
+- `exports/C_fibers.md`
+- `exports/X_live.csv`
+- `exports/X_dead.csv`
+- `exports/X_partition.md`
+
+**Action Tables:**
+- `exports/actions_A.csv`
+- `exports/actions_B.csv`
+- `exports/actions_C.csv`
+- `exports/actions_X.csv`
+- `exports/actions_summary.csv`
+- `exports/actions_summary.md`
+
+**Orbit Tables:**
+- `exports/orbits_XX.csv`
+- `exports/orbits_CX.csv`
+- `exports/orbits_XC.csv`
+- `exports/orbits_CC.csv`
+- `exports/orbits_AX.csv`
+- `exports/orbits_BX.csv`
+- `exports/orbits_CXC.csv`
+- `exports/orbits_summary.md`
+
+**Signature Tables:**
+- `exports/signatures_XX.csv`
+- `exports/signatures_CX.csv`
+- `exports/signatures_XC.csv`
+- `exports/signatures_CC.csv`
+- `exports/signatures_AX.csv`
+- `exports/signatures_BX.csv`
+- `exports/signatures_CXC.csv`
+- `exports/signature_summary.md`
+
+**Stabilizer Tables:**
+- `exports/stabilizers_XX.csv`
+- `exports/stabilizers_CX.csv`
+- `exports/stabilizers_XC.csv`
+- `exports/stabilizers_CC.csv`
+- `exports/stabilizers_AX.csv`
+- `exports/stabilizers_BX.csv`
+- `exports/stabilizers_CXC.csv`
+- `exports/stabilizers_summary.md`
+
+**Repair Reports:**
+- `exports/orbit_metadata_repair_report.md`
+- `exports/orbit_metadata_repaired_summary.csv`
+
+**Typed/Raw Bridges:**
+- `exports/bridge_XX.csv`
+- `exports/bridge_XX.md`
+
+**Cross-Schema Alignment:**
+- `exports/raw3_alignment.csv`
+- `exports/raw3_alignment.md`
+
+**Composition Exports:**
+- `exports/comp_CX_XC_to_CC.csv`
+- `exports/comp_CX_XC_to_CC.md`
+- `exports/comp_CX_XC_to_CC_witnesses.csv`
+
+**Higher-Arity Schema Exports:**
+- `exports/schema_CXXC_summary.md`
+- `exports/bridge_CXXC.csv`
+
+
+## 18. FIRST ARITY-4 TYPED SCHEMA: CXXC
+
+[MEASURED_FROM_CODE]
+
+Typed schema growth beyond the arity-3 core has begun.
+
+| Property | Value |
+|----------|-------|
+| Schema | C × X × X × C |
+| Typed arity | 4 |
+| Raw arity | 6 |
+| Typed config count | 531,441 |
+| Bridge export | full population |
+| Injective | yes |
+| Role overlay | (C, A_X1, B_X1, A_X2, B_X2, C) |
+
+Supporting artifacts: exports/schema_CXXC_summary.md, exports/bridge_CXXC.csv
 
 ----------------------------------------------------------------------
 END OF DOSSIER

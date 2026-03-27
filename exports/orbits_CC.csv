@@ -1,0 +1,5 @@
+schema,orbit_id,rep_config_id,rep_readable,orbit_size,stabilizer_size
+CC,0,0,"CC[C[0,0],C[0,0]]",9,24
+CC,1,1,"CC[C[0,0],C[0,1]]",18,12
+CC,2,3,"CC[C[0,0],C[1,0]]",18,12
+CC,3,4,"CC[C[0,0],C[1,1]]",36,6

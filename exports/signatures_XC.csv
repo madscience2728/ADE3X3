@@ -1,0 +1,9 @@
+schema,orbit_id,rep_config_id,rep_readable,signature_key,orbit_size,stabilizer_size
+XC,0,0,"XC[X[0,0|0,0],C[0,0]]","(True, True, True, True)",27,8
+XC,1,1,"XC[X[0,0|0,0],C[0,1]]","(True, False, True, False)",54,4
+XC,2,3,"XC[X[0,0|0,0],C[1,0]]","(True, False, False, True)",54,4
+XC,3,4,"XC[X[0,0|0,0],C[1,1]]","(True, False, False, False)",108,2
+XC,4,27,"XC[X[0,0|1,0],C[0,0]]","(False, False, True, True)",54,4
+XC,5,28,"XC[X[0,0|1,0],C[0,1]]","(False, False, True, False)",108,2
+XC,6,30,"XC[X[0,0|1,0],C[1,0]]","(False, False, False, True)",108,2
+XC,7,31,"XC[X[0,0|1,0],C[1,1]]","(False, False, False, False)",216,1
