@@ -1,0 +1,9 @@
+# ADE3x3 Requirements
+#
+# Core dependencies (currently none - pure Python implementation)
+# Add dependencies here as needed, for example:
+# numpy>=1.20.0
+# sympy>=1.9
+
+# Development dependencies
+# Install with: pip install -r requirements-dev.txt

@@ -38,3 +38,26 @@ Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Project-specific
+# Generated exports (comment out if you want to track exports)
+outputs/exports/*.csv
+outputs/exports/*.md
+outputs/artifacts/
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
+
+# Claude settings (keep only the base config)
+.claude/settings.local.json
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Type checking
+.mypy_cache/
+.pytype/
