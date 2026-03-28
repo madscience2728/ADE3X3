@@ -1,0 +1,12 @@
+{
+  "cycle": 1,
+  "R": 23,
+  "seed": 0,
+  "success": false,
+  "loss": 13651.045999950351,
+  "verified_loss": 12951.936864992605,
+  "elapsed_hours": 0.0016220917304356893,
+  "restarts": 1,
+  "wins": 0,
+  "best_per_R": {}
+}

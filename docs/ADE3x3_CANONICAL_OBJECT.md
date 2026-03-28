@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-28 05:17:33
+Generated: 2026-03-28 06:05:59
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-28 05:17:33
+**Generated:** 2026-03-28 06:05:59
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -26,7 +26,9 @@ refinement-conditioned kernel (step 43), floor-layer analysis (step 44),
 same-fiber / 64-subalgebra structure analysis (step 46),
 mixed-pair resolution / tensor-constraint extraction (step 47),
 tensor profile constraint modeling (step 48),
-and coefficient-level rank constraints (step 49)
+coefficient-level rank constraints (step 49),
+symbolic fiber-mode decomposition (step 51),
+and quotient-space rank criterion analysis (step 52)
 
 **IMPORTANT:** This document contains all computed results inline.
 No external files are required. All research findings are here.
@@ -13259,7 +13261,140 @@ closed ansatze. Strassen 2x2 shows exactly the kind of cancellation behavior tha
 algorithm would need, so any future search has to keep real coefficients and dead-X cancellation
 in the model rather than support patterns alone.
 
-## 40. CURRENT GAPS / OPEN FRONTS
+## 40. SYMBOLIC FIBER-MODE DECOMPOSITION
+
+[EXACT_DERIVED] (Step 51)
+
+Step 51 replaces stochastic search with an exact symbolic block decomposition of the tensor
+equations. Every rank-1 term contributes three kinds of A x B data: fiber sums, live-fiber
+anisotropy, and dead-X coordinates. The full 729-equation system splits exactly into those
+three blocks.
+
+**Fiber-sum equations:** 81
+**Live-anisotropy equations:** 162
+**Dead-X equations:** 486
+**Total equations:** 729
+**Exact matrix form:** Gamma * Sigma = 3 I_9; Gamma * Eta1 = 0; Gamma * Eta2 = 0; Gamma * Delta = 0
+
+### Fiber Coordinates
+
+| fiber | sigma formula | eta1 formula | eta2 formula |
+|-------|---------------|--------------|--------------|
+| (0,0) | sigma_k[0,0] = a_k[0,0]*b_k[0,0] + a_k[0,1]*b_k[1,0] + a_k[0,2]*b_k[2,0] | eta1_k[0,0] = a_k[0,0]*b_k[0,0] - a_k[0,1]*b_k[1,0] | eta2_k[0,0] = a_k[0,1]*b_k[1,0] - a_k[0,2]*b_k[2,0] |
+| (0,1) | sigma_k[0,1] = a_k[0,0]*b_k[0,1] + a_k[0,1]*b_k[1,1] + a_k[0,2]*b_k[2,1] | eta1_k[0,1] = a_k[0,0]*b_k[0,1] - a_k[0,1]*b_k[1,1] | eta2_k[0,1] = a_k[0,1]*b_k[1,1] - a_k[0,2]*b_k[2,1] |
+| (0,2) | sigma_k[0,2] = a_k[0,0]*b_k[0,2] + a_k[0,1]*b_k[1,2] + a_k[0,2]*b_k[2,2] | eta1_k[0,2] = a_k[0,0]*b_k[0,2] - a_k[0,1]*b_k[1,2] | eta2_k[0,2] = a_k[0,1]*b_k[1,2] - a_k[0,2]*b_k[2,2] |
+| (1,0) | sigma_k[1,0] = a_k[1,0]*b_k[0,0] + a_k[1,1]*b_k[1,0] + a_k[1,2]*b_k[2,0] | eta1_k[1,0] = a_k[1,0]*b_k[0,0] - a_k[1,1]*b_k[1,0] | eta2_k[1,0] = a_k[1,1]*b_k[1,0] - a_k[1,2]*b_k[2,0] |
+| (1,1) | sigma_k[1,1] = a_k[1,0]*b_k[0,1] + a_k[1,1]*b_k[1,1] + a_k[1,2]*b_k[2,1] | eta1_k[1,1] = a_k[1,0]*b_k[0,1] - a_k[1,1]*b_k[1,1] | eta2_k[1,1] = a_k[1,1]*b_k[1,1] - a_k[1,2]*b_k[2,1] |
+| (1,2) | sigma_k[1,2] = a_k[1,0]*b_k[0,2] + a_k[1,1]*b_k[1,2] + a_k[1,2]*b_k[2,2] | eta1_k[1,2] = a_k[1,0]*b_k[0,2] - a_k[1,1]*b_k[1,2] | eta2_k[1,2] = a_k[1,1]*b_k[1,2] - a_k[1,2]*b_k[2,2] |
+| (2,0) | sigma_k[2,0] = a_k[2,0]*b_k[0,0] + a_k[2,1]*b_k[1,0] + a_k[2,2]*b_k[2,0] | eta1_k[2,0] = a_k[2,0]*b_k[0,0] - a_k[2,1]*b_k[1,0] | eta2_k[2,0] = a_k[2,1]*b_k[1,0] - a_k[2,2]*b_k[2,0] |
+| (2,1) | sigma_k[2,1] = a_k[2,0]*b_k[0,1] + a_k[2,1]*b_k[1,1] + a_k[2,2]*b_k[2,1] | eta1_k[2,1] = a_k[2,0]*b_k[0,1] - a_k[2,1]*b_k[1,1] | eta2_k[2,1] = a_k[2,1]*b_k[1,1] - a_k[2,2]*b_k[2,1] |
+| (2,2) | sigma_k[2,2] = a_k[2,0]*b_k[0,2] + a_k[2,1]*b_k[1,2] + a_k[2,2]*b_k[2,2] | eta1_k[2,2] = a_k[2,0]*b_k[0,2] - a_k[2,1]*b_k[1,2] | eta2_k[2,2] = a_k[2,1]*b_k[1,2] - a_k[2,2]*b_k[2,2] |
+
+### Exact Matrix Form
+
+| matrix | shape | definition | meaning |
+|--------|-------|------------|---------|
+| Gamma | 9 x R | Gamma[(r',u'), k] = gamma_k[r',u'] | Output weights attached to term k for each C coordinate |
+| Sigma | R x 9 | Sigma[k, (r,u)] = sigma_k[r,u] | Fiber-sum coordinates of the A x B rank-1 profile |
+| Eta1 | R x 9 | Eta1[k, (r,u)] = eta1_k[r,u] | First live-fiber anisotropy coordinate |
+| Eta2 | R x 9 | Eta2[k, (r,u)] = eta2_k[r,u] | Second live-fiber anisotropy coordinate |
+| Delta | R x 54 | Delta[k, (r,s,t,u)] = delta_k[r,s,t,u] for s!=t | Dead-X coordinates |
+| Constraint | symbolic | Gamma * Sigma = 3 I_9, Gamma * Eta1 = 0, Gamma * Eta2 = 0, Gamma * Delta = 0 | Exact matrix-form restatement of all 729 tensor equations |
+
+The exact tensor system is equivalent to:
+- Gamma * Sigma = 3 I_9
+- Gamma * Eta1 = 0
+- Gamma * Eta2 = 0
+- Gamma * Delta = 0
+
+### Standard 27-Term Verification
+
+- Fiber-sum failures: 0
+- Live-anisotropy failures: 0
+- Dead-X failures: 0
+
+| output_c | fiber | fiber_sum_total | fiber_sum_expected | eta1_total | eta2_total | status |
+|----------|-------|-----------------|--------------------|------------|------------|--------|
+| C[0,0] | (0,0) | 3 | 3 | 0 | 0 | PASS |
+| C[0,0] | (0,1) | 0 | 0 | 0 | 0 | PASS |
+| C[0,0] | (0,2) | 0 | 0 | 0 | 0 | PASS |
+| C[0,0] | (1,0) | 0 | 0 | 0 | 0 | PASS |
+| C[0,0] | (1,1) | 0 | 0 | 0 | 0 | PASS |
+| C[0,0] | (1,2) | 0 | 0 | 0 | 0 | PASS |
+| C[0,0] | (2,0) | 0 | 0 | 0 | 0 | PASS |
+| C[0,0] | (2,1) | 0 | 0 | 0 | 0 | PASS |
+| C[0,0] | (2,2) | 0 | 0 | 0 | 0 | PASS |
+| C[0,1] | (0,0) | 0 | 0 | 0 | 0 | PASS |
+| C[0,1] | (0,1) | 3 | 3 | 0 | 0 | PASS |
+| C[0,1] | (0,2) | 0 | 0 | 0 | 0 | PASS |
+| C[0,1] | (1,0) | 0 | 0 | 0 | 0 | PASS |
+| C[0,1] | (1,1) | 0 | 0 | 0 | 0 | PASS |
+| C[0,1] | (1,2) | 0 | 0 | 0 | 0 | PASS |
+| C[0,1] | (2,0) | 0 | 0 | 0 | 0 | PASS |
+| C[0,1] | (2,1) | 0 | 0 | 0 | 0 | PASS |
+| C[0,1] | (2,2) | 0 | 0 | 0 | 0 | PASS |
+
+
+[INTERPRETATION]
+
+Step 51 isolates the real symbolic burden of any fast 3x3 algorithm. The target tensor lives
+entirely in the 9-dimensional fiber-sum block. Every candidate rank-1 term also generates live
+anisotropy and dead-X mass, and those nuisance components must cancel exactly after gamma
+weighting. This turns the problem into a structured elimination problem on subspaces rather
+than an undirected search through raw coefficient space.
+
+## 41. QUOTIENT-SPACE RANK CRITERION
+
+[EXACT_DERIVED] (Step 52)
+
+Step 52 turns the Step 51 matrix form into an exact quotient-space solvability test. For a
+fixed decomposition, solvability is equivalent to the fiber-sum columns remaining independent
+modulo the nuisance span generated by live anisotropy and dead-X columns.
+
+**Bound scope:** per_algorithm_not_universal
+**Standard 3x3 nuisance rank:** 18
+**Standard 3x3 lower bound from nuisance:** 27
+**Strassen 2x2 nuisance rank:** 3
+**Strassen 2x2 lower bound from nuisance:** 7
+
+### Exact Criterion
+
+- T1: Fix a particular rank-R decomposition with term space V = R^R and columns Sigma, Eta, Delta built from that decomposition's alpha and beta factors. Let N be the nuisance span generated by Eta and Delta.
+- T2: For that fixed decomposition, there exists Gamma with Gamma*Sigma = 3 I_9 and Gamma*Nuisance = 0 iff the 9 sigma columns are linearly independent modulo N.
+- T3: Equivalently, for 3x3 one has rank([Sigma Nuisance]) = rank(Nuisance) + 9, and for 2x2 the analog is rank([Sigma Nuisance]) = rank(Nuisance) + 4.
+- T4: Hence this specific 3x3 decomposition satisfies R >= 9 + rank(Nuisance). This is a per-algorithm necessary bound, not yet a universal lower bound.
+- T5: For a fixed 2x2 decomposition, the exact analog is R >= 4 + rank(Nuisance).
+- T6: A universal bound would require proving a decomposition-independent lower bound on rank(Nuisance) for every admissible choice of alpha,beta whose Sigma columns have the required quotient-space independence. Step 52 does not prove such a theorem.
+
+### Algorithm Profiles
+
+| algorithm | size | R | nuisance shape | sigma_rank | eta_rank | dead_rank | nuisance_rank | augmented_rank | lower_bound | saturates |
+|-----------|------|---|----------------|------------|----------|-----------|---------------|----------------|-------------|-----------|
+| standard_3x3 | 3x3 | 27 | 27x72 | 9 | 18 | 0 | 18 | 27 | 27 | True |
+| strassen_2x2 | 2x2 | 7 | 7x12 | 4 | 3 | 2 | 3 | 7 | 7 | True |
+
+### 3x3 Nuisance-Rank Targets
+
+| target_R | max_allowed_nuisance_rank | necessary_condition |
+|----------|---------------------------|---------------------|
+| 23 | 14 | rank(Nuisance) <= 14 |
+| 22 | 13 | rank(Nuisance) <= 13 |
+| 21 | 12 | rank(Nuisance) <= 12 |
+| 20 | 11 | rank(Nuisance) <= 11 |
+| 19 | 10 | rank(Nuisance) <= 10 |
+| 18 | 9 | rank(Nuisance) <= 9 |
+
+
+[INTERPRETATION]
+
+Step 52 is the first exact linear-algebra obstruction beyond raw equation counting, but its
+scope matters: the bound R >= 9 + rank(Nuisance) is per-algorithm, not universal. It depends
+on the nuisance span produced by the chosen alpha,beta factors. What the step proves is that
+every candidate algorithm must compress its own nuisance span into dimension at most R-9. The
+2x2 Strassen check is the key validation: its nuisance matrix is 7x12 with rank exactly 3, so
+Strassen is tight against the criterion R = 4 + rank(Nuisance).
+
+## 42. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
@@ -13281,6 +13416,8 @@ in the model rather than support patterns alone.
 - Mixed-pair resolution + tensor constraints: ✓ 41,688 witnesses scanned; 0/164 mixed pairs resolved by interface coordinates; raw tensor same-fiber support uses only orbits 0 and 30
 - Tensor profile constraint model: ✓ 729 tensor equations collapse to 8 XC orbit classes; only XC orbit 0 is positive; generic rank-1 support has profile (27,27); the 8-orbit linearization alone gives no rank lower bound
 - Coefficient-level rank constraints: ✓ explicit 8 equation types recorded with orbit sizes (27,54,54,108,54,108,108,216); standard 27-term basis algorithm and Strassen 2x2 both verified exactly; search-space dimensions exported
+- Symbolic fiber-mode decomposition: ✓ the 729 equations now split exactly as 81 fiber-sum + 162 live-anisotropy + 486 dead-X equations, with matrix form Gamma*Sigma=3I_9 and Gamma annihilating the nuisance blocks
+- Quotient-space rank criterion: ✓ for a fixed decomposition solvability is equivalent to quotient-space independence of Sigma modulo nuisance; standard 3x3 gives nuisance rank 18 and Strassen 2x2 gives rank 3, with Strassen exactly tight
 
 **Remaining open fronts:**
 - Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored
@@ -13302,6 +13439,8 @@ in the model rather than support patterns alone.
   any useful lower-bound model must retain finer-than-orbit-sum equation structure
 - Step 49 now records the exact 729-equation trilinear system and the 8 representative types;
   the remaining open problem is whether the rank-R solution variety is nonempty for sparse or non-group-closed ansatze
+- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining
+  hard theorem is universal: prove a decomposition-independent lower bound on rank(Nuisance)
 - Kernel uniformity: cc uniformity holds at orbit level AND (s,t) stratum level;
   next level to check is the full (r,s,t,u) X coordinate or the (c1,c2) boundary
 

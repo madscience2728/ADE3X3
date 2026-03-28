@@ -1,0 +1,1 @@
+{"cycle": 1, "R": 23, "seed": 0, "success": false, "loss": 13651.045999950351, "best_iter": 4, "iters": 5, "verified_loss": 12951.936864992605, "max_abs_residual": 20.456320402796262, "elapsed_hours": 0.0016220917304356893, "init": "normal"}

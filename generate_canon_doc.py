@@ -148,6 +148,23 @@ def read_step49_outputs():
     return (summary_rows, equation_rows, verification_rows, standard_rows,
             tensor_slice_rows, strassen_term_rows, strassen_orbit_rows, search_rows)
 
+def read_step51_outputs():
+    """Read step 51 symbolic fiber-mode decomposition exports."""
+    summary_rows = read_csv("step51_summary.csv")
+    sum_rows = read_csv("step51_fiber_sum_formulas.csv")
+    anisotropy_rows = read_csv("step51_live_anisotropy_formulas.csv")
+    matrix_rows = read_csv("step51_matrix_form.csv")
+    standard_rows = read_csv("step51_standard_algorithm_symbolic_verification.csv")
+    return summary_rows, sum_rows, anisotropy_rows, matrix_rows, standard_rows
+
+def read_step52_outputs():
+    """Read step 52 quotient-space rank criterion exports."""
+    summary_rows = read_csv("step52_summary.csv")
+    theorem_rows = read_csv("step52_quotient_rank_theorem.csv")
+    profile_rows = read_csv("step52_algorithm_rank_profiles.csv")
+    bound_rows = read_csv("step52_required_nuisance_bounds.csv")
+    return summary_rows, theorem_rows, profile_rows, bound_rows
+
 def generate_x_atoms():
     """Generate all 81 X atoms with live/dead status and target."""
     # Try to read from export first
@@ -230,7 +247,9 @@ def generate():
     w("same-fiber / 64-subalgebra structure analysis (step 46),")
     w("mixed-pair resolution / tensor-constraint extraction (step 47),")
     w("tensor profile constraint modeling (step 48),")
-    w("and coefficient-level rank constraints (step 49)")
+    w("coefficient-level rank constraints (step 49),")
+    w("symbolic fiber-mode decomposition (step 51),")
+    w("and quotient-space rank criterion analysis (step 52)")
     w()
     w("**IMPORTANT:** This document contains all computed results inline.")
     w("No external files are required. All research findings are here.")
@@ -1860,6 +1879,120 @@ def generate():
     w("algorithm would need, so any future search has to keep real coefficients and dead-X cancellation")
     w("in the model rather than support patterns alone.")
 
+    # ── STEP 51 ──
+    w()
+    w(f"## {section_num}. SYMBOLIC FIBER-MODE DECOMPOSITION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 51)")
+    w()
+    w("Step 51 replaces stochastic search with an exact symbolic block decomposition of the tensor")
+    w("equations. Every rank-1 term contributes three kinds of A x B data: fiber sums, live-fiber")
+    w("anisotropy, and dead-X coordinates. The full 729-equation system splits exactly into those")
+    w("three blocks.")
+    w()
+    sum51_rows, fiber51_rows, anis51_rows, matrix51_rows, std51_rows = read_step51_outputs()
+    if sum51_rows:
+        sum51 = {row['summary_name']: row['summary_value'] for row in sum51_rows}
+        w(f"**Fiber-sum equations:** {sum51['fiber_sum_equations']}")
+        w(f"**Live-anisotropy equations:** {sum51['fiber_anisotropy_equations']}")
+        w(f"**Dead-X equations:** {sum51['dead_x_equations']}")
+        w(f"**Total equations:** {sum51['total_equations']}")
+        w(f"**Exact matrix form:** {sum51['matrix_form_constraint']}")
+        w()
+        w("### Fiber Coordinates")
+        w()
+        w("| fiber | sigma formula | eta1 formula | eta2 formula |")
+        w("|-------|---------------|--------------|--------------|")
+        for sum_row, eta1_row, eta2_row in zip(fiber51_rows, anis51_rows[0::2], anis51_rows[1::2]):
+            w(f"| {sum_row['fiber']} | {sum_row['formula']} | {eta1_row['formula']} | {eta2_row['formula']} |")
+        w()
+        w("### Exact Matrix Form")
+        w()
+        w("| matrix | shape | definition | meaning |")
+        w("|--------|-------|------------|---------|")
+        for row in matrix51_rows:
+            w(f"| {row['matrix_name']} | {row['shape']} | {row['entry_definition']} | {row['meaning']} |")
+        w()
+        w("The exact tensor system is equivalent to:")
+        w("- Gamma * Sigma = 3 I_9")
+        w("- Gamma * Eta1 = 0")
+        w("- Gamma * Eta2 = 0")
+        w("- Gamma * Delta = 0")
+        w()
+        w("### Standard 27-Term Verification")
+        w()
+        w(f"- Fiber-sum failures: {sum51['standard_fiber_sum_failures']}")
+        w(f"- Live-anisotropy failures: {sum51['standard_live_anisotropy_failures']}")
+        w(f"- Dead-X failures: {sum51['standard_dead_x_failures']}")
+        w()
+        w("| output_c | fiber | fiber_sum_total | fiber_sum_expected | eta1_total | eta2_total | status |")
+        w("|----------|-------|-----------------|--------------------|------------|------------|--------|")
+        for row in std51_rows[:18]:
+            w(f"| {row['output_c']} | {row['fiber']} | {row['fiber_sum_total']} | {row['fiber_sum_expected']} | {row['eta1_total']} | {row['eta2_total']} | {row['status']} |")
+        w()
+    else:
+        w("*Run ade3x3_step51_symbolic_fiber_mode_decomposition.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 51 isolates the real symbolic burden of any fast 3x3 algorithm. The target tensor lives")
+    w("entirely in the 9-dimensional fiber-sum block. Every candidate rank-1 term also generates live")
+    w("anisotropy and dead-X mass, and those nuisance components must cancel exactly after gamma")
+    w("weighting. This turns the problem into a structured elimination problem on subspaces rather")
+    w("than an undirected search through raw coefficient space.")
+
+    # ── STEP 52 ──
+    w()
+    w(f"## {section_num}. QUOTIENT-SPACE RANK CRITERION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 52)")
+    w()
+    w("Step 52 turns the Step 51 matrix form into an exact quotient-space solvability test. For a")
+    w("fixed decomposition, solvability is equivalent to the fiber-sum columns remaining independent")
+    w("modulo the nuisance span generated by live anisotropy and dead-X columns.")
+    w()
+    sum52_rows, theorem52_rows, profile52_rows, bound52_rows = read_step52_outputs()
+    if sum52_rows:
+        sum52 = {row['summary_name']: row['summary_value'] for row in sum52_rows}
+        w(f"**Bound scope:** {sum52['step52_bound_scope']}")
+        w(f"**Standard 3x3 nuisance rank:** {sum52['standard_3x3_nuisance_rank']}")
+        w(f"**Standard 3x3 lower bound from nuisance:** {sum52['standard_3x3_lower_bound_from_nuisance']}")
+        w(f"**Strassen 2x2 nuisance rank:** {sum52['strassen_2x2_nuisance_rank']}")
+        w(f"**Strassen 2x2 lower bound from nuisance:** {sum52['strassen_2x2_lower_bound_from_nuisance']}")
+        w()
+        w("### Exact Criterion")
+        w()
+        for row in theorem52_rows:
+            w(f"- {row['statement_id']}: {row['statement']}")
+        w()
+        w("### Algorithm Profiles")
+        w()
+        w("| algorithm | size | R | nuisance shape | sigma_rank | eta_rank | dead_rank | nuisance_rank | augmented_rank | lower_bound | saturates |")
+        w("|-----------|------|---|----------------|------------|----------|-----------|---------------|----------------|-------------|-----------|")
+        for row in profile52_rows:
+            w(f"| {row['algorithm']} | {row['matrix_size']} | {row['R']} | {row['R']}x{row['nuisance_columns']} | {row['sigma_rank']} | {row['eta_rank']} | {row['dead_rank']} | {row['nuisance_rank']} | {row['augmented_rank']} | {row['lower_bound_from_nuisance']} | {row['saturates_lower_bound']} |")
+        w()
+        w("### 3x3 Nuisance-Rank Targets")
+        w()
+        w("| target_R | max_allowed_nuisance_rank | necessary_condition |")
+        w("|----------|---------------------------|---------------------|")
+        for row in bound52_rows:
+            w(f"| {row['target_R']} | {row['max_allowed_nuisance_rank']} | {row['necessary_condition']} |")
+        w()
+    else:
+        w("*Run ade3x3_step52_quotient_rank_criterion.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 52 is the first exact linear-algebra obstruction beyond raw equation counting, but its")
+    w("scope matters: the bound R >= 9 + rank(Nuisance) is per-algorithm, not universal. It depends")
+    w("on the nuisance span produced by the chosen alpha,beta factors. What the step proves is that")
+    w("every candidate algorithm must compress its own nuisance span into dimension at most R-9. The")
+    w("2x2 Strassen check is the key validation: its nuisance matrix is 7x12 with rank exactly 3, so")
+    w("Strassen is tight against the criterion R = 4 + rank(Nuisance).")
+
     # ── OPEN FRONTS ──
     w()
     w(f"## {section_num}. CURRENT GAPS / OPEN FRONTS")
@@ -1885,6 +2018,8 @@ def generate():
     w("- Mixed-pair resolution + tensor constraints: ✓ 41,688 witnesses scanned; 0/164 mixed pairs resolved by interface coordinates; raw tensor same-fiber support uses only orbits 0 and 30")
     w("- Tensor profile constraint model: ✓ 729 tensor equations collapse to 8 XC orbit classes; only XC orbit 0 is positive; generic rank-1 support has profile (27,27); the 8-orbit linearization alone gives no rank lower bound")
     w("- Coefficient-level rank constraints: ✓ explicit 8 equation types recorded with orbit sizes (27,54,54,108,54,108,108,216); standard 27-term basis algorithm and Strassen 2x2 both verified exactly; search-space dimensions exported")
+    w("- Symbolic fiber-mode decomposition: ✓ the 729 equations now split exactly as 81 fiber-sum + 162 live-anisotropy + 486 dead-X equations, with matrix form Gamma*Sigma=3I_9 and Gamma annihilating the nuisance blocks")
+    w("- Quotient-space rank criterion: ✓ for a fixed decomposition solvability is equivalent to quotient-space independence of Sigma modulo nuisance; standard 3x3 gives nuisance rank 18 and Strassen 2x2 gives rank 3, with Strassen exactly tight")
     w()
     w("**Remaining open fronts:**")
     w("- Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored")
@@ -1906,6 +2041,8 @@ def generate():
     w("  any useful lower-bound model must retain finer-than-orbit-sum equation structure")
     w("- Step 49 now records the exact 729-equation trilinear system and the 8 representative types;")
     w("  the remaining open problem is whether the rank-R solution variety is nonempty for sparse or non-group-closed ansatze")
+    w("- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining")
+    w("  hard theorem is universal: prove a decomposition-independent lower bound on rank(Nuisance)")
     w("- Kernel uniformity: cc uniformity holds at orbit level AND (s,t) stratum level;")
     w("  next level to check is the full (r,s,t,u) X coordinate or the (c1,c2) boundary")
     w()
