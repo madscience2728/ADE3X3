@@ -1,0 +1,5 @@
+piece_id,piece_outputs,rank_tested,restarts,best_verified_loss,best_max_abs_residual,exact_hit_count,verified_exact,provenance
+fresh_piece_check,"(0,2); (1,2); (2,1); (2,2)",9,500,1.0044561110041295e+00,3.6754249733461397e-01,0,False,MEASURED_FROM_CODE
+fresh_piece_check,"(0,2); (1,2); (2,1); (2,2)",10,500,4.1316631254345992e-03,2.1020162189457365e-02,0,False,MEASURED_FROM_CODE
+fresh_piece_check,"(0,2); (1,2); (2,1); (2,2)",11,500,2.0633889273130681e-03,9.4050444033203732e-03,0,False,MEASURED_FROM_CODE
+fresh_piece_check,"(0,2); (1,2); (2,1); (2,2)",12,500,6.1512333089060391e-19,1.6520384713003544e-10,297,True,MEASURED_FROM_CODE

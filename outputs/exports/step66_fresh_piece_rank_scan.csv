@@ -1,0 +1,2 @@
+piece_id,piece_outputs,rank_tested,restarts,best_verified_loss,best_max_abs_residual,exact_hit_count,verified_exact,provenance
+fresh_piece_check,"(0,0); (0,1); (1,0); (2,1)",11,2000,1.1867109268390639e-03,9.9123232817869018e-03,0,False,MEASURED_FROM_CODE

@@ -1,0 +1,2 @@
+piece_id,piece_outputs,flattening_rank_A_BC,flattening_rank_B_AC,flattening_rank_C_AB,flattening_lower_bound,best_rank_tested,best_verified_loss,best_max_abs_residual,exact_rank_upper_bound,provenance
+fresh_piece_check,"(0,2); (1,2); (2,1); (2,2)",9,6,4,9,12,6.1512333089060391e-19,1.6520384713003544e-10,12,EXACT_DERIVED + MEASURED_FROM_CODE
