@@ -1,0 +1,1 @@
+Contains the updated dossier generator and regenerated ADE3x3_CANONICAL_OBJECT.md with arity-4 inventory updates (CXXC/AXXC and CXXC interaction inventories).
