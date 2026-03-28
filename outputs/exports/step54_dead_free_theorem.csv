@@ -1,0 +1,6 @@
+statement_id,statement,status,provenance
+D1,"A nonzero rank-1 term is dead-free (all delta coordinates vanish) iff there exists a unique summation index s* such that alpha[:,t]=0 for all t!=s* and beta[t,:]=0 for all t!=s*. Equivalently, the alpha column support and beta row support are contained in the same singleton {s*}.",exact_characterization,EXACT_DERIVED
+D2,"For a nonzero dead-free term with active index s*, define v = a[:,s*] tensor b[s*,:] in the 9-dimensional fiber space. Then Sigma contributes v, while Eta1 and Eta2 are fixed signed embeddings of the same v; only Delta vanishes.",mode_profile,EXACT_DERIVED
+D3,"Therefore dead-free does not imply nuisance-free in the Step 51 basis. A generic nonzero dead-free term has dead rank 0 but nuisance rank 1, because its anisotropy coordinates are nonzero unless v=0.",critical_correction,EXACT_DERIVED
+D4,The Strassen-style pure-live versus cancellation split does not transfer verbatim to Step 51. What survives is only the weaker statement that dead-free terms contribute no dead-X nuisance; they still contribute anisotropy nuisance.,template_scope,EXACT_DERIVED
+D5,"A family of dead-free terms has nuisance rows inside the union of three fixed 9-dimensional embeddings E0(v)=(v,0), E1(v)=(-v,v), E2(v)=(0,-v) of the fiber space into the 18-dimensional anisotropy space.",family_embedding,EXACT_DERIVED

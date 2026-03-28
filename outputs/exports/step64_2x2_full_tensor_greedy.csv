@@ -1,0 +1,8 @@
+rank_step,profile_id,alpha,beta,gamma,residual_norm_squared,exact_zero,profile_matches_strassen,provenance
+1,0,"[[-1, -1], [-1, -1]]","[[-1, -1], [-1, -1]]","[[0.125, 0.125], [0.125, 0.125]]",7.0,False,False,MEASURED_FROM_CODE
+2,20,"[[-1, -1], [-1, -1]]","[[-1, 1], [-1, 1]]","[[0.125, -0.125], [0.125, -0.125]]",6.0,False,False,MEASURED_FROM_CODE
+3,320,"[[-1, -1], [1, 1]]","[[-1, -1], [-1, -1]]","[[0.125, 0.125], [-0.125, -0.125]]",5.0,False,False,MEASURED_FROM_CODE
+4,340,"[[-1, -1], [1, 1]]","[[-1, 1], [-1, 1]]","[[0.125, -0.125], [-0.125, 0.125]]",4.0,False,False,MEASURED_FROM_CODE
+5,808,"[[-1, 1], [-1, 1]]","[[-1, -1], [1, 1]]","[[0.125, 0.125], [0.125, 0.125]]",3.0,False,False,MEASURED_FROM_CODE
+6,824,"[[-1, 1], [-1, 1]]","[[-1, 1], [1, -1]]","[[0.125, -0.125], [0.125, -0.125]]",2.0,False,False,MEASURED_FROM_CODE
+7,968,"[[-1, 1], [1, -1]]","[[-1, -1], [1, 1]]","[[0.125, 0.125], [-0.125, -0.125]]",1.0,False,False,MEASURED_FROM_CODE

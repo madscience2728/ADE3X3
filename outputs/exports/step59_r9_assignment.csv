@@ -1,0 +1,10 @@
+output_fiber,channel_j,label,provenance
+"(0,0)",0,"fiber=(0,0),j=0",EXACT_DERIVED
+"(0,1)",1,"fiber=(0,1),j=1",EXACT_DERIVED
+"(0,2)",2,"fiber=(0,2),j=2",EXACT_DERIVED
+"(1,0)",0,"fiber=(1,0),j=0",EXACT_DERIVED
+"(1,1)",1,"fiber=(1,1),j=1",EXACT_DERIVED
+"(1,2)",2,"fiber=(1,2),j=2",EXACT_DERIVED
+"(2,0)",0,"fiber=(2,0),j=0",EXACT_DERIVED
+"(2,1)",1,"fiber=(2,1),j=1",EXACT_DERIVED
+"(2,2)",2,"fiber=(2,2),j=2",EXACT_DERIVED

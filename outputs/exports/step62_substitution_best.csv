@@ -1,0 +1,7 @@
+pattern_id,representative_fibers,best_lower_bound,best_source,provenance
+P1,"(0,0); (0,1); (0,2); (1,0); (1,1); (2,0)",9,no_substitution; A_row_1=0; A_row_2=0; B_column_1=0; B_column_2=0; Gamma_row_1=0; Gamma_row_2=0; Gamma_col_1=0; Gamma_col_2=0,EXACT_DERIVED
+P2,"(0,0); (0,1); (0,2); (1,0); (1,1); (2,2)",9,no_substitution; A_row_0=0; A_row_1=0; A_row_2=0; B_column_0=0; B_column_1=0; Gamma_row_0=0; Gamma_row_1=0; Gamma_row_2=0; Gamma_col_0=0; Gamma_col_1=0,EXACT_DERIVED
+P3,"(0,0); (0,1); (1,0); (1,1); (2,0); (2,2)",9,no_substitution; A_row_0=0; A_row_1=0; B_column_0=0; B_column_1=0; B_column_2=0; Gamma_row_0=0; Gamma_row_1=0; Gamma_col_0=0; Gamma_col_1=0; Gamma_col_2=0,EXACT_DERIVED
+P4,"(0,0); (0,1); (1,0); (1,2); (2,1); (2,2)",9,no_substitution; A_row_0=0; A_row_1=0; A_row_2=0; B_column_0=0; B_column_1=0; B_column_2=0; Gamma_row_0=0; Gamma_row_1=0; Gamma_row_2=0; Gamma_col_0=0; Gamma_col_1=0; Gamma_col_2=0,EXACT_DERIVED
+P5,"(0,0); (0,1); (0,2); (1,0); (1,1); (1,2)",9,no_substitution; A_row_0=0; A_row_1=0; A_row_2=0; Gamma_row_0=0; Gamma_row_1=0; Gamma_row_2=0,EXACT_DERIVED
+P6,"(0,0); (0,1); (1,0); (1,1); (2,0); (2,1)",9,no_substitution; B_column_0=0; B_column_1=0; B_column_2=0; Gamma_col_0=0; Gamma_col_1=0; Gamma_col_2=0,EXACT_DERIVED

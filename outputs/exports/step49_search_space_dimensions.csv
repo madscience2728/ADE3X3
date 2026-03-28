@@ -1,0 +1,8 @@
+R,K,dense_variables_27R,sparse_variable_upper_bound_3KR,constraints,linear_balance_dense,linear_balance_sparse_upper_bound,exact_support_patterns_per_term,support_patterns_per_term_at_most_K,exact_support_patterns_div_216_floor,provenance
+23,9,621,621,729,over,over,1,134217728,0,EXACT_DERIVED
+23,3,621,207,729,over,over,592704,2197000,2744,EXACT_DERIVED
+23,2,621,138,729,over,over,46656,97336,216,EXACT_DERIVED
+22,9,594,594,729,over,over,1,134217728,0,EXACT_DERIVED
+21,9,567,567,729,over,over,1,134217728,0,EXACT_DERIVED
+20,9,540,540,729,over,over,1,134217728,0,EXACT_DERIVED
+19,9,513,513,729,over,over,1,134217728,0,EXACT_DERIVED

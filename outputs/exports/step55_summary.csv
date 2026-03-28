@@ -1,0 +1,10 @@
+summary_name,summary_value,provenance,note
+p3q3_combined_max_nuisance_rank,0,EXACT_DERIVED,"Inside a 9-dimensional Hadamard space, full 9-dimensional Sigma recovery leaves no room for nuisance."
+p3q4_combined_max_nuisance_rank,3,EXACT_DERIVED,"For p=3,q=4, the Hadamard geometry tightens the R=22 nuisance target from 13 down to 3."
+best_structured_family_nuisance_rank,11,EXACT_DERIVED,"Minimum nuisance rank observed among structured families that actually achieve ranks (3,4)."
+best_structured_family_quotient_gain,1,EXACT_DERIVED,Maximum quotient gain observed among the tested structured 3x4 families.
+gf2_flattening_rank_lower_bound,9,EXACT_DERIVED,Flattening-rank lower bound on tensor rank over F2.
+tropical_flattening_rank,9,EXACT_DERIVED,Flattening tropical rank cannot exceed 9 here because each flattening has only 9 rows.
+standard_3x3_zero_commutators,81,EXACT_DERIVED,Only same-output ordered pairs commute in the fiber commutator sense for the standard 27-term decomposition.
+strassen_2x2_zero_commutators,7,EXACT_DERIVED,Strassen has nontrivial overlap structure in the fiber commutator profile.
+symbolic_minor_witness_found,True,EXACT_DERIVED,Whether an exact 4x4 minor witness was extracted for a 4-parameter symbolic Toeplitz family.

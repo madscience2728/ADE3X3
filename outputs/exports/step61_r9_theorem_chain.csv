@@ -1,0 +1,9 @@
+statement_id,statement,value,provenance
+N1,"In any exact 3x3 decomposition, Gamma*Sigma = 3I_9 forces rank(Gamma)=9.",rank_Gamma_is_9,EXACT_DERIVED
+N2,"For R=9, Gamma is a 9x9 invertible matrix, so ker(Gamma) = {0}.",nullity_0,EXACT_DERIVED
+N3,"Therefore Eta1 = 0, Eta2 = 0, and Delta = 0 as full matrices, not just after summation.",all_nuisance_zero,EXACT_DERIVED
+N4,"By Step 54 D1, Delta = 0 implies every nonzero term is dead-free and therefore supported on a unique summation index s*.",singleton_sum_index_support,EXACT_DERIVED
+N5,"By Step 54 D2, a dead-free term at s*=0 has (Sigma,Eta1,Eta2)=(v,v,0), at s*=1 has (v,-v,v), and at s*=2 has (v,0,-v). Hence Eta1=Eta2=0 implies v=0 and therefore Sigma=0 for that term.",no_nonzero_nuisance_free_term,EXACT_DERIVED
+N6,"So an exact R=9 decomposition would force every term to have zero Sigma row, contradicting rank(Sigma)=9 in Gamma*Sigma = 3I_9.",R9_impossible,EXACT_DERIVED
+N7,"Weaker corollary: if only Delta = 0 is imposed, then terms split by summation index and each summation channel must span the full 9-dimensional output-matrix space, requiring at least 9 terms per channel and therefore R >= 27.",deadfree_implies_R_at_least_27,EXACT_DERIVED
+N8,"Hence any exact algorithm with R < 27 must use nonzero nuisance. Nuisance is structurally necessary, not an accidental by-product.",nuisance_is_load_bearing,EXACT_DERIVED

@@ -1,0 +1,3 @@
+algorithm,fiber_count,total_aligned_live_occurrences,unique_live_x_atoms,unique_same_fiber_distinct_pairs,occurrence_same_fiber_distinct_pairs,per_fiber_unique_counts,provenance
+standard_2x2_basis,4,8,8,4,4,"{(0, 0): 2, (0, 1): 2, (1, 0): 2, (1, 1): 2}",EXACT_DERIVED
+strassen_2x2,4,8,8,4,4,"{(0, 0): 2, (0, 1): 2, (1, 0): 2, (1, 1): 2}",EXACT_DERIVED

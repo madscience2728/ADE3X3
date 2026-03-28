@@ -1,0 +1,7 @@
+matrix_size,target_R,base_dim,max_allowed_nuisance_rank,necessary_condition,provenance
+3x3,23,9,14,rank(Nuisance) <= 14,EXACT_DERIVED
+3x3,22,9,13,rank(Nuisance) <= 13,EXACT_DERIVED
+3x3,21,9,12,rank(Nuisance) <= 12,EXACT_DERIVED
+3x3,20,9,11,rank(Nuisance) <= 11,EXACT_DERIVED
+3x3,19,9,10,rank(Nuisance) <= 10,EXACT_DERIVED
+3x3,18,9,9,rank(Nuisance) <= 9,EXACT_DERIVED

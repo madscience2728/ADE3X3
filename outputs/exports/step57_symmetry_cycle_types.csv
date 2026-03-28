@@ -1,0 +1,6 @@
+cycle_lengths,class_size,provenance
+"(1, 1, 1, 1, 1, 1, 1, 1, 1)",1,EXACT_DERIVED
+"(1, 1, 1, 2, 2, 2)",6,EXACT_DERIVED
+"(1, 2, 2, 2, 2)",9,EXACT_DERIVED
+"(3, 3, 3)",8,EXACT_DERIVED
+"(3, 6)",12,EXACT_DERIVED

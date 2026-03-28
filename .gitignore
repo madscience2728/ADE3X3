@@ -41,9 +41,6 @@ Thumbs.db
 
 # Project-specific
 # Generated exports (comment out if you want to track exports)
-outputs/exports/*.csv
-outputs/exports/*.md
-outputs/artifacts/
 
 # Temporary files
 *.tmp

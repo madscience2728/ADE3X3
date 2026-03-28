@@ -1,0 +1,3 @@
+timestamp,mode,workers,ids_per_worker,sample_ids,elapsed_seconds,throughput_ids_per_second,estimated_full_seconds,estimated_full_minutes,estimated_full_hours,checksum_guard,sample_unique_canonical_ids,sample_total_grouped_ids,sample_top_bucket,sample_mean_bucket_size,sample_top5_buckets
+2026-03-28T15:01:58,canonical216_grouped,20,50000,1000000,19.246127,51958.506,7456.344,124.272,2.071207,435182087275,399310,1000000,4,2.504320,4:4; 12:4; 13:4; 14:4; 28:4
+2026-03-28T15:14:39,canonical216_grouped,20,1500000,30000000,657.775575,45608.261,8494.524,141.575,2.359590,15273390534611,10764961,30000000,4,2.786819,4:4; 12:4; 13:4; 14:4; 28:4

@@ -1,0 +1,20 @@
+summary_name,summary_value,provenance,note
+modularity_total_subsets_checked,512,EXACT_DERIVED,All same-fiber Fourier subset combinations checked against their restricted targets.
+modularity_total_passing_subsets,512,EXACT_DERIVED,Every checked Fourier subset passed exact modularity verification.
+modularity_max_abs_residual,0.0000000000,EXACT_DERIVED,Maximum residual over all checked Fourier subsets.
+sixfiber_orbit_count,6,EXACT_DERIVED,Number of S3 x S3 orbits on 6-fiber residual output patterns.
+sixfiber_min_flattening_rank_max,9,EXACT_DERIVED,Minimum max-flattening lower bound among 6-fiber residual patterns.
+sixfiber_max_flattening_rank_max,9,EXACT_DERIVED,Maximum max-flattening lower bound among 6-fiber residual patterns.
+sixfiber_candidate_orbits_R19_by_flattening,6,EXACT_DERIVED,Six-fiber residual orbits not ruled out by flattening against 10 spreaders at R=19.
+sixfiber_candidate_orbits_R20_by_flattening,6,EXACT_DERIVED,Six-fiber residual orbits not ruled out by flattening against 11 spreaders at R=20.
+sixfiber_candidate_orbits_R21_by_flattening,6,EXACT_DERIVED,Six-fiber residual orbits not ruled out by flattening against 12 spreaders at R=21.
+sixfiber_candidate_orbits_R22_by_flattening,6,EXACT_DERIVED,Six-fiber residual orbits not ruled out by flattening against 13 spreaders at R=22.
+sixfiber_candidate_orbits_R23_by_flattening,6,EXACT_DERIVED,Six-fiber residual orbits not ruled out by flattening against 14 spreaders at R=23.
+remaining4_candidate_orbits_R19_by_flattening,0,EXACT_DERIVED,Four-fiber residual orbits not ruled out by flattening against 4 spreaders.
+remaining4_candidate_orbits_R20_by_flattening,0,EXACT_DERIVED,Four-fiber residual orbits not ruled out by flattening against 5 spreaders.
+remaining4_candidate_orbits_R21_by_flattening,1,EXACT_DERIVED,Four-fiber residual orbits not ruled out by flattening against 6 spreaders.
+remaining3_candidate_orbits_R22_by_flattening,0,EXACT_DERIVED,Three-fiber residual orbits not ruled out by flattening against 4 spreaders.
+remaining4_candidate_orbits_R22_by_flattening,1,EXACT_DERIVED,Four-fiber residual orbits not ruled out by flattening against 7 spreaders.
+two_fiber_row_case_verdict,ruled_out_by_known_exact_rank,EXACT_DERIVED,Explicit two-fiber row residual at R=23.
+three_fiber_row_case_verdict,ruled_out_by_known_exact_rank,EXACT_DERIVED,Explicit three-fiber row residual at R=22.
+three_fiber_diagonal_case_verdict,ruled_out_by_flattening,EXACT_DERIVED,Explicit three-fiber diagonal residual at R=22.

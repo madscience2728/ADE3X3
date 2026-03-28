@@ -1,0 +1,3 @@
+algorithm_name,status,reason
+Smirnov_23x3x3_2013,not_mapped,"No direct algorithm specification is present in the repository or bundled sources, and no authoritative public term list was available through the current tool set."
+Strassen_2x2_7,not_mapped,Outside the current 3x3 CXXC export scope; no direct 2x2-to-3x3 embedding was formalized in this step.

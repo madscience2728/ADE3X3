@@ -1,0 +1,5 @@
+coefficient_orbit_id,coefficient_orbit_size,strassen_terms,n_strassen_terms_in_orbit,provenance
+0,4,['m1'],1,EXACT_DERIVED
+1,8,"['m2', 'm5']",2,EXACT_DERIVED
+2,8,"['m3', 'm4']",2,EXACT_DERIVED
+3,8,"['m6', 'm7']",2,EXACT_DERIVED

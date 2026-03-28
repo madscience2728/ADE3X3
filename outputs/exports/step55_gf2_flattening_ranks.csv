@@ -1,0 +1,4 @@
+flattening,shape,nonzero_entries,gf2_rank,real_rank,provenance
+A_vs_BC,9x81,27,9,9,EXACT_DERIVED
+B_vs_AC,9x81,27,9,9,EXACT_DERIVED
+C_vs_AB,9x81,27,9,9,EXACT_DERIVED

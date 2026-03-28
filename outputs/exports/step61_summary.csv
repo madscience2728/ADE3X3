@@ -1,0 +1,7 @@
+summary_name,summary_value,provenance,note
+R9_status,impossible_by_zero_nuisance_contradiction,EXACT_DERIVED,"R=9 forces Gamma invertible, which forces all nuisance zero and therefore every term zero."
+deadfree_global_lower_bound,27,EXACT_DERIVED,"If every term is dead-free, per-channel reconstruction requires at least 9 terms for each of the three summation channels."
+R18_gamma_nullity,9,EXACT_DERIVED,At R=18 the Gamma-nullspace has dimension 9 and must contain the entire nuisance span.
+R18_min_dead_dependencies,45,EXACT_DERIVED,"The 54 dead columns must fit inside at most 9 dimensions, forcing at least 45 exact linear dependencies."
+R18_min_total_nuisance_dependencies,63,EXACT_DERIVED,"The 72 nuisance columns must fit inside at most 9 dimensions, forcing at least 63 exact linear dependencies."
+sub27_requires_nuisance,true,EXACT_DERIVED,Any exact algorithm below rank 27 must use nonzero nuisance columns.

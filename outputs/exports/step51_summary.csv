@@ -1,0 +1,9 @@
+summary_name,summary_value,provenance,note
+fiber_sum_equations,81,EXACT_DERIVED,One equation for each output C atom and each output fiber.
+fiber_anisotropy_equations,162,EXACT_DERIVED,Two independent live-direction difference equations per fiber and output.
+dead_x_equations,486,EXACT_DERIVED,All dead coordinates must cancel after gamma weighting.
+total_equations,729,EXACT_DERIVED,The full tensor system size.
+standard_fiber_sum_failures,0,EXACT_DERIVED,Standard algorithm check on the 81 fiber-sum equations.
+standard_live_anisotropy_failures,0,EXACT_DERIVED,Standard algorithm check on the 162 anisotropy equations.
+standard_dead_x_failures,0,EXACT_DERIVED,Standard algorithm check on the 486 dead-X equations.
+matrix_form_constraint,Gamma * Sigma = 3 I_9; Gamma * Eta1 = 0; Gamma * Eta2 = 0; Gamma * Delta = 0,EXACT_DERIVED,Exact matrix reformulation of the symbolic split.

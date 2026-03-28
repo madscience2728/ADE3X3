@@ -1,0 +1,13 @@
+constraint_name,constraint_value,provenance,note
+n_xc_equation_orbits,8,EXACT_DERIVED,The 729 tensor equations decompose into exactly 8 XC orbit classes.
+positive_xc_orbits,[0],EXACT_DERIVED,Only these XC orbit classes carry tensor RHS 1.
+positive_tensor_equations,27,EXACT_DERIVED,Exactly 27 of the 729 coordinate equations have RHS 1.
+activation_profile_orbit_types,531,EXACT_DERIVED,Support-level fiber activation profiles up to row/column symmetry.
+support_contribution_pairs,111,EXACT_DERIVED,"Distinct support-level (CXXC orbit 0, CXXC orbit 30) pairs realized by the 531 profile orbits."
+generic_profile_unique,True,EXACT_DERIVED,The full-support profile (3 in all 9 fibers) is unique at the profile-orbit level.
+generic_profile,"(3, 3, 3, 3, 3, 3, 3, 3, 3)",EXACT_DERIVED,"Generic rank-1 support activates all 27 live X atoms, 3 in each output fiber."
+generic_cxxc_orbit0_support,27,EXACT_DERIVED,Support-level self-pair count for the generic rank-1 activation profile.
+generic_cxxc_orbit30_support,27,EXACT_DERIVED,Support-level distinct same-fiber pair count for the generic rank-1 activation profile.
+orbit_sum_linearization_nontrivial_rank_bound,False,EXACT_DERIVED,The 8-equation XC orbit-sum model alone does not force any positive lower bound on R.
+orbit_sum_counterexample_vector,"[27, 0, 0, 0, 0, 0, 0, 0]",EXACT_DERIVED,One sparse rank-1 term can match the full orbit-sum RHS vector while failing the coordinate tensor equations.
+orbit_sum_counterexample_full_tensor_mismatches,27,EXACT_DERIVED,Number of coordinate tensor equations missed by that single-term orbit-sum witness.

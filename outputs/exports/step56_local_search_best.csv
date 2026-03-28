@@ -1,0 +1,11 @@
+restart_id,loss,nuclear_norm,gain_proxy,sigma_rank,eta_rank,delta_rank,nuisance_rank,augmented_rank,quotient_gain,meets_nuisance_cap_7,meets_r22_target,full_quotient_target_holds,method,provenance
+31,31.0122340485,31.0122340485,0.0,9,16,16,16,16,0,False,False,False,torch_unavailable_numpy_local_search,EXACT_DERIVED
+39,31.7635600755,31.7635600755,0.0,9,16,16,16,16,0,False,False,False,torch_unavailable_numpy_local_search,EXACT_DERIVED
+43,35.4201139209,35.4201139209,0.0,9,16,16,16,16,0,False,False,False,torch_unavailable_numpy_local_search,EXACT_DERIVED
+25,36.1085250344,36.1085250344,0.0,9,16,16,16,16,0,False,False,False,torch_unavailable_numpy_local_search,EXACT_DERIVED
+17,36.4637215105,36.4637215105,0.0,9,16,16,16,16,0,False,False,False,torch_unavailable_numpy_local_search,EXACT_DERIVED
+27,36.4865193392,36.4865193392,0.0,9,16,16,16,16,0,False,False,False,torch_unavailable_numpy_local_search,EXACT_DERIVED
+2,37.0299710968,37.0299710968,0.0,9,16,16,16,16,0,False,False,False,torch_unavailable_numpy_local_search,EXACT_DERIVED
+28,39.1020528287,39.1020528287,0.0,9,16,16,16,16,0,False,False,False,torch_unavailable_numpy_local_search,EXACT_DERIVED
+47,39.505115609,39.505115609,0.0,9,16,16,16,16,0,False,False,False,torch_unavailable_numpy_local_search,EXACT_DERIVED
+8,40.467333693,40.467333693,0.0,9,16,16,16,16,0,False,False,False,torch_unavailable_numpy_local_search,EXACT_DERIVED

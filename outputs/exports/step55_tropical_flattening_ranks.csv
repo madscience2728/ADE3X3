@@ -1,0 +1,4 @@
+flattening,shape,tropical_rank,upper_bound_min_dimension,witness_submatrix,implies_r_ge_23,provenance
+A_vs_BC,9x81,9,9,Select one live column for each of the 9 rows to obtain a 9x9 diagonal 0/inf submatrix.,False,EXACT_DERIVED
+B_vs_AC,9x81,9,9,Select one live column for each of the 9 rows to obtain a 9x9 diagonal 0/inf submatrix.,False,EXACT_DERIVED
+C_vs_AB,9x81,9,9,Select one live column for each of the 9 rows to obtain a 9x9 diagonal 0/inf submatrix.,False,EXACT_DERIVED

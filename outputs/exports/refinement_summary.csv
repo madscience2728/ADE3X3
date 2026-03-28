@@ -1,0 +1,6 @@
+schema,total_orbits,base_collisions,historical_refiner,historical_size,workbench_refiner,workbench_size,refined_distinct,fully_resolved
+XX,56,12,"(s2, t2, u2, r2)",4,"(s2, t2)",2,56,True
+AX,10,4,"(t, u)",2,"(t,)",1,10,True
+BX,10,4,"(s, r)",2,"(s,)",1,10,True
+CXXC,2744,2744,(none),0,"(s4, t4)",2,2744,True
+CCXX,2744,2744,(none),0,"(s4, t4)",2,2744,True

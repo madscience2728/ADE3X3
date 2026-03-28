@@ -1,0 +1,11 @@
+family,sample_id,sigma_rank,eta_rank,delta_rank,nuisance_rank,augmented_rank,quotient_gain,meets_nuisance_cap_7,meets_r22_target,full_quotient_target_holds,provenance
+ternary_sample,1,9,16,16,16,16,0,False,False,False,EXACT_DERIVED
+ternary_sample,2,9,16,16,16,16,0,False,False,False,EXACT_DERIVED
+ternary_sample,3,9,16,16,16,16,0,False,False,False,EXACT_DERIVED
+ternary_sample,4,9,16,16,16,16,0,False,False,False,EXACT_DERIVED
+ternary_sample,5,9,16,16,16,16,0,False,False,False,EXACT_DERIVED
+ternary_sample,6,9,16,16,16,16,0,False,False,False,EXACT_DERIVED
+ternary_sample,7,9,16,16,16,16,0,False,False,False,EXACT_DERIVED
+ternary_sample,8,9,16,16,16,16,0,False,False,False,EXACT_DERIVED
+ternary_sample,9,9,16,16,16,16,0,False,False,False,EXACT_DERIVED
+ternary_sample,10,9,16,16,16,16,0,False,False,False,EXACT_DERIVED

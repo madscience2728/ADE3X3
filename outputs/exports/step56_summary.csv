@@ -1,0 +1,15 @@
+summary_name,summary_value,provenance,note
+p4q4_combined_nuisance_cap,7,EXACT_DERIVED,"In a 16-dimensional Hadamard space, quotient gain 9 leaves at most 7 nuisance dimensions."
+dft_best_quotient_gain,1,EXACT_DERIVED,Best quotient gain across the complete 126 x 126 DFT mode sweep.
+dft_best_nuisance_rank,15,EXACT_DERIVED,Nuisance rank at the best DFT mode pair.
+dft_best_mode_pair,00|01|02|10 :: 00|01|10|20,EXACT_DERIVED,"Best DFT mode pair by quotient gain, nuisance rank, then sigma rank."
+dft_any_quotient_gain_ge_5,False,EXACT_DERIVED,Flag for a potentially serious constructive lead in the DFT sweep.
+ternary_best_quotient_gain,0,EXACT_DERIVED,"Best observed quotient gain in the {-1,0,1} random sample."
+algebraic_best_quotient_gain,0,EXACT_DERIVED,"Best observed quotient gain in the {-1,0,1,w,w^2} random sample."
+correction_best_quotient_gain,0,EXACT_DERIVED,Best quotient gain in the interpreted ternary correction-block sweep.
+optimization_best_quotient_gain,0,EXACT_DERIVED,Best quotient gain found by torch-free numpy local search.
+orbit30_to_0_count,54,EXACT_DERIVED,Exact branch count for 30 o 30 -> 0 in the same-fiber algebra.
+orbit30_to_30_count,54,EXACT_DERIVED,Exact branch count for 30 o 30 -> 30 in the same-fiber algebra.
+standard_single_removal_delta_orbit30,-2,EXACT_DERIVED,Single-term removal effect on the standard 27-term orbit-30 same-fiber count.
+strassen_occurrence_same_fiber_pairs,4,EXACT_DERIVED,Same-fiber distinct-pair count in the coarse 2x2 aligned live-support analog for Strassen.
+support_analog_strassen_equals_standard,True,EXACT_DERIVED,Whether the coarse 2x2 same-fiber live-support analog distinguishes Strassen from the standard basis algorithm.

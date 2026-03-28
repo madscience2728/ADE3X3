@@ -1,0 +1,9 @@
+action_id,pi_rA,pi_shared,pi_cB,alpha_cycle_lengths,beta_cycle_lengths,fixed_projective_alpha_lines,fixed_projective_beta_lines,fixed_profile_classes,provenance
+0,"(0, 1)","(0, 1)","(0, 1)","[1, 1, 1, 1]","[1, 1, 1, 1]",40,40,1600,EXACT_DERIVED
+1,"(0, 1)","(0, 1)","(1, 0)","[1, 1, 1, 1]","[2, 2]",40,8,320,EXACT_DERIVED
+2,"(0, 1)","(1, 0)","(0, 1)","[2, 2]","[2, 2]",8,8,64,EXACT_DERIVED
+3,"(0, 1)","(1, 0)","(1, 0)","[2, 2]","[2, 2]",8,8,64,EXACT_DERIVED
+4,"(1, 0)","(0, 1)","(0, 1)","[2, 2]","[1, 1, 1, 1]",8,40,320,EXACT_DERIVED
+5,"(1, 0)","(0, 1)","(1, 0)","[2, 2]","[2, 2]",8,8,64,EXACT_DERIVED
+6,"(1, 0)","(1, 0)","(0, 1)","[2, 2]","[2, 2]",8,8,64,EXACT_DERIVED
+7,"(1, 0)","(1, 0)","(1, 0)","[2, 2]","[2, 2]",8,8,64,EXACT_DERIVED

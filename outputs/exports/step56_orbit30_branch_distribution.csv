@@ -1,0 +1,3 @@
+input_orbit_A,input_orbit_B,output_orbit,count,fraction,total_pairs,provenance
+30,30,0,54,0.5,108,EXACT_DERIVED
+30,30,30,54,0.5,108,EXACT_DERIVED

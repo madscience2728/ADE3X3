@@ -1,0 +1,9 @@
+equation_label,xc_orbit_id,computed_orbit_size,expected_orbit_size,orbit_size_matches,rhs_invariant_on_orbit,type_partition_matches_full_729,step48_roster_match,sample_orbit_member_1,sample_orbit_member_2,provenance
+E0,0,27,27,True,True,True,True,"sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[0,0] = 1","sum_k alpha_k[0,0] * beta_k[0,1] * gamma_k[0,1] = 1",EXACT_DERIVED
+E1,1,54,54,True,True,True,True,"sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[0,1] = 0","sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[0,2] = 0",EXACT_DERIVED
+E2,2,54,54,True,True,True,True,"sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[1,0] = 0","sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[2,0] = 0",EXACT_DERIVED
+E3,3,108,108,True,True,True,True,"sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[1,1] = 0","sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[1,2] = 0",EXACT_DERIVED
+E4,4,54,54,True,True,True,True,"sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[0,0] = 0","sum_k alpha_k[0,0] * beta_k[1,1] * gamma_k[0,1] = 0",EXACT_DERIVED
+E5,5,108,108,True,True,True,True,"sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[0,1] = 0","sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[0,2] = 0",EXACT_DERIVED
+E6,6,108,108,True,True,True,True,"sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[1,0] = 0","sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[2,0] = 0",EXACT_DERIVED
+E7,7,216,216,True,True,True,True,"sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[1,1] = 0","sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[1,2] = 0",EXACT_DERIVED

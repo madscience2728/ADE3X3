@@ -1,0 +1,16 @@
+summary_name,summary_value,provenance,note
+pool3_raw_pairs,387420489,EXACT_DERIVED,"Total 3x3 alpha,beta raw pairs in {-1,0,1}^{9} x {-1,0,1}^{9}."
+pool3_nonzero_pairs,387381124,EXACT_DERIVED,Raw pairs with alpha!=0 and beta!=0.
+pool3_projective_line_count,9841,EXACT_DERIVED,Nonzero ternary 9-vectors modulo global sign.
+pool3_distinct_profiles_mod_sign,96845281,EXACT_DERIVED,Distinct nonzero bilinear profiles after duplicate and negation quotient.
+pool3_symmetry_reduced_profiles,570521,EXACT_DERIVED,Burnside orbit count under the 216-element symmetry group.
+pool3_zero_projection_profiles,15751929,EXACT_DERIVED,Profiles whose projection onto the live tensor is zero.
+pool3_deadfree_nonzero_profiles,0,EXACT_DERIVED,Profiles with zero nuisance magnitude and nonzero tensor projection.
+collapsed_3x3_greedy_first_exact_rank,3,MEASURED_FROM_CODE,First exact zero residual rank for the collapsed 81D greedy.
+collapsed_2x2_greedy_first_exact_rank,2,MEASURED_FROM_CODE,First exact zero residual rank for the collapsed 16D greedy.
+pool2_raw_pairs,6561,EXACT_DERIVED,"Total 2x2 alpha,beta raw pairs."
+pool2_zero_pairs,161,EXACT_DERIVED,2x2 raw pairs with alpha=0 or beta=0.
+pool2_distinct_profiles_mod_sign,1600,EXACT_DERIVED,Distinct 2x2 bilinear profiles after duplicate and negation quotient.
+pool2_symmetry_reduced_profiles,320,EXACT_DERIVED,Explicit 2x2 symmetry-reduced profile count.
+full_tensor_2x2_greedy_first_exact_rank,none,MEASURED_FROM_CODE,First exact rank where corrected full-tensor greedy reaches zero on 2x2.
+full_tensor_2x2_selected_strassen_matches,0,MEASURED_FROM_CODE,How many selected 2x2 greedy profiles are canonical Strassen bilinear profiles.

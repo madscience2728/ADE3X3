@@ -1,0 +1,7 @@
+component,multiplication_count,method,note,provenance
+top_left_2x2_block,7,Strassen_on_A11_B11,Apply 2x2 Strassen to the top-left 2x2 corner block.,EXACT_DERIVED
+top_left_outer_fixup,4,a12_times_b21_outer_product,The a12*b21^T correction contributes 4 scalar products to C11.,EXACT_DERIVED
+top_right_block,6,A11_b12_plus_a12_b22,A11*b12 costs 4 and a12*b22 costs 2.,EXACT_DERIVED
+bottom_left_block,6,a21T_B11_plus_a22_b21T,a21^T*B11 costs 4 and a22*b21^T costs 2.,EXACT_DERIVED
+bottom_right_scalar,3,a21T_b12_plus_a22_b22,The scalar corner uses 2 + 1 standard products.,EXACT_DERIVED
+naive_corner_strassen_total,26,sum_of_above,A direct 2x2-corner Strassen lift already exceeds 23 before any cross-block optimization.,EXACT_DERIVED

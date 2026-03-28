@@ -1,0 +1,19 @@
+fiber,anisotropy_symbol,formula,zero_equation_template,provenance
+"(0,0)","eta1_k[0,0]","eta1_k[0,0] = a_k[0,0]*b_k[0,0] - a_k[0,1]*b_k[1,0]","sum_k gamma_k[r',u'] * eta1_k[0,0] = 0",EXACT_DERIVED
+"(0,0)","eta2_k[0,0]","eta2_k[0,0] = a_k[0,1]*b_k[1,0] - a_k[0,2]*b_k[2,0]","sum_k gamma_k[r',u'] * eta2_k[0,0] = 0",EXACT_DERIVED
+"(0,1)","eta1_k[0,1]","eta1_k[0,1] = a_k[0,0]*b_k[0,1] - a_k[0,1]*b_k[1,1]","sum_k gamma_k[r',u'] * eta1_k[0,1] = 0",EXACT_DERIVED
+"(0,1)","eta2_k[0,1]","eta2_k[0,1] = a_k[0,1]*b_k[1,1] - a_k[0,2]*b_k[2,1]","sum_k gamma_k[r',u'] * eta2_k[0,1] = 0",EXACT_DERIVED
+"(0,2)","eta1_k[0,2]","eta1_k[0,2] = a_k[0,0]*b_k[0,2] - a_k[0,1]*b_k[1,2]","sum_k gamma_k[r',u'] * eta1_k[0,2] = 0",EXACT_DERIVED
+"(0,2)","eta2_k[0,2]","eta2_k[0,2] = a_k[0,1]*b_k[1,2] - a_k[0,2]*b_k[2,2]","sum_k gamma_k[r',u'] * eta2_k[0,2] = 0",EXACT_DERIVED
+"(1,0)","eta1_k[1,0]","eta1_k[1,0] = a_k[1,0]*b_k[0,0] - a_k[1,1]*b_k[1,0]","sum_k gamma_k[r',u'] * eta1_k[1,0] = 0",EXACT_DERIVED
+"(1,0)","eta2_k[1,0]","eta2_k[1,0] = a_k[1,1]*b_k[1,0] - a_k[1,2]*b_k[2,0]","sum_k gamma_k[r',u'] * eta2_k[1,0] = 0",EXACT_DERIVED
+"(1,1)","eta1_k[1,1]","eta1_k[1,1] = a_k[1,0]*b_k[0,1] - a_k[1,1]*b_k[1,1]","sum_k gamma_k[r',u'] * eta1_k[1,1] = 0",EXACT_DERIVED
+"(1,1)","eta2_k[1,1]","eta2_k[1,1] = a_k[1,1]*b_k[1,1] - a_k[1,2]*b_k[2,1]","sum_k gamma_k[r',u'] * eta2_k[1,1] = 0",EXACT_DERIVED
+"(1,2)","eta1_k[1,2]","eta1_k[1,2] = a_k[1,0]*b_k[0,2] - a_k[1,1]*b_k[1,2]","sum_k gamma_k[r',u'] * eta1_k[1,2] = 0",EXACT_DERIVED
+"(1,2)","eta2_k[1,2]","eta2_k[1,2] = a_k[1,1]*b_k[1,2] - a_k[1,2]*b_k[2,2]","sum_k gamma_k[r',u'] * eta2_k[1,2] = 0",EXACT_DERIVED
+"(2,0)","eta1_k[2,0]","eta1_k[2,0] = a_k[2,0]*b_k[0,0] - a_k[2,1]*b_k[1,0]","sum_k gamma_k[r',u'] * eta1_k[2,0] = 0",EXACT_DERIVED
+"(2,0)","eta2_k[2,0]","eta2_k[2,0] = a_k[2,1]*b_k[1,0] - a_k[2,2]*b_k[2,0]","sum_k gamma_k[r',u'] * eta2_k[2,0] = 0",EXACT_DERIVED
+"(2,1)","eta1_k[2,1]","eta1_k[2,1] = a_k[2,0]*b_k[0,1] - a_k[2,1]*b_k[1,1]","sum_k gamma_k[r',u'] * eta1_k[2,1] = 0",EXACT_DERIVED
+"(2,1)","eta2_k[2,1]","eta2_k[2,1] = a_k[2,1]*b_k[1,1] - a_k[2,2]*b_k[2,1]","sum_k gamma_k[r',u'] * eta2_k[2,1] = 0",EXACT_DERIVED
+"(2,2)","eta1_k[2,2]","eta1_k[2,2] = a_k[2,0]*b_k[0,2] - a_k[2,1]*b_k[1,2]","sum_k gamma_k[r',u'] * eta1_k[2,2] = 0",EXACT_DERIVED
+"(2,2)","eta2_k[2,2]","eta2_k[2,2] = a_k[2,1]*b_k[1,2] - a_k[2,2]*b_k[2,2]","sum_k gamma_k[r',u'] * eta2_k[2,2] = 0",EXACT_DERIVED

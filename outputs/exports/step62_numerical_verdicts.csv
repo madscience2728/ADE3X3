@@ -1,0 +1,7 @@
+pattern_id,numerical_rank_upper_bound_if_found,best_loss_all_ranks,rank_leq_13_found,rank_leq_14_found,best_success_loss,best_success_max_abs_residual,provenance
+P1,,1.007556492620e+00,False,False,,,MEASURED_FROM_CODE
+P2,,1.049573765062e+00,False,False,,,MEASURED_FROM_CODE
+P3,,1.011397192806e+00,False,False,,,MEASURED_FROM_CODE
+P4,,2.006682842623e+00,False,False,,,MEASURED_FROM_CODE
+P5,,1.000578290450e+00,False,False,,,MEASURED_FROM_CODE
+P6,,1.001606838715e+00,False,False,,,MEASURED_FROM_CODE

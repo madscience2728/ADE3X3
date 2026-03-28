@@ -1,0 +1,10 @@
+input_A,input_B,output_orbit,pair_count,focused_output,same_fiber_output,in_doubly_live_core,output_stab_type
+0,0,0,27,True,True,True,(Z2)^3
+0,30,30,54,True,True,True,Z2xZ2
+1,1,1,54,True,True,True,Z2xZ2
+2,2,2,54,True,True,True,Z2xZ2
+30,0,30,54,True,True,True,Z2xZ2
+30,30,0,54,True,True,True,(Z2)^3
+30,30,30,54,True,True,True,Z2xZ2
+132,132,132,54,True,True,True,Z2xZ2
+1057,1057,1057,54,True,True,True,Z2xZ2

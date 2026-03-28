@@ -1,0 +1,10 @@
+fiber,fiber_sum_symbol,formula,target_equation_template,provenance
+"(0,0)","sigma_k[0,0]","sigma_k[0,0] = a_k[0,0]*b_k[0,0] + a_k[0,1]*b_k[1,0] + a_k[0,2]*b_k[2,0]","sum_k gamma_k[r',u'] * sigma_k[0,0] = 3*delta_((0,0)=(r',u'))",EXACT_DERIVED
+"(0,1)","sigma_k[0,1]","sigma_k[0,1] = a_k[0,0]*b_k[0,1] + a_k[0,1]*b_k[1,1] + a_k[0,2]*b_k[2,1]","sum_k gamma_k[r',u'] * sigma_k[0,1] = 3*delta_((0,1)=(r',u'))",EXACT_DERIVED
+"(0,2)","sigma_k[0,2]","sigma_k[0,2] = a_k[0,0]*b_k[0,2] + a_k[0,1]*b_k[1,2] + a_k[0,2]*b_k[2,2]","sum_k gamma_k[r',u'] * sigma_k[0,2] = 3*delta_((0,2)=(r',u'))",EXACT_DERIVED
+"(1,0)","sigma_k[1,0]","sigma_k[1,0] = a_k[1,0]*b_k[0,0] + a_k[1,1]*b_k[1,0] + a_k[1,2]*b_k[2,0]","sum_k gamma_k[r',u'] * sigma_k[1,0] = 3*delta_((1,0)=(r',u'))",EXACT_DERIVED
+"(1,1)","sigma_k[1,1]","sigma_k[1,1] = a_k[1,0]*b_k[0,1] + a_k[1,1]*b_k[1,1] + a_k[1,2]*b_k[2,1]","sum_k gamma_k[r',u'] * sigma_k[1,1] = 3*delta_((1,1)=(r',u'))",EXACT_DERIVED
+"(1,2)","sigma_k[1,2]","sigma_k[1,2] = a_k[1,0]*b_k[0,2] + a_k[1,1]*b_k[1,2] + a_k[1,2]*b_k[2,2]","sum_k gamma_k[r',u'] * sigma_k[1,2] = 3*delta_((1,2)=(r',u'))",EXACT_DERIVED
+"(2,0)","sigma_k[2,0]","sigma_k[2,0] = a_k[2,0]*b_k[0,0] + a_k[2,1]*b_k[1,0] + a_k[2,2]*b_k[2,0]","sum_k gamma_k[r',u'] * sigma_k[2,0] = 3*delta_((2,0)=(r',u'))",EXACT_DERIVED
+"(2,1)","sigma_k[2,1]","sigma_k[2,1] = a_k[2,0]*b_k[0,1] + a_k[2,1]*b_k[1,1] + a_k[2,2]*b_k[2,1]","sum_k gamma_k[r',u'] * sigma_k[2,1] = 3*delta_((2,1)=(r',u'))",EXACT_DERIVED
+"(2,2)","sigma_k[2,2]","sigma_k[2,2] = a_k[2,0]*b_k[0,2] + a_k[2,1]*b_k[1,2] + a_k[2,2]*b_k[2,2]","sum_k gamma_k[r',u'] * sigma_k[2,2] = 3*delta_((2,2)=(r',u'))",EXACT_DERIVED

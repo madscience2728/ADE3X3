@@ -1,0 +1,11 @@
+ranked_position,c_mode_label,d_mode_label,coordinate_nuisance_rank,coordinate_quotient_gain,actual_sigma_rank,actual_eta_rank,actual_delta_rank,actual_nuisance_rank,actual_augmented_rank,actual_quotient_gain,matches_coordinate_profile,provenance
+1,00|01|02|10,00|01|10|20,15,1,4,6,13,15,16,1,True,EXACT_DERIVED
+2,00|01|02|10,00|01|11|21,15,1,4,6,13,15,16,1,True,EXACT_DERIVED
+3,00|01|02|10,00|02|10|20,15,1,4,6,13,15,16,1,True,EXACT_DERIVED
+4,00|01|02|10,00|02|12|22,15,1,4,6,13,15,16,1,True,EXACT_DERIVED
+5,00|01|02|10,01|02|11|21,15,1,4,6,13,15,16,1,True,EXACT_DERIVED
+6,00|01|02|10,01|02|12|22,15,1,4,6,13,15,16,1,True,EXACT_DERIVED
+7,00|01|02|11,00|10|20|21,15,1,4,6,13,15,16,1,True,EXACT_DERIVED
+8,00|01|02|11,00|10|20|22,15,1,4,6,13,15,16,1,True,EXACT_DERIVED
+9,00|01|02|11,01|11|20|21,15,1,4,6,13,15,16,1,True,EXACT_DERIVED
+10,00|01|02|11,01|11|21|22,15,1,4,6,13,15,16,1,True,EXACT_DERIVED

@@ -1,0 +1,10 @@
+remaining_fiber_count,fourier_fiber_count,reduced_output_coordinates,fiber_sum_equations,live_anisotropy_equations,dead_x_equations,total_reduced_equations,available_spreaders_R19,available_spreaders_R20,available_spreaders_R21,available_spreaders_R22,available_spreaders_R23,provenance
+1,8,1,9,18,54,81,-5,-4,-3,-2,-1,EXACT_DERIVED
+2,7,2,18,36,108,162,-2,-1,0,1,2,EXACT_DERIVED
+3,6,3,27,54,162,243,1,2,3,4,5,EXACT_DERIVED
+4,5,4,36,72,216,324,4,5,6,7,8,EXACT_DERIVED
+5,4,5,45,90,270,405,7,8,9,10,11,EXACT_DERIVED
+6,3,6,54,108,324,486,10,11,12,13,14,EXACT_DERIVED
+7,2,7,63,126,378,567,13,14,15,16,17,EXACT_DERIVED
+8,1,8,72,144,432,648,16,17,18,19,20,EXACT_DERIVED
+9,0,9,81,162,486,729,19,20,21,22,23,EXACT_DERIVED

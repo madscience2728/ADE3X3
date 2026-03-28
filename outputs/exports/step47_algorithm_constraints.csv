@@ -1,0 +1,9 @@
+constraint_name,constraint_value,provenance,note
+mixed_pair_count,164,EXACT_DERIVED,These are the orbit-level forks that any search inside the 64-orbit algebra must resolve.
+resolved_by_st,0/164,EXACT_DERIVED,"Pairs fully determined by interface (s,t) coordinates alone."
+resolved_by_rstu,0/164,EXACT_DERIVED,Pairs fully determined by full interface X coordinates.
+constant_outputset_by_st,164/164,EXACT_DERIVED,"Pairs whose mixed output-set is identical in every occupied (s,t) stratum."
+constant_outputset_by_rstu,164/164,EXACT_DERIVED,Pairs whose mixed output-set is identical in every occupied full-coordinate stratum.
+tensor_same_fiber_orbits,"[0, 30]",EXACT_DERIVED,"Among the 10 same-fiber closed orbits, the raw 3x3 multiplication tensor uses exactly these orbit ids."
+tensor_doubly_live_outside_0_30,0,EXACT_DERIVED,No raw multiplication-tensor same-fiber pair lands outside orbit 0 or orbit 30.
+rank1_exact_orbit_model_status,underdetermined_without_coefficient_or_support_model,EXACT_DERIVED,General rank-1 terms live in a continuous coefficient space; a finite orbit count and exact ILP need an explicit coefficient/support restriction.

@@ -1,0 +1,2 @@
+compatible_pairs,deterministic_pairs,mixed_pairs,deterministic_pct,mixed_pct,reachable_outputs,reachable_outputs_pct,identity_compatible,identity_exact,singleton_seed
+602,438,164,72.75747508305648,27.242524916943523,64,100.0,18,18,1

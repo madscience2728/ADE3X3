@@ -1,0 +1,4 @@
+summation_index,active_term_shape,target_output_space_dimension,minimum_terms_needed_for_channel,channel_statement,provenance
+0,p_k q_k^T in M_3x3,9,9,"Dead-free terms at fixed summation index reconstruct only that live channel, so their output-matrix span must equal all 3x3 matrices.",EXACT_DERIVED
+1,p_k q_k^T in M_3x3,9,9,"Dead-free terms at fixed summation index reconstruct only that live channel, so their output-matrix span must equal all 3x3 matrices.",EXACT_DERIVED
+2,p_k q_k^T in M_3x3,9,9,"Dead-free terms at fixed summation index reconstruct only that live channel, so their output-matrix span must equal all 3x3 matrices.",EXACT_DERIVED

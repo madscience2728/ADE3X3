@@ -1,0 +1,15 @@
+summary_name,summary_value,provenance,note
+n_equation_types_3x3,8,EXACT_DERIVED,The 729 tensor equations split into 8 structural XC equation types.
+equation_type_sizes_3x3,"[27, 54, 54, 108, 54, 108, 108, 216]",EXACT_DERIVED,Orbit sizes of the 8 structural equation types.
+step48_roster_crosscheck_passed,True,EXACT_DERIVED,Representative equations match the Step 48 XC orbit roster when that export is present.
+standard_27_term_representative_mismatches,0,EXACT_DERIVED,Standard 27-term basis algorithm mismatches on E0-E7.
+standard_27_term_full_tensor_mismatches,0,EXACT_DERIVED,Standard 27-term basis algorithm mismatches on all 729 equations.
+group_closed_reduction_scope,Representative equations imply all 729 only for group-closed multisets of terms.,EXACT_DERIVED,"This is a symmetry statement, not a general lower bound for arbitrary algorithms."
+non_group_closed_algorithms_require_all_729,True,EXACT_DERIVED,Known fast algorithms are not generally group-closed and must satisfy every instantiated equation.
+strassen_2x2_terms,7,EXACT_DERIVED,Number of rank-1 terms in Strassen 2x2.
+strassen_2x2_full_tensor_mismatches,0,EXACT_DERIVED,Strassen verification on the full 64-equation 2x2 tensor system.
+strassen_2x2_equation_orbits,8,EXACT_DERIVED,Number of equation orbit types in the 2x2 analog under S2 x S2 x S2.
+strassen_2x2_term_coefficient_orbits_used,4,EXACT_DERIVED,Number of coefficient-level term orbits used by the 7 Strassen terms.
+search_constraint_count,729,EXACT_DERIVED,The exact coordinate system remains 729 equations for 3x3.
+search_variable_count_formula_dense,27R,EXACT_DERIVED,Dense parameter count formula.
+search_variable_count_formula_sparse,3KR,EXACT_DERIVED,Sparse upper-bound variable count formula when each factor has at most K nonzeros.

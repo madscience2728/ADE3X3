@@ -1,0 +1,12 @@
+summary_name,summary_value,provenance,note
+fullspread_live_family_rank_per_output,1,EXACT_DERIVED,Live subspace rank for the full-spread omega family on a fixed output block.
+fullspread_target_live_rank_per_output,9,EXACT_DERIVED,Required live rank on a fixed output block for the true tensor.
+fullspread_exact_solution_exists,False,EXACT_DERIVED,Whether any number of full-spread omega terms can solve the tensor exactly.
+balanced_r9_total_failures,702,EXACT_DERIVED,Exact failure count for the explicit 9-term full-spread attempt.
+balanced_r9_live_off_target_failures,216,EXACT_DERIVED,Off-fiber live equations failed by the explicit 9-term full-spread attempt.
+balanced_r9_dead_failures,486,EXACT_DERIVED,Dead-X equations failed by the explicit 9-term full-spread attempt.
+greedy_fullspread_R27_total_failures,243,EXACT_DERIVED,Failure count after allowing all 27 full-spread basis terms in least-squares form.
+single_j1_nuisance_rank,1,EXACT_DERIVED,Step 51 nuisance rank for one same-fiber omega term with j=1.
+pair_j1_j2_nuisance_rank,4,EXACT_DERIVED,Combined nuisance rank for a same-fiber conjugate pair.
+triple_j012_nuisance_rank,8,EXACT_DERIVED,Combined nuisance rank for the three-channel same-fiber Fourier bundle.
+samefiber_fourier_total_failures,0,EXACT_DERIVED,Direct 729-equation verification result for the 27-term same-fiber Fourier disguise of the standard algorithm.

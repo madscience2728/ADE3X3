@@ -196,6 +196,122 @@ def read_step55_outputs():
     comm_rows = read_csv("step55_commutator_summary.csv")
     return summary_rows, dimension_rows, best_rows, profile_rows, symbolic_rows, gf2_rows, tropical_rows, comm_rows
 
+def read_step56_outputs():
+    """Read step 56 tensor-product DFT and orbit-packing exports."""
+    summary_rows = read_csv("step56_summary.csv")
+    dft_top_rows = read_csv("step56_dft_mode_top10.csv")
+    dft_dc_rows = read_csv("step56_dft_top10_dc_summary.csv")
+    dft_verification_rows = read_csv("step56_dft_mode_top10_verification.csv")
+    ternary_best_rows = read_csv("step56_ternary_random_best.csv")
+    algebraic_best_rows = read_csv("step56_algebraic_random_best.csv")
+    correction_best_rows = read_csv("step56_correction_block_best.csv")
+    optimization_best_rows = read_csv("step56_local_search_best.csv")
+    branch_rows = read_csv("step56_orbit30_branch_distribution.csv")
+    removal_rows = read_csv("step56_standard_term_removal_profile.csv")
+    support_rows = read_csv("step56_2x2_same_fiber_support_profiles.csv")
+    return (
+        summary_rows,
+        dft_top_rows,
+        dft_dc_rows,
+        dft_verification_rows,
+        ternary_best_rows,
+        algebraic_best_rows,
+        correction_best_rows,
+        optimization_best_rows,
+        branch_rows,
+        removal_rows,
+        support_rows,
+    )
+
+def read_step57_outputs():
+    """Read step 57 fiber-group partition enumeration exports."""
+    summary_rows = read_csv("step57_summary.csv")
+    type_rows = read_csv("step57_partition_types.csv")
+    survivor_rows = read_csv("step57_exact3_survivors.csv")
+    cycle_rows = read_csv("step57_symmetry_cycle_types.csv")
+    shape_rows = read_csv("step57_shape_classes.csv")
+    return summary_rows, type_rows, survivor_rows, cycle_rows, shape_rows
+
+def read_step59_outputs():
+    """Read step 59 cube-root-of-unity injection exports."""
+    summary_rows = read_csv("step59_summary.csv")
+    obstruction_rows = read_csv("step59_fullspread_obstruction.csv")
+    assignment_rows = read_csv("step59_r9_assignment.csv")
+    r9_summary_rows = read_csv("step59_r9_failure_summary.csv")
+    r9_failure_rows = read_csv("step59_r9_failure_examples.csv")
+    greedy_rows = read_csv("step59_greedy_fullspread_progress.csv")
+    nuisance_rows = read_csv("step59_samefiber_nuisance_profiles.csv")
+    verification_rows = read_csv("step59_samefiber_fourier_standard_verification.csv")
+    return (
+        summary_rows,
+        obstruction_rows,
+        assignment_rows,
+        r9_summary_rows,
+        r9_failure_rows,
+        greedy_rows,
+        nuisance_rows,
+        verification_rows,
+    )
+
+def read_step60_outputs():
+    """Read step 60 hybrid Fourier construction exports."""
+    summary_rows = read_csv("step60_summary.csv")
+    modularity_rows = read_csv("step60_fourier_modularity_summary.csv")
+    orbit_rows = read_csv("step60_residual_subtensor_orbits.csv")
+    size_rows = read_csv("step60_residual_subtensor_size_summary.csv")
+    reduced_rows = read_csv("step60_reduced_spreader_systems.csv")
+    feasibility_rows = read_csv("step60_hybrid_feasibility_table.csv")
+    explicit_rows = read_csv("step60_explicit_cases.csv")
+    return (
+        summary_rows,
+        modularity_rows,
+        orbit_rows,
+        size_rows,
+        reduced_rows,
+        feasibility_rows,
+        explicit_rows,
+    )
+
+def read_step61_outputs():
+    """Read step 61 nuisance-first architecture exports."""
+    summary_rows = read_csv("step61_summary.csv")
+    theorem_rows = read_csv("step61_r9_theorem_chain.csv")
+    channel_rows = read_csv("step61_deadfree_channel_bound.csv")
+    budget_rows = read_csv("step61_nuisance_budget_table.csv")
+    pressure_rows = read_csv("step61_rank18_23_pressure.csv")
+    return summary_rows, theorem_rows, channel_rows, budget_rows, pressure_rows
+
+def read_step62_outputs():
+    """Read step 62 six-fiber sub-tensor rank attack exports."""
+    summary_rows = read_csv("step62_summary.csv")
+    substitution_best_rows = read_csv("step62_substitution_best.csv")
+    numerical_rows = read_csv("step62_numerical_rank_scan.csv")
+    direct_rows = read_csv("step62_direct_p4_construction.csv")
+    pattern_rows = read_csv("step62_pattern_summary.csv")
+    verdict_rows = read_csv("step62_hybrid_verdicts.csv")
+    return summary_rows, substitution_best_rows, numerical_rows, direct_rows, pattern_rows, verdict_rows
+
+def read_step63_outputs():
+    """Read step 63 reverse-engineering and cancellation-visualization exports."""
+    summary_rows = read_csv("step63_summary.csv")
+    source_rows = read_csv("step63_external_source_status.csv")
+    term_rows = read_csv("step63_term_coefficients.csv")
+    importance_rows = read_csv("step63_term_importance.csv")
+    single_rows = read_csv("step63_single_term_removal.csv")
+    pair_rows = read_csv("step63_pair_term_removal.csv")
+    dead_rows = read_csv("step63_dead_equation_balances.csv")
+    comm_rows = read_csv("step63_commutator_split.csv")
+    return summary_rows, source_rows, term_rows, importance_rows, single_rows, pair_rows, dead_rows, comm_rows
+
+def read_step64_outputs():
+    """Read step 64 small-integer coefficient-enumeration exports."""
+    summary_rows = read_csv("step64_summary.csv")
+    top_rows = read_csv("step64_top100_usefulness_profiles.csv")
+    greedy3_rows = read_csv("step64_3x3_collapsed_greedy.csv")
+    greedy2_collapsed_rows = read_csv("step64_2x2_collapsed_greedy.csv")
+    greedy2_rows = read_csv("step64_2x2_full_tensor_greedy.csv")
+    return summary_rows, top_rows, greedy3_rows, greedy2_collapsed_rows, greedy2_rows
+
 def generate_x_atoms():
     """Generate all 81 X atoms with live/dead status and target."""
     # Try to read from export first
@@ -283,7 +399,15 @@ def generate():
     w("quotient-space rank criterion analysis (step 52),")
     w("support-type representative incidence analysis (step 53),")
     w("and analytical low-nuisance construction analysis (step 54),")
-    w("plus algebraic nuisance dependency mining and wildcard exploration (step 55)")
+    w("plus algebraic nuisance dependency mining and wildcard exploration (step 55),")
+    w("and tensor-product DFT construction with orbit-packing analysis (step 56),")
+    w("plus fiber-group partition enumeration with orbit-budget filtering (step 57),")
+    w("and cube-root-of-unity injection analysis (step 59),")
+    w("plus hybrid Fourier construction analysis (step 60),")
+    w("and nuisance-first architecture analysis (step 61),")
+    w("plus non-rectangular 6-fiber sub-tensor rank attack (step 62),")
+    w("and reverse engineering with cancellation visualization (step 63),")
+    w("plus small-integer coefficient enumeration (step 64)")
     w()
     w("**IMPORTANT:** This document contains all computed results inline.")
     w("No external files are required. All research findings are here.")
@@ -2223,6 +2347,696 @@ def generate():
     w("at 9 by the matrix dimensions, and the commutator profile shows real overlap structure")
     w("even for the standard and Strassen decompositions rather than automatic vanishing.")
 
+    # ── STEP 56 ──
+    w()
+    w(f"## {section_num}. TENSOR-PRODUCT DFT CONSTRUCTION + ORBIT PACKING")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 56)")
+    w()
+    w("Step 56 moves from p=3,q=4 to p=q=4, where the Hadamard space has dimension 16 and")
+    w("therefore leaves room for at most 7 nuisance dimensions if the quotient gain is to reach 9.")
+    w("Its main exact computation is a complete 126 x 126 tensor-product DFT mode sweep.")
+    w()
+    (sum56_rows, dft56_top_rows, dft56_dc_rows, dft56_verify_rows,
+     ternary56_rows, algebraic56_rows, correction56_rows, optimization56_rows,
+     branch56_rows, removal56_rows, support56_rows) = read_step56_outputs()
+    if sum56_rows:
+        sum56 = {row['summary_name']: row['summary_value'] for row in sum56_rows}
+        w(f"**p=q=4 combined nuisance cap:** {sum56['p4q4_combined_nuisance_cap']}")
+        w(f"**Best DFT quotient gain:** {sum56['dft_best_quotient_gain']}")
+        w(f"**Best DFT nuisance rank:** {sum56['dft_best_nuisance_rank']}")
+        w(f"**Best DFT mode pair:** {sum56['dft_best_mode_pair']}")
+        w(f"**Any DFT quotient gain >= 5?** {sum56['dft_any_quotient_gain_ge_5']}")
+        w(f"**Best ternary sample quotient gain:** {sum56['ternary_best_quotient_gain']}")
+        w(f"**Best algebraic sample quotient gain:** {sum56['algebraic_best_quotient_gain']}")
+        w(f"**Best correction-block quotient gain:** {sum56['correction_best_quotient_gain']}")
+        w(f"**Best local-search quotient gain:** {sum56['optimization_best_quotient_gain']}")
+        w()
+        w("### Track A: Top DFT Mode Pairs")
+        w()
+        w("| rank | C modes | D modes | C has DC | D has DC | sigma_rank | nuisance_rank | quotient_gain | meets nuisance<=7 |")
+        w("|------|---------|---------|----------|----------|------------|---------------|---------------|-------------------|")
+        for idx, row in enumerate(dft56_top_rows, start=1):
+            w(f"| {idx} | {row['c_mode_label']} | {row['d_mode_label']} | {row['c_includes_dc']} | {row['d_includes_dc']} | {row['sigma_rank']} | {row['nuisance_rank']} | {row['quotient_gain']} | {row['meets_nuisance_cap_7']} |")
+        w()
+        w("| DC pattern | top-10 count |")
+        w("|------------|--------------|")
+        for row in dft56_dc_rows:
+            w(f"| {row['dc_pattern']} | {row['top10_count']} |")
+        w()
+        w("| family | best quotient_gain | best nuisance_rank |")
+        w("|--------|--------------------|--------------------|")
+        w(f"| ternary random sample | {max(int(row['quotient_gain']) for row in ternary56_rows)} | {min(int(row['nuisance_rank']) for row in ternary56_rows)} |")
+        w(f"| algebraic random sample | {max(int(row['quotient_gain']) for row in algebraic56_rows)} | {min(int(row['nuisance_rank']) for row in algebraic56_rows)} |")
+        w(f"| interpreted correction-block sweep | {max(int(row['quotient_gain']) for row in correction56_rows)} | {min(int(row['nuisance_rank']) for row in correction56_rows)} |")
+        w(f"| numpy local search surrogate | {max(int(row['quotient_gain']) for row in optimization56_rows)} | {min(int(row['nuisance_rank']) for row in optimization56_rows)} |")
+        w()
+        w("### Track B: Orbit Packing")
+        w()
+        w("| branch | count | fraction |")
+        w("|--------|-------|----------|")
+        for row in branch56_rows:
+            w(f"| 30 o 30 -> {row['output_orbit']} | {row['count']} | {float(row['fraction']):.6f} |")
+        w()
+        w("| removed term | removed fiber | orbit0 after removal | orbit30 after removal | delta orbit0 | delta orbit30 |")
+        w("|--------------|--------------|----------------------|----------------------|--------------|--------------|")
+        for row in removal56_rows[:9]:
+            w(f"| {row['removed_term_label']} | {row['removed_fiber']} | {row['orbit0_count_after_removal']} | {row['orbit30_count_after_removal']} | {row['delta_orbit0']} | {row['delta_orbit30']} |")
+        w()
+        w("| algorithm | fibers hit | total aligned occurrences | unique live X atoms | unique distinct same-fiber pairs | occurrence distinct same-fiber pairs |")
+        w("|-----------|-----------|--------------------------|---------------------|----------------------------------|--------------------------------------|")
+        for row in support56_rows:
+            w(f"| {row['algorithm']} | {row['fiber_count']} | {row['total_aligned_live_occurrences']} | {row['unique_live_x_atoms']} | {row['unique_same_fiber_distinct_pairs']} | {row['occurrence_same_fiber_distinct_pairs']} |")
+        w()
+    else:
+        w("*Run ade3x3_step56_tensor_product_dft_orbit_packing.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 56 tests the first complete structured p=q=4 family. The Hadamard cap is now 7 rather")
+    w("than 3, so this regime is genuinely less cramped than Step 55's p=3,q=4 setting. The full")
+    w("DFT sweep is therefore definitive for that family: if the best quotient gain remains small,")
+    w("the tensor-product DFT basis is not by itself the missing ansatz. On the discrete side, the")
+    w("same-fiber branching point 30 o 30 stays exactly balanced, so there is no asymmetry lever in")
+    w("that raw composition rule. The direct minimization track used a numpy local-search surrogate")
+    w("because PyTorch is not installed in the current environment, so those values are best-observed")
+    w("measurements rather than a claim of global optimality.")
+
+    # ── STEP 57 ──
+    w()
+    w(f"## {section_num}. FIBER-GROUP PARTITION ENUMERATION + ORBIT BUDGET FILTER")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 57)")
+    w()
+    w("Step 57 moves to a purely discrete pre-coefficient search: partition the R terms into 9")
+    w("primary-fiber groups, reduce those partitions by the S3 x S3 action on the 3x3 output grid,")
+    w("and then filter them by same-fiber orbit budget. A second exact but conservative model asks")
+    w("whether a partition can be realized by rectangular spreading shapes so that every fiber is")
+    w("touched exactly three times in the 9-fiber x 3-channel picture.")
+    w()
+    sum57_rows, type57_rows, survivor57_rows, cycle57_rows, shape57_rows = read_step57_outputs()
+    if sum57_rows:
+        sum57_by_r = {int(row['R']): row for row in sum57_rows}
+        r9 = sum57_by_r[9]
+        r22 = sum57_by_r[22]
+        r23 = sum57_by_r[23]
+        w(f"**R=9 ordered compositions:** {r9['ordered_compositions']}")
+        w(f"**R=9 symmetry-inequivalent compositions:** {r9['symmetry_inequivalent_compositions']}")
+        w(f"**R=22 no-spreading survivor types:** {r22['no_spreading_survivor_types']}")
+        w(f"**R=22 exact-3 survivor assignment orbits:** {r22['exact3_tiling_surviving_assignment_orbits']}")
+        w(f"**R=23 no-spreading survivor types:** {r23['no_spreading_survivor_types']}")
+        w(f"**R=23 exact-3 survivor assignment orbits:** {r23['exact3_tiling_surviving_assignment_orbits']}")
+        w()
+        w("### Task 1-2: Partition Sweep")
+        w()
+        w("| R | ordered compositions | partition types | symmetry-inequivalent compositions | no-spreading survivor types | exact-3 survivor assignment orbits |")
+        w("|---|----------------------|-----------------|------------------------------------|-----------------------------|------------------------------------|")
+        for row in sum57_rows:
+            w(f"| {row['R']} | {row['ordered_compositions']} | {row['partition_types']} | {row['symmetry_inequivalent_compositions']} | {row['no_spreading_survivor_types']} | {row['exact3_tiling_surviving_assignment_orbits']} |")
+        w()
+        w("| cycle lengths on 9 fibers | class size |")
+        w("|---------------------------|------------|")
+        for row in cycle57_rows:
+            w(f"| {row['cycle_lengths']} | {row['class_size']} |")
+        w()
+        w("| shape | fibers touched | extra fibers beyond primary | primary-anchored rectangles |")
+        w("|-------|----------------|-----------------------------|-----------------------------|")
+        for row in shape57_rows:
+            w(f"| {row['shape']} | {row['fibers_touched']} | {row['extra_fibers_beyond_primary']} | {row['primary_anchored_rectangles']} |")
+        w()
+        w("### Task 4: Bottom-Up Structural Sweep")
+        w()
+        w("| R | partition_types | orbit_budget_survivors | shape_assignment_survivors | notes |")
+        w("|---|-----------------|------------------------|---------------------------|-------|")
+        for row in sum57_rows:
+            note_parts = []
+            if row['first_exact3_survivor_type']:
+                note_parts.append(f"first exact-3 type {row['first_exact3_survivor_type']}")
+            note_parts.append(f"deficit range {row['min_spreading_deficit']}..{row['max_spreading_deficit']}")
+            w(f"| {row['R']} | {row['partition_types']} | {row['no_spreading_survivor_types']} | {row['exact3_tiling_surviving_assignment_orbits']} | {'; '.join(note_parts)} |")
+        w()
+        top_survivors = survivor57_rows[:10]
+        if top_survivors:
+            w("### Representative Exact-3 Survivor Types")
+            w()
+            w("| R | partition type | surviving assignment orbits | example assignment | example shape witness |")
+            w("|---|----------------|----------------------------|--------------------|-----------------------|")
+            for row in top_survivors:
+                witness_cell = row['example_shape_witness'].replace('|', ';')
+                w(f"| {row['R']} | {row['partition_type']} | {row['surviving_assignment_orbits']} | {row['example_surviving_assignment']} | {witness_cell} |")
+            w()
+    else:
+        w("*Run ade3x3_step57_fiber_group_partition_enumeration.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 57 gives an exact discrete front end to the search, but not yet a lower-bound theorem.")
+    w("The ordered/symmetry-reduced partition counts and the orbit-budget deficits are exact. The")
+    w("exact-3 survivors are also exact inside their own model, but that model is conservative: it")
+    w("forces the 27 channel incidences to appear literally as 3 touches per fiber. So if survivors")
+    w("already appear at small R, the partition ansatz alone does not exclude those ranks; if a")
+    w("partition fails the exact-3 test, that only says it cannot realize the rigid tiling picture, not")
+    w("that weighted coefficient cancellation is impossible.")
+
+    # ── STEP 59 ──
+    w()
+    w(f"## {section_num}. CUBE ROOT OF UNITY INJECTION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 59)")
+    w()
+    w("Step 59 separates two omega-based constructions that are easy to conflate. The full-spread")
+    w("family places the same Fourier row on every input row and the conjugate Fourier column on")
+    w("every input column; the same-fiber family localizes those Fourier factors to a single output")
+    w("fiber. The first family is the source of the naive low-R temptation, and the second family is")
+    w("the one that actually interacts cleanly with the Step 51 nuisance basis.")
+    w()
+    (
+        sum59_rows,
+        obstruction59_rows,
+        assignment59_rows,
+        r9sum59_rows,
+        r9fail59_rows,
+        greedy59_rows,
+        nuisance59_rows,
+        verify59_rows,
+    ) = read_step59_outputs()
+    if sum59_rows:
+        sum59 = {row['summary_name']: row for row in sum59_rows}
+        r9sum59 = r9sum59_rows[0] if r9sum59_rows else None
+        verify59 = verify59_rows[0] if verify59_rows else None
+        w(f"**Full-spread live rank per output block:** {sum59['fullspread_live_family_rank_per_output']['summary_value']}")
+        w(f"**Target live rank per output block:** {sum59['fullspread_target_live_rank_per_output']['summary_value']}")
+        w(f"**Balanced 9-term full-spread total failures:** {sum59['balanced_r9_total_failures']['summary_value']}")
+        w(f"**Same-fiber j=1 nuisance rank:** {sum59['single_j1_nuisance_rank']['summary_value']}")
+        w(f"**Same-fiber j=1,2 pair nuisance rank:** {sum59['pair_j1_j2_nuisance_rank']['summary_value']}")
+        w(f"**Same-fiber j=0,1,2 triple nuisance rank:** {sum59['triple_j012_nuisance_rank']['summary_value']}")
+        w(f"**27-term same-fiber Fourier verification failures:** {sum59['samefiber_fourier_total_failures']['summary_value']}")
+        w()
+        w("### Task 2f: Full-Spread Obstruction")
+        w()
+        w("| statement id | statement | value |")
+        w("|--------------|-----------|-------|")
+        for row in obstruction59_rows:
+            w(f"| {row['statement_id']} | {row['statement']} | {row['value']} |")
+        w()
+        w("### Task 3c-3d: Explicit 9-Term Full-Spread Attempt")
+        w()
+        w("| output fiber | channel j | label |")
+        w("|--------------|-----------|-------|")
+        for row in assignment59_rows:
+            w(f"| {row['output_fiber']} | {row['channel_j']} | {row['label']} |")
+        w()
+        if r9sum59:
+            w("| live target failures | live off-target failures | dead failures | total failures |")
+            w("|----------------------|--------------------------|---------------|----------------|")
+            w(f"| {r9sum59['live_target_failures']} | {r9sum59['live_off_target_failures']} | {r9sum59['dead_failures']} | {r9sum59['total_failures']} |")
+            w()
+        if r9fail59_rows:
+            w("Representative failed equations:")
+            w()
+            w("| output fiber | input coordinate | block type | actual | target | residual |")
+            w("|--------------|------------------|------------|--------|--------|----------|")
+            for row in r9fail59_rows[:12]:
+                w(f"| {row['output_fiber']} | {row['input_coordinate']} | {row['block_type']} | {row['actual_value']} | {row['target_value']} | {row['residual']} |")
+            w()
+        w("### Task 3e: Greedy Restricted-Family Augmentation")
+        w()
+        w("| R | selected term | residual L2 | max abs residual | live target fails | live off-target fails | dead fails | total fails |")
+        w("|---|---------------|-------------|------------------|-------------------|-----------------------|------------|-------------|")
+        for row in greedy59_rows[:12]:
+            w(f"| {row['R']} | {row['selected_term']} | {row['residual_l2_norm']} | {row['max_abs_residual']} | {row['live_target_failures']} | {row['live_off_target_failures']} | {row['dead_failures']} | {row['total_failures']} |")
+        if greedy59_rows:
+            tail59 = greedy59_rows[-1]
+            w()
+            w(f"At R={tail59['R']} within the full-spread family, the failure count is still {tail59['total_failures']} with residual L2 {tail59['residual_l2_norm']}.")
+            w()
+        w("### Task 4a-4c: Same-Fiber Fourier Nuisance Profiles")
+        w()
+        w("| case | term count | sigma rank | eta rank | delta rank | nuisance rank | augmented rank | quotient gain |")
+        w("|------|------------|------------|----------|------------|---------------|----------------|---------------|")
+        for row in nuisance59_rows:
+            w(f"| {row['case_label']} | {row['term_count']} | {row['sigma_rank']} | {row['eta_rank']} | {row['delta_rank']} | {row['nuisance_rank']} | {row['augmented_rank']} | {row['quotient_gain']} |")
+        w()
+        if verify59:
+            w("| same-fiber Fourier term count | total failures | live target failures | live off-target failures | dead failures |")
+            w("|-------------------------------|----------------|----------------------|--------------------------|---------------|")
+            w(f"| {verify59['samefiber_fourier_term_count']} | {verify59['samefiber_fourier_total_failures']} | {verify59['samefiber_fourier_live_target_failures']} | {verify59['samefiber_fourier_live_off_target_failures']} | {verify59['samefiber_fourier_dead_failures']} |")
+            w()
+    else:
+        w("*Run ade3x3_step59_cube_root_unity_injection.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 59 sharpens the omega story into an exact yes/no split. The full-spread family is not")
+    w("merely insufficient in sampled search; it is linearly incapable of resolving the 9 distinct")
+    w("input fibers inside a fixed live output block, so the naive low-rank hope fails for a structural")
+    w("reason. The same-fiber Fourier bundle behaves differently: DFT orthogonality kills the dead-X")
+    w("channels exactly and yields a valid 27-term decomposition, but it does so as a Fourier disguise")
+    w("of the standard algorithm rather than as a new sub-27 construction. In Step 51 language, cube")
+    w("roots of unity help organize nuisance cancellation, but they do not by themselves collapse the")
+    w("nuisance span below the regime needed for a rank improvement.")
+
+    # ── STEP 60 ──
+    w()
+    w(f"## {section_num}. HYBRID FOURIER CONSTRUCTION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 60)")
+    w()
+    w("Step 60 treats the hybrid ansatz as an exact direct sum of two blocks. Same-fiber Fourier")
+    w("triples solve chosen output fibers perfectly and do not leak to the complementary fibers. The")
+    w("remaining spreader problem is therefore an honest residual tensor-rank problem on the uncovered")
+    w("fiber set, which can be filtered first by flattening lower bounds and then, where available, by")
+    w("known exact ranks for rectangular subproblems.")
+    w()
+    (
+        sum60_rows,
+        modularity60_rows,
+        orbit60_rows,
+        size60_rows,
+        reduced60_rows,
+        feasibility60_rows,
+        explicit60_rows,
+    ) = read_step60_outputs()
+    if sum60_rows:
+        sum60 = {row['summary_name']: row for row in sum60_rows}
+        w(f"**Fourier subsets checked:** {sum60['modularity_total_subsets_checked']['summary_value']}")
+        w(f"**Fourier subsets passing exactly:** {sum60['modularity_total_passing_subsets']['summary_value']}")
+        w(f"**Maximum Fourier modularity residual:** {sum60['modularity_max_abs_residual']['summary_value']}")
+        w(f"**Six-fiber residual orbits:** {sum60['sixfiber_orbit_count']['summary_value']}")
+        w(f"**Six-fiber max-flattening lower-bound range:** {sum60['sixfiber_min_flattening_rank_max']['summary_value']}..{sum60['sixfiber_max_flattening_rank_max']['summary_value']}")
+        w(f"**Six-fiber flattening candidates at R=19:** {sum60['sixfiber_candidate_orbits_R19_by_flattening']['summary_value']}")
+        w(f"**Six-fiber flattening candidates at R=20:** {sum60['sixfiber_candidate_orbits_R20_by_flattening']['summary_value']}")
+        w(f"**Six-fiber flattening candidates at R=21:** {sum60['sixfiber_candidate_orbits_R21_by_flattening']['summary_value']}")
+        w(f"**Six-fiber R=22 flattening candidates:** {sum60['sixfiber_candidate_orbits_R22_by_flattening']['summary_value']}")
+        w(f"**Six-fiber R=23 flattening candidates:** {sum60['sixfiber_candidate_orbits_R23_by_flattening']['summary_value']}")
+        w(f"**R=22 three-fiber row case:** {sum60['three_fiber_row_case_verdict']['summary_value']}")
+        w()
+        w("### Task 1: Fourier Block Modularity")
+        w()
+        w("| subset size | subset count | passing count | max abs residual |")
+        w("|-------------|--------------|---------------|------------------|")
+        for row in modularity60_rows:
+            w(f"| {row['subset_size']} | {row['subset_count']} | {row['passing_count']} | {row['max_abs_residual']} |")
+        w()
+        w("### Task 2d: Reduced Spreader Systems")
+        w()
+        w("| remaining fibers | Fourier fibers | fiber-sum eqs | anisotropy eqs | dead-X eqs | total reduced eqs | spreaders at R=19 | spreaders at R=20 | spreaders at R=21 | spreaders at R=22 | spreaders at R=23 |")
+        w("|------------------|----------------|---------------|----------------|------------|-------------------|------------------|------------------|------------------|------------------|------------------|")
+        for row in reduced60_rows:
+            w(f"| {row['remaining_fiber_count']} | {row['fourier_fiber_count']} | {row['fiber_sum_equations']} | {row['live_anisotropy_equations']} | {row['dead_x_equations']} | {row['total_reduced_equations']} | {row['available_spreaders_R19']} | {row['available_spreaders_R20']} | {row['available_spreaders_R21']} | {row['available_spreaders_R22']} | {row['available_spreaders_R23']} |")
+        w()
+        sixfiber_orbits = [row for row in orbit60_rows if row['remaining_fiber_count'] == '6']
+        if sixfiber_orbits:
+            w("### Task 4c: Six-Fiber Residual Orbits")
+            w()
+            w("| representative residual fibers | orbit size | row profile | col profile | rectangle | rank A|(BC) | rank B|(AC) | rank C|(AB) | max lower bound | known exact rank if any |")
+            w("|-------------------------------|------------|-------------|-------------|-----------|------------|------------|------------|-----------------|-------------------------|")
+            for row in sixfiber_orbits:
+                exact_cell = row['exact_rank_if_known'] if row['exact_rank_if_known'] else ''
+                w(f"| {row['orbit_representative']} | {row['orbit_size']} | {row['row_profile']} | {row['col_profile']} | {row['is_rectangle']} | {row['flattening_rank_A_BC']} | {row['flattening_rank_B_AC']} | {row['flattening_rank_C_AB']} | {row['flattening_rank_max']} | {exact_cell} |")
+            w()
+        w("### Task 3f / 4: Hybrid Feasibility Table")
+        w()
+        w("| Fourier fibers f | Fourier terms | remaining fibers | R=19 spreaders | R=20 spreaders | R=21 spreaders | R=22 spreaders | R=23 spreaders | flattening lower-bound range | R19 cand. | R20 cand. | R21 cand. | R22 cand. | R23 cand. |")
+        w("|------------------|---------------|------------------|---------------|---------------|---------------|---------------|---------------|------------------------------|-----------|-----------|-----------|-----------|-----------|")
+        for row in feasibility60_rows:
+            lower_range = f"{row['min_flattening_lower_bound']}..{row['max_flattening_lower_bound']}"
+            w(f"| {row['fourier_fiber_count']} | {row['fourier_term_count']} | {row['remaining_fiber_count']} | {row['available_spreaders_R19']} | {row['available_spreaders_R20']} | {row['available_spreaders_R21']} | {row['available_spreaders_R22']} | {row['available_spreaders_R23']} | {lower_range} | {row['candidate_orbits_R19_by_flattening']} | {row['candidate_orbits_R20_by_flattening']} | {row['candidate_orbits_R21_by_flattening']} | {row['candidate_orbits_R22_by_flattening']} | {row['candidate_orbits_R23_by_flattening']} |")
+        w()
+        w("### Explicit Cases")
+        w()
+        w("| case | remaining fibers | available spreaders | max flattening lower bound | known exact rank | verdict |")
+        w("|------|------------------|---------------------|----------------------------|------------------|---------|")
+        for row in explicit60_rows:
+            exact_cell = row['known_exact_rank_if_any'] if row['known_exact_rank_if_any'] else ''
+            w(f"| {row['case_id']} | {row['remaining_fibers']} | {row['available_spreaders']} | {row['flattening_rank_max']} | {exact_cell} | {row['verdict']} |")
+    else:
+        w("*Run ade3x3_step60_hybrid_fourier_construction.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 60 closes one ambiguity from Step 59 and opens another. The ambiguity it closes is")
+    w("coupling: the Fourier block is exactly modular, so once some fibers are handled by same-fiber")
+    w("Fourier triples, the spreader block sees a literal residual tensor on the uncovered fibers and")
+    w("nothing else. The new open point is rank: flattening lower bounds immediately kill the tiny")
+    w("residual cases with 1, 2, or 3 remaining fibers, and known exact ranks also kill the 2x2 and")
+    w("2x3 rectangular residuals at the hoped-for spreader budgets. But the six-fiber non-rectangular")
+    w("residuals remain alive under flattening alone, all with lower bound 9 against budgets 10, 11, 12,")
+    w("13, and 14 at R=19..23. So the hybrid ansatz is not dead, but the surviving territory is now sharply localized to")
+    w("non-rectangular residual patterns where stronger lower bounds or explicit constructions are still")
+    w("needed.")
+
+    # ── STEP 61 ──
+    w()
+    w(f"## {section_num}. NUISANCE-FIRST ARCHITECTURE")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 61)")
+    w()
+    w("Step 61 reverses the constructive viewpoint. Instead of asking how to suppress nuisance, it asks")
+    w("what exact architecture the Step 51-52 equations force if nuisance is treated as the load-bearing")
+    w("resource below rank 27. The first consequence is a sharp R=9 contradiction; the second is an")
+    w("exact dependency budget for ranks 18 through 23.")
+    w()
+    sum61_rows, theorem61_rows, channel61_rows, budget61_rows, pressure61_rows = read_step61_outputs()
+    if sum61_rows:
+        sum61 = {row['summary_name']: row for row in sum61_rows}
+        w(f"**R=9 status:** {sum61['R9_status']['summary_value']}")
+        w(f"**Dead-free global lower bound:** {sum61['deadfree_global_lower_bound']['summary_value']}")
+        w(f"**R=18 Gamma-nullity:** {sum61['R18_gamma_nullity']['summary_value']}")
+        w(f"**R=18 minimum dead dependencies:** {sum61['R18_min_dead_dependencies']['summary_value']}")
+        w(f"**Sub-27 requires nuisance:** {sum61['sub27_requires_nuisance']['summary_value']}")
+        w()
+        w("### R=9 Theorem Chain")
+        w()
+        w("| id | statement | value |")
+        w("|----|-----------|-------|")
+        for row in theorem61_rows:
+            w(f"| {row['statement_id']} | {row['statement']} | {row['value']} |")
+        w()
+        w("### Dead-Free Per-Channel Lower Bound")
+        w()
+        w("| summation index | target dimension | minimum terms needed | statement |")
+        w("|-----------------|------------------|----------------------|-----------|")
+        for row in channel61_rows:
+            w(f"| {row['summation_index']} | {row['target_output_space_dimension']} | {row['minimum_terms_needed_for_channel']} | {row['channel_statement']} |")
+        w()
+        highlight61_rows = [row for row in budget61_rows if row['R'] in {'9', '18', '19', '20', '21', '22', '23', '27'}]
+        w("### Nuisance Budget Table")
+        w()
+        w("| R | Gamma nullity | max nuisance rank | max dead rank | min dead dependencies | min total nuisance dependencies | all terms dead-free possible? |")
+        w("|---|---------------|-------------------|---------------|-----------------------|--------------------------------|-------------------------------|")
+        for row in highlight61_rows:
+            w(f"| {row['R']} | {row['gamma_nullity']} | {row['max_nuisance_rank']} | {row['max_dead_rank']} | {row['min_dead_dependencies']} | {row['min_total_nuisance_dependencies']} | {row['all_terms_deadfree_possible']} |")
+        w()
+        w("### R=18..23 Pressure Rows")
+        w()
+        w("| R | Gamma nullity | max nuisance rank | min dead dependencies | min total nuisance dependencies |")
+        w("|---|---------------|-------------------|-----------------------|--------------------------------|")
+        for row in pressure61_rows:
+            w(f"| {row['R']} | {row['gamma_nullity']} | {row['max_nuisance_rank']} | {row['min_dead_linear_dependencies']} | {row['min_total_nuisance_linear_dependencies']} |")
+        w()
+    else:
+        w("*Run ade3x3_step61_nuisance_first_architecture.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 61 makes explicit what the earlier steps only suggested empirically: nuisance is not a")
+    w("mistake to be eliminated, but the mechanism by which any sub-27 algorithm must operate. At")
+    w("R=9 the contradiction is exact: Gamma has no nullspace, so nuisance would have to vanish term by")
+    w("term, but Step 54's dead-free classification shows that a nonzero term cannot be both dead-free")
+    w("and anisotropy-free. The weaker channel-count argument already forces R>=27 for all-dead-free")
+    w("families. At R=18 the budget becomes geometric rather than impossible: the whole 72-column")
+    w("nuisance block must fit inside a 9-dimensional annihilator, so dozens of exact linear identities")
+    w("are required before any quotient-space gain is even possible. That reframes the constructive")
+    w("problem: not how to avoid nuisance, but how to engineer nuisance with maximal cancellation power")
+    w("at minimal rank cost.")
+
+    # ── STEP 62 ──
+    w()
+    w(f"## {section_num}. NON-RECTANGULAR 6-FIBER SUB-TENSOR RANK ATTACK")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] + [MEASURED_FROM_CODE] (Step 62)")
+    w()
+    w("Step 62 attacks the six-fiber survivors from Step 60 with three tools at once: exact")
+    w("substitution-style restriction bounds, measured CP-rank fitting on the full 9x9xm subtensors,")
+    w("and a direct upper-bound construction for the anti-diagonal-missing pattern P4.")
+    w()
+    (
+        sum62_rows,
+        subbest62_rows,
+        num62_rows,
+        direct62_rows,
+        pattern62_rows,
+        verdict62_rows,
+    ) = read_step62_outputs()
+    if sum62_rows:
+        sum62 = {row['summary_name']: row for row in sum62_rows}
+        w(f"**Nonrectangular patterns attacked:** {sum62['nonrectangular_pattern_count']['summary_value']}")
+        w(f"**Rectangular patterns ruled out exactly:** {sum62['rectangular_patterns_ruled_out_exactly']['summary_value']}")
+        w(f"**Best substitution lower bound on P1-P4:** {sum62['best_substitution_lower_bound_nonrectangular']['summary_value']}")
+        w(f"**Any nonrectangular rank <= 13 found numerically?** {sum62['any_nonrectangular_rank_leq_13_found']['summary_value']}")
+        w(f"**Any nonrectangular rank <= 14 found numerically?** {sum62['any_nonrectangular_rank_leq_14_found']['summary_value']}")
+        w(f"**P4 direct upper bound:** {sum62['P4_direct_upper_bound']['summary_value']}")
+        w()
+        w("### Pattern Table")
+        w()
+        w("| pattern | representative fibers | substitution best lower bound | numerical rank upper bound if found | best loss over ranks 9..14 | known exact rank if determined | feasible at 13 spreaders? | feasible at 14 spreaders? |")
+        w("|---------|-----------------------|-------------------------------|-------------------------------------|----------------------------|-------------------------------|--------------------------|--------------------------|")
+        for row in pattern62_rows:
+            w(f"| {row['pattern_id']} | {row['representative_fibers']} | {row['substitution_best_lower_bound']} | {row['numerical_rank_upper_bound_if_found']} | {row['best_loss_all_ranks']} | {row['known_exact_rank_if_determined']} | {row['feasible_at_13_spreaders']} | {row['feasible_at_14_spreaders']} |")
+        w()
+        nonrect_num_rows = [row for row in num62_rows if row['pattern_id'] in {'P1', 'P2', 'P3', 'P4'} and row['rank_tested'] in {'13', '14'}]
+        if nonrect_num_rows:
+            w("### Numerical Rank Scan on P1-P4")
+            w()
+            w("| pattern | rank tested | best verified loss | best max abs residual | numerical exact? |")
+            w("|---------|-------------|--------------------|-----------------------|------------------|")
+            for row in nonrect_num_rows:
+                w(f"| {row['pattern_id']} | {row['rank_tested']} | {row['best_verified_loss']} | {row['best_max_abs_residual']} | {row['numerically_exact']} |")
+            w()
+        w("### Direct P4 Construction")
+        w()
+        w("| construction | term count | status | note |")
+        w("|--------------|------------|--------|------|")
+        for row in direct62_rows:
+            w(f"| {row['construction_id']} | {row['term_count']} | {row['status']} | {row['note']} |")
+        w()
+        w("### Hybrid Verdicts")
+        w()
+        w("| R | Fourier fibers f | spreaders | verdict | scope |")
+        w("|---|------------------|-----------|---------|-------|")
+        for row in verdict62_rows:
+            w(f"| {row['R']} | {row['fourier_fiber_count']} | {row['spreader_budget']} | {row['any_pattern_feasible']} | {row['scope']} |")
+        w()
+    else:
+        w("*Run ade3x3_step62_nonrectangular_6fiber_rank_attack.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 62 upgrades the six-fiber hybrid discussion from a flattening possibility statement to a")
+    w("direct rank attack. The exact restriction bounds still stop at 9 on the nonrectangular patterns,")
+    w("so they do not decide the R=22 question. The measured CP-rank scan is the new evidence: across")
+    w("all four nonrectangular six-fiber patterns, no rank-13 or rank-14 fit drove the loss anywhere")
+    w("near zero in the current L-BFGS-B restarts. That is not a proof of impossibility, but it is")
+    w("negative evidence against the f=3 hybrid route at both R=22 and R=23. The rectangular patterns")
+    w("stay exactly ruled out by rank 15, and P4 still has only the obvious exact upper bound 18 from")
+    w("its fiber-local decomposition.")
+
+    # ── STEP 63 ──
+    w()
+    w(f"## {section_num}. REVERSE ENGINEERING + CANCELLATION VISUALIZATION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] + [MEASURED_FROM_CODE] (Step 63)")
+    w()
+    w("Step 63 changes direction. Instead of only searching forward for low-rank 3x3 algorithms, it")
+    w("starts from a known exact rank-23 decomposition and measures how that algorithm sits inside the")
+    w("Step 51-52 fiber-mode framework. The key source result is that while Smirnov's explicit 2013")
+    w("coefficient table was not recovered from the fetched paper metadata, the public AlphaTensor")
+    w("repository exposes an exact 3x3x3 rank-23 factorization in recombination/example.py, and that")
+    w("explicit 23-term coefficient table can be profiled directly.")
+    w()
+    (
+        sum63_rows,
+        source63_rows,
+        term63_rows,
+        importance63_rows,
+        single63_rows,
+        pair63_rows,
+        dead63_rows,
+        comm63_rows,
+    ) = read_step63_outputs()
+    if sum63_rows:
+        sum63 = {row['summary_name']: row for row in sum63_rows}
+        w(f"**Recovered algorithm:** {sum63['algorithm_label']['summary_value']}")
+        w(f"**Term count:** {sum63['term_count']['summary_value']}")
+        w(f"**Gamma orientation needed for ADE3x3 indexing:** {sum63['gamma_orientation']['summary_value']}")
+        w(f"**Exact reconstruction residual:** {sum63['reconstruction_max_abs_residual']['summary_value']}")
+        w(f"**Measured nuisance rank:** {sum63['nuisance_rank']['summary_value']}")
+        w(f"**Quotient gain:** {sum63['quotient_gain']['summary_value']}")
+        w(f"**Nuisance equals R-9 exactly?** {sum63['nuisance_equals_R_minus_9']['summary_value']}")
+        w(f"**Single-term reweight-feasible removals:** {sum63['single_term_reweight_feasible_count']['summary_value']}")
+        w(f"**Pair reweight-feasible removals:** {sum63['pair_reweight_feasible_count']['summary_value']}")
+        w(f"**Dependency-graph edges:** {sum63['dependency_graph_edge_count']['summary_value']}")
+        w(f"**Visualization HTML:** {sum63['visualization_html']['summary_value']}")
+        w()
+        w("### Task 1: External Source Status")
+        w()
+        w("| source | status | detail |")
+        w("|--------|--------|--------|")
+        for row in source63_rows:
+            w(f"| {row['source_label']} | {row['status']} | {row['detail']} |")
+        w()
+        w("### Task 2: Fiber-Mode Profile of the Public Rank-23 Algorithm")
+        w()
+        w("| R | sigma_rank | eta_rank | delta_rank | nuisance_rank | augmented_rank | quotient_gain | Gamma*Sigma=3I_9 | Gamma*Nuisance=0 |")
+        w("|---|------------|----------|------------|---------------|----------------|---------------|------------------|------------------|")
+        w(f"| {sum63['term_count']['summary_value']} | {sum63['sigma_rank']['summary_value']} | {sum63['eta_rank']['summary_value']} | {sum63['delta_rank']['summary_value']} | {sum63['nuisance_rank']['summary_value']} | {sum63['augmented_rank']['summary_value']} | {sum63['quotient_gain']['summary_value']} | True | True |")
+        w()
+        w("The critical exact measurement is nuisance rank 14, so this recovered 23-term algorithm")
+        w("saturates the Step 52 boundary R = 9 + rank(Nuisance) exactly.")
+        w()
+        w("### Task 1/2: Explicit 23-Term Coefficient Table")
+        w()
+        w("| term | alpha | beta | gamma |")
+        w("|------|-------|------|-------|")
+        for row in term63_rows:
+            w(f"| {row['term_id']} | {row['alpha']} | {row['beta']} | {row['gamma']} |")
+        w()
+        w("### Task 3a/3b: Term Importance")
+        w()
+        w("| rank | term | Frobenius norm^2 | nonzero equations | affected equation types | live fibers touched |")
+        w("|------|------|------------------|-------------------|-------------------------|--------------------|")
+        for row in importance63_rows[:10]:
+            w(f"| {row['importance_rank']} | {row['term_id']} | {row['frobenius_norm_squared']} | {row['nonzero_equation_count']} | {row['affected_equation_types']} | {row['affected_live_fibers']} |")
+        w()
+        w("### Task 3c: Single-Term Removal Feasibility")
+        w()
+        w("| removed term | remaining R | nuisance_rank | augmented_rank | quotient_gain | gamma-only reweight feasible? |")
+        w("|--------------|-------------|---------------|----------------|---------------|-------------------------------|")
+        for row in single63_rows:
+            w(f"| {row['removed_terms']} | {row['remaining_R']} | {row['nuisance_rank']} | {row['augmented_rank']} | {row['quotient_gain']} | {row['gamma_reweight_feasible']} |")
+        w()
+        top_pair63_rows = [row for row in pair63_rows if row['quotient_gain'] == pair63_rows[0]['quotient_gain']][:10]
+        w("### Task 3d: Best Pair-Removal Cases")
+        w()
+        w("| removed pair | remaining R | nuisance_rank | augmented_rank | quotient_gain | gamma-only reweight feasible? |")
+        w("|--------------|-------------|---------------|----------------|---------------|-------------------------------|")
+        for row in top_pair63_rows:
+            w(f"| {row['removed_terms']} | {row['remaining_R']} | {row['nuisance_rank']} | {row['augmented_rank']} | {row['quotient_gain']} | {row['gamma_reweight_feasible']} |")
+        w()
+        perfect_dead = sum(1 for row in dead63_rows if row['balance_status'] == 'perfect_balanced')
+        multi_dead = sum(1 for row in dead63_rows if row['balance_status'] == 'multi_way_balanced')
+        one_sided_dead = sum(1 for row in dead63_rows if row['balance_status'] == 'one_sided')
+        w("### Task 4: Cancellation Structure Summary")
+        w()
+        w(f"- Perfectly balanced dead equations: {perfect_dead}")
+        w(f"- Multi-way balanced dead equations: {multi_dead}")
+        w(f"- One-sided dead equations: {one_sided_dead}")
+        w("- Full interactive-style HTML export written to outputs/step63_cancellation_visualization.html")
+        w()
+        w("### Task 5: Commutator / Anticommutator Split")
+        w()
+        w("| size | tensor piece | nonzero entries | rank A|(BC) | rank B|(AC) | rank C|(AB) | flattening lower bound |")
+        w("|------|--------------|-----------------|------------|------------|------------|-------------------------|")
+        for row in comm63_rows:
+            w(f"| {row['matrix_size']} | {row['tensor_piece']} | {row['nonzero_entries']} | {row['flattening_rank_A_BC']} | {row['flattening_rank_B_AC']} | {row['flattening_rank_C_AB']} | {row['flattening_lower_bound']} |")
+        w()
+    else:
+        w("*Run ade3x3_step63_reverse_engineering_cancellation_visualization.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 63 supplies exactly the kind of reverse-engineering datum the earlier steps lacked: an")
+    w("explicit low-rank 3x3 algorithm that can be measured in the fiber-mode basis rather than merely")
+    w("hypothesized. The strongest exact result is that the recovered public rank-23 decomposition has")
+    w("nuisance rank 14 and quotient gain 9, so it lands precisely on the Step 52 boundary R = 9 +")
+    w("rank(Nuisance). That is already informative structurally: the known 23-term solution uses every")
+    w("available nuisance degree of freedom. The removal tests sharpen that statement further. Every")
+    w("single-term deletion drops quotient gain from 9 to 8, and no pair deletion recovers gain 9")
+    w("either, so this public factorization shows no hidden 22-term or 21-term gamma-only redundancy.")
+    w("The cancellation visualization then makes the mechanism concrete: almost every active dead")
+    w("equation is resolved by exact two-term sign cancellation, with one genuinely multi-way balanced")
+    w("dead equation remaining as an exceptional knot. The commutator split is structurally suggestive")
+    w("but not by itself decisive: for 3x3 the commutator tensor has flattening lower bound 8, below the")
+    w("full multiplication tensor's 9, so it is a simpler attack surface but not obviously simple enough")
+    w("to force a new lower bound alone.")
+
+    # ── STEP 64 ──
+    w()
+    w(f"## {section_num}. SMALL INTEGER COEFFICIENT ENUMERATION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] + [MEASURED_FROM_CODE] (Step 64)")
+    w()
+    w("Step 64 studies the finite ternary coefficient pool directly. The main exact reduction is that")
+    w("a bilinear profile is an outer product of two nonzero ternary vectors, so duplicate elimination")
+    w("and global-sign quotienting reduce to projective-line counting instead of brute-force hashing of")
+    w("all 3^18 raw 3x3 alpha,beta pairs. The step then combines exact Burnside orbit counts, a")
+    w("usefulness score in the Step 51 live-versus-nuisance split, and both collapsed and full-tensor")
+    w("greedy diagnostics.")
+    w()
+    (
+        sum64_rows,
+        top64_rows,
+        greedy64_rows,
+        greedy64_2c_rows,
+        greedy64_2f_rows,
+    ) = read_step64_outputs()
+    if sum64_rows:
+        sum64 = {row['summary_name']: row for row in sum64_rows}
+        w("### Task 1: Exact Pool Statistics")
+        w()
+        w(f"**3x3 raw pairs:** {sum64['pool3_raw_pairs']['summary_value']}")
+        w(f"**3x3 nonzero pairs:** {sum64['pool3_nonzero_pairs']['summary_value']}")
+        w(f"**3x3 projective ternary lines:** {sum64['pool3_projective_line_count']['summary_value']}")
+        w(f"**3x3 distinct profiles modulo duplicates and sign:** {sum64['pool3_distinct_profiles_mod_sign']['summary_value']}")
+        w(f"**3x3 symmetry-reduced profile orbits:** {sum64['pool3_symmetry_reduced_profiles']['summary_value']}")
+        w(f"**3x3 zero-projection profiles:** {sum64['pool3_zero_projection_profiles']['summary_value']}")
+        w(f"**3x3 dead-free nonzero profiles:** {sum64['pool3_deadfree_nonzero_profiles']['summary_value']}")
+        w(f"**Collapsed 3x3 greedy first exact rank:** {sum64['collapsed_3x3_greedy_first_exact_rank']['summary_value']}")
+        w(f"**Collapsed 2x2 greedy first exact rank:** {sum64['collapsed_2x2_greedy_first_exact_rank']['summary_value']}")
+        w(f"**2x2 distinct profiles modulo sign:** {sum64['pool2_distinct_profiles_mod_sign']['summary_value']}")
+        w(f"**2x2 symmetry-reduced profiles:** {sum64['pool2_symmetry_reduced_profiles']['summary_value']}")
+        w(f"**Full-tensor 2x2 greedy first exact rank:** {sum64['full_tensor_2x2_greedy_first_exact_rank']['summary_value']}")
+        w(f"**Selected Strassen-profile matches in 2x2 greedy:** {sum64['full_tensor_2x2_selected_strassen_matches']['summary_value']}")
+        w()
+        w("### Task 2: Top Usefulness Profiles")
+        w()
+        w("| rank | alpha | beta | projection | nuisance sq | usefulness score | dead-free? |")
+        w("|------|-------|------|------------|-------------|------------------|------------|")
+        for row in top64_rows[:10]:
+            w(f"| {row['rank']} | {row['alpha']} | {row['beta']} | {row['projection_onto_tensor']} | {row['nuisance_magnitude_squared']} | {row['usefulness_score']} | {row['dead_free']} |")
+        w()
+        w("### Task 3: Collapsed Greedy Diagnostics")
+        w()
+        w("**3x3 collapsed 81D greedy trace (first exact completion):**")
+        w()
+        w("| rank | alpha | beta | weight | score drop | residual norm^2 | exact zero? |")
+        w("|------|-------|------|--------|------------|-----------------|-------------|")
+        for row in greedy64_rows[:3]:
+            w(f"| {row['rank_step']} | {row['alpha']} | {row['beta']} | {row['weight']} | {row['score_drop']} | {row['residual_norm_squared']} | {row['exact_zero']} |")
+        w()
+        w("**2x2 collapsed 16D greedy trace (first exact completion):**")
+        w()
+        w("| rank | alpha | beta | weight | score drop | residual norm^2 | exact zero? |")
+        w("|------|-------|------|--------|------------|-----------------|-------------|")
+        for row in greedy64_2c_rows[:2]:
+            w(f"| {row['rank_step']} | {row['alpha']} | {row['beta']} | {row['weight']} | {row['score_drop']} | {row['residual_norm_squared']} | {row['exact_zero']} |")
+        w()
+        w("### Task 4: Corrected 2x2 Full-Tensor Greedy Verification")
+        w()
+        w("| rank | profile id | alpha | beta | gamma | residual norm^2 | exact zero? | Strassen profile? |")
+        w("|------|------------|-------|------|-------|-----------------|-------------|-------------------|")
+        for row in greedy64_2f_rows:
+            w(f"| {row['rank_step']} | {row['profile_id']} | {row['alpha']} | {row['beta']} | {row['gamma']} | {row['residual_norm_squared']} | {row['exact_zero']} | {row['profile_matches_strassen']} |")
+        w()
+    else:
+        w("*Run ade3x3_step64_small_integer_coefficient_enumeration.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 64 closes one tempting loophole cleanly: even after quotienting duplicates and global sign,")
+    w("the ternary 3x3 coefficient pool is not small in any practical sense. It still contains")
+    w("96,845,281 distinct nonzero bilinear profiles before symmetry reduction, and 570,521 orbits after")
+    w("the full 216-element action is factored out. Just as important, the live-versus-nuisance score")
+    w("finds no dead-free profile with nonzero live projection at all. The top-scoring profiles are large,")
+    w("row-constant or banded sign patterns that project strongly onto the live tensor but still carry")
+    w("substantial nuisance mass.")
+    w("The two greedy experiments separate what is trivial from what is structurally relevant. In the")
+    w("collapsed 81D model, the algorithm reaches exact zero for 3x3 at rank 3 and for 2x2 at rank 2 by")
+    w("simply selecting the summation-channel masks, so that model is far too weak to represent true")
+    w("matrix-multiplication complexity. The corrected 2x2 full-tensor greedy is the meaningful test, and")
+    w("there it fails to recover Strassen or even any exact rank-7 decomposition. That negative result does")
+    w("not prove impossibility, but it does show that naive matching pursuit over the finite ternary")
+    w("profile pool is not by itself an adequate search strategy for genuine low-rank algorithms.")
+
     # ── OPEN FRONTS ──
     w()
     w(f"## {section_num}. CURRENT GAPS / OPEN FRONTS")
@@ -2253,6 +3067,14 @@ def generate():
     w("- Support-type representative incidence: ✓ there are 8000 support classes modulo S3^3; 1000 can realize Type 0, and 216 of those allow all 8 representative equation types, so support-only pruning is vacuous")
     w("- Analytical low-nuisance construction: ✓ dead-free terms were shown not to be nuisance-free in the Step 51 basis; random low-rank factor families were profiled numerically, and although some R=22 families reached nuisance rank <= 13, none achieved the quotient-space gain required by Step 52")
     w("- Algebraic nuisance dependencies + wildcards: ✓ Hadamard-space geometry now sharpens the p=3,q=4 target to nuisance rank <= 3; tested Toeplitz, circulant, shared-latent, and DFT families still failed to produce quotient gain 9; GF(2) and tropical flattening ranks both stayed at 9, and fiber commutators were mostly nonzero")
+    w("- Tensor-product DFT construction + orbit packing: ✓ in the looser p=q=4 regime, the full 126x126 DFT mode sweep, random ternary/algebraic samples, interpreted correction-block sweep, and numpy local search all stayed far below quotient gain 9; the same-fiber branch 30 o 30 is exactly balanced")
+    w("- Fiber-group partition enumeration + orbit budget filter: ✓ exact ordered and symmetry-reduced partition counts for R=9..23 are now recorded, no-spreading orbit budgets are tabulated by partition type, and a conservative exact-3 rectangle-tiling model identifies structurally feasible primary-fiber assignments before coefficient solving")
+    w("- Cube-root-of-unity injection: ✓ the full-spread omega family is now ruled out by an exact live-rank obstruction, an explicit balanced 9-term attempt and a 27-term greedy augmentation trace both fail inside that family, and the same-fiber Fourier bundle is verified as an exact 27-term Fourier disguise of the standard algorithm with measured Step 51 nuisance ranks")
+    w("- Hybrid Fourier construction: ✓ same-fiber Fourier triples are now verified modular on all 512 output-fiber subsets, the same flattening filter has been extended through R=19..23, explicit tiny residual cases are ruled out by flattening or known exact ranks, and the residual-fiber problem is reduced to 35 symmetry classes with all six six-fiber hybrids still alive under flattening alone")
+    w("- Nuisance-first architecture: ✓ R=9 is now ruled out by an exact zero-nuisance contradiction, the weaker all-dead-free route is shown to force R>=27 by per-channel reconstruction, and exact nuisance/dead dependency budgets are tabulated for R=18..23")
+    w("- Non-rectangular 6-fiber sub-tensor rank attack: ✓ exact substitution bounds and direct P4 constructions are now tabulated, the rectangular six-fiber cases remain ruled out by exact rank 15, and the current numerical CP-rank scan found no rank-13 or rank-14 witness for any nonrectangular six-fiber pattern")
+    w("- Reverse engineering + cancellation visualization: ✓ a public exact rank-23 3x3 coefficient table has been recovered from AlphaTensor's public repo, measured directly in the Step 51-52 basis, shown to have nuisance rank 14 = 23-9 exactly, and tested for single/pair gamma-only redundancy with no feasible 22-term or 21-term sub-decomposition found")
+    w("- Small-integer coefficient enumeration: ✓ the exact ternary profile pool has been counted modulo sign and symmetry (96,845,281 raw distinct profiles; 570,521 symmetry orbits), the top usefulness profiles have been ranked, and collapsed/full-tensor greedy diagnostics show that collapsed matching is vacuous while corrected 2x2 full-tensor greedy does not recover Strassen through rank 7")
     w()
     w("**Remaining open fronts:**")
     w("- Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored")
@@ -2274,8 +3096,9 @@ def generate():
     w("  any useful lower-bound model must retain finer-than-orbit-sum equation structure")
     w("- Step 49 now records the exact 729-equation trilinear system and the 8 representative types;")
     w("  the remaining open problem is whether the rank-R solution variety is nonempty for sparse or non-group-closed ansatze")
-    w("- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining")
-    w("  hard theorem is universal: prove a decomposition-independent lower bound on rank(Nuisance)")
+    w("- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining open problem is to prove a decomposition-independent nuisance lower bound rather than only measure it on known examples")
+    w("- Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity")
+    w("- Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit")
     w("- Step 53 shows that support-only representative incidence is also vacuous; any sharper universal")
     w("  theorem must use coefficient identities or subspace geometry, not only index-support patterns")
     w("- Step 54 shows that generic low-rank factor models also fail constructively: low nuisance can")
@@ -2286,6 +3109,26 @@ def generate():
     w("  force that collapse without also collapsing Sigma")
     w("- The current structured families were still too rigid or too generic; next candidates should")
     w("  target exact nuisance-column identities rather than only symmetry patterns such as Toeplitz or DFT")
+    w("- Step 56 extends that negative evidence to p=q=4: even with Hadamard cap 7, the tensor-product")
+    w("  DFT family and the tested correction/entry-restricted families did not approach quotient gain 9")
+    w("- PyTorch-free local search can only provide best-observed surrogates; if gradient-based nuclear-norm")
+    w("  optimization is to be taken seriously, the next run should install torch or another autodiff stack")
+    w("- The same-fiber branch 30 o 30 is exactly 54/54, so any orbit-packing lever must come from coefficient")
+    w("  weighting or higher-order interactions, not from a hidden asymmetry in the raw branch count")
+    w("- Step 57 shows the partition ansatz is still broad at the discrete level; the next pruning layer must")
+    w("  combine these partition survivors with finer coefficient identities or with a less rigid spreading model")
+    w("- Step 59 rules out the naive full-spread omega family but not more general coefficient-engineered Fourier")
+    w("  hybrids; the remaining question is whether one can force large dead-X cancellation while keeping the")
+    w("  live block fiber-resolving and the nuisance span uniformly small")
+    w("- Step 60 shows the hybrid problem decouples exactly into a Fourier block plus a residual spreader tensor;")
+    w("  the remaining hard case is non-rectangular residual output patterns, especially six-fiber patterns where")
+    w("  flattening lower bounds stay at 9 and therefore do not distinguish R=19,20,21,22,23 spreader budgets")
+    w("- Step 61 shows nuisance is structurally necessary below rank 27, but it does not yet give a universal")
+    w("  lower bound above 18; the remaining challenge is to turn these dependency budgets into decomposition-")
+    w("  independent lower bounds or into a constructive nuisance-design ansatz")
+    w("- Step 62 gives negative numerical evidence against the six-fiber f=3 hybrid route at R=22 and R=23,")
+    w("  but not a proof; the remaining work is either stronger exact lower bounds for P1-P4 or a more serious")
+    w("  numerical/exact decomposition search with enough structure to certify a witness if one exists")
     w("- The characteristic-2, tropical-flattening, and commutator wildcards did not produce a new")
     w("  lower bound yet; if a wildcard route is to matter, it must retain more than flattening data")
     w("- Kernel uniformity: cc uniformity holds at orbit level AND (s,t) stratum level;")

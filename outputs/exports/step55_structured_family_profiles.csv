@@ -1,0 +1,31 @@
+label,family,c_rank,d_rank,target_pq,hadamard_dim,sigma_rank,eta_rank,delta_rank,nuisance_rank,augmented_rank,quotient_gain,nuisance_dependencies,meets_rank34_target,meets_r22_nuisance_target,meets_hadamard_quotient_target,full_quotient_target_holds,notes,provenance
+p3q3_baseline,baseline_shadow,3,3,3x3,9,3,6,9,9,9,0,63,False,True,False,False,Representative p=q=3 Hadamard-space shadow.,EXACT_DERIVED
+toeplitz_circulant_1,toeplitz_circulant,2,3,3x4,6,1,2,6,6,6,0,66,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_2,toeplitz_circulant,2,3,3x4,6,1,2,6,6,6,0,66,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_3,toeplitz_circulant,2,3,3x4,6,1,2,6,6,6,0,66,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_4,toeplitz_circulant,2,3,3x4,6,1,2,6,6,6,0,66,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_5,toeplitz_circulant,3,3,3x4,9,1,2,6,8,9,1,64,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_6,toeplitz_circulant,3,3,3x4,9,1,2,6,8,9,1,64,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_7,toeplitz_circulant,3,3,3x4,9,1,2,6,8,9,1,64,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_8,toeplitz_circulant,3,3,3x4,9,1,2,6,8,9,1,64,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_9,toeplitz_circulant,3,3,3x4,9,1,2,6,8,9,1,64,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_10,toeplitz_circulant,3,3,3x4,9,1,2,6,8,9,1,64,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_11,toeplitz_circulant,3,3,3x4,9,1,2,6,8,9,1,64,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_12,toeplitz_circulant,3,3,3x4,9,1,2,6,8,9,1,64,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_13,toeplitz_circulant,3,3,3x4,9,1,2,6,8,9,1,64,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_14,toeplitz_circulant,3,3,3x4,9,1,2,6,8,9,1,64,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_15,toeplitz_circulant,3,3,3x4,9,1,2,6,8,9,1,64,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_circulant_16,toeplitz_circulant,3,3,3x4,9,1,2,6,8,9,1,64,False,True,False,False,C uses summation-mode Toeplitz structure; D uses summation-mode circulant structure.,EXACT_DERIVED
+toeplitz_genericD_1,toeplitz_genericD,2,4,3x4,8,3,6,8,8,8,0,64,False,True,False,False,Toeplitz C against a fixed full-rank 4x9 D.,EXACT_DERIVED
+toeplitz_genericD_2,toeplitz_genericD,3,4,3x4,12,3,6,12,12,12,0,60,True,True,False,False,Toeplitz C against a fixed full-rank 4x9 D.,EXACT_DERIVED
+toeplitz_genericD_3,toeplitz_genericD,3,4,3x4,12,3,6,12,12,12,0,60,True,True,False,False,Toeplitz C against a fixed full-rank 4x9 D.,EXACT_DERIVED
+toeplitz_genericD_4,toeplitz_genericD,3,4,3x4,12,3,6,12,12,12,0,60,True,True,False,False,Toeplitz C against a fixed full-rank 4x9 D.,EXACT_DERIVED
+genericC_circulant_1,genericC_circulant,3,3,3x4,9,3,6,9,9,9,0,63,False,True,False,False,Fixed full-rank 3x9 C against circulant D.,EXACT_DERIVED
+genericC_circulant_2,genericC_circulant,3,3,3x4,9,3,6,9,9,9,0,63,False,True,False,False,Fixed full-rank 3x9 C against circulant D.,EXACT_DERIVED
+genericC_circulant_3,genericC_circulant,3,3,3x4,9,3,6,9,9,9,0,63,False,True,False,False,Fixed full-rank 3x9 C against circulant D.,EXACT_DERIVED
+genericC_circulant_4,genericC_circulant,3,3,3x4,9,3,6,9,9,9,0,63,False,True,False,False,Fixed full-rank 3x9 C against circulant D.,EXACT_DERIVED
+shared_latent_shadow,shared_latent_shadow,3,3,3x4,9,9,9,9,9,9,0,63,False,True,False,False,C and D both factor through a common 3-dimensional latent matrix; D rank cannot exceed 3 in this construction.,EXACT_DERIVED
+dft_modes_1,dft_modes,3,4,3x4,12,2,4,9,11,12,1,61,True,True,False,False,C uses exact 3-point Fourier modes; D mixes Fourier rows with one extra row to allow q=4.,EXACT_DERIVED
+dft_modes_2,dft_modes,3,4,3x4,12,2,4,9,11,12,1,61,True,True,False,False,C uses exact 3-point Fourier modes; D mixes Fourier rows with one extra row to allow q=4.,EXACT_DERIVED
+dft_modes_3,dft_modes,3,4,3x4,12,3,5,9,11,12,1,61,True,True,False,False,C uses exact 3-point Fourier modes; D mixes Fourier rows with one extra row to allow q=4.,EXACT_DERIVED
+dft_modes_4,dft_modes,3,4,3x4,12,3,5,9,11,12,1,61,True,True,False,False,C uses exact 3-point Fourier modes; D mixes Fourier rows with one extra row to allow q=4.,EXACT_DERIVED

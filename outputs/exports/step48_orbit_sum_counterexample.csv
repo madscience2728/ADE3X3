@@ -1,0 +1,2 @@
+a_support,b_support,c_support,orbit_sum_vector,matches_8_orbit_sum_system,full_tensor_equation_mismatches,interpretation
+100/000/000,100/000/000,270/000/000,"[27, 0, 0, 0, 0, 0, 0, 0]",True,27,A single sparse rank-1 term can satisfy the 8 aggregated orbit-sum equations while failing the full 729-equation tensor system.

@@ -1,0 +1,4 @@
+case_label,term_count,sigma_rank,eta_rank,delta_rank,nuisance_rank,augmented_rank,quotient_gain,provenance
+single_j1,1,1,1,1,1,1,0,EXACT_DERIVED
+pair_j1_j2,2,1,2,4,4,4,0,EXACT_DERIVED
+triple_j0_j1_j2,3,1,2,6,8,9,1,EXACT_DERIVED

@@ -1,0 +1,9 @@
+xc_orbit_id,constraint_lhs,constraint_rhs_sum,constraint_rhs_average,exact_constraint,provenance
+0,"sum_k q_(k,0)",27,1.000000,"sum_k q_(k,0) = 27",EXACT_DERIVED
+1,"sum_k q_(k,1)",0,0.000000,"sum_k q_(k,1) = 0",EXACT_DERIVED
+2,"sum_k q_(k,2)",0,0.000000,"sum_k q_(k,2) = 0",EXACT_DERIVED
+3,"sum_k q_(k,3)",0,0.000000,"sum_k q_(k,3) = 0",EXACT_DERIVED
+4,"sum_k q_(k,4)",0,0.000000,"sum_k q_(k,4) = 0",EXACT_DERIVED
+5,"sum_k q_(k,5)",0,0.000000,"sum_k q_(k,5) = 0",EXACT_DERIVED
+6,"sum_k q_(k,6)",0,0.000000,"sum_k q_(k,6) = 0",EXACT_DERIVED
+7,"sum_k q_(k,7)",0,0.000000,"sum_k q_(k,7) = 0",EXACT_DERIVED

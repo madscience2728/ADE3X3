@@ -1,0 +1,7 @@
+stab_type_A,stab_type_B,stab_type_output,pair_count,fraction
+Z2xZ2,Z2xZ2,Z2,1944,0.16
+Z2xZ2,Z2xZ2,Z2xZ2,9882,0.8133333333333334
+Z2xZ2,Z2xZ2,(Z2)^3,324,0.02666666666666667
+Z2xZ2,(Z2)^3,Z2xZ2,324,1.0
+(Z2)^3,Z2xZ2,Z2xZ2,324,1.0
+(Z2)^3,(Z2)^3,(Z2)^3,27,1.0

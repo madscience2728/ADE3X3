@@ -1,0 +1,3 @@
+orbit_id,pair_count,fraction,stabilizer_type,rep_readable
+0,27,0.500000,(Z2)^3,"CXXC[C[0,0],X[0,0|0,0],X[0,0|0,0],C[0,0]]"
+30,27,0.500000,Z2xZ2,"CXXC[C[0,0],X[0,0|0,0],X[0,1|1,0],C[0,0]]"

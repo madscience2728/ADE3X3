@@ -1,0 +1,4 @@
+source_kind,source_label,status,detail,url,provenance
+smirnov_2013_search,Smirnov explicit 23-term coefficients,not_recovered_from_available_sources,Search surfaced 23-term 3x3 papers but not an explicit coefficient table in fetched content.,https://arxiv.org/abs/1108.2830,MEASURED_FROM_CODE
+alternative_public_algorithm,AlphaTensor public recombination example,explicit_rank23_coefficients_recovered,"Public get_3x3x3_factorization() provides exact 9x23 factor matrices u,v,w.",https://raw.githubusercontent.com/google-deepmind/alphatensor/main/recombination/example.py,MEASURED_FROM_CODE
+alphatensor_repo_scope,AlphaTensor benchmarking algorithms,4x4_public_benchmarking_factorizations_only,The public benchmarking factorization module exposes 4x4 rank-49 GPU/TPU algorithms; the explicit 3x3 rank-23 example is in recombination/example.py.,https://github.com/google-deepmind/alphatensor,MEASURED_FROM_CODE

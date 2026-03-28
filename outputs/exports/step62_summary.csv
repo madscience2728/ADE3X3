@@ -1,0 +1,10 @@
+summary_name,summary_value,provenance,note
+nonrectangular_pattern_count,4,EXACT_DERIVED,The true Step 62 targets are P1-P4.
+rectangular_patterns_ruled_out_exactly,2,EXACT_DERIVED,P5 and P6 are ruled out by known exact rank 15 against budgets 13 and 14.
+best_substitution_lower_bound_nonrectangular,9,EXACT_DERIVED,Best substitution-style flattening lower bound among P1-P4.
+any_nonrectangular_rank_leq_13_found,false,MEASURED_FROM_CODE,Whether numerical fitting found a six-fiber nonrectangular pattern with rank at most 13.
+any_nonrectangular_rank_leq_14_found,false,MEASURED_FROM_CODE,Whether numerical fitting found a six-fiber nonrectangular pattern with rank at most 14.
+P4_direct_upper_bound,18,EXACT_DERIVED,Fiber-local exact decomposition verified for P4.
+P4_numerical_rank_upper_bound_if_found,,MEASURED_FROM_CODE,"Measured smallest successful CP rank for P4, if any."
+R22_f3_hybrid_verdict,no_numerical_witness_at_or_below_13,MEASURED_FROM_CODE,Step 62 verdict for six-fiber hybrid residuals at R=22.
+R23_f3_hybrid_verdict,no_numerical_witness_at_or_below_14,MEASURED_FROM_CODE,Step 62 verdict for six-fiber hybrid residuals at R=23.

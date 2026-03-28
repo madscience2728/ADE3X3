@@ -1,0 +1,8 @@
+rank_step,alpha,beta,weight,score_drop,residual_norm_squared,exact_zero,provenance
+1,"[[1, 0], [1, 0]]","[[1, 1], [0, 0]]",1.0,4.0,4.0,False,MEASURED_FROM_CODE
+2,"[[0, 1], [0, 1]]","[[0, 0], [1, 1]]",1.0,4.0,0.0,True,MEASURED_FROM_CODE
+3,,,0.0,0.0,0.0,True,MEASURED_FROM_CODE
+4,,,0.0,0.0,0.0,True,MEASURED_FROM_CODE
+5,,,0.0,0.0,0.0,True,MEASURED_FROM_CODE
+6,,,0.0,0.0,0.0,True,MEASURED_FROM_CODE
+7,,,0.0,0.0,0.0,True,MEASURED_FROM_CODE

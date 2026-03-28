@@ -1,0 +1,4 @@
+case_label,sigma_target_fiber_column,eta1_target_fiber_column,eta2_target_fiber_column,delta_first_dead_column,provenance
+single_j1,3.000000,0.000000,0.000000,-0.500000-0.866025i,EXACT_DERIVED
+pair_j1_j2,3.000000,0.000000,0.000000,-0.500000-0.866025i,EXACT_DERIVED
+triple_j0_j1_j2,3.000000,0.000000,0.000000,1.000000,EXACT_DERIVED

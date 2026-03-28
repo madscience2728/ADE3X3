@@ -1,0 +1,5 @@
+summary_name,summary_value,provenance
+standard_baseline_orbit0,27,EXACT_DERIVED
+standard_baseline_orbit30,27,EXACT_DERIVED
+single_removal_delta_orbit0,-1,EXACT_DERIVED
+single_removal_delta_orbit30,-2,EXACT_DERIVED

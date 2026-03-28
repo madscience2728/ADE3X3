@@ -1,0 +1,3 @@
+algorithm,term_count,ordered_pairs,zero_commutators,nonzero_commutators,max_commutator_rank,provenance
+standard_3x3,27,729,81,648,2,EXACT_DERIVED
+strassen_2x2,7,49,7,42,2,EXACT_DERIVED

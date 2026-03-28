@@ -1,0 +1,7 @@
+orbit_id,rep_config_id,orbit_size,stabilizer_type,signature_key,rep_readable,focus_boundary,target_c_atom,x1_fiber_position,x2_fiber_position,x1_eq_x2,c1_eq_c2
+0,0,27,(Z2)^3,"(True, True, True, True, True, True, True, (0, 0, 0, 0), (0, 0, 0, 0))","CXXC[C[0,0],X[0,0|0,0],X[0,0|0,0],C[0,0]]",both,"C[0,0]",0,0,True,True
+1,1,54,Z2xZ2,"(True, True, False, True, True, False, False, (0, 0, 0, 0), (0, 0, 0, 1))","CXXC[C[0,0],X[0,0|0,0],X[0,0|0,0],C[0,1]]",c1,"C[0,0]",0,0,True,False
+2,3,54,Z2xZ2,"(True, True, False, True, True, False, False, (0, 0, 0, 1), (0, 0, 0, 0))","CXXC[C[0,0],X[0,0|0,0],X[0,0|0,0],C[1,0]]",c1,"C[0,0]",0,0,True,False
+30,108,54,Z2xZ2,"(True, True, True, True, True, True, True, (0, 0, 0, 0), (0, 0, 0, 0))","CXXC[C[0,0],X[0,0|0,0],X[0,1|1,0],C[0,0]]",both,"C[0,0]",0,1,False,True
+132,739,54,Z2xZ2,"(True, True, False, False, False, True, True, (0, 0, 0, 0), (0, 1, 1, 1))","CXXC[C[0,0],X[0,0|0,1],X[0,0|0,1],C[0,1]]",c2,"C[0,1]",0,0,True,False
+1057,19929,54,Z2xZ2,"(True, True, False, False, False, True, True, (0, 1, 1, 1), (0, 0, 0, 0))","CXXC[C[0,0],X[1,0|0,0],X[1,0|0,0],C[1,0]]",c2,"C[1,0]",0,0,True,False

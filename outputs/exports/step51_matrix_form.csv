@@ -1,0 +1,7 @@
+matrix_name,shape,entry_definition,meaning,provenance
+Gamma,9 x R,"Gamma[(r',u'), k] = gamma_k[r',u']",Output weights attached to term k for each C coordinate,EXACT_DERIVED
+Sigma,R x 9,"Sigma[k, (r,u)] = sigma_k[r,u]",Fiber-sum coordinates of the A x B rank-1 profile,EXACT_DERIVED
+Eta1,R x 9,"Eta1[k, (r,u)] = eta1_k[r,u]",First live-fiber anisotropy coordinate,EXACT_DERIVED
+Eta2,R x 9,"Eta2[k, (r,u)] = eta2_k[r,u]",Second live-fiber anisotropy coordinate,EXACT_DERIVED
+Delta,R x 54,"Delta[k, (r,s,t,u)] = delta_k[r,s,t,u] for s!=t",Dead-X coordinates,EXACT_DERIVED
+Constraint,symbolic,"Gamma * Sigma = 3 I_9, Gamma * Eta1 = 0, Gamma * Eta2 = 0, Gamma * Delta = 0",Exact matrix-form restatement of all 729 tensor equations,EXACT_DERIVED

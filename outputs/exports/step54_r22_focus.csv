@@ -1,0 +1,17 @@
+R,p_rank,q_rank,trials,expected_product_rank_cap,nuisance_target,nuisance_rank_min,nuisance_rank_median,nuisance_rank_max,full_product_rank_min,full_product_rank_median,full_product_rank_max,augmented_rank_min,augmented_rank_median,augmented_rank_max,quotient_gain_min,quotient_gain_median,quotient_gain_max,criterion_holds_count,meets_nuisance_target_count,meets_full_target_count,nuisance_equals_expected_count,nuisance_equals_full_product_count,augmented_equals_nuisance_count,provenance
+22,3,3,24,9,13,9,9,9,9,9,9,9,9,9,0,0,0,0,24,0,24,24,24,EXACT_DERIVED
+22,3,4,24,12,13,12,12,12,12,12,12,12,12,12,0,0,0,0,24,0,24,24,24,EXACT_DERIVED
+22,3,5,24,15,13,15,15,15,15,15,15,15,15,15,0,0,0,0,0,0,24,24,24,EXACT_DERIVED
+22,3,6,24,18,13,18,18,18,18,18,18,18,18,18,0,0,0,0,0,0,24,24,24,EXACT_DERIVED
+22,4,3,24,12,13,12,12,12,12,12,12,12,12,12,0,0,0,0,24,0,24,24,24,EXACT_DERIVED
+22,4,4,24,16,13,16,16,16,16,16,16,16,16,16,0,0,0,0,0,0,24,24,24,EXACT_DERIVED
+22,4,5,24,20,13,20,20,20,20,20,20,20,20,20,0,0,0,0,0,0,24,24,24,EXACT_DERIVED
+22,4,6,24,22,13,22,22,22,22,22,22,22,22,22,0,0,0,0,0,0,24,24,24,EXACT_DERIVED
+22,5,3,24,15,13,15,15,15,15,15,15,15,15,15,0,0,0,0,0,0,24,24,24,EXACT_DERIVED
+22,5,4,24,20,13,20,20,20,20,20,20,20,20,20,0,0,0,0,0,0,24,24,24,EXACT_DERIVED
+22,5,5,24,22,13,22,22,22,22,22,22,22,22,22,0,0,0,0,0,0,24,24,24,EXACT_DERIVED
+22,5,6,24,22,13,22,22,22,22,22,22,22,22,22,0,0,0,0,0,0,24,24,24,EXACT_DERIVED
+22,6,3,24,18,13,18,18,18,18,18,18,18,18,18,0,0,0,0,0,0,24,24,24,EXACT_DERIVED
+22,6,4,24,22,13,22,22,22,22,22,22,22,22,22,0,0,0,0,0,0,24,24,24,EXACT_DERIVED
+22,6,5,24,22,13,22,22,22,22,22,22,22,22,22,0,0,0,0,0,0,24,24,24,EXACT_DERIVED
+22,6,6,24,22,13,22,22,22,22,22,22,22,22,22,0,0,0,0,0,0,24,24,24,EXACT_DERIVED

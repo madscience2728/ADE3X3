@@ -1,0 +1,9 @@
+summary_name,summary_value,provenance,note
+dead_free_term_nuisance_zero,False,EXACT_DERIVED,Dead-free terms still contribute anisotropy nuisance in the Step 51 basis.
+dead_free_generic_nonzero_term_nuisance_rank,1,EXACT_DERIVED,A nonzero dead-free term has generic nuisance rank 1 and dead rank 0.
+r22_best_observed_nuisance_rank,9,EXACT_DERIVED,Minimum nuisance rank observed across all random R=22 low-rank factor samples.
+r22_best_observed_family,"p=3, q=3",EXACT_DERIVED,Family attaining the minimum observed nuisance rank at R=22.
+r22_any_meets_nuisance_target,True,EXACT_DERIVED,Whether any sampled R=22 family achieved nuisance rank <= 13.
+r22_any_meets_full_target,False,EXACT_DERIVED,Whether any sampled R=22 family achieved nuisance rank <= 13 and quotient-space independence.
+naive_corner_strassen_total,26,EXACT_DERIVED,Direct 2x2-corner Strassen lift baseline for 3x3.
+smirnov_profile_status,not_available_in_repo_or_current_tool_set,EXACT_DERIVED,Current status of the Smirnov 23-term nuisance-profile lookup.

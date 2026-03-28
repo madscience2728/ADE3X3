@@ -1,0 +1,4 @@
+construction_id,pattern_id,term_count,status,note,provenance
+fiber_local_standard,P4,18,exact_verified,Three fiber-local terms per selected output fiber give an exact decomposition.,EXACT_DERIVED
+row_pair_cover,P4,18,no_improvement,"Three row-wise 1x2 subproblems each have known exact rank 6, totaling 18.",EXACT_DERIVED
+column_pair_cover,P4,18,no_improvement,"Three column-wise 2x1 subproblems each have known exact rank 6, totaling 18.",EXACT_DERIVED

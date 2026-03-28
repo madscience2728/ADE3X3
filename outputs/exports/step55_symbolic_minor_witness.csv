@@ -1,0 +1,2 @@
+family,parameters,row_indices,column_indices,minor_degree,minor_factorization,rank_drop_condition,interpretation,provenance
+toeplitz_genericD_symbolic,"a,b,c,d","(0, 1, 2, 3)","(0, 1, 2, 9)",4,-21*a**3*b + 8*a**3 + 25*a**2*b + 4*a**2 + 3*a*b - 8*a - 7*b,-21*a**3*b + 8*a**3 + 25*a**2*b + 4*a**2 + 3*a*b - 8*a - 7*b = 0,This nonzero 4x4 minor polynomial is an exact witness that rank(Nuisance) >= 4 away from its zero locus for the selected 4-parameter Toeplitz family.,EXACT_DERIVED

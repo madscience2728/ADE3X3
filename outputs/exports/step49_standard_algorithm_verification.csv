@@ -1,0 +1,9 @@
+equation_label,representative_equation,expected_rhs,observed_sum,contributing_basis_terms,status,provenance
+E0,"sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[0,0] = 1",1,1,"[(0, 0, 0)]",PASS,EXACT_DERIVED
+E1,"sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[0,1] = 0",0,0,[],PASS,EXACT_DERIVED
+E2,"sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[1,0] = 0",0,0,[],PASS,EXACT_DERIVED
+E3,"sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[1,1] = 0",0,0,[],PASS,EXACT_DERIVED
+E4,"sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[0,0] = 0",0,0,[],PASS,EXACT_DERIVED
+E5,"sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[0,1] = 0",0,0,[],PASS,EXACT_DERIVED
+E6,"sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[1,0] = 0",0,0,[],PASS,EXACT_DERIVED
+E7,"sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[1,1] = 0",0,0,[],PASS,EXACT_DERIVED

@@ -1,0 +1,4 @@
+active_sum_index,sigma_profile,eta1_profile,eta2_profile,dead_profile,nuisance_zero,generic_nonzero_term_nuisance_rank,provenance
+0,Sigma = v,Eta1 = v,Eta2 = 0,Delta = 0,False,1,EXACT_DERIVED
+1,Sigma = v,Eta1 = -v,Eta2 = v,Delta = 0,False,1,EXACT_DERIVED
+2,Sigma = v,Eta1 = 0,Eta2 = -v,Delta = 0,False,1,EXACT_DERIVED

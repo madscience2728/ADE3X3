@@ -1,0 +1,17 @@
+sample_id,seed,R,p_rank,q_rank,expected_product_rank_cap,nuisance_target,sigma_rank,eta_rank,dead_rank,nuisance_rank,augmented_rank,full_product_rank,quotient_gain,criterion_holds,meets_nuisance_target,meets_full_target,nuisance_equals_full_product_rank,augmented_equals_nuisance_rank,provenance
+513,541052,22,3,3,9,13,9,9,9,9,9,9,0,False,True,False,True,True,EXACT_DERIVED
+537,541076,22,3,4,12,13,9,12,12,12,12,12,0,False,True,False,True,True,EXACT_DERIVED
+561,541100,22,3,5,15,13,9,15,15,15,15,15,0,False,False,False,True,True,EXACT_DERIVED
+585,541124,22,3,6,18,13,9,18,18,18,18,18,0,False,False,False,True,True,EXACT_DERIVED
+609,541148,22,4,3,12,13,9,12,12,12,12,12,0,False,True,False,True,True,EXACT_DERIVED
+633,541172,22,4,4,16,13,9,16,16,16,16,16,0,False,False,False,True,True,EXACT_DERIVED
+657,541196,22,4,5,20,13,9,18,20,20,20,20,0,False,False,False,True,True,EXACT_DERIVED
+681,541220,22,4,6,22,13,9,18,22,22,22,22,0,False,False,False,True,True,EXACT_DERIVED
+705,541244,22,5,3,15,13,9,15,15,15,15,15,0,False,False,False,True,True,EXACT_DERIVED
+729,541268,22,5,4,20,13,9,18,20,20,20,20,0,False,False,False,True,True,EXACT_DERIVED
+753,541292,22,5,5,22,13,9,18,22,22,22,22,0,False,False,False,True,True,EXACT_DERIVED
+777,541316,22,5,6,22,13,9,18,22,22,22,22,0,False,False,False,True,True,EXACT_DERIVED
+801,541340,22,6,3,18,13,9,18,18,18,18,18,0,False,False,False,True,True,EXACT_DERIVED
+825,541364,22,6,4,22,13,9,18,22,22,22,22,0,False,False,False,True,True,EXACT_DERIVED
+849,541388,22,6,5,22,13,9,18,22,22,22,22,0,False,False,False,True,True,EXACT_DERIVED
+873,541412,22,6,6,22,13,9,18,22,22,22,22,0,False,False,False,True,True,EXACT_DERIVED

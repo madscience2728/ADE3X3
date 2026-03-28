@@ -1,0 +1,4 @@
+regime,hadamard_dim_upper_bound,required_sigma_mod_nuisance_rank,max_nuisance_rank_from_hadamard_geometry,max_nuisance_rank_from_r22_constraint,combined_max_nuisance_rank,geometric_status,provenance
+"p=3,q=3",9,9,0,13,0,feasible_only_if_nuisance_strongly_compressed,EXACT_DERIVED
+"p=3,q=4",12,9,3,13,3,feasible_only_if_nuisance_strongly_compressed,EXACT_DERIVED
+"p=4,q=3",12,9,3,13,3,feasible_only_if_nuisance_strongly_compressed,EXACT_DERIVED

@@ -1,0 +1,9 @@
+equation_type,structure_condition,orbit_size,rhs,provenance
+Type 0,"s=t, r=r', u=u'",8,1,EXACT_DERIVED
+Type 1,"s=t, r=r', u!=u'",8,0,EXACT_DERIVED
+Type 2,"s=t, r!=r', u=u'",8,0,EXACT_DERIVED
+Type 3,"s=t, r!=r', u!=u'",8,0,EXACT_DERIVED
+Type 4,"s!=t, r=r', u=u'",8,0,EXACT_DERIVED
+Type 5,"s!=t, r=r', u!=u'",8,0,EXACT_DERIVED
+Type 6,"s!=t, r!=r', u=u'",8,0,EXACT_DERIVED
+Type 7,"s!=t, r!=r', u!=u'",8,0,EXACT_DERIVED

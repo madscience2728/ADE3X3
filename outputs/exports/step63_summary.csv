@@ -1,0 +1,16 @@
+summary_name,summary_value,provenance,note
+algorithm_label,AlphaTensor_public_rank23_3x3x3,MEASURED_FROM_CODE,Exact public coefficient table used for Step 63 reverse engineering.
+term_count,23,EXACT_DERIVED,Number of rank-1 terms in the recovered public factorization.
+gamma_orientation,transpose,EXACT_DERIVED,Orientation needed to align the public output factors with ADE3x3 output indexing.
+reconstruction_max_abs_residual,0,EXACT_DERIVED,Exact tensor reconstruction residual after orientation alignment.
+sigma_rank,9,EXACT_DERIVED,Rank of Sigma for the recovered rank-23 algorithm.
+eta_rank,14,EXACT_DERIVED,Combined rank of Eta1 and Eta2.
+delta_rank,10,EXACT_DERIVED,Rank of Delta for the recovered rank-23 algorithm.
+nuisance_rank,14,EXACT_DERIVED,Step 52 nuisance rank measured on the recovered rank-23 algorithm.
+augmented_rank,23,EXACT_DERIVED,Rank of [Sigma Nuisance] for the recovered rank-23 algorithm.
+quotient_gain,9,EXACT_DERIVED,Sigma quotient gain modulo nuisance.
+nuisance_equals_R_minus_9,True,EXACT_DERIVED,Whether the recovered algorithm saturates nuisance rank = R - 9 exactly.
+single_term_reweight_feasible_count,0,EXACT_DERIVED,Number of single-term removals whose remaining alpha/beta factors still admit some gamma reweighting.
+pair_reweight_feasible_count,0,EXACT_DERIVED,Number of pair removals whose remaining alpha/beta factors still admit some gamma reweighting.
+dependency_graph_edge_count,36,EXACT_DERIVED,Number of term pairs sharing at least one dead X cell.
+visualization_html,outputs/step63_cancellation_visualization.html,MEASURED_FROM_CODE,HTML visualization path.

@@ -1,0 +1,9 @@
+xc_orbit_id,orbit_size,rep_config_id,rep_readable,rep_x_atom_name,rep_c_atom_name,x_live,c_relation_to_target,tensor_rhs_constant,tensor_rhs_sum_on_orbit,tensor_rhs_average_on_orbit
+0,27,0,"XC[X[0,0|0,0],C[0,0]]","X[0,0|0,0]","C[0,0]",True,exact_target,1,27,1.000000
+1,54,1,"XC[X[0,0|0,0],C[0,1]]","X[0,0|0,0]","C[0,1]",True,same_row_diff_col,0,0,0.000000
+2,54,3,"XC[X[0,0|0,0],C[1,0]]","X[0,0|0,0]","C[1,0]",True,diff_row_same_col,0,0,0.000000
+3,108,4,"XC[X[0,0|0,0],C[1,1]]","X[0,0|0,0]","C[1,1]",True,diff_row_diff_col,0,0,0.000000
+4,54,27,"XC[X[0,0|1,0],C[0,0]]","X[0,0|1,0]","C[0,0]",False,exact_target,0,0,0.000000
+5,108,28,"XC[X[0,0|1,0],C[0,1]]","X[0,0|1,0]","C[0,1]",False,same_row_diff_col,0,0,0.000000
+6,108,30,"XC[X[0,0|1,0],C[1,0]]","X[0,0|1,0]","C[1,0]",False,diff_row_same_col,0,0,0.000000
+7,216,31,"XC[X[0,0|1,0],C[1,1]]","X[0,0|1,0]","C[1,1]",False,diff_row_diff_col,0,0,0.000000

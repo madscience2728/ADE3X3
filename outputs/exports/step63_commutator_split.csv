@@ -1,0 +1,7 @@
+matrix_size,tensor_piece,nonzero_entries,flattening_rank_A_BC,flattening_rank_B_AC,flattening_rank_C_AB,flattening_lower_bound,provenance
+2x2,multiplication,8,4,4,4,4,EXACT_DERIVED
+2x2,commutator,12,3,3,3,3,EXACT_DERIVED
+2x2,anticommutator,14,4,4,4,4,EXACT_DERIVED
+3x3,multiplication,27,9,9,9,9,EXACT_DERIVED
+3x3,commutator,48,8,8,8,8,EXACT_DERIVED
+3x3,anticommutator,51,9,9,9,9,EXACT_DERIVED

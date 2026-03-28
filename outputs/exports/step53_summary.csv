@@ -1,0 +1,9 @@
+summary_name,summary_value,provenance,note
+n_support_type_classes,8000,EXACT_DERIVED,Distinct six-support classes modulo S3 x S3 x S3.
+support_type_orbit_sizes,"1,3,6,9,18,27,36,54,108,216",EXACT_DERIVED,Possible orbit sizes of support classes.
+support_type_orbit_size_histogram,1:64; 3:576; 6:192; 9:1728; 18:1152; 27:1728; 36:192; 54:1728; 108:576; 216:64,EXACT_DERIVED,Class counts by support-orbit size.
+n_with_orbit0_possible,1000,EXACT_DERIVED,Support classes that can realize the positive Type 0 equation.
+min_auto_zero_among_orbit0_possible,0,EXACT_DERIVED,Minimum number of representative types forced absent by support among Type-0-feasible classes.
+n_all8_active_among_orbit0_possible,216,EXACT_DERIVED,Type-0-feasible classes whose support allows all 8 representative equation types.
+support_only_representative_obstruction,vacuous,EXACT_DERIVED,Support-only representative incidence cannot force any zero-RHS type to vanish universally once Type 0 is allowed.
+sample_all8_active_support_type_id,2486,EXACT_DERIVED,One canonical support class with active_mask 11111111.

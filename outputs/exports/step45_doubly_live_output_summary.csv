@@ -1,0 +1,5 @@
+output_class,pair_count,fraction
+doubly_live_floor,4563,0.875648
+doubly_live_nonfloor,648,0.124352
+singly_live,0,0.000000
+dead,0,0.000000

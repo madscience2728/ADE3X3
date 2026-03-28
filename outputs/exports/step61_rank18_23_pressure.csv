@@ -1,0 +1,7 @@
+R,gamma_nullity,max_nuisance_rank,max_dead_rank,dead_columns,min_dead_linear_dependencies,total_nuisance_columns,min_total_nuisance_linear_dependencies,deadfree_all_terms_ruled_out,interpretation,provenance
+18,9,9,9,54,45,72,63,True,"R=18 is the tight nuisance-first budget: dead rank must fit inside 9 dimensions, forcing at least 45 dead-column dependencies.",EXACT_DERIVED
+19,10,10,10,54,44,72,62,True,"At R=19, nuisance must fit inside a 10-dimensional Gamma-nullspace.",EXACT_DERIVED
+20,11,11,11,54,43,72,61,True,"At R=20, nuisance must fit inside a 11-dimensional Gamma-nullspace.",EXACT_DERIVED
+21,12,12,12,54,42,72,60,True,"At R=21, nuisance must fit inside a 12-dimensional Gamma-nullspace.",EXACT_DERIVED
+22,13,13,13,54,41,72,59,True,"At R=22, nuisance must fit inside a 13-dimensional Gamma-nullspace.",EXACT_DERIVED
+23,14,14,14,54,40,72,58,True,"At R=23, nuisance must fit inside a 14-dimensional Gamma-nullspace.",EXACT_DERIVED

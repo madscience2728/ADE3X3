@@ -1,0 +1,4 @@
+statement_id,statement,value,provenance
+F1,"In the full-spread family, every frequency channel gives the same live contribution on a fixed output block: the all-ones vector across the 9 input fibers x 3 live summation coordinates.",verified_by_direct_matrix_build,EXACT_DERIVED
+F2,"The full-spread family has live-block column rank 1 per output block, whereas the target live block has fiber rank 9.",rank_obstruction,EXACT_DERIVED
+F3,"Therefore no sum of full-spread omega terms can realize the 3x3 multiplication tensor exactly, regardless of R.",family_impossible,EXACT_DERIVED

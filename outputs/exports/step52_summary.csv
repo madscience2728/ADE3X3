@@ -1,0 +1,8 @@
+summary_name,summary_value,provenance,note
+step52_bound_scope,per_algorithm_not_universal,EXACT_DERIVED,The Step 52 rank bound depends on the nuisance span of the specific decomposition under study.
+standard_3x3_nuisance_rank,18,EXACT_DERIVED,Exact nuisance span dimension for the standard 27-term algorithm.
+standard_3x3_lower_bound_from_nuisance,27,EXACT_DERIVED,Step 52 lower bound recovered from the standard algorithm nuisance rank.
+standard_3x3_saturates_bound,True,EXACT_DERIVED,Whether the standard algorithm exactly saturates R >= 9 + rank(Nuisance).
+strassen_2x2_nuisance_rank,3,EXACT_DERIVED,Exact nuisance span dimension for Strassen 2x2.
+strassen_2x2_lower_bound_from_nuisance,7,EXACT_DERIVED,Step 52 lower bound recovered from Strassen nuisance rank.
+strassen_2x2_saturates_bound,True,EXACT_DERIVED,Whether Strassen exactly saturates R >= 4 + rank(Nuisance).

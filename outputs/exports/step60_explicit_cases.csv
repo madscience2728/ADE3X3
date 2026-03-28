@@ -1,0 +1,6 @@
+case_id,R_total,remaining_fibers,remaining_fiber_count,available_spreaders,flattening_rank_A_BC,flattening_rank_B_AC,flattening_rank_C_AB,flattening_rank_max,known_exact_rank_if_any,rank_source,verdict,justification,provenance
+R23_two_fiber_row_case,23,"(2,1); (2,2)",2,2,3,6,2,6,6,known_exact_rank_1x3x2=6,ruled_out_by_known_exact_rank,known exact rank 6 versus available spreaders 2,EXACT_DERIVED
+R22_three_fiber_row_case,22,"(2,0); (2,1); (2,2)",3,4,3,9,3,9,9,known_exact_rank_1x3x3=9,ruled_out_by_known_exact_rank,known exact rank 9 versus available spreaders 4,EXACT_DERIVED
+R22_three_fiber_column_case,22,"(0,2); (1,2); (2,2)",3,4,9,3,3,9,9,known_exact_rank_3x3x1=9,ruled_out_by_known_exact_rank,known exact rank 9 versus available spreaders 4,EXACT_DERIVED
+R22_three_fiber_diagonal_case,22,"(0,0); (1,1); (2,2)",3,4,9,9,3,9,,flattening_lower_bound_only,ruled_out_by_flattening,flattening lower bound 9 versus available spreaders 4,EXACT_DERIVED
+R22_six_fiber_rectangle_case,22,"(0,0); (0,1); (0,2); (1,0); (1,1); (1,2)",6,13,6,9,6,9,15,known_exact_rank_2x3x3=15,ruled_out_by_known_exact_rank,known exact rank 15 versus available spreaders 13,EXACT_DERIVED
