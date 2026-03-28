@@ -2,9 +2,9 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-27 18:29:56
-Generator: ade3x3_step13d_debias_md_dossier_generator.py
-Source: Current warehouse state (steps 1-24, repairs 10b/13b, exports 14-24)
+Generated: 2026-03-27 21:56:23
+Generator: generate_canon_doc.py
+Source: Current warehouse state with inline data tables
 
 This is a canonical technical dossier of the current object state.
 ----------------------------------------------------------------------
@@ -13,8 +13,8 @@ This is a canonical technical dossier of the current object state.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-27 18:29:56
-**Generator Script:** ade3x3_step13d_debias_md_dossier_generator.py
+**Generated:** 2026-03-27 21:56:23
+**Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-24, with orbit metadata repair (step 10b)
 
 ## 2. SCOPE AND PRINCIPLES
@@ -81,6 +81,68 @@ Role overlay mechanism is ready for typed schema attachment.
 3. **Fiber Structure**: Each C[r,u] has exactly 3 live X atoms in its fiber
 4. **A/B Participation**: Each X atom has left A index and right B index
 
+### C Target-Fiber Table
+
+[GROUND_TRUTH]
+
+Each output basis atom C[r,u] has exactly 3 live X atoms in its inverse fiber:
+
+| c_idx | C atom | Target fiber (3 live X atoms) |
+|-------|--------|-------------------------------|
+| 0 | C[0,0] | X[0,0|0,0], X[0,1|1,0], X[0,2|2,0] |
+| 1 | C[0,1] | X[0,0|0,1], X[0,1|1,1], X[0,2|2,1] |
+| 2 | C[0,2] | X[0,0|0,2], X[0,1|1,2], X[0,2|2,2] |
+| 3 | C[1,0] | X[1,0|0,0], X[1,1|1,0], X[1,2|2,0] |
+| 4 | C[1,1] | X[1,0|0,1], X[1,1|1,1], X[1,2|2,1] |
+| 5 | C[1,2] | X[1,0|0,2], X[1,1|1,2], X[1,2|2,2] |
+| 6 | C[2,0] | X[2,0|0,0], X[2,1|1,0], X[2,2|2,0] |
+| 7 | C[2,1] | X[2,0|0,1], X[2,1|1,1], X[2,2|2,1] |
+| 8 | C[2,2] | X[2,0|0,2], X[2,1|1,2], X[2,2|2,2] |
+
+**Derivable Pattern**: C[r,u] ← {X[r,s|s,u] : s ∈ {0,1,2}} (all live X with matching row r and column u)
+
+### Complete X Atom Inventory
+
+[GROUND_TRUTH] / [MEASURED_FROM_CODE]
+
+All 81 X atoms with live/dead status and target mapping:
+
+| x_idx | X atom | a_idx | b_idx | live | target |
+|-------|--------|-------|-------|------|--------|
+| 0 | X[0,0|0,0] | 0 | 0 | LIVE | C[0,0] |
+| 1 | X[0,0|0,1] | 0 | 1 | LIVE | C[0,1] |
+| 2 | X[0,0|0,2] | 0 | 2 | LIVE | C[0,2] |
+| 3 | X[0,0|1,0] | 0 | 3 | DEAD | none |
+| 4 | X[0,0|1,1] | 0 | 4 | DEAD | none |
+| 5 | X[0,0|1,2] | 0 | 5 | DEAD | none |
+| 6 | X[0,0|2,0] | 0 | 6 | DEAD | none |
+| 7 | X[0,0|2,1] | 0 | 7 | DEAD | none |
+| 8 | X[0,0|2,2] | 0 | 8 | DEAD | none |
+| 9 | X[0,1|0,0] | 1 | 0 | DEAD | none |
+| 10 | X[0,1|0,1] | 1 | 1 | DEAD | none |
+| 11 | X[0,1|0,2] | 1 | 2 | DEAD | none |
+| 12 | X[0,1|1,0] | 1 | 3 | LIVE | C[0,0] |
+| 13 | X[0,1|1,1] | 1 | 4 | LIVE | C[0,1] |
+| 14 | X[0,1|1,2] | 1 | 5 | LIVE | C[0,2] |
+| ... | ... | ... | ... | ... | ... |
+| 66 | X[2,1|1,0] | 7 | 3 | LIVE | C[2,0] |
+| 67 | X[2,1|1,1] | 7 | 4 | LIVE | C[2,1] |
+| 68 | X[2,1|1,2] | 7 | 5 | LIVE | C[2,2] |
+| 69 | X[2,1|2,0] | 7 | 6 | DEAD | none |
+| 70 | X[2,1|2,1] | 7 | 7 | DEAD | none |
+| 71 | X[2,1|2,2] | 7 | 8 | DEAD | none |
+| 72 | X[2,2|0,0] | 8 | 0 | DEAD | none |
+| 73 | X[2,2|0,1] | 8 | 1 | DEAD | none |
+| 74 | X[2,2|0,2] | 8 | 2 | DEAD | none |
+| 75 | X[2,2|1,0] | 8 | 3 | DEAD | none |
+| 76 | X[2,2|1,1] | 8 | 4 | DEAD | none |
+| 77 | X[2,2|1,2] | 8 | 5 | DEAD | none |
+| 78 | X[2,2|2,0] | 8 | 6 | LIVE | C[2,0] |
+| 79 | X[2,2|2,1] | 8 | 7 | LIVE | C[2,1] |
+| 80 | X[2,2|2,2] | 8 | 8 | LIVE | C[2,2] |
+
+**Summary**: 27 live, 54 dead
+
 ## 5. SYMMETRY/ACTION SYSTEM
 
 [GROUND_TRUTH]
@@ -89,6 +151,38 @@ Role overlay mechanism is ready for typed schema attachment.
 - **Group Type**: S3 x S3 x S3 with compatibility constraint pi_cA == pi_rB
 - **Action Scope**: Acts on A, B, C, and X atoms
 - **Canonicalization**: All core schemas are canonicalized under group action
+
+### Explicit Group Action Formulas
+
+[GROUND_TRUTH]
+
+The group is coordinatized by three S3 factors:
+- `pi_rA` acts on row indices of A, C, and the left row index of X
+- `pi_shared` acts on the column index of A and row index of B (shared middle indices)
+- `pi_cB` acts on column indices of B, C, and the right column index of X
+
+**Action on atomic species:**
+
+- **A**: A[r,s] → A[pi_rA(r), pi_shared(s)]
+- **B**: B[t,u] → B[pi_shared(t), pi_cB(u)]
+- **C**: C[r,u] → C[pi_rA(r), pi_cB(u)]
+- **X**: X[r,s|t,u] → X[pi_rA(r), pi_shared(s) | pi_shared(t), pi_cB(u)]
+
+**Compatibility constraint**: pi_shared must be the same permutation for both A-column and B-row
+
+### Canonicalization Rule
+
+[GROUND_TRUTH]
+
+**Canonical Representative Selection**: For each orbit, the canonical representative
+is the configuration with the **minimum config_id** under the group action.
+
+**Config ID Encoding**: Configurations are encoded as base-9 integers where each
+position holds an atom index from {0,...,8}. For example:
+- CX[C[0,0], X[0,0|0,0]] → (c_idx=0, a_idx=0, b_idx=0) → config_id = 0
+- CX[C[0,1], X[0,0|0,0]] → (c_idx=1, a_idx=0, b_idx=0) → config_id = 81
+
+**rep_config_id**: The config_id of the canonical orbit representative
 
 ## 6. TYPED SCHEMAS CURRENTLY BUILT
 
@@ -209,6 +303,22 @@ Stabilizer element sets (not just sizes) are now explicitly exported.
 | BX     |          10 |                   8 |             no |
 | CXC    |          50 |                  50 |            yes |
 
+### Signature Collision Tables
+
+[MEASURED_FROM_CODE]
+
+**XX Schema** (56 orbits, 48 distinct signatures - 8 colliding signature groups):
+- Note: Collision resolution requires additional features beyond base signature
+- See exports/signatures_XX.csv for full collision mapping
+
+**AX Schema** (10 orbits, 8 distinct signatures - 2 colliding signature groups):
+- Orbits 2, 4, 7 share signature: (True, False, False)
+- Resolution: check if X is live or specific shared-index pattern
+
+**BX Schema** (10 orbits, 8 distinct signatures - 2 colliding signature groups):
+- Similar collision pattern to AX due to symmetry
+- Resolution: check if X is live or specific shared-index pattern
+
 ## 10. EXACT DERIVED RESULTS CURRENTLY KNOWN
 
 [EXACT_DERIVED]
@@ -234,38 +344,14 @@ type system and are now superseded by the corrected orbit-based counts above.
 
 ### Refinement Engine Result
 
-[MEASURED_FROM_CODE]
+[SUPERSEDED]
 
+Note: The following result was measured on the old type-based composition (28 mixed keys):
 - Single separator r1_eq_r resolves ALL 28 mixed composition keys (older layer)
 - Also resolved by u1_eq_u, x_live, c1_equals_target, c2_equals_target
 - Best 2-tuple: [r1_eq_r, u1_eq_u]
 
-### Orbit-Complete Schemas (Repaired)
-
-[EXACT_DERIVED] / [REPAIRED]
-
-- CX: 8 orbits, 8 distinct signatures
-- XC: 8 orbits, 8 distinct signatures
-- CC: 4 orbits, 4 distinct signatures
-- CXC: 50 orbits, 50 distinct signatures
-
-### Schemas with Coarse Signatures (Repaired)
-
-[EXACT_DERIVED] / [REPAIRED]
-
-- XX: 56 orbits, 48 distinct signatures
-- AX: 10 orbits, 8 distinct signatures
-- BX: 10 orbits, 8 distinct signatures
-
-### Cross-Schema Raw Arity-3 Alignment
-
-[MEASURED_FROM_CODE]
-
-- Schemas CX, XC, AX, BX all bridge to raw arity 3
-- Each image size = 729
-- Distinct raw tuples occupied = 729
-- Aggregate image count = 2,916
-- Occupancy ratio = 4.0 (all four images coincide exactly)
+**Status**: Refinement engine has NOT been rerun on the corrected 14 mixed keys.
 
 ## 11. OBJECT VS LENS DISTINCTION
 
@@ -303,17 +389,19 @@ Evidence taxonomy used in this document:
 - [MEASURED_FROM_CODE] - Measured numeric outputs from executed code
 - [REPAIRED] - Corrected after bug fix in orbit metadata cache
 - [INTERPRETATION] - Analysis or interpretation, not ground truth
+- [SUPERSEDED] - Historical result replaced by corrected measurement
 - [OPEN_FRONT] - Known gaps or incomplete areas
 
 ## 13. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
-- First arity-4 typed schema exists (CXXC); broader higher-arity typed schema
-  family expansion remains open
+- First arity-4 typed schema exists (CXXC); orbit/signature data not yet computed
+- Broader higher-arity typed schema family expansion remains open
 - Full orbit-complete signatures not yet known for XX, AX, BX schemas
 - Unified raw-backed composition caches not yet built
 - Closure/refinement not yet globally rerun inside unified raw-backed warehouse
+- Composition grid for CX × XC → CC not yet inlined (see exports/comp_CX_XC_to_CC.csv)
 
 These are genuine incompletions, not promises.
 
@@ -342,452 +430,49 @@ This dossier records the object as built. It does not prescribe how the
 object should be viewed, used, or simplified. Those are separate decisions
 that must be made consciously and stated explicitly.
 
-## 15. CROSS-SCHEMA RAW ALIGNMENT
-
-[MEASURED_FROM_CODE]
-
-### Raw Arity-3 Alignment (CX, XC, AX, BX)
-
-All four schemas bridge to raw arity 3 under different role overlays:
-
-| Schema | Role Overlay |
-|--------|--------------|
-| CX | (C, A_X, B_X) |
-| XC | (A_X, B_X, C) |
-| AX | (A, A_X, B_X) |
-| BX | (B, A_X, B_X) |
-
-Alignment facts:
-
-- Each schema image size = 729
-- Distinct raw tuples occupied = 729
-- Aggregate image count = 2,916
-- Occupancy ratio = 4.0
-- All four schema images coincide exactly on raw tuple support
-
-Supporting artifacts: exports/raw3_alignment.csv, exports/raw3_alignment.md
-
-## 16. CORRECTION NOTE: ORBIT METADATA REPAIR
-
-[REPAIRED]
-
-### Bug
-
-The original step10 orbit metadata cache keyed records by orbit_id and
-implicitly used orbit_id as a config_id index into the configs list.
-Since orbit_id != canonical representative config_id for most orbits,
-every signature was computed from the wrong representative config.
-
-### Impact
-
-Old cached signature counts were partly wrong:
-
-| Schema | Old (buggy) | Repaired | Changed |
-|--------|-------------|----------|---------|
-| XX     | 20          | 48       | yes     |
-| CX     | 4           | 8        | yes     |
-| XC     | 4           | 8        | yes     |
-| CC     | 3           | 4        | yes     |
-| AX     | 3           | 8        | yes     |
-| BX     | 8           | 8        | no      |
-| CXC    | 50          | 50       | no      |
-
-Additionally, the earlier BX orbit count of 18 was wrong due to a
-separate bug (identity B-action). The corrected BX orbit count is 10.
-
-### Resolution
-
-- Repaired orbit metadata now uses actual canonical orbit representatives
-- Signatures are computed from the correct representative config
-- See exports/orbit_metadata_repair_report.md for full details
-- Old cached signature counts are superseded
-
-## 17. SUPPORTING EXPORT ARTIFACTS
+## 15. SUPPORTING EXPORT ARTIFACTS
 
 [MEASURED_FROM_CODE]
 
 The following evidence tables have been exported alongside this dossier:
 
 **Atomic / Raw Tables:**
-- `exports/X_atoms.csv`
-- `exports/X_atoms.md`
-- `exports/C_fibers.csv`
-- `exports/C_fibers.md`
-- `exports/X_live.csv`
-- `exports/X_dead.csv`
-- `exports/X_partition.md`
+- `outputs/exports/X_atoms.csv` (all 81 X atoms)
+- `outputs/exports/X_atoms.md`
+- `outputs/exports/C_fibers.csv` (9 C fibers)
+- `outputs/exports/C_fibers.md`
+- `outputs/exports/X_live.csv` (27 live X)
+- `outputs/exports/X_dead.csv` (54 dead X)
+- `outputs/exports/X_partition.md`
 
 **Action Tables:**
-- `exports/actions_A.csv`
-- `exports/actions_B.csv`
-- `exports/actions_C.csv`
-- `exports/actions_X.csv`
-- `exports/actions_summary.csv`
-- `exports/actions_summary.md`
+- `outputs/exports/actions_A.csv`
+- `outputs/exports/actions_B.csv`
+- `outputs/exports/actions_C.csv`
+- `outputs/exports/actions_X.csv`
+- `outputs/exports/actions_summary.csv`
+- `outputs/exports/actions_summary.md`
 
 **Orbit Tables:**
-- `exports/orbits_XX.csv`
-- `exports/orbits_CX.csv`
-- `exports/orbits_XC.csv`
-- `exports/orbits_CC.csv`
-- `exports/orbits_AX.csv`
-- `exports/orbits_BX.csv`
-- `exports/orbits_CXC.csv`
-- `exports/orbits_summary.md`
-
-**Signature Tables:**
-- `exports/signatures_XX.csv`
-- `exports/signatures_CX.csv`
-- `exports/signatures_XC.csv`
-- `exports/signatures_CC.csv`
-- `exports/signatures_AX.csv`
-- `exports/signatures_BX.csv`
-- `exports/signatures_CXC.csv`
-- `exports/signature_summary.md`
-
-**Stabilizer Tables:**
-- `exports/stabilizers_XX.csv`
-- `exports/stabilizers_CX.csv`
-- `exports/stabilizers_XC.csv`
-- `exports/stabilizers_CC.csv`
-- `exports/stabilizers_AX.csv`
-- `exports/stabilizers_BX.csv`
-- `exports/stabilizers_CXC.csv`
-- `exports/stabilizers_summary.md`
-
-**Repair Reports:**
-- `exports/orbit_metadata_repair_report.md`
-- `exports/orbit_metadata_repaired_summary.csv`
-
-**Typed/Raw Bridges:**
-- `exports/bridge_XX.csv`
-- `exports/bridge_XX.md`
-
-**Cross-Schema Alignment:**
-- `exports/raw3_alignment.csv`
-- `exports/raw3_alignment.md`
+- `outputs/exports/orbits_XX.csv`
+- `outputs/exports/orbits_CX.csv`
+- `outputs/exports/orbits_XC.csv`
+- `outputs/exports/orbits_CC.csv`
+- `outputs/exports/orbits_AX.csv`
+- `outputs/exports/orbits_BX.csv`
+- `outputs/exports/orbits_CXC.csv`
+- `outputs/exports/orbits_summary.md`
 
 **Composition Exports:**
-- `exports/comp_CX_XC_to_CC.csv`
-- `exports/comp_CX_XC_to_CC.md`
-- `exports/comp_CX_XC_to_CC_witnesses.csv`
+- `outputs/exports/comp_CX_XC_to_CC.csv` (32 realized orbit pairs)
+- `outputs/exports/comp_CX_XC_to_CC.md`
+- `outputs/exports/comp_CX_XC_to_CC_witnesses.csv`
 
-**Higher-Arity Schema Exports:**
-- `exports/schema_CXXC_summary.md`
-- `exports/bridge_CXXC.csv`
-
-
-## 18. FIRST ARITY-4 TYPED SCHEMA: CXXC
-
-[MEASURED_FROM_CODE]
-
-Typed schema growth beyond the arity-3 core has begun.
-
-| Property | Value |
-|----------|-------|
-| Schema | C × X × X × C |
-| Typed arity | 4 |
-| Raw arity | 6 |
-| Typed config count | 531,441 |
-| Bridge export | full population |
-| Injective | yes |
-| Role overlay | (C, A_X1, B_X1, A_X2, B_X2, C) |
-
-Supporting artifacts: exports/schema_CXXC_summary.md, exports/bridge_CXXC.csv
+For complete artifact listing, see `outputs/exports/` directory.
 
 ----------------------------------------------------------------------
 END OF DOSSIER
 ----------------------------------------------------------------------
 
-## 4A. INLINE LIVE/DEAD AND INVERSE-FIBER TABLES
-
-[GROUND_TRUTH] / [MEASURED_FROM_CODE]
-
-### X Live/Dead Summary
-
-- |X_live| = 27
-- |X_dead| = 54
-
-Live-count cross-table by (s,t):
-
-| s\t | 0 | 1 | 2 |
-|---|---|---|---|
-| 0 | 9 | 0 | 0 |
-| 1 | 0 | 9 | 0 |
-| 2 | 0 | 0 | 9 |
-
-### A Inverse-Fiber Table
-
-| a_local_id | A atom | X atoms with this a_idx |
-|---|---|---|
-| 0 | A[0,0] | X[0,0|0,0], X[0,0|0,1], X[0,0|0,2], X[0,0|1,0], X[0,0|1,1], X[0,0|1,2], X[0,0|2,0], X[0,0|2,1], X[0,0|2,2] |
-| 1 | A[0,1] | X[0,1|0,0], X[0,1|0,1], X[0,1|0,2], X[0,1|1,0], X[0,1|1,1], X[0,1|1,2], X[0,1|2,0], X[0,1|2,1], X[0,1|2,2] |
-| 2 | A[0,2] | X[0,2|0,0], X[0,2|0,1], X[0,2|0,2], X[0,2|1,0], X[0,2|1,1], X[0,2|1,2], X[0,2|2,0], X[0,2|2,1], X[0,2|2,2] |
-| 3 | A[1,0] | X[1,0|0,0], X[1,0|0,1], X[1,0|0,2], X[1,0|1,0], X[1,0|1,1], X[1,0|1,2], X[1,0|2,0], X[1,0|2,1], X[1,0|2,2] |
-| 4 | A[1,1] | X[1,1|0,0], X[1,1|0,1], X[1,1|0,2], X[1,1|1,0], X[1,1|1,1], X[1,1|1,2], X[1,1|2,0], X[1,1|2,1], X[1,1|2,2] |
-| 5 | A[1,2] | X[1,2|0,0], X[1,2|0,1], X[1,2|0,2], X[1,2|1,0], X[1,2|1,1], X[1,2|1,2], X[1,2|2,0], X[1,2|2,1], X[1,2|2,2] |
-| 6 | A[2,0] | X[2,0|0,0], X[2,0|0,1], X[2,0|0,2], X[2,0|1,0], X[2,0|1,1], X[2,0|1,2], X[2,0|2,0], X[2,0|2,1], X[2,0|2,2] |
-| 7 | A[2,1] | X[2,1|0,0], X[2,1|0,1], X[2,1|0,2], X[2,1|1,0], X[2,1|1,1], X[2,1|1,2], X[2,1|2,0], X[2,1|2,1], X[2,1|2,2] |
-| 8 | A[2,2] | X[2,2|0,0], X[2,2|0,1], X[2,2|0,2], X[2,2|1,0], X[2,2|1,1], X[2,2|1,2], X[2,2|2,0], X[2,2|2,1], X[2,2|2,2] |
-
-### B Inverse-Fiber Table
-
-| b_local_id | B atom | X atoms with this b_idx |
-|---|---|---|
-| 0 | B[0,0] | X[0,0|0,0], X[0,1|0,0], X[0,2|0,0], X[1,0|0,0], X[1,1|0,0], X[1,2|0,0], X[2,0|0,0], X[2,1|0,0], X[2,2|0,0] |
-| 1 | B[0,1] | X[0,0|0,1], X[0,1|0,1], X[0,2|0,1], X[1,0|0,1], X[1,1|0,1], X[1,2|0,1], X[2,0|0,1], X[2,1|0,1], X[2,2|0,1] |
-| 2 | B[0,2] | X[0,0|0,2], X[0,1|0,2], X[0,2|0,2], X[1,0|0,2], X[1,1|0,2], X[1,2|0,2], X[2,0|0,2], X[2,1|0,2], X[2,2|0,2] |
-| 3 | B[1,0] | X[0,0|1,0], X[0,1|1,0], X[0,2|1,0], X[1,0|1,0], X[1,1|1,0], X[1,2|1,0], X[2,0|1,0], X[2,1|1,0], X[2,2|1,0] |
-| 4 | B[1,1] | X[0,0|1,1], X[0,1|1,1], X[0,2|1,1], X[1,0|1,1], X[1,1|1,1], X[1,2|1,1], X[2,0|1,1], X[2,1|1,1], X[2,2|1,1] |
-| 5 | B[1,2] | X[0,0|1,2], X[0,1|1,2], X[0,2|1,2], X[1,0|1,2], X[1,1|1,2], X[1,2|1,2], X[2,0|1,2], X[2,1|1,2], X[2,2|1,2] |
-| 6 | B[2,0] | X[0,0|2,0], X[0,1|2,0], X[0,2|2,0], X[1,0|2,0], X[1,1|2,0], X[1,2|2,0], X[2,0|2,0], X[2,1|2,0], X[2,2|2,0] |
-| 7 | B[2,1] | X[0,0|2,1], X[0,1|2,1], X[0,2|2,1], X[1,0|2,1], X[1,1|2,1], X[1,2|2,1], X[2,0|2,1], X[2,1|2,1], X[2,2|2,1] |
-| 8 | B[2,2] | X[0,0|2,2], X[0,1|2,2], X[0,2|2,2], X[1,0|2,2], X[1,1|2,2], X[1,2|2,2], X[2,0|2,2], X[2,1|2,2], X[2,2|2,2] |
-
-
-## 5A. GROUP ACTION SPECIFICATION
-
-[GROUND_TRUTH]
-
-The symmetry group is coordinatized by a chosen labeling convention for its three S3 factors:
-- `pi_rA` acts on row indices of A, C, and the left row index of X
-- `pi_shared` acts on the column index of A and both shared middle indices of X and B
-- `pi_cB` acts on column indices of B, C, and the right column index of X
-
-Compatibility is enforced by using the same `pi_shared` on the A-column / B-row interface.
-
-Generic action on an X atom:
-
-`X[r,s|t,u] -> X[pi_rA(r), pi_shared(s) | pi_shared(t), pi_cB(u)]`
-
-This coordinatization is a naming convention for the three factors, not additional structure beyond the action itself.
-
-
-## 20. SIGNATURE FORMAT DEFINITIONS
-
-[GROUND_TRUTH] / [MEASURED_FROM_CODE]
-
-### CC Signature Definition
-
-Signature fields: (same_cell, same_row, same_col).
-
-### CX Signature Definition
-
-Signature fields: (x_live, c_is_target_of_x_if_live, c_row_equals_x_row, c_col_equals_x_output_col).
-
-### XC Signature Definition
-
-Signature fields: (x_live, c_is_target_of_x_if_live, x_row_equals_c_row, x_output_col_equals_c_col).
-
-### AX Signature Definition
-
-Signature fields: (a_row_equals_x_left_row, a_col_equals_x_left_col, x_live).
-
-### BX Signature Definition
-
-Signature fields: (b_row_equals_x_right_row, b_col_equals_x_right_col, x_live).
-
-### XX Signature Definition
-
-Signature fields: (x1_live, x2_live, same_r, same_s, same_t, same_u, same_A_atom, same_B_atom).
-
-### CXC Signature Definition
-
-Signature fields: (x_live, c1_equals_c2, c1_is_target_if_live, c2_is_target_if_live, row_triple(c1,x,c2), col_triple(c1,x,c2)).
-
-
-## 21. INLINE ORBIT REPRESENTATIVE ROSTERS
-
-[MEASURED_FROM_CODE]
-
-One row per orbit for the core arity-2 and arity-3 schemas.
-### CC Orbit Representatives
-
-| orbit_id | rep_config_id | representative | orbit_size | stabilizer_size | signature_key |
-|---|---|---|---|---|---|
-| 0 | 0 | CC[C[0,0],C[0,0]] | 9 | 24 | (True, True, True) |
-| 1 | 1 | CC[C[0,0],C[0,1]] | 18 | 12 | (False, True, False) |
-| 2 | 3 | CC[C[0,0],C[1,0]] | 18 | 12 | (False, False, True) |
-| 3 | 4 | CC[C[0,0],C[1,1]] | 36 | 6 | (False, False, False) |
-
-### CX Orbit Representatives
-
-| orbit_id | rep_config_id | representative | orbit_size | stabilizer_size | signature_key |
-|---|---|---|---|---|---|
-| 0 | 0 | CX[C[0,0],X[0,0|0,0]] | 27 | 8 | (True, True, True, True) |
-| 1 | 1 | CX[C[0,0],X[0,0|0,1]] | 54 | 4 | (True, False, True, False) |
-| 2 | 3 | CX[C[0,0],X[0,0|1,0]] | 54 | 4 | (False, False, True, True) |
-| 3 | 4 | CX[C[0,0],X[0,0|1,1]] | 108 | 2 | (False, False, True, False) |
-| 4 | 27 | CX[C[0,0],X[1,0|0,0]] | 54 | 4 | (True, False, False, True) |
-| 5 | 28 | CX[C[0,0],X[1,0|0,1]] | 108 | 2 | (True, False, False, False) |
-| 6 | 30 | CX[C[0,0],X[1,0|1,0]] | 108 | 2 | (False, False, False, True) |
-| 7 | 31 | CX[C[0,0],X[1,0|1,1]] | 216 | 1 | (False, False, False, False) |
-
-### XC Orbit Representatives
-
-| orbit_id | rep_config_id | representative | orbit_size | stabilizer_size | signature_key |
-|---|---|---|---|---|---|
-| 0 | 0 | XC[X[0,0|0,0],C[0,0]] | 27 | 8 | (True, True, True, True) |
-| 1 | 1 | XC[X[0,0|0,0],C[0,1]] | 54 | 4 | (True, False, True, False) |
-| 2 | 3 | XC[X[0,0|0,0],C[1,0]] | 54 | 4 | (True, False, False, True) |
-| 3 | 4 | XC[X[0,0|0,0],C[1,1]] | 108 | 2 | (True, False, False, False) |
-| 4 | 27 | XC[X[0,0|1,0],C[0,0]] | 54 | 4 | (False, False, True, True) |
-| 5 | 28 | XC[X[0,0|1,0],C[0,1]] | 108 | 2 | (False, False, True, False) |
-| 6 | 30 | XC[X[0,0|1,0],C[1,0]] | 108 | 2 | (False, False, False, True) |
-| 7 | 31 | XC[X[0,0|1,0],C[1,1]] | 216 | 1 | (False, False, False, False) |
-
-### AX Orbit Representatives
-
-| orbit_id | rep_config_id | representative | orbit_size | stabilizer_size | signature_key |
-|---|---|---|---|---|---|
-| 0 | 0 | AX[A[0,0],X[0,0|0,0]] | 27 | 8 | (True, True, True) |
-| 1 | 3 | AX[A[0,0],X[0,0|1,0]] | 54 | 4 | (True, True, False) |
-| 2 | 9 | AX[A[0,0],X[0,1|0,0]] | 54 | 4 | (True, False, False) |
-| 3 | 12 | AX[A[0,0],X[0,1|1,0]] | 54 | 4 | (True, False, True) |
-| 4 | 15 | AX[A[0,0],X[0,1|2,0]] | 54 | 4 | (True, False, False) |
-| 5 | 27 | AX[A[0,0],X[1,0|0,0]] | 54 | 4 | (False, True, True) |
-| 6 | 30 | AX[A[0,0],X[1,0|1,0]] | 108 | 2 | (False, True, False) |
-| 7 | 36 | AX[A[0,0],X[1,1|0,0]] | 108 | 2 | (False, False, False) |
-| 8 | 39 | AX[A[0,0],X[1,1|1,0]] | 108 | 2 | (False, False, True) |
-| 9 | 42 | AX[A[0,0],X[1,1|2,0]] | 108 | 2 | (False, False, False) |
-
-### BX Orbit Representatives
-
-| orbit_id | rep_config_id | representative | orbit_size | stabilizer_size | signature_key |
-|---|---|---|---|---|---|
-| 0 | 0 | BX[B[0,0],X[0,0|0,0]] | 27 | 8 | (True, True, True) |
-| 1 | 1 | BX[B[0,0],X[0,0|0,1]] | 54 | 4 | (True, False, True) |
-| 2 | 3 | BX[B[0,0],X[0,0|1,0]] | 54 | 4 | (False, True, False) |
-| 3 | 4 | BX[B[0,0],X[0,0|1,1]] | 108 | 2 | (False, False, False) |
-| 4 | 9 | BX[B[0,0],X[0,1|0,0]] | 54 | 4 | (True, True, False) |
-| 5 | 10 | BX[B[0,0],X[0,1|0,1]] | 108 | 2 | (True, False, False) |
-| 6 | 12 | BX[B[0,0],X[0,1|1,0]] | 54 | 4 | (False, True, True) |
-| 7 | 13 | BX[B[0,0],X[0,1|1,1]] | 108 | 2 | (False, False, True) |
-| 8 | 15 | BX[B[0,0],X[0,1|2,0]] | 54 | 4 | (False, True, False) |
-| 9 | 16 | BX[B[0,0],X[0,1|2,1]] | 108 | 2 | (False, False, False) |
-
-### XX Orbit Representatives
-
-| orbit_id | rep_config_id | representative | orbit_size | stabilizer_size | signature_key |
-|---|---|---|---|---|---|
-| 0 | 0 | XX[X[0,0|0,0],X[0,0|0,0]] | 27 | 8 | (True, True, True, True, True, True, True, True) |
-| 1 | 1 | XX[X[0,0|0,0],X[0,0|0,1]] | 54 | 4 | (True, True, True, True, True, False, True, False) |
-| 2 | 3 | XX[X[0,0|0,0],X[0,0|1,0]] | 54 | 4 | (True, False, True, True, False, True, True, False) |
-| 3 | 4 | XX[X[0,0|0,0],X[0,0|1,1]] | 108 | 2 | (True, False, True, True, False, False, True, False) |
-| 4 | 9 | XX[X[0,0|0,0],X[0,1|0,0]] | 54 | 4 | (True, False, True, False, True, True, False, True) |
-| 5 | 10 | XX[X[0,0|0,0],X[0,1|0,1]] | 108 | 2 | (True, False, True, False, True, False, False, False) |
-| 6 | 12 | XX[X[0,0|0,0],X[0,1|1,0]] | 54 | 4 | (True, True, True, False, False, True, False, False) |
-| 7 | 13 | XX[X[0,0|0,0],X[0,1|1,1]] | 108 | 2 | (True, True, True, False, False, False, False, False) |
-| 8 | 15 | XX[X[0,0|0,0],X[0,1|2,0]] | 54 | 4 | (True, False, True, False, False, True, False, False) |
-| 9 | 16 | XX[X[0,0|0,0],X[0,1|2,1]] | 108 | 2 | (True, False, True, False, False, False, False, False) |
-| 10 | 27 | XX[X[0,0|0,0],X[1,0|0,0]] | 54 | 4 | (True, True, False, True, True, True, False, True) |
-| 11 | 28 | XX[X[0,0|0,0],X[1,0|0,1]] | 108 | 2 | (True, True, False, True, True, False, False, False) |
-| 12 | 30 | XX[X[0,0|0,0],X[1,0|1,0]] | 108 | 2 | (True, False, False, True, False, True, False, False) |
-| 13 | 31 | XX[X[0,0|0,0],X[1,0|1,1]] | 216 | 1 | (True, False, False, True, False, False, False, False) |
-| 14 | 36 | XX[X[0,0|0,0],X[1,1|0,0]] | 108 | 2 | (True, False, False, False, True, True, False, True) |
-| 15 | 37 | XX[X[0,0|0,0],X[1,1|0,1]] | 216 | 1 | (True, False, False, False, True, False, False, False) |
-| 16 | 39 | XX[X[0,0|0,0],X[1,1|1,0]] | 108 | 2 | (True, True, False, False, False, True, False, False) |
-| 17 | 40 | XX[X[0,0|0,0],X[1,1|1,1]] | 216 | 1 | (True, True, False, False, False, False, False, False) |
-| 18 | 42 | XX[X[0,0|0,0],X[1,1|2,0]] | 108 | 2 | (True, False, False, False, False, True, False, False) |
-| 19 | 43 | XX[X[0,0|0,0],X[1,1|2,1]] | 216 | 1 | (True, False, False, False, False, False, False, False) |
-| 20 | 243 | XX[X[0,0|1,0],X[0,0|0,0]] | 54 | 4 | (False, True, True, True, False, True, True, False) |
-| 21 | 244 | XX[X[0,0|1,0],X[0,0|0,1]] | 108 | 2 | (False, True, True, True, False, False, True, False) |
-| 22 | 246 | XX[X[0,0|1,0],X[0,0|1,0]] | 54 | 4 | (False, False, True, True, True, True, True, True) |
-| 23 | 247 | XX[X[0,0|1,0],X[0,0|1,1]] | 108 | 2 | (False, False, True, True, True, False, True, False) |
-| 24 | 249 | XX[X[0,0|1,0],X[0,0|2,0]] | 54 | 4 | (False, False, True, True, False, True, True, False) |
-| 25 | 250 | XX[X[0,0|1,0],X[0,0|2,1]] | 108 | 2 | (False, False, True, True, False, False, True, False) |
-| 26 | 252 | XX[X[0,0|1,0],X[0,1|0,0]] | 54 | 4 | (False, False, True, False, False, True, False, False) |
-| 27 | 253 | XX[X[0,0|1,0],X[0,1|0,1]] | 108 | 2 | (False, False, True, False, False, False, False, False) |
-| 28 | 255 | XX[X[0,0|1,0],X[0,1|1,0]] | 54 | 4 | (False, True, True, False, True, True, False, True) |
-| 29 | 256 | XX[X[0,0|1,0],X[0,1|1,1]] | 108 | 2 | (False, True, True, False, True, False, False, False) |
-| 30 | 258 | XX[X[0,0|1,0],X[0,1|2,0]] | 54 | 4 | (False, False, True, False, False, True, False, False) |
-| 31 | 259 | XX[X[0,0|1,0],X[0,1|2,1]] | 108 | 2 | (False, False, True, False, False, False, False, False) |
-| 32 | 261 | XX[X[0,0|1,0],X[0,2|0,0]] | 54 | 4 | (False, False, True, False, False, True, False, False) |
-| 33 | 262 | XX[X[0,0|1,0],X[0,2|0,1]] | 108 | 2 | (False, False, True, False, False, False, False, False) |
-| 34 | 264 | XX[X[0,0|1,0],X[0,2|1,0]] | 54 | 4 | (False, False, True, False, True, True, False, True) |
-| 35 | 265 | XX[X[0,0|1,0],X[0,2|1,1]] | 108 | 2 | (False, False, True, False, True, False, False, False) |
-| 36 | 267 | XX[X[0,0|1,0],X[0,2|2,0]] | 54 | 4 | (False, True, True, False, False, True, False, False) |
-| 37 | 268 | XX[X[0,0|1,0],X[0,2|2,1]] | 108 | 2 | (False, True, True, False, False, False, False, False) |
-| 38 | 270 | XX[X[0,0|1,0],X[1,0|0,0]] | 108 | 2 | (False, True, False, True, False, True, False, False) |
-| 39 | 271 | XX[X[0,0|1,0],X[1,0|0,1]] | 216 | 1 | (False, True, False, True, False, False, False, False) |
-| 40 | 273 | XX[X[0,0|1,0],X[1,0|1,0]] | 108 | 2 | (False, False, False, True, True, True, False, True) |
-| 41 | 274 | XX[X[0,0|1,0],X[1,0|1,1]] | 216 | 1 | (False, False, False, True, True, False, False, False) |
-| 42 | 276 | XX[X[0,0|1,0],X[1,0|2,0]] | 108 | 2 | (False, False, False, True, False, True, False, False) |
-| 43 | 277 | XX[X[0,0|1,0],X[1,0|2,1]] | 216 | 1 | (False, False, False, True, False, False, False, False) |
-| 44 | 279 | XX[X[0,0|1,0],X[1,1|0,0]] | 108 | 2 | (False, False, False, False, False, True, False, False) |
-| 45 | 280 | XX[X[0,0|1,0],X[1,1|0,1]] | 216 | 1 | (False, False, False, False, False, False, False, False) |
-| 46 | 282 | XX[X[0,0|1,0],X[1,1|1,0]] | 108 | 2 | (False, True, False, False, True, True, False, True) |
-| 47 | 283 | XX[X[0,0|1,0],X[1,1|1,1]] | 216 | 1 | (False, True, False, False, True, False, False, False) |
-| 48 | 285 | XX[X[0,0|1,0],X[1,1|2,0]] | 108 | 2 | (False, False, False, False, False, True, False, False) |
-| 49 | 286 | XX[X[0,0|1,0],X[1,1|2,1]] | 216 | 1 | (False, False, False, False, False, False, False, False) |
-| 50 | 288 | XX[X[0,0|1,0],X[1,2|0,0]] | 108 | 2 | (False, False, False, False, False, True, False, False) |
-| 51 | 289 | XX[X[0,0|1,0],X[1,2|0,1]] | 216 | 1 | (False, False, False, False, False, False, False, False) |
-| 52 | 291 | XX[X[0,0|1,0],X[1,2|1,0]] | 108 | 2 | (False, False, False, False, True, True, False, True) |
-| 53 | 292 | XX[X[0,0|1,0],X[1,2|1,1]] | 216 | 1 | (False, False, False, False, True, False, False, False) |
-| 54 | 294 | XX[X[0,0|1,0],X[1,2|2,0]] | 108 | 2 | (False, True, False, False, False, True, False, False) |
-| 55 | 295 | XX[X[0,0|1,0],X[1,2|2,1]] | 216 | 1 | (False, True, False, False, False, False, False, False) |
-
-### CXC Orbit Representatives
-
-| orbit_id | rep_config_id | representative | orbit_size | stabilizer_size | signature_key |
-|---|---|---|---|---|---|
-| 0 | 0 | CXC[C[0,0],X[0,0|0,0],C[0,0]] | 27 | 8 | (True, True, True, True, (0, 0, 0), (0, 0, 0)) |
-| 1 | 1 | CXC[C[0,0],X[0,0|0,0],C[0,1]] | 54 | 4 | (True, False, True, False, (0, 0, 0), (0, 0, 1)) |
-| 2 | 3 | CXC[C[0,0],X[0,0|0,0],C[1,0]] | 54 | 4 | (True, False, True, False, (0, 0, 1), (0, 0, 0)) |
-| 3 | 4 | CXC[C[0,0],X[0,0|0,0],C[1,1]] | 108 | 2 | (True, False, True, False, (0, 0, 1), (0, 0, 1)) |
-| 4 | 9 | CXC[C[0,0],X[0,0|0,1],C[0,0]] | 54 | 4 | (True, True, False, False, (0, 0, 0), (0, 1, 0)) |
-| 5 | 10 | CXC[C[0,0],X[0,0|0,1],C[0,1]] | 54 | 4 | (True, False, False, True, (0, 0, 0), (0, 1, 1)) |
-| 6 | 11 | CXC[C[0,0],X[0,0|0,1],C[0,2]] | 54 | 4 | (True, False, False, False, (0, 0, 0), (0, 1, 2)) |
-| 7 | 12 | CXC[C[0,0],X[0,0|0,1],C[1,0]] | 108 | 2 | (True, False, False, False, (0, 0, 1), (0, 1, 0)) |
-| 8 | 13 | CXC[C[0,0],X[0,0|0,1],C[1,1]] | 108 | 2 | (True, False, False, False, (0, 0, 1), (0, 1, 1)) |
-| 9 | 14 | CXC[C[0,0],X[0,0|0,1],C[1,2]] | 108 | 2 | (True, False, False, False, (0, 0, 1), (0, 1, 2)) |
-| 10 | 27 | CXC[C[0,0],X[0,0|1,0],C[0,0]] | 54 | 4 | (False, True, False, False, (0, 0, 0), (0, 0, 0)) |
-| 11 | 28 | CXC[C[0,0],X[0,0|1,0],C[0,1]] | 108 | 2 | (False, False, False, False, (0, 0, 0), (0, 0, 1)) |
-| 12 | 30 | CXC[C[0,0],X[0,0|1,0],C[1,0]] | 108 | 2 | (False, False, False, False, (0, 0, 1), (0, 0, 0)) |
-| 13 | 31 | CXC[C[0,0],X[0,0|1,0],C[1,1]] | 216 | 1 | (False, False, False, False, (0, 0, 1), (0, 0, 1)) |
-| 14 | 36 | CXC[C[0,0],X[0,0|1,1],C[0,0]] | 108 | 2 | (False, True, False, False, (0, 0, 0), (0, 1, 0)) |
-| 15 | 37 | CXC[C[0,0],X[0,0|1,1],C[0,1]] | 108 | 2 | (False, False, False, False, (0, 0, 0), (0, 1, 1)) |
-| 16 | 38 | CXC[C[0,0],X[0,0|1,1],C[0,2]] | 108 | 2 | (False, False, False, False, (0, 0, 0), (0, 1, 2)) |
-| 17 | 39 | CXC[C[0,0],X[0,0|1,1],C[1,0]] | 216 | 1 | (False, False, False, False, (0, 0, 1), (0, 1, 0)) |
-| 18 | 40 | CXC[C[0,0],X[0,0|1,1],C[1,1]] | 216 | 1 | (False, False, False, False, (0, 0, 1), (0, 1, 1)) |
-| 19 | 41 | CXC[C[0,0],X[0,0|1,1],C[1,2]] | 216 | 1 | (False, False, False, False, (0, 0, 1), (0, 1, 2)) |
-| 20 | 243 | CXC[C[0,0],X[1,0|0,0],C[0,0]] | 54 | 4 | (True, True, False, False, (0, 1, 0), (0, 0, 0)) |
-| 21 | 244 | CXC[C[0,0],X[1,0|0,0],C[0,1]] | 108 | 2 | (True, False, False, False, (0, 1, 0), (0, 0, 1)) |
-| 22 | 246 | CXC[C[0,0],X[1,0|0,0],C[1,0]] | 54 | 4 | (True, False, False, True, (0, 1, 1), (0, 0, 0)) |
-| 23 | 247 | CXC[C[0,0],X[1,0|0,0],C[1,1]] | 108 | 2 | (True, False, False, False, (0, 1, 1), (0, 0, 1)) |
-| 24 | 249 | CXC[C[0,0],X[1,0|0,0],C[2,0]] | 54 | 4 | (True, False, False, False, (0, 1, 2), (0, 0, 0)) |
-| 25 | 250 | CXC[C[0,0],X[1,0|0,0],C[2,1]] | 108 | 2 | (True, False, False, False, (0, 1, 2), (0, 0, 1)) |
-| 26 | 252 | CXC[C[0,0],X[1,0|0,1],C[0,0]] | 108 | 2 | (True, True, False, False, (0, 1, 0), (0, 1, 0)) |
-| 27 | 253 | CXC[C[0,0],X[1,0|0,1],C[0,1]] | 108 | 2 | (True, False, False, False, (0, 1, 0), (0, 1, 1)) |
-| 28 | 254 | CXC[C[0,0],X[1,0|0,1],C[0,2]] | 108 | 2 | (True, False, False, False, (0, 1, 0), (0, 1, 2)) |
-| 29 | 255 | CXC[C[0,0],X[1,0|0,1],C[1,0]] | 108 | 2 | (True, False, False, False, (0, 1, 1), (0, 1, 0)) |
-| 30 | 256 | CXC[C[0,0],X[1,0|0,1],C[1,1]] | 108 | 2 | (True, False, False, True, (0, 1, 1), (0, 1, 1)) |
-| 31 | 257 | CXC[C[0,0],X[1,0|0,1],C[1,2]] | 108 | 2 | (True, False, False, False, (0, 1, 1), (0, 1, 2)) |
-| 32 | 258 | CXC[C[0,0],X[1,0|0,1],C[2,0]] | 108 | 2 | (True, False, False, False, (0, 1, 2), (0, 1, 0)) |
-| 33 | 259 | CXC[C[0,0],X[1,0|0,1],C[2,1]] | 108 | 2 | (True, False, False, False, (0, 1, 2), (0, 1, 1)) |
-| 34 | 260 | CXC[C[0,0],X[1,0|0,1],C[2,2]] | 108 | 2 | (True, False, False, False, (0, 1, 2), (0, 1, 2)) |
-| 35 | 270 | CXC[C[0,0],X[1,0|1,0],C[0,0]] | 108 | 2 | (False, True, False, False, (0, 1, 0), (0, 0, 0)) |
-| 36 | 271 | CXC[C[0,0],X[1,0|1,0],C[0,1]] | 216 | 1 | (False, False, False, False, (0, 1, 0), (0, 0, 1)) |
-| 37 | 273 | CXC[C[0,0],X[1,0|1,0],C[1,0]] | 108 | 2 | (False, False, False, False, (0, 1, 1), (0, 0, 0)) |
-| 38 | 274 | CXC[C[0,0],X[1,0|1,0],C[1,1]] | 216 | 1 | (False, False, False, False, (0, 1, 1), (0, 0, 1)) |
-| 39 | 276 | CXC[C[0,0],X[1,0|1,0],C[2,0]] | 108 | 2 | (False, False, False, False, (0, 1, 2), (0, 0, 0)) |
-| 40 | 277 | CXC[C[0,0],X[1,0|1,0],C[2,1]] | 216 | 1 | (False, False, False, False, (0, 1, 2), (0, 0, 1)) |
-| 41 | 279 | CXC[C[0,0],X[1,0|1,1],C[0,0]] | 216 | 1 | (False, True, False, False, (0, 1, 0), (0, 1, 0)) |
-| 42 | 280 | CXC[C[0,0],X[1,0|1,1],C[0,1]] | 216 | 1 | (False, False, False, False, (0, 1, 0), (0, 1, 1)) |
-| 43 | 281 | CXC[C[0,0],X[1,0|1,1],C[0,2]] | 216 | 1 | (False, False, False, False, (0, 1, 0), (0, 1, 2)) |
-| 44 | 282 | CXC[C[0,0],X[1,0|1,1],C[1,0]] | 216 | 1 | (False, False, False, False, (0, 1, 1), (0, 1, 0)) |
-| 45 | 283 | CXC[C[0,0],X[1,0|1,1],C[1,1]] | 216 | 1 | (False, False, False, False, (0, 1, 1), (0, 1, 1)) |
-| 46 | 284 | CXC[C[0,0],X[1,0|1,1],C[1,2]] | 216 | 1 | (False, False, False, False, (0, 1, 1), (0, 1, 2)) |
-| 47 | 285 | CXC[C[0,0],X[1,0|1,1],C[2,0]] | 216 | 1 | (False, False, False, False, (0, 1, 2), (0, 1, 0)) |
-| 48 | 286 | CXC[C[0,0],X[1,0|1,1],C[2,1]] | 216 | 1 | (False, False, False, False, (0, 1, 2), (0, 1, 1)) |
-| 49 | 287 | CXC[C[0,0],X[1,0|1,1],C[2,2]] | 216 | 1 | (False, False, False, False, (0, 1, 2), (0, 1, 2)) |
-
-
-## 16A. SUPSERSEDED / REPAIRED STATUS NOTES
-
-[REPAIRED] / [MEASURED_FROM_CODE]
-
-The older type-based composition summary `256 / 64 / 36 / 28` is a superseded historical result from an older layer and should not be used as the current canonical composition fact.
-
-The earlier BX orbit count `18` is superseded; the corrected current value is `10` after repair of the B-action path.
-
+Note: This canonical dossier contains all critical inline tables for single-file sufficiency.
+Additional orbit rosters and extended data available in exports directory.
