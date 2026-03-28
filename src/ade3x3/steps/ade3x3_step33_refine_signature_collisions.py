@@ -8,6 +8,7 @@ Target schemas:
 - AX: 2 groups of 2 orbits each (4 collisions)    — refiner (t,)
 - BX: 2 groups of 2 orbits each (4 collisions)    — refiner (s,)
 - CXXC: 784 groups (2744 collisions)               — refiner (s4, t4)
+- CCXX: 784 groups (2744 collisions)               — refiner (s4, t4)
 
 Refiners are the minimal appendages discovered by the workbench (step 36).
 """
@@ -123,6 +124,38 @@ def refine_CXXC_features(cfg_data):
     d = cfg_data
     return (d['s4'], d['t4'])
 
+def decode_CCXX(cfg):
+    """Decode CCXX config into (c1, c2, x1, x2) components."""
+    x2 = cfg % 81
+    rem = cfg // 81
+    x1 = rem % 81
+    rem = rem // 81
+    c2 = rem % 9
+    c1 = rem // 9
+    r1, u1 = divmod(c1, 3)
+    r2, u2 = divmod(c2, 3)
+    r3, s3 = divmod(x1 // 9, 3)
+    t3, u3 = divmod(x1 % 9, 3)
+    r4, s4 = divmod(x2 // 9, 3)
+    t4, u4 = divmod(x2 % 9, 3)
+    return {
+        'c1': c1, 'c2': c2, 'x1': x1, 'x2': x2,
+        'r1': r1, 'u1': u1,
+        'r2': r2, 'u2': u2,
+        'r3': r3, 's3': s3, 't3': t3, 'u3': u3,
+        'r4': r4, 's4': s4, 't4': t4, 'u4': u4,
+    }
+
+def refine_CCXX_features(cfg_data):
+    """
+    Minimal refinement features for CCXX schema.
+
+    Workbench-discovered: (x2_s4, x2_t4) is the smallest order-2
+    appendage that fully resolves all 2744 collisions.
+    """
+    d = cfg_data
+    return (d['s4'], d['t4'])
+
 # ─── Refiner metadata ───────────────────────────────────────────────
 
 REFINERS = {
@@ -133,6 +166,8 @@ REFINERS = {
     'BX':   {'feature_names': '(s,)',            'size': 1,
              'historical': '(s, r)',              'hist_size': 2},
     'CXXC': {'feature_names': '(s4, t4)',        'size': 2,
+             'historical': '(none)',              'hist_size': 0},
+    'CCXX': {'feature_names': '(s4, t4)',        'size': 2,
              'historical': '(none)',              'hist_size': 0},
 }
 
@@ -255,6 +290,10 @@ def main():
     # ─── CXXC ─────────────────────────────────────────────────────
     run_schema('CXXC', 2744, exports / 'signatures_CXXC.csv',
                decode_CXXC, refine_CXXC_features)
+
+    # ─── CCXX ─────────────────────────────────────────────────────
+    run_schema('CCXX', 2744, exports / 'signatures_CCXX.csv',
+               decode_CCXX, refine_CCXX_features)
 
     # ─── Summary report ───────────────────────────────────────────
     print("="*70)

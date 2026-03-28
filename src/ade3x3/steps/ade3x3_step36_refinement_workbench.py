@@ -373,6 +373,53 @@ def build_cxxc_feature_registry():
 
 
 # ═══════════════════════════════════════════════════════════════════════
+# Schema plug-in: CCXX
+# ═══════════════════════════════════════════════════════════════════════
+
+def decode_ccxx(cfg):
+    x2 = cfg % 81
+    rem = cfg // 81
+    x1 = rem % 81
+    rem = rem // 81
+    c2 = rem % 9
+    c1 = rem // 9
+    r1, u1 = divmod(c1, 3)
+    r2, u2 = divmod(c2, 3)
+    r3, s3 = divmod(x1 // 9, 3)
+    t3, u3 = divmod(x1 % 9, 3)
+    r4, s4 = divmod(x2 // 9, 3)
+    t4, u4 = divmod(x2 % 9, 3)
+    return {
+        'c1': c1, 'c2': c2, 'x1': x1, 'x2': x2,
+        'r1': r1, 'u1': u1,
+        'r2': r2, 'u2': u2,
+        'r3': r3, 's3': s3, 't3': t3, 'u3': u3,
+        'r4': r4, 's4': s4, 't4': t4, 'u4': u4,
+    }
+
+
+def build_ccxx_feature_registry():
+    features = {}
+
+    for prefix, coords in [
+        ('c1', ['r1', 'u1']),
+        ('c2', ['r2', 'u2']),
+        ('x1', ['r3', 's3', 't3', 'u3']),
+        ('x2', ['r4', 's4', 't4', 'u4']),
+    ]:
+        for c in coords:
+            features[f'{prefix}_{c}'] = lambda d, k=c: d[k]
+
+    features['x1_live'] = lambda d: d['s3'] == d['t3']
+    features['x2_live'] = lambda d: d['s4'] == d['t4']
+    features['c1_equals_c2'] = lambda d: d['c1'] == d['c2']
+    features['r1_eq_r2'] = lambda d: d['r1'] == d['r2']
+    features['u1_eq_u2'] = lambda d: d['u1'] == d['u2']
+
+    return features
+
+
+# ═══════════════════════════════════════════════════════════════════════
 # Schema plug-in: XX
 # ═══════════════════════════════════════════════════════════════════════
 
@@ -521,6 +568,12 @@ SCHEMAS = {
         decode_fn=decode_cxxc,
         feature_registry_fn=build_cxxc_feature_registry,
         output_prefix='cxxc',
+    ),
+    'CCXX': dict(
+        csv_path='outputs/exports/signatures_CCXX.csv',
+        decode_fn=decode_ccxx,
+        feature_registry_fn=build_ccxx_feature_registry,
+        output_prefix='ccxx',
     ),
     'XX': dict(
         csv_path='outputs/exports/signatures_XX.csv',
