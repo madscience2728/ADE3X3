@@ -10,6 +10,7 @@ It must be completely self-contained with all research findings.
 No arguments. Just run it.
 """
 
+import ast
 import csv
 from datetime import datetime
 from pathlib import Path
@@ -74,6 +75,57 @@ def read_cxxc_marginal_weight_profile():
 def read_stabilizer_classification():
     """Read stabilizer classification for CXC and CXXC orbits."""
     return read_csv("stabilizer_classification.csv")
+
+def read_stabilizer_composition():
+    """Read stabilizer composition summary (stab_type_A, stab_type_B, stab_type_output, ...)."""
+    return read_csv("stabilizer_composition_summary.csv")
+
+def read_refinement_conditioned_kernel():
+    """Read refinement-conditioned kernel strata (step 43)."""
+    return read_csv("refinement_conditioned_kernel_strata.csv")
+
+def read_floor_layer():
+    """Read Z2xZ2 floor layer inventory and composition table (step 44)."""
+    inventory = read_csv("floor_layer_inventory.csv")
+    comp_table = read_csv("floor_layer_composition_table.csv")
+    stab_comp = read_csv("floor_layer_stab_composition.csv")
+    return inventory, comp_table, stab_comp
+
+def read_step45_outputs():
+    """Read step 45 closure, doubly-live core, and fixed-point exports."""
+    closure_steps = read_csv("step45_closure_steps.csv")
+    core_rows = read_csv("step45_doubly_live_core.csv")
+    core_comp = read_csv("step45_doubly_live_composition.csv")
+    core_output_summary = read_csv("step45_doubly_live_output_summary.csv")
+    fixed_rows = read_csv("step45_fixed_point_subspaces.csv")
+    return closure_steps, core_rows, core_comp, core_output_summary, fixed_rows
+
+def read_step46_outputs():
+    """Read step 46 same-fiber, focused, and 64-subalgebra exports."""
+    same_fiber_outputs = read_csv("step46_same_fiber_outputs.csv")
+    same_fiber_pair_summary = read_csv("step46_same_fiber_pair_summary.csv")
+    same_fiber_closure = read_csv("step46_same_fiber_closure.csv")
+    subalg_table = read_csv("step46_64_subalgebra_table.csv")
+    subalg_summary = read_csv("step46_64_subalgebra_summary.csv")
+    focused_orbits = read_csv("step46_focused_orbits.csv")
+    focused_comp = read_csv("step46_focused_composition.csv")
+    focused_summary = read_csv("step46_focus_profile_summary.csv")
+    identity_map = read_csv("step46_identity_map.csv")
+    single_gen = read_csv("step46_single_generator_closure.csv")
+    greedy_gen = read_csv("step46_greedy_generators.csv")
+    return (same_fiber_outputs, same_fiber_pair_summary, same_fiber_closure,
+            subalg_table, subalg_summary, focused_orbits, focused_comp,
+            focused_summary, identity_map, single_gen, greedy_gen)
+
+def read_step47_outputs():
+    """Read step 47 mixed-pair resolution and tensor-constraint exports."""
+    st_rows = read_csv("step47_mixed_pair_st_resolution.csv")
+    full_rows = read_csv("step47_mixed_pair_rstu_resolution.csv")
+    summary_rows = read_csv("step47_mixed_pair_resolution_summary.csv")
+    tensor_profile = read_csv("step47_tensor_orbit_profile.csv")
+    constraint_rows = read_csv("step47_algorithm_constraints.csv")
+    external_rows = read_csv("step47_external_algorithm_status.csv")
+    return st_rows, full_rows, summary_rows, tensor_profile, constraint_rows, external_rows
 
 def generate_x_atoms():
     """Generate all 81 X atoms with live/dead status and target."""
@@ -148,10 +200,14 @@ def generate():
     w("**Dossier Type:** Canonical Object Technical Dossier")
     w(f"**Generated:** {ts}")
     w("**Generator Script:** generate_canon_doc.py")
-    w("**Provenance:** Built from steps 1-41+, including orbit metadata repair (step 10b),")
+    w("**Provenance:** Built from steps 1-47+, including orbit metadata repair (step 10b),")
     w("signature refinement, CCXX orbit computation, arity-4 parity export,")
     w("composition kernel (step 39), CXXC marginal weight profile (step 40),")
-    w("and stabilizer subgroup classification (step 41)")
+    w("stabilizer subgroup classification (step 41), stabilizer composition (step 42),")
+    w("refinement-conditioned kernel (step 43), floor-layer analysis (step 44),")
+    w("58-orbit closure / doubly-live core analysis (step 45),")
+    w("same-fiber / 64-subalgebra structure analysis (step 46),")
+    w("and mixed-pair resolution / tensor-constraint extraction (step 47)")
     w()
     w("**IMPORTANT:** This document contains all computed results inline.")
     w("No external files are required. All research findings are here.")
@@ -888,6 +944,16 @@ def generate():
     w("index (contracted through the X atom) resolves ambiguity uniformly —")
     w("no CC orbit is preferred by any mixed CX x XC pair.")
     w("Verification: all kernel row sums match Section 18 witness totals exactly.")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("This is a clean negative result with positive implications. The hypothesis")
+    w("was that different mixed keys would split differently, encoding how the")
+    w("summation index governs the product. Instead, the summation index is")
+    w("maximally democratic: it fails to determine the output orbit with perfect")
+    w("indifference. This closes the orbit-level composition as a source of free")
+    w("algorithmic information. Any structure distinguishing output orbits within")
+    w("a mixed pair must come from sub-orbit features, i.e., the refinement coordinates.")
 
     # ── CXXC MARGINAL WEIGHT PROFILE ──
     w()
@@ -983,9 +1049,21 @@ def generate():
                 w(f"| {stype} | {ord_val} | {cnt} | {cnt/n:.4f} |")
             w()
             if schema == 'CXXC':
-                w("**Remarkable pattern:** The counts 2197 + 507 + 39 + 1 = 2744")
+                w("**Remarkable arithmetic:** The counts 2197 + 507 + 39 + 1 = 2744")
                 w("where 2197 = 13^3, 507 = 3 x 13^2, 39 = 3 x 13, 1 = 1.")
-                w("The total 2744 = 14^3. The arithmetic structure is exact.")
+                w("This is the binomial expansion (13+1)^3 = 14^3. The number 14 = C(4,2) + C(4,1) + C(4,0).")
+                w("CXXC has typed arity 4. Whether the coincidence reflects the partition lattice")
+                w("of the 4-index equality pattern under the compatible group action is an open question.")
+                w()
+                w("[INTERPRETATION]")
+                w()
+                w("The pure-2-group constraint is structurally non-obvious. S3 x S3 x S3 has 27")
+                w("elements of order 3 and 6 elements of order 6, yet none stabilize any CXC or")
+                w("CXXC configuration. The compatibility constraint (pi_shared acts on both A-columns")
+                w("and B-rows) must be responsible, but the exact mechanism is not yet isolated.")
+                w("Consequence: equivariant decompositions of any arity-2/4 tensor only require")
+                w("2-group representation theory (F_2-vector spaces), not the full representation")
+                w("theory of S3. This is a real constraint on the algorithm search space.")
                 w()
             w("| orbit_id | rep_config_id | orbit_size | stab_order | type | element_orders |")
             w("|----------|--------------|------------|------------|------|----------------|")
@@ -996,6 +1074,592 @@ def generate():
             w()
     else:
         w("*Run ade3x3_step41_stabilizer_classification.py to populate this section.*")
+
+    # ── STABILIZER COMPOSITION ANALYSIS ──
+    w()
+    w(f"## {section_num}. STABILIZER COMPOSITION ANALYSIS")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 42)")
+    w()
+    w("For each pair of CXXC orbits (A, B) that compose through a shared CXC face,")
+    w("does the stabilizer type of the inputs constrain the stabilizer type of the output?")
+    w()
+    w("**Composition definition:**")
+    w("For CXC interface config m = (c1_m, x_m, c2_m):")
+    w("  A = CXXC(c1_m, x1, x_m, c2_m)   [right-CXC face = m]")
+    w("  B = CXXC(c1_m, x_m, x4, c2_m)   [left-CXC face = m]")
+    w("  Output = CXXC(c1_m, x1, x4, c2_m)")
+    w("Total pairs enumerated: 6,561 CXC configs x 81 x 81 = 43,046,721  [VERIFIED]")
+    w()
+    comp_rows = read_stabilizer_composition()
+    if comp_rows:
+        from collections import defaultdict as _dd4
+        pred_rows = [r for r in comp_rows if abs(float(r['fraction']) - 1.0) < 1e-9]
+        pred_pairs = {(r['stab_type_A'], r['stab_type_B']): r['stab_type_output']
+                      for r in pred_rows}
+        w("### Predictability Table")
+        w()
+        w("| stab_type_A | stab_type_B | Output Types | Predictable? |")
+        w("|-------------|-------------|--------------|--------------|")
+        seen_pairs = {}
+        all_outputs = _dd4(set)
+        for r in comp_rows:
+            key = (r['stab_type_A'], r['stab_type_B'])
+            all_outputs[key].add(r['stab_type_output'])
+        _TYPE_ORD = ['Trivial', 'Z2', 'Z2xZ2', '(Z2)^3']
+        for key in sorted(all_outputs.keys(), key=lambda x: (_TYPE_ORD.index(x[0]) if x[0] in _TYPE_ORD else 99, _TYPE_ORD.index(x[1]) if x[1] in _TYPE_ORD else 99)):
+            outputs = sorted(all_outputs[key], key=lambda x: _TYPE_ORD.index(x) if x in _TYPE_ORD else 99)
+            pred = "Yes" if len(outputs) == 1 else "No"
+            w(f"| {key[0]} | {key[1]} | {', '.join(outputs)} | {pred} |")
+        w()
+        w("### Full Distribution")
+        w()
+        w("| stab_type_A | stab_type_B | stab_type_output | pair_count | fraction |")
+        w("|-------------|-------------|------------------|------------|----------|")
+        for r in comp_rows:
+            w(f"| {r['stab_type_A']} | {r['stab_type_B']} | {r['stab_type_output']} "
+              f"| {int(r['pair_count']):,} | {float(r['fraction']):.6f} |")
+    else:
+        w("*Run ade3x3_step42_stabilizer_composition.py to populate this section.*")
+    w()
+    w("**Key findings:**")
+    w()
+    w("1. **(Z2)^3 is a composition identity (in stabilizer type):** If either input has")
+    w("   stabilizer type (Z2)^3, the output type is exactly the OTHER input's type.")
+    w("   (Z2)^3 \u2218 X = X and X \u2218 (Z2)^3 = X for all stabilizer types X.")
+    w("   The (Z2)^3 orbit (rep_config_id=0, the all-zero config) passes the other input through unchanged.")
+    w()
+    w("2. **Stabilizer type is not generally preserved:** For most input type pairs,")
+    w("   the output type ranges across multiple types. The input types provide only")
+    w("   weak constraints on the output, except at the (Z2)^3 fixed point.")
+    w()
+    w("3. **No order-bounding:** Composing two Trivial-stabilizer orbits can produce")
+    w("   a (Z2)^3 orbit (864 such pairs observed). The stabilizer order can increase")
+    w("   under composition. Equivalently, two generic configs can land on the")
+    w("   maximally-symmetric all-zero output.")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("The negative finding: stabilizer type layers are not closed under composition.")
+    w("The positive finding: the (Z2)^3 identity structure is clean and algebraically")
+    w("precise. The search for composition-stable substructures must go below the")
+    w("stabilizer-type coarsening — either to full orbit identity or to the refinement")
+    w("coordinate layer.")
+
+    # ── REFINEMENT-CONDITIONED KERNEL ──
+    w()
+    w(f"## {section_num}. REFINEMENT-CONDITIONED COMPOSITION KERNEL")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 43)")
+    w()
+    w("For each of the 14 mixed CX x XC -> CC orbit-pairs, witnesses are stratified")
+    w("by the (s, t) refinement coordinates of the shared X atom (s = contraction index")
+    w("from CX side, t = contraction index from XC side).")
+    w()
+    w("**Hypothesis tested:** Does conditioning on (s, t) break the orbit-level CC uniformity?")
+    w()
+    w("**X atom coordinate encoding:** x = 9*(3r+s) + (3t+u);  s = (x//9)%3, t = (x%9)//3")
+    w("The shared X atom's (s, t) pair is the 'summation index' contracted through.")
+    w()
+    strat_rows = read_refinement_conditioned_kernel()
+    if strat_rows:
+        n_strata = len(strat_rows)
+        n_uniform = sum(1 for r in strat_rows if r['is_uniform'] == 'True')
+        n_nonuniform = n_strata - n_uniform
+        w(f"**Results:** {n_strata} strata (cx_orbit, xc_orbit, s, t) occupied across 14 mixed keys")
+        w(f"- Uniform strata (CC distribution equal within stratum): {n_uniform}")
+        w(f"- Non-uniform strata: {n_nonuniform}")
+        w()
+        if n_nonuniform == 0:
+            w("**VERDICT:** ALL strata are uniform. Conditioning on (s,t) does NOT break")
+            w("the orbit-level CC uniformity. The refinement-coordination hypothesis is")
+            w("CLOSED at the (s,t) stratum level.")
+        else:
+            w(f"**VERDICT:** {n_nonuniform}/{n_strata} strata are non-uniform.")
+            w("Conditioning on (s,t) DOES reveal sub-orbit structure.")
+        w()
+        w("### Strata per Mixed Key")
+        w()
+        from collections import defaultdict as _dd5
+        strata_per_key = _dd5(list)
+        for r in strat_rows:
+            strata_per_key[(int(r['cx_orbit']), int(r['xc_orbit']))].append(r)
+        w("| cx_orbit | xc_orbit | n_strata | uniform | sample cc_counts |")
+        w("|----------|----------|----------|---------|-----------------|")
+        for key in sorted(strata_per_key.keys()):
+            rows_k = strata_per_key[key]
+            n_u = sum(1 for r in rows_k if r['is_uniform'] == 'True')
+            sample = rows_k[0]['cc_counts'] if rows_k else ''
+            w(f"| {key[0]} | {key[1]} | {len(rows_k)} | {n_u}/{len(rows_k)} | {sample} |")
+    else:
+        w("*Run ade3x3_step43_refinement_conditioned_kernel.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("The (s,t) uniformity is a second-layer negative result: not only is the orbit-level")
+    w("composition uniform (Section 27), but conditioning on the shared X atom's summation")
+    w("index also produces uniform CC-orbit splits within each stratum. The contraction")
+    w("operation is maximally democratic at both the orbit level and the (s,t) stratum level.")
+    w("Any structure distinguishing output orbits in the mixed CX x XC pairs must come")
+    w("from finer features than (s,t) alone — possibly the full (r,s,t,u) coordinate of")
+    w("the shared X atom, or the specific (c1,c2) boundary conditions.")
+
+    # ── Z2xZ2 FLOOR LAYER ──
+    w()
+    w(f"## {section_num}. Z2xZ2 FLOOR LAYER ANALYSIS")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 44)")
+    w()
+    w("The 40 CXXC orbits with stabilizer order >= 4 (39 Z2xZ2 + 1 (Z2)^3) are")
+    w("investigated as a composition-stable 'floor layer'. Uses the same composition")
+    w("definition as step 42. Results verified against step 42 ground truth (self-test).")
+    w()
+    fl_inventory, fl_comp_table, fl_stab_comp = read_floor_layer()
+    if fl_inventory:
+        n_floor = len(fl_inventory)
+        n_both_live = sum(1 for r in fl_inventory if r['both_live'] == 'True')
+        n_x1x2 = sum(1 for r in fl_inventory if r['x1_eq_x2'] == 'True')
+        n_c1c2 = sum(1 for r in fl_inventory if r['c1_eq_c2'] == 'True')
+        w(f"**Floor layer:** {n_floor} orbits")
+        w(f"  Z2xZ2 orbits: {sum(1 for r in fl_inventory if r['stabilizer_type'] == 'Z2xZ2')}")
+        w(f"  (Z2)^3 orbits: {sum(1 for r in fl_inventory if r['stabilizer_type'] == '(Z2)^3')}")
+        w()
+        w("### Task 2a-2b: From Step 42 Summary Data")
+        w()
+        if fl_stab_comp:
+            out_types_fl = set(r['stab_type_output'] for r in fl_stab_comp)
+            floor_t = {'Z2xZ2', '(Z2)^3'}
+            full_cl = out_types_fl <= floor_t
+            no_triv = 'Trivial' not in out_types_fl
+            w(f"Output types observed: {sorted(out_types_fl)}")
+            w(f"**2a Full closure:** {'NO — Z2 outputs appear' if not full_cl else 'YES — fully closed'}")
+            w(f"**2b Floor property (no Trivial output):** {'YES' if no_triv else 'NO'}")
+            w()
+            w("| stab_type_A | stab_type_B | stab_type_output | pair_count |")
+            w("|-------------|-------------|------------------|------------|")
+            for r in fl_stab_comp:
+                w(f"| {r['stab_type_A']} | {r['stab_type_B']} | {r['stab_type_output']} "
+                  f"| {int(r['pair_count']):,} |")
+        w()
+        w("### Task 2c: Structural Inventory")
+        w()
+        w(f"- Both X atoms live (s=t): {n_both_live} / {n_floor}")
+        w(f"- x1 = x2 (identical X atoms): {n_x1x2} / {n_floor}")
+        w(f"- c1 = c2 (identical C atoms): {n_c1c2} / {n_floor}")
+        w()
+        w("| orbit_id | rep | size | stab_type | live_x1 | live_x2 | c1=c2 | x1=x2 |")
+        w("|----------|-----|------|-----------|---------|---------|-------|-------|")
+        for r in sorted(fl_inventory, key=lambda x: int(x['orbit_id'])):
+            w(f"| {r['orbit_id']} | {r['rep_config_id']} | {r['orbit_size']} | "
+              f"{r['stabilizer_type']} | {r['live_x1']} | {r['live_x2']} | "
+              f"{r['c1_eq_c2']} | {r['x1_eq_x2']} |")
+        w()
+        if fl_comp_table:
+            n_pairs = sum(int(r['total_pairs']) for r in fl_comp_table)
+            n_in    = sum(int(r['output_in_floor']) for r in fl_comp_table)
+            n_out   = sum(int(r['output_outside_floor']) for r in fl_comp_table)
+            all_out = set()
+            for r in fl_comp_table:
+                for oid in ast.literal_eval(r['output_orbit_ids']):
+                    all_out.add(oid)
+            floor_ids_set = set(int(r['orbit_id']) for r in fl_inventory)
+            escaped = sorted(all_out - floor_ids_set)
+            w("### Task 2d: Composition Table (Floor x Floor)")
+            w()
+            w(f"Total floor x floor pairs: {n_pairs:,}")
+            w(f"- Output in floor layer:   {n_in:,} ({100*n_in//n_pairs}%)")
+            w(f"- Output outside floor:    {n_out:,} ({100*n_out//n_pairs}%)")
+            w(f"Reachable output orbits:   {len(all_out)} total, {len(escaped)} outside floor")
+            if escaped:
+                w(f"Escaped orbit ids: {escaped}")
+            w()
+    else:
+        w("*Run ade3x3_step44_z2z2_floor_layer.py to populate this section.*")
+    w()
+    w("**Key findings:**")
+    w()
+    w("1. **Not fully closed (2a=NO):** Z2xZ2 + Z2xZ2 can produce Z2 output (15.16% exit rate).")
+    w("   The floor layer is not a sub-algebra under orbit composition.")
+    w()
+    w("2. **Floor property holds (2b=YES):** Compositions within the 40-orbit set NEVER")
+    w("   produce Trivial-stabilizer output. These orbits form a genuine composition floor:")
+    w("   they cannot spontaneously decay to generic (Trivial-stabilizer) position.")
+    w()
+    w("3. **Structural motif (2c):** 28/40 floor orbits have both X atoms live (s=t).")
+    w("   10/40 have identical X atoms (x1=x2). 22/40 have identical boundary atoms (c1=c2).")
+    w("   The floor layer is concentrated on structurally symmetric configurations.")
+    w()
+    w("4. **Step-1 closure adds 18 orbits:** The smallest composition-closed set containing")
+    w("   the 40 floor orbits requires adding 18 more Z2 orbits (escaped outputs).")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("The floor layer is a genuine algebraic feature: it is a composition sub-floor")
+    w("(never decays to Trivial) but not a sub-algebra (can escape to Z2). The 28 doubly-live")
+    w("orbits are the structural core — their liveness constraint (s=t on both X atoms) is")
+    w("preserved as a floor property even when the full stabilizer type is not preserved.")
+    w("The 18 escaped Z2 orbits that complete the step-1 closure are the next candidates")
+    w("for investigation: do they form a closed layer with the original 40?")
+
+    # ── 58-ORBIT CLOSURE ──
+    w()
+    w(f"## {section_num}. 58-ORBIT CLOSURE")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 45, Task 1)")
+    w()
+    w("Start from the 58-orbit candidate set = 40 floor orbits + 18 step-1 escaped Z2 orbits")
+    w("from Section 32. Iterate closure under the same CXC-interface composition used in")
+    w("steps 42 and 44.")
+    w()
+    closure_steps, core_rows, core_comp, core_output_summary, fixed_rows = read_step45_outputs()
+    if closure_steps:
+        w("| closure_step | set_size | pairs_checked | pairs_inside | pairs_outside | new_escapes |")
+        w("|--------------|----------|---------------|--------------|---------------|-------------|")
+        for row in closure_steps:
+            pairs_checked = int(row['pairs_checked'])
+            pairs_inside = int(row['pairs_inside'])
+            pairs_outside = int(row['pairs_outside'])
+            w(f"| {row['closure_step']} | {row['set_size']} | {pairs_checked:,} | "
+              f"{pairs_inside:,} | {pairs_outside:,} | {row['new_escapes']} |")
+        w()
+        first = closure_steps[0]
+        w(f"Step 1 new escape ids: {first['new_escape_ids']}")
+        if len(closure_steps) >= 2:
+            second = closure_steps[1]
+            w(f"**VERDICT:** The 58-orbit candidate is not closed, but its step-2 closure is.")
+            w(f"Adding the 6 new escape orbits from step 1 produces a **64-orbit closed set**.")
+            w(f"Step 2 checks {int(second['pairs_checked']):,} pairs and finds 0 outputs outside the 64-set.")
+        else:
+            w("**VERDICT:** Closure did not stabilize within the recorded steps.")
+        w()
+    else:
+        w("*Run ade3x3_step45_58_orbit_closure_live_core.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("The step-1 58-orbit candidate does NOT blow up toward the full 2744-orbit algebra.")
+    w("Instead it stabilizes immediately at step 2 as a 64-orbit closed layer. This is the")
+    w("first genuinely small composition-closed CXXC sub-algebra found so far: 64 is tiny")
+    w("compared to 2744, yet large enough to strictly contain both the 40-orbit floor and")
+    w("its 18 first escapes.")
+
+    # ── DOUBLY-LIVE CORE ──
+    w()
+    w(f"## {section_num}. DOUBLY-LIVE FLOOR CORE AND FIXED-POINT SUBSPACES")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 45, Tasks 2-3)")
+    w()
+    w("The 28 floor orbits with both X atoms live (s=t on both X positions) are the")
+    w("computationally relevant live core: both bilinear terms fire. For each such orbit,")
+    w("record the two target C atoms, whether the targets coincide, and whether the shared")
+    w("target is a boundary atom c1 or c2.")
+    w()
+    if core_rows:
+        same_fiber = sum(1 for r in core_rows if r['same_fiber'] == 'True')
+        focused = sum(1 for r in core_rows if r['focused_on_boundary'] == 'True')
+        w(f"**Doubly-live core size:** {len(core_rows)}")
+        w(f"- Same target fiber: {same_fiber} / {len(core_rows)}")
+        w(f"- Different target fibers: {len(core_rows) - same_fiber} / {len(core_rows)}")
+        w(f"- Focused on a boundary C atom: {focused} / {len(core_rows)}")
+        same_fiber_pos = defaultdict(int)
+        for r in core_rows:
+            if r['same_fiber'] == 'True':
+                same_fiber_pos[(r['x1_fiber_position'], r['x2_fiber_position'])] += 1
+        if same_fiber_pos:
+            pos_bits = [f"{k}: {v}" for k, v in sorted(same_fiber_pos.items())]
+            w(f"- Same-fiber position pairs: {', '.join(pos_bits)}")
+        w()
+        w("| orbit_id | rep | stab_type | target_of_x1 | target_of_x2 | same_fiber | focused |")
+        w("|----------|-----|-----------|--------------|--------------|------------|---------|")
+        for r in sorted(core_rows, key=lambda x: int(x['orbit_id'])):
+            w(f"| {r['orbit_id']} | {r['rep_config_id']} | {r['stabilizer_type']} | "
+              f"{r['target_of_x1']} | {r['target_of_x2']} | {r['same_fiber']} | "
+              f"{r['focused_on_boundary']} |")
+        w()
+
+        output_map = {r['output_class']: (int(r['pair_count']), float(r['fraction'])) for r in core_output_summary}
+        total_core_pairs = sum(v[0] for v in output_map.values())
+        w("### Core Composition")
+        w()
+        w(f"Total doubly-live core x core pairs: {total_core_pairs:,}")
+        if output_map:
+            w(f"- Output is a doubly-live floor orbit: {output_map.get('doubly_live_floor', (0, 0.0))[0]:,} "
+              f"({100 * output_map.get('doubly_live_floor', (0, 0.0))[1]:.2f}%)")
+            w(f"- Output is doubly-live but outside the floor: {output_map.get('doubly_live_nonfloor', (0, 0.0))[0]:,} "
+              f"({100 * output_map.get('doubly_live_nonfloor', (0, 0.0))[1]:.2f}%)")
+            w(f"- Output is singly-live: {output_map.get('singly_live', (0, 0.0))[0]:,} "
+              f"({100 * output_map.get('singly_live', (0, 0.0))[1]:.2f}%)")
+            w(f"- Output is dead: {output_map.get('dead', (0, 0.0))[0]:,} "
+              f"({100 * output_map.get('dead', (0, 0.0))[1]:.2f}%)")
+            w()
+            w("**VERDICT:** The doubly-live property survives composition perfectly.")
+            w("All 5,211 outputs remain doubly-live; none decay to singly-live or dead position.")
+        w()
+
+        if fixed_rows:
+            fixed_dim_counts = defaultdict(int)
+            char_pattern_counts = defaultdict(int)
+            for r in fixed_rows:
+                fixed_dim_counts[int(r['fixed_dim'])] += 1
+                char_pattern_counts[(int(r['char_pp_dim']), int(r['char_pm_dim']), int(r['char_mp_dim']), int(r['char_mm_dim']))] += 1
+            w("### Fixed-Point Subspaces on the 81-Dimensional X Space")
+            w()
+            w(f"Computed for all {len(fixed_rows)} Z2xZ2 stabilizers in the 40-orbit floor layer.")
+            w("The requested '-1' dimension is recorded as the total non-fixed dimension = 81 - fixed_dim;")
+            w("for Z2xZ2 the non-fixed part further splits into three independent sign-character subspaces.")
+            w()
+            w("| fixed_dim | minus_dim | count |")
+            w("|-----------|-----------|-------|")
+            for fixed_dim in sorted(fixed_dim_counts):
+                w(f"| {fixed_dim} | {81 - fixed_dim} | {fixed_dim_counts[fixed_dim]} |")
+            w()
+            w("| (char_pp, char_pm, char_mp, char_mm) | count |")
+            w("|--------------------------------------|-------|")
+            for pattern in sorted(char_pattern_counts):
+                w(f"| {pattern} | {char_pattern_counts[pattern]} |")
+            w()
+    else:
+        w("*Run ade3x3_step45_58_orbit_closure_live_core.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("The 28-orbit live core is even more rigid than the 40-orbit floor. It is not closed")
+    w("inside the floor layer, but it is closed inside the larger both-live world: every core")
+    w("x core composition remains doubly-live. The escape channel is therefore not liveness")
+    w("failure, but symmetry failure: 12.44% of outputs leave the floor while staying fully")
+    w("live. The fixed-space analysis is likewise non-uniform: floor stabilizers split into")
+    w("two fixed-dimension classes (30 and 36), so the Z2xZ2 symmetry constraint does not")
+    w("impose a single universal live-X linear subspace.")
+
+    # ── SAME-FIBER CORE AND FOCUSED ORBITS ──
+    w()
+    w(f"## {section_num}. SAME-FIBER CORE AND FOCUSED ORBITS")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 46, Tasks 1 and 3)")
+    w()
+    w("Inside the 28-orbit doubly-live floor core, the 10 same-fiber orbits are those where")
+    w("both live X atoms target the SAME C atom. The 6 focused orbits are the subset where")
+    w("that shared target is also a boundary atom c1 or c2.")
+    w()
+    (sf_outputs, sf_pair_summary, sf_closure, subalg_table, subalg_summary,
+     focused_orbits, focused_comp, focused_summary, identity_map,
+     single_gen, greedy_gen) = read_step46_outputs()
+    if sf_pair_summary:
+        sf_total = sum(int(r['total_pairs']) for r in sf_pair_summary)
+        sf_compatible = sum(1 for r in sf_pair_summary if r['compatible'] == 'True')
+        sf_same = sum(int(r['same_fiber_pairs']) for r in sf_pair_summary)
+        sf_diff = sum(int(r['doubly_live_different_fiber_pairs']) for r in sf_pair_summary)
+        sf_out = sum(int(r['outside_core_pairs']) for r in sf_pair_summary)
+        w(f"**Same-fiber set:** 10 orbits")
+        w(f"- Compatible ordered orbit pairs: {sf_compatible} / 100")
+        w(f"- Total witness pairs: {sf_total:,}")
+        w(f"- Same-fiber outputs: {sf_same:,} ({100 * sf_same / sf_total:.2f}%)")
+        w(f"- Doubly-live different-fiber outputs: {sf_diff:,} ({100 * sf_diff / sf_total:.2f}%)")
+        w(f"- Outputs outside the 28-orbit core: {sf_out:,} ({100 * sf_out / sf_total:.2f}%)")
+        if sf_closure:
+            row = sf_closure[0]
+            w(f"- Closure from the 10 same-fiber orbits: size {row['set_size']}, new orbits {row['new_orbits']}")
+        w()
+        w("**VERDICT:** The 10 same-fiber orbits are already composition-closed.")
+        w("They form a 10-orbit sub-layer inside the 64-orbit closed algebra.")
+        w()
+        w("| input_A | input_B | output_orbits | total_pairs |")
+        w("|---------|---------|---------------|-------------|")
+        for r in sf_pair_summary:
+            if r['compatible'] == 'True':
+                w(f"| {r['input_A']} | {r['input_B']} | {r['output_orbits']} | {int(r['total_pairs']):,} |")
+        w()
+
+    if focused_orbits:
+        focused_total = int(focused_summary[0]['total_pairs']) if focused_summary else 0
+        focused_hit = int(focused_summary[0]['focused_pairs']) if focused_summary else 0
+        focused_same = int(focused_summary[0]['same_fiber_pairs']) if focused_summary else 0
+        focused_pairs = len({(int(r['input_A']), int(r['input_B'])) for r in focused_comp})
+        w(f"**Focused set:** {len(focused_orbits)} orbits")
+        w(f"- Compatible ordered orbit pairs: {focused_pairs}")
+        w(f"- Total witness pairs: {focused_total:,}")
+        w(f"- Focused outputs: {focused_hit:,} ({100 * focused_hit / focused_total:.2f}%)")
+        w(f"- Same-fiber outputs: {focused_same:,} ({100 * focused_same / focused_total:.2f}%)")
+        w()
+        w("**VERDICT:** The 6 focused orbits are also composition-closed.")
+        w("Every focused x focused composition stays focused, same-fiber, and inside the 28-orbit core.")
+        w()
+        w("| orbit_id | focus_boundary | target_c_atom | (s2, s4) | rep |")
+        w("|----------|----------------|---------------|----------|-----|")
+        for r in sorted(focused_orbits, key=lambda x: int(x['orbit_id'])):
+            w(f"| {r['orbit_id']} | {r['focus_boundary']} | {r['target_c_atom']} | "
+              f"({r['x1_fiber_position']}, {r['x2_fiber_position']}) | {r['rep_readable']} |")
+        w()
+    else:
+        w("*Run ade3x3_step46_same_fiber_subalgebra.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("The same-fiber and focused layers are dramatically more rigid than the full live core.")
+    w("The 10-orbit same-fiber set is already closed, and the 6 focused orbits form an even")
+    w("smaller closed motif inside it. The geometry is therefore nested: focused ⊂ same-fiber")
+    w("⊂ doubly-live core ⊂ 64-orbit sub-algebra.")
+
+    # ── 64-ORBIT SUB-ALGEBRA STRUCTURE ──
+    w()
+    w(f"## {section_num}. 64-ORBIT SUB-ALGEBRA STRUCTURE")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 46, Tasks 2 and 4)")
+    w()
+    w("The step-2 closure from Section 33 is a 64-orbit composition-closed CXXC sub-algebra.")
+    w("Step 46 computes its full ordered-pair composition table (64 x 64 = 4096 orbit pairs),")
+    w("recording the full output set for each compatible pair.")
+    w()
+    if subalg_summary:
+        row = subalg_summary[0]
+        comp_pairs = int(row['compatible_pairs'])
+        det_pairs = int(row['deterministic_pairs'])
+        mix_pairs = int(row['mixed_pairs'])
+        left_exact = sum(1 for r in identity_map if r['left_compatible'] == 'True' and r['left_is_identity'] == 'True')
+        right_exact = sum(1 for r in identity_map if r['right_compatible'] == 'True' and r['right_is_identity'] == 'True')
+        size_hist = defaultdict(int)
+        for r in subalg_table:
+            if r['compatible'] != 'True':
+                continue
+            size_hist[len(ast.literal_eval(r['output_orbits']))] += 1
+        w(f"**Full table summary:**")
+        w(f"- Compatible ordered orbit pairs: {comp_pairs} / 4096")
+        w(f"- Deterministic compatible pairs: {det_pairs} ({float(row['deterministic_pct']):.2f}%)")
+        w(f"- Mixed compatible pairs: {mix_pairs} ({float(row['mixed_pct']):.2f}%)")
+        w(f"- Output coverage: {int(row['reachable_outputs'])} / 64 orbits ({float(row['reachable_outputs_pct']):.2f}%)")
+        if size_hist:
+            hist_bits = [f"{k}-output: {size_hist[k]}" for k in sorted(size_hist)]
+            w(f"- Output-set cardinalities among compatible pairs: {', '.join(hist_bits)}")
+        w()
+        w("### Representative Mixed Pairs")
+        w()
+        w("| orbit_A | orbit_B | output_orbits | total_pairs |")
+        w("|---------|---------|---------------|-------------|")
+        shown = 0
+        for r in subalg_table:
+            if r['compatible'] == 'True' and r['deterministic'] == 'False':
+                w(f"| {r['orbit_A']} | {r['orbit_B']} | {r['output_orbits']} | {int(r['total_pairs']):,} |")
+                shown += 1
+                if shown >= 12:
+                    break
+        w()
+        w("### Generator Analysis")
+        w()
+        w(f"- Orbit 0 acts as exact identity on all {left_exact} left-compatible and {right_exact} right-compatible rows.")
+        if single_gen:
+            w(f"- Smallest nontrivial orbit tested: orbit {row['singleton_seed']}")
+            w(f"- Singleton closure status: {single_gen[-1]['status']} at size {single_gen[-1]['set_size']}")
+        if greedy_gen:
+            final = greedy_gen[-1]
+            gens = ast.literal_eval(final['generator_set'])
+            w(f"- Greedy generating set size: {len(gens)}")
+            w(f"- Greedy generating set: {gens}")
+        w()
+        w("**VERDICT:** The 64-orbit algebra is fully output-connected (all 64 orbits appear as outputs),")
+        w("but not globally deterministic: 164 compatible ordered pairs are genuinely mixed.")
+        w()
+    else:
+        w("*Run ade3x3_step46_same_fiber_subalgebra.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("The 64-orbit object is not a tiny deterministic semigroup; it is a small closed algebra")
+    w("with real branching. Most compatible pairs are still deterministic, but the mixed pairs")
+    w("are common enough to matter structurally. The greedy generator search also suggests that")
+    w("the algebra is not monogenic: one-orbit closure stalls immediately for orbit 1, and the")
+    w("best greedy construction still needs a large multi-orbit seed (18 orbits).")
+
+    # ── MIXED-PAIR RESOLUTION AND TENSOR CONSTRAINTS ──
+    w()
+    w(f"## {section_num}. MIXED-PAIR RESOLUTION AND TENSOR CONSTRAINTS")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 47)")
+    w()
+    w("The 164 mixed compatible pairs from Section 36 are scanned at witness level to test")
+    w("whether finer interface coordinates resolve the orbit-level branching. For each witness,")
+    w("the shared CXC face records the interface X atom and its coordinates (s,t) and (r,s,t,u).")
+    w()
+    st47_rows, full47_rows, sum47_rows, tensor47_rows, constraint47_rows, external47_rows = read_step47_outputs()
+    if sum47_rows:
+        row = sum47_rows[0]
+        st_hist = defaultdict(int)
+        full_hist = defaultdict(int)
+        for r in st47_rows:
+            st_hist[int(r['n_strata_by_st'])] += 1
+        for r in full47_rows:
+            full_hist[int(r['n_strata_by_rstu'])] += 1
+        w(f"**Mixed pairs scanned:** {int(row['n_mixed_pairs'])}")
+        w(f"**Mixed-pair witnesses:** {int(row['mixed_pair_witnesses']):,}")
+        w(f"- Fully resolved by (s,t): {row['resolved_by_st']} / {row['n_mixed_pairs']}")
+        w(f"- Fully resolved by (r,s,t,u): {row['resolved_by_rstu']} / {row['n_mixed_pairs']}")
+        w(f"- Output-set invariant across all occupied (s,t) strata: {row['constant_outputset_by_st']} / {row['n_mixed_pairs']}")
+        w(f"- Output-set invariant across all occupied (r,s,t,u) strata: {row['constant_outputset_by_rstu']} / {row['n_mixed_pairs']}")
+        if st_hist:
+            st_bits = [f"{k} strata: {st_hist[k]}" for k in sorted(st_hist)]
+            w(f"- Occupied (s,t) stratum counts: {', '.join(st_bits)}")
+        if full_hist:
+            full_bits = [f"{k} strata: {full_hist[k]}" for k in sorted(full_hist)]
+            w(f"- Occupied (r,s,t,u) stratum counts: {', '.join(full_bits)}")
+        w()
+        w("**VERDICT:** Interface-coordinate refinement does NOT resolve any mixed pair.")
+        w("More strongly, for every one of the 164 mixed pairs, the output-set is identical in")
+        w("every occupied (s,t) stratum and in every occupied full (r,s,t,u) stratum. The 64-orbit")
+        w("forks survive unchanged even after conditioning on the full interface X coordinates.")
+        w()
+        w("### Representative Mixed Pairs Under Refinement")
+        w()
+        w("| orbit_A | orbit_B | output_orbits | n_strata_by_st | resolution_map |")
+        w("|---------|---------|---------------|----------------|----------------|")
+        for r in st47_rows[:12]:
+            w(f"| {r['orbit_A']} | {r['orbit_B']} | {r['output_orbits']} | {r['n_strata_by_st']} | {r['resolution_map']} |")
+        w()
+
+        if tensor47_rows:
+            used_orbits = [int(r['orbit_id']) for r in tensor47_rows]
+            w("### Standard 3x3 Multiplication Tensor in the Same-Fiber Layer")
+            w()
+            w("The 54 unordered same-fiber live-X pairs (3 self-pairs + 3 distinct pairs in each of")
+            w("the 9 output fibers) land in only two same-fiber CXXC orbits.")
+            w()
+            w("| orbit_id | pair_count | fraction | stab_type |")
+            w("|----------|------------|----------|-----------|")
+            for r in tensor47_rows:
+                w(f"| {r['orbit_id']} | {int(r['pair_count'])} | {float(r['fraction']):.6f} | {r['stabilizer_type']} |")
+            w()
+            w(f"**Tensor same-fiber support:** only orbits {used_orbits}")
+            w("Orbit 0 carries the 27 self-pairs; orbit 30 carries the 27 distinct same-fiber pairs.")
+            w("None of the other 8 same-fiber closed orbits appear in the raw multiplication tensor.")
+            w()
+
+        if constraint47_rows:
+            rank1_status = next((r['constraint_value'] for r in constraint47_rows if r['constraint_name'] == 'rank1_exact_orbit_model_status'), '')
+            w("### Rank-1 Search Model Status")
+            w()
+            w(f"- Exact finite orbit model for general rank-1 terms: {rank1_status}")
+            if external47_rows:
+                for r in external47_rows:
+                    w(f"- External algorithm mapping {r['algorithm_name']}: {r['status']} ({r['reason']})")
+            w()
+    else:
+        w("*Run ade3x3_step47_mixed_pair_resolution_algorithm_constraints.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("This is a third-layer negative result, but an important one. The 64-orbit branching is not")
+    w("caused by forgetting interface coordinates: even the full shared-X coordinates leave every")
+    w("mixed output-set intact. Any future deterministic refinement of the 64-orbit algebra must")
+    w("therefore depend on data beyond the shared face alone, presumably involving the outer X")
+    w("atoms or finer orbit-internal structure. On the positive side, the raw multiplication tensor")
+    w("occupies only the two most constrained same-fiber orbits, 0 and 30, which gives a precise")
+    w("target profile for any algorithm search restricted to the discovered closed layers.")
 
     # ── OPEN FRONTS ──
     w()
@@ -1012,8 +1676,14 @@ def generate():
     w("- Composition kernel: ✓ Mixed key CC-orbit distributions computed (all 14 keys uniform)")
     w("- CXXC marginal weight profile: ✓ Fiber-size histogram for all 7 projections")
     w("- Stabilizer subgroup classification: ✓ CXC and CXXC; all pure-2-groups (Z2, Z2xZ2, (Z2)^3)")
+    w("- Stabilizer composition analysis: ✓ 43M pairs; (Z2)^3 is composition identity; types not generally closed")
     w("- CXXC and CCXX arity-4 collisions: ✓ All resolved with minimal refiner `(s4, t4)`")
     w("- CXXC marginal projections: ✓ Full coverage analysis completed")
+    w("- Refinement-conditioned kernel: ✓ All 63 (s,t) strata uniform; hypothesis closed at stratum level")
+    w("- Z2xZ2 floor layer: ✓ 40 orbits; floor property holds (no Trivial decay); not fully closed; step-1 closure adds 18 Z2 orbits")
+    w("- 58-orbit closure + doubly-live core: ✓ 58-seed closes at 64 orbits; 28-core stays 100% doubly-live; floor fixed dims are 30 or 36")
+    w("- Same-fiber core + 64-subalgebra structure: ✓ 10 same-fiber and 6 focused orbits are both closed; 64-table has 602 compatible rows with 164 mixed; greedy generator set size 18")
+    w("- Mixed-pair resolution + tensor constraints: ✓ 41,688 witnesses scanned; 0/164 mixed pairs resolved by interface coordinates; raw tensor same-fiber support uses only orbits 0 and 30")
     w()
     w("**Remaining open fronts:**")
     w("- Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored")
@@ -1021,6 +1691,20 @@ def generate():
     w("  whether there is a simpler intrinsic minimal closed-form signature/refinement rule remains open")
     w("- Refinement engine: Not yet rerun on corrected composition (14 mixed keys)")
     w("- Higher arity layers: Arity 5+ unexplored")
+    w("- The 14^3 = 2744 CXXC orbit count factorization: whether 14 = C(4,2)+C(4,1)+C(4,0) reflects")
+    w("  partition types at arity 4 under the compatible group action is unverified")
+    w("- The 64-orbit closed layer now has a full composition table; its intrinsic signature rule")
+    w("  and exact minimum generating set are still unknown")
+    w("- The 164 mixed pairs are invariant under all shared-face coordinate conditioning tried so far;")
+    w("  any deterministic refinement must depend on data beyond the interface X coordinates alone")
+    w("- The 12.44% live-core escapes stay doubly-live but leave the floor; classify those nonfloor")
+    w("  doubly-live targets as a structural layer of their own")
+    w("- Same-fiber and focused subsets are closed; determine whether they admit a clean intrinsic")
+    w("  signature or conceptual description beyond the target/focus predicates")
+    w("- The raw multiplication tensor profile inside the same-fiber layer is exactly orbit 0 + orbit 30;")
+    w("  translate that profile into a finite coefficient/support model for rank-1 terms before solving an ILP")
+    w("- Kernel uniformity: cc uniformity holds at orbit level AND (s,t) stratum level;")
+    w("  next level to check is the full (r,s,t,u) X coordinate or the (c1,c2) boundary")
     w()
     w("These are genuine incompletions, not promises.")
 

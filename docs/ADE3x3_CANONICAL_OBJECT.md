@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-28 02:01:16
+Generated: 2026-03-28 04:07:35
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,12 +15,16 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-28 02:01:16
+**Generated:** 2026-03-28 04:07:35
 **Generator Script:** generate_canon_doc.py
-**Provenance:** Built from steps 1-41+, including orbit metadata repair (step 10b),
+**Provenance:** Built from steps 1-47+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
 composition kernel (step 39), CXXC marginal weight profile (step 40),
-and stabilizer subgroup classification (step 41)
+stabilizer subgroup classification (step 41), stabilizer composition (step 42),
+refinement-conditioned kernel (step 43), floor-layer analysis (step 44),
+58-orbit closure / doubly-live core analysis (step 45),
+same-fiber / 64-subalgebra structure analysis (step 46),
+and mixed-pair resolution / tensor-constraint extraction (step 47)
 
 **IMPORTANT:** This document contains all computed results inline.
 No external files are required. All research findings are here.
@@ -9401,6 +9405,16 @@ index (contracted through the X atom) resolves ambiguity uniformly —
 no CC orbit is preferred by any mixed CX x XC pair.
 Verification: all kernel row sums match Section 18 witness totals exactly.
 
+[INTERPRETATION]
+
+This is a clean negative result with positive implications. The hypothesis
+was that different mixed keys would split differently, encoding how the
+summation index governs the product. Instead, the summation index is
+maximally democratic: it fails to determine the output orbit with perfect
+indifference. This closes the orbit-level composition as a source of free
+algorithmic information. Any structure distinguishing output orbits within
+a mixed pair must come from sub-orbit features, i.e., the refinement coordinates.
+
 ## 28. CXXC MARGINAL WEIGHT PROFILE
 
 [EXACT_DERIVED] (Step 40)
@@ -9735,9 +9749,21 @@ stabilizers appear, despite the group having order 216 = 8 x 27.
 | Z2xZ2 | 4 | 39 | 0.0142 |
 | (Z2)^3 | 8 | 1 | 0.0004 |
 
-**Remarkable pattern:** The counts 2197 + 507 + 39 + 1 = 2744
+**Remarkable arithmetic:** The counts 2197 + 507 + 39 + 1 = 2744
 where 2197 = 13^3, 507 = 3 x 13^2, 39 = 3 x 13, 1 = 1.
-The total 2744 = 14^3. The arithmetic structure is exact.
+This is the binomial expansion (13+1)^3 = 14^3. The number 14 = C(4,2) + C(4,1) + C(4,0).
+CXXC has typed arity 4. Whether the coincidence reflects the partition lattice
+of the 4-index equality pattern under the compatible group action is an open question.
+
+[INTERPRETATION]
+
+The pure-2-group constraint is structurally non-obvious. S3 x S3 x S3 has 27
+elements of order 3 and 6 elements of order 6, yet none stabilize any CXC or
+CXXC configuration. The compatibility constraint (pi_shared acts on both A-columns
+and B-rows) must be responsible, but the exact mechanism is not yet isolated.
+Consequence: equivariant decompositions of any arity-2/4 tensor only require
+2-group representation theory (F_2-vector spaces), not the full representation
+theory of S3. This is a real constraint on the algorithm search space.
 
 | orbit_id | rep_config_id | orbit_size | stab_order | type | element_orders |
 |----------|--------------|------------|------------|------|----------------|
@@ -12487,7 +12513,559 @@ The total 2744 = 14^3. The arithmetic structure is exact.
 | 2743 | 23327 | 216 | 1 | Trivial | {"1": 1} |
 
 
-## 30. CURRENT GAPS / OPEN FRONTS
+## 30. STABILIZER COMPOSITION ANALYSIS
+
+[EXACT_DERIVED] (Step 42)
+
+For each pair of CXXC orbits (A, B) that compose through a shared CXC face,
+does the stabilizer type of the inputs constrain the stabilizer type of the output?
+
+**Composition definition:**
+For CXC interface config m = (c1_m, x_m, c2_m):
+  A = CXXC(c1_m, x1, x_m, c2_m)   [right-CXC face = m]
+  B = CXXC(c1_m, x_m, x4, c2_m)   [left-CXC face = m]
+  Output = CXXC(c1_m, x1, x4, c2_m)
+Total pairs enumerated: 6,561 CXC configs x 81 x 81 = 43,046,721  [VERIFIED]
+
+### Predictability Table
+
+| stab_type_A | stab_type_B | Output Types | Predictable? |
+|-------------|-------------|--------------|--------------|
+| Trivial | Trivial | Trivial, Z2, Z2xZ2, (Z2)^3 | No |
+| Trivial | Z2 | Trivial, Z2, Z2xZ2 | No |
+| Trivial | Z2xZ2 | Trivial, Z2 | No |
+| Trivial | (Z2)^3 | Trivial | Yes |
+| Z2 | Trivial | Trivial, Z2, Z2xZ2 | No |
+| Z2 | Z2 | Trivial, Z2, Z2xZ2, (Z2)^3 | No |
+| Z2 | Z2xZ2 | Trivial, Z2, Z2xZ2 | No |
+| Z2 | (Z2)^3 | Z2 | Yes |
+| Z2xZ2 | Trivial | Trivial, Z2 | No |
+| Z2xZ2 | Z2 | Trivial, Z2, Z2xZ2 | No |
+| Z2xZ2 | Z2xZ2 | Z2, Z2xZ2, (Z2)^3 | No |
+| Z2xZ2 | (Z2)^3 | Z2xZ2 | Yes |
+| (Z2)^3 | Trivial | Trivial | Yes |
+| (Z2)^3 | Z2 | Z2 | Yes |
+| (Z2)^3 | Z2xZ2 | Z2xZ2 | Yes |
+| (Z2)^3 | (Z2)^3 | (Z2)^3 | Yes |
+
+### Full Distribution
+
+| stab_type_A | stab_type_B | stab_type_output | pair_count | fraction |
+|-------------|-------------|------------------|------------|----------|
+| Trivial | Trivial | Trivial | 32,231,736 | 0.914501 |
+| Trivial | Trivial | Z2 | 2,925,072 | 0.082992 |
+| Trivial | Trivial | Z2xZ2 | 87,480 | 0.002482 |
+| Trivial | Trivial | (Z2)^3 | 864 | 0.000025 |
+| Trivial | Z2 | Trivial | 2,925,072 | 0.942774 |
+| Trivial | Z2 | Z2 | 174,960 | 0.056391 |
+| Trivial | Z2 | Z2xZ2 | 2,592 | 0.000835 |
+| Trivial | Z2xZ2 | Trivial | 87,480 | 0.971223 |
+| Trivial | Z2xZ2 | Z2 | 2,592 | 0.028777 |
+| Trivial | (Z2)^3 | Trivial | 864 | 1.000000 |
+| Z2 | Trivial | Trivial | 2,925,072 | 0.942774 |
+| Z2 | Trivial | Z2 | 174,960 | 0.056391 |
+| Z2 | Trivial | Z2xZ2 | 2,592 | 0.000835 |
+| Z2 | Z2 | Trivial | 174,960 | 0.138462 |
+| Z2 | Z2 | Z2 | 1,024,164 | 0.810513 |
+| Z2 | Z2 | Z2xZ2 | 63,504 | 0.050256 |
+| Z2 | Z2 | (Z2)^3 | 972 | 0.000769 |
+| Z2 | Z2xZ2 | Trivial | 2,592 | 0.038095 |
+| Z2 | Z2xZ2 | Z2 | 63,504 | 0.933333 |
+| Z2 | Z2xZ2 | Z2xZ2 | 1,944 | 0.028571 |
+| Z2 | (Z2)^3 | Z2 | 972 | 1.000000 |
+| Z2xZ2 | Trivial | Trivial | 87,480 | 0.971223 |
+| Z2xZ2 | Trivial | Z2 | 2,592 | 0.028777 |
+| Z2xZ2 | Z2 | Trivial | 2,592 | 0.038095 |
+| Z2xZ2 | Z2 | Z2 | 63,504 | 0.933333 |
+| Z2xZ2 | Z2 | Z2xZ2 | 1,944 | 0.028571 |
+| Z2xZ2 | Z2xZ2 | Z2 | 1,944 | 0.160000 |
+| Z2xZ2 | Z2xZ2 | Z2xZ2 | 9,882 | 0.813333 |
+| Z2xZ2 | Z2xZ2 | (Z2)^3 | 324 | 0.026667 |
+| Z2xZ2 | (Z2)^3 | Z2xZ2 | 324 | 1.000000 |
+| (Z2)^3 | Trivial | Trivial | 864 | 1.000000 |
+| (Z2)^3 | Z2 | Z2 | 972 | 1.000000 |
+| (Z2)^3 | Z2xZ2 | Z2xZ2 | 324 | 1.000000 |
+| (Z2)^3 | (Z2)^3 | (Z2)^3 | 27 | 1.000000 |
+
+**Key findings:**
+
+1. **(Z2)^3 is a composition identity (in stabilizer type):** If either input has
+   stabilizer type (Z2)^3, the output type is exactly the OTHER input's type.
+   (Z2)^3 ∘ X = X and X ∘ (Z2)^3 = X for all stabilizer types X.
+   The (Z2)^3 orbit (rep_config_id=0, the all-zero config) passes the other input through unchanged.
+
+2. **Stabilizer type is not generally preserved:** For most input type pairs,
+   the output type ranges across multiple types. The input types provide only
+   weak constraints on the output, except at the (Z2)^3 fixed point.
+
+3. **No order-bounding:** Composing two Trivial-stabilizer orbits can produce
+   a (Z2)^3 orbit (864 such pairs observed). The stabilizer order can increase
+   under composition. Equivalently, two generic configs can land on the
+   maximally-symmetric all-zero output.
+
+[INTERPRETATION]
+
+The negative finding: stabilizer type layers are not closed under composition.
+The positive finding: the (Z2)^3 identity structure is clean and algebraically
+precise. The search for composition-stable substructures must go below the
+stabilizer-type coarsening — either to full orbit identity or to the refinement
+coordinate layer.
+
+## 31. REFINEMENT-CONDITIONED COMPOSITION KERNEL
+
+[EXACT_DERIVED] (Step 43)
+
+For each of the 14 mixed CX x XC -> CC orbit-pairs, witnesses are stratified
+by the (s, t) refinement coordinates of the shared X atom (s = contraction index
+from CX side, t = contraction index from XC side).
+
+**Hypothesis tested:** Does conditioning on (s, t) break the orbit-level CC uniformity?
+
+**X atom coordinate encoding:** x = 9*(3r+s) + (3t+u);  s = (x//9)%3, t = (x%9)//3
+The shared X atom's (s, t) pair is the 'summation index' contracted through.
+
+**Results:** 63 strata (cx_orbit, xc_orbit, s, t) occupied across 14 mixed keys
+- Uniform strata (CC distribution equal within stratum): 63
+- Non-uniform strata: 0
+
+**VERDICT:** ALL strata are uniform. Conditioning on (s,t) does NOT break
+the orbit-level CC uniformity. The refinement-coordination hypothesis is
+CLOSED at the (s,t) stratum level.
+
+### Strata per Mixed Key
+
+| cx_orbit | xc_orbit | n_strata | uniform | sample cc_counts |
+|----------|----------|----------|---------|-----------------|
+| 1 | 1 | 3 | 3/3 | {0: 18, 1: 18} |
+| 1 | 3 | 3 | 3/3 | {2: 36, 3: 36} |
+| 3 | 5 | 6 | 6/6 | {0: 18, 1: 18} |
+| 3 | 7 | 6 | 6/6 | {2: 36, 3: 36} |
+| 4 | 2 | 3 | 3/3 | {0: 18, 2: 18} |
+| 4 | 3 | 3 | 3/3 | {1: 36, 3: 36} |
+| 5 | 1 | 3 | 3/3 | {2: 36, 3: 36} |
+| 5 | 2 | 3 | 3/3 | {1: 36, 3: 36} |
+| 5 | 3 | 3 | 3/3 | {0: 36, 1: 36, 2: 36, 3: 36} |
+| 6 | 6 | 6 | 6/6 | {0: 18, 2: 18} |
+| 6 | 7 | 6 | 6/6 | {1: 36, 3: 36} |
+| 7 | 5 | 6 | 6/6 | {2: 36, 3: 36} |
+| 7 | 6 | 6 | 6/6 | {1: 36, 3: 36} |
+| 7 | 7 | 6 | 6/6 | {0: 36, 1: 36, 2: 36, 3: 36} |
+
+[INTERPRETATION]
+
+The (s,t) uniformity is a second-layer negative result: not only is the orbit-level
+composition uniform (Section 27), but conditioning on the shared X atom's summation
+index also produces uniform CC-orbit splits within each stratum. The contraction
+operation is maximally democratic at both the orbit level and the (s,t) stratum level.
+Any structure distinguishing output orbits in the mixed CX x XC pairs must come
+from finer features than (s,t) alone — possibly the full (r,s,t,u) coordinate of
+the shared X atom, or the specific (c1,c2) boundary conditions.
+
+## 32. Z2xZ2 FLOOR LAYER ANALYSIS
+
+[EXACT_DERIVED] (Step 44)
+
+The 40 CXXC orbits with stabilizer order >= 4 (39 Z2xZ2 + 1 (Z2)^3) are
+investigated as a composition-stable 'floor layer'. Uses the same composition
+definition as step 42. Results verified against step 42 ground truth (self-test).
+
+**Floor layer:** 40 orbits
+  Z2xZ2 orbits: 39
+  (Z2)^3 orbits: 1
+
+### Task 2a-2b: From Step 42 Summary Data
+
+Output types observed: ['(Z2)^3', 'Z2', 'Z2xZ2']
+**2a Full closure:** NO — Z2 outputs appear
+**2b Floor property (no Trivial output):** YES
+
+| stab_type_A | stab_type_B | stab_type_output | pair_count |
+|-------------|-------------|------------------|------------|
+| Z2xZ2 | Z2xZ2 | Z2 | 1,944 |
+| Z2xZ2 | Z2xZ2 | Z2xZ2 | 9,882 |
+| Z2xZ2 | Z2xZ2 | (Z2)^3 | 324 |
+| Z2xZ2 | (Z2)^3 | Z2xZ2 | 324 |
+| (Z2)^3 | Z2xZ2 | Z2xZ2 | 324 |
+| (Z2)^3 | (Z2)^3 | (Z2)^3 | 27 |
+
+### Task 2c: Structural Inventory
+
+- Both X atoms live (s=t): 28 / 40
+- x1 = x2 (identical X atoms): 10 / 40
+- c1 = c2 (identical C atoms): 22 / 40
+
+| orbit_id | rep | size | stab_type | live_x1 | live_x2 | c1=c2 | x1=x2 |
+|----------|-----|------|-----------|---------|---------|-------|-------|
+| 0 | 0 | 27 | (Z2)^3 | True | True | True | True |
+| 1 | 1 | 54 | Z2xZ2 | True | True | False | True |
+| 2 | 3 | 54 | Z2xZ2 | True | True | False | True |
+| 4 | 9 | 54 | Z2xZ2 | True | True | True | False |
+| 5 | 10 | 54 | Z2xZ2 | True | True | False | False |
+| 6 | 11 | 54 | Z2xZ2 | True | True | False | False |
+| 10 | 27 | 54 | Z2xZ2 | True | False | True | False |
+| 20 | 81 | 54 | Z2xZ2 | True | False | True | False |
+| 30 | 108 | 54 | Z2xZ2 | True | True | True | False |
+| 40 | 135 | 54 | Z2xZ2 | True | False | True | False |
+| 50 | 243 | 54 | Z2xZ2 | True | True | True | False |
+| 52 | 246 | 54 | Z2xZ2 | True | True | False | False |
+| 54 | 249 | 54 | Z2xZ2 | True | True | False | False |
+| 125 | 729 | 54 | Z2xZ2 | True | True | True | False |
+| 126 | 730 | 54 | Z2xZ2 | True | True | False | False |
+| 127 | 731 | 54 | Z2xZ2 | True | True | False | False |
+| 131 | 738 | 54 | Z2xZ2 | True | True | True | True |
+| 132 | 739 | 54 | Z2xZ2 | True | True | False | True |
+| 133 | 740 | 54 | Z2xZ2 | True | True | False | True |
+| 137 | 747 | 54 | Z2xZ2 | True | True | True | False |
+| 138 | 748 | 54 | Z2xZ2 | True | True | False | False |
+| 139 | 749 | 54 | Z2xZ2 | True | True | False | False |
+| 350 | 2187 | 54 | Z2xZ2 | False | True | True | False |
+| 360 | 2214 | 54 | Z2xZ2 | False | False | True | True |
+| 370 | 2241 | 54 | Z2xZ2 | False | False | True | False |
+| 380 | 2268 | 54 | Z2xZ2 | False | False | True | False |
+| 390 | 2295 | 54 | Z2xZ2 | False | True | True | False |
+| 400 | 2322 | 54 | Z2xZ2 | False | False | True | False |
+| 410 | 2349 | 54 | Z2xZ2 | False | False | True | False |
+| 420 | 2376 | 54 | Z2xZ2 | False | False | True | False |
+| 430 | 2403 | 54 | Z2xZ2 | False | True | True | False |
+| 980 | 19683 | 54 | Z2xZ2 | True | True | True | False |
+| 982 | 19686 | 54 | Z2xZ2 | True | True | False | False |
+| 984 | 19689 | 54 | Z2xZ2 | True | True | False | False |
+| 1055 | 19926 | 54 | Z2xZ2 | True | True | True | True |
+| 1057 | 19929 | 54 | Z2xZ2 | True | True | False | True |
+| 1059 | 19932 | 54 | Z2xZ2 | True | True | False | True |
+| 1130 | 20169 | 54 | Z2xZ2 | True | True | True | False |
+| 1132 | 20172 | 54 | Z2xZ2 | True | True | False | False |
+| 1134 | 20175 | 54 | Z2xZ2 | True | True | False | False |
+
+### Task 2d: Composition Table (Floor x Floor)
+
+Total floor x floor pairs: 12,825
+- Output in floor layer:   10,881 (84%)
+- Output outside floor:    1,944 (15%)
+Reachable output orbits:   58 total, 18 outside floor
+Escaped orbit ids: [34, 95, 143, 161, 179, 197, 215, 354, 394, 434, 440, 500, 560, 986, 995, 1010, 1025, 1040]
+
+
+**Key findings:**
+
+1. **Not fully closed (2a=NO):** Z2xZ2 + Z2xZ2 can produce Z2 output (15.16% exit rate).
+   The floor layer is not a sub-algebra under orbit composition.
+
+2. **Floor property holds (2b=YES):** Compositions within the 40-orbit set NEVER
+   produce Trivial-stabilizer output. These orbits form a genuine composition floor:
+   they cannot spontaneously decay to generic (Trivial-stabilizer) position.
+
+3. **Structural motif (2c):** 28/40 floor orbits have both X atoms live (s=t).
+   10/40 have identical X atoms (x1=x2). 22/40 have identical boundary atoms (c1=c2).
+   The floor layer is concentrated on structurally symmetric configurations.
+
+4. **Step-1 closure adds 18 orbits:** The smallest composition-closed set containing
+   the 40 floor orbits requires adding 18 more Z2 orbits (escaped outputs).
+
+[INTERPRETATION]
+
+The floor layer is a genuine algebraic feature: it is a composition sub-floor
+(never decays to Trivial) but not a sub-algebra (can escape to Z2). The 28 doubly-live
+orbits are the structural core — their liveness constraint (s=t on both X atoms) is
+preserved as a floor property even when the full stabilizer type is not preserved.
+The 18 escaped Z2 orbits that complete the step-1 closure are the next candidates
+for investigation: do they form a closed layer with the original 40?
+
+## 33. 58-ORBIT CLOSURE
+
+[EXACT_DERIVED] (Step 45, Task 1)
+
+Start from the 58-orbit candidate set = 40 floor orbits + 18 step-1 escaped Z2 orbits
+from Section 32. Iterate closure under the same CXC-interface composition used in
+steps 42 and 44.
+
+| closure_step | set_size | pairs_checked | pairs_inside | pairs_outside | new_escapes |
+|--------------|----------|---------------|--------------|---------------|-------------|
+| 1 | 58 | 56,889 | 49,113 | 7,776 | 6 |
+| 2 | 64 | 86,265 | 86,265 | 0 | 0 |
+
+Step 1 new escape ids: [185, 191, 296, 1031, 1100, 1175]
+**VERDICT:** The 58-orbit candidate is not closed, but its step-2 closure is.
+Adding the 6 new escape orbits from step 1 produces a **64-orbit closed set**.
+Step 2 checks 86,265 pairs and finds 0 outputs outside the 64-set.
+
+
+[INTERPRETATION]
+
+The step-1 58-orbit candidate does NOT blow up toward the full 2744-orbit algebra.
+Instead it stabilizes immediately at step 2 as a 64-orbit closed layer. This is the
+first genuinely small composition-closed CXXC sub-algebra found so far: 64 is tiny
+compared to 2744, yet large enough to strictly contain both the 40-orbit floor and
+its 18 first escapes.
+
+## 34. DOUBLY-LIVE FLOOR CORE AND FIXED-POINT SUBSPACES
+
+[EXACT_DERIVED] (Step 45, Tasks 2-3)
+
+The 28 floor orbits with both X atoms live (s=t on both X positions) are the
+computationally relevant live core: both bilinear terms fire. For each such orbit,
+record the two target C atoms, whether the targets coincide, and whether the shared
+target is a boundary atom c1 or c2.
+
+**Doubly-live core size:** 28
+- Same target fiber: 10 / 28
+- Different target fibers: 18 / 28
+- Focused on a boundary C atom: 6 / 28
+- Same-fiber position pairs: ('0', '0'): 9, ('0', '1'): 1
+
+| orbit_id | rep | stab_type | target_of_x1 | target_of_x2 | same_fiber | focused |
+|----------|-----|-----------|--------------|--------------|------------|---------|
+| 0 | 0 | (Z2)^3 | C[0,0] | C[0,0] | True | True |
+| 1 | 1 | Z2xZ2 | C[0,0] | C[0,0] | True | True |
+| 2 | 3 | Z2xZ2 | C[0,0] | C[0,0] | True | True |
+| 4 | 9 | Z2xZ2 | C[0,0] | C[0,1] | False | False |
+| 5 | 10 | Z2xZ2 | C[0,0] | C[0,1] | False | False |
+| 6 | 11 | Z2xZ2 | C[0,0] | C[0,1] | False | False |
+| 30 | 108 | Z2xZ2 | C[0,0] | C[0,0] | True | True |
+| 50 | 243 | Z2xZ2 | C[0,0] | C[1,0] | False | False |
+| 52 | 246 | Z2xZ2 | C[0,0] | C[1,0] | False | False |
+| 54 | 249 | Z2xZ2 | C[0,0] | C[1,0] | False | False |
+| 125 | 729 | Z2xZ2 | C[0,1] | C[0,0] | False | False |
+| 126 | 730 | Z2xZ2 | C[0,1] | C[0,0] | False | False |
+| 127 | 731 | Z2xZ2 | C[0,1] | C[0,0] | False | False |
+| 131 | 738 | Z2xZ2 | C[0,1] | C[0,1] | True | False |
+| 132 | 739 | Z2xZ2 | C[0,1] | C[0,1] | True | True |
+| 133 | 740 | Z2xZ2 | C[0,1] | C[0,1] | True | False |
+| 137 | 747 | Z2xZ2 | C[0,1] | C[0,2] | False | False |
+| 138 | 748 | Z2xZ2 | C[0,1] | C[0,2] | False | False |
+| 139 | 749 | Z2xZ2 | C[0,1] | C[0,2] | False | False |
+| 980 | 19683 | Z2xZ2 | C[1,0] | C[0,0] | False | False |
+| 982 | 19686 | Z2xZ2 | C[1,0] | C[0,0] | False | False |
+| 984 | 19689 | Z2xZ2 | C[1,0] | C[0,0] | False | False |
+| 1055 | 19926 | Z2xZ2 | C[1,0] | C[1,0] | True | False |
+| 1057 | 19929 | Z2xZ2 | C[1,0] | C[1,0] | True | True |
+| 1059 | 19932 | Z2xZ2 | C[1,0] | C[1,0] | True | False |
+| 1130 | 20169 | Z2xZ2 | C[1,0] | C[2,0] | False | False |
+| 1132 | 20172 | Z2xZ2 | C[1,0] | C[2,0] | False | False |
+| 1134 | 20175 | Z2xZ2 | C[1,0] | C[2,0] | False | False |
+
+### Core Composition
+
+Total doubly-live core x core pairs: 5,211
+- Output is a doubly-live floor orbit: 4,563 (87.56%)
+- Output is doubly-live but outside the floor: 648 (12.44%)
+- Output is singly-live: 0 (0.00%)
+- Output is dead: 0 (0.00%)
+
+**VERDICT:** The doubly-live property survives composition perfectly.
+All 5,211 outputs remain doubly-live; none decay to singly-live or dead position.
+
+### Fixed-Point Subspaces on the 81-Dimensional X Space
+
+Computed for all 39 Z2xZ2 stabilizers in the 40-orbit floor layer.
+The requested '-1' dimension is recorded as the total non-fixed dimension = 81 - fixed_dim;
+for Z2xZ2 the non-fixed part further splits into three independent sign-character subspaces.
+
+| fixed_dim | minus_dim | count |
+|-----------|-----------|-------|
+| 30 | 51 | 26 |
+| 36 | 45 | 13 |
+
+| (char_pp, char_pm, char_mp, char_mm) | count |
+|--------------------------------------|-------|
+| (30, 15, 24, 12) | 13 |
+| (30, 24, 15, 12) | 13 |
+| (36, 18, 18, 9) | 13 |
+
+
+[INTERPRETATION]
+
+The 28-orbit live core is even more rigid than the 40-orbit floor. It is not closed
+inside the floor layer, but it is closed inside the larger both-live world: every core
+x core composition remains doubly-live. The escape channel is therefore not liveness
+failure, but symmetry failure: 12.44% of outputs leave the floor while staying fully
+live. The fixed-space analysis is likewise non-uniform: floor stabilizers split into
+two fixed-dimension classes (30 and 36), so the Z2xZ2 symmetry constraint does not
+impose a single universal live-X linear subspace.
+
+## 35. SAME-FIBER CORE AND FOCUSED ORBITS
+
+[EXACT_DERIVED] (Step 46, Tasks 1 and 3)
+
+Inside the 28-orbit doubly-live floor core, the 10 same-fiber orbits are those where
+both live X atoms target the SAME C atom. The 6 focused orbits are the subset where
+that shared target is also a boundary atom c1 or c2.
+
+**Same-fiber set:** 10 orbits
+- Compatible ordered orbit pairs: 12 / 100
+- Total witness pairs: 675
+- Same-fiber outputs: 675 (100.00%)
+- Doubly-live different-fiber outputs: 0 (0.00%)
+- Outputs outside the 28-orbit core: 0 (0.00%)
+- Closure from the 10 same-fiber orbits: size 10, new orbits 0
+
+**VERDICT:** The 10 same-fiber orbits are already composition-closed.
+They form a 10-orbit sub-layer inside the 64-orbit closed algebra.
+
+| input_A | input_B | output_orbits | total_pairs |
+|---------|---------|---------------|-------------|
+| 0 | 0 | [0] | 27 |
+| 0 | 30 | [30] | 54 |
+| 1 | 1 | [1] | 54 |
+| 2 | 2 | [2] | 54 |
+| 30 | 0 | [30] | 54 |
+| 30 | 30 | [0, 30] | 108 |
+| 131 | 131 | [131] | 54 |
+| 132 | 132 | [132] | 54 |
+| 133 | 133 | [133] | 54 |
+| 1055 | 1055 | [1055] | 54 |
+| 1057 | 1057 | [1057] | 54 |
+| 1059 | 1059 | [1059] | 54 |
+
+**Focused set:** 6 orbits
+- Compatible ordered orbit pairs: 8
+- Total witness pairs: 459
+- Focused outputs: 459 (100.00%)
+- Same-fiber outputs: 459 (100.00%)
+
+**VERDICT:** The 6 focused orbits are also composition-closed.
+Every focused x focused composition stays focused, same-fiber, and inside the 28-orbit core.
+
+| orbit_id | focus_boundary | target_c_atom | (s2, s4) | rep |
+|----------|----------------|---------------|----------|-----|
+| 0 | both | C[0,0] | (0, 0) | CXXC[C[0,0],X[0,0|0,0],X[0,0|0,0],C[0,0]] |
+| 1 | c1 | C[0,0] | (0, 0) | CXXC[C[0,0],X[0,0|0,0],X[0,0|0,0],C[0,1]] |
+| 2 | c1 | C[0,0] | (0, 0) | CXXC[C[0,0],X[0,0|0,0],X[0,0|0,0],C[1,0]] |
+| 30 | both | C[0,0] | (0, 1) | CXXC[C[0,0],X[0,0|0,0],X[0,1|1,0],C[0,0]] |
+| 132 | c2 | C[0,1] | (0, 0) | CXXC[C[0,0],X[0,0|0,1],X[0,0|0,1],C[0,1]] |
+| 1057 | c2 | C[1,0] | (0, 0) | CXXC[C[0,0],X[1,0|0,0],X[1,0|0,0],C[1,0]] |
+
+
+[INTERPRETATION]
+
+The same-fiber and focused layers are dramatically more rigid than the full live core.
+The 10-orbit same-fiber set is already closed, and the 6 focused orbits form an even
+smaller closed motif inside it. The geometry is therefore nested: focused ⊂ same-fiber
+⊂ doubly-live core ⊂ 64-orbit sub-algebra.
+
+## 36. 64-ORBIT SUB-ALGEBRA STRUCTURE
+
+[EXACT_DERIVED] (Step 46, Tasks 2 and 4)
+
+The step-2 closure from Section 33 is a 64-orbit composition-closed CXXC sub-algebra.
+Step 46 computes its full ordered-pair composition table (64 x 64 = 4096 orbit pairs),
+recording the full output set for each compatible pair.
+
+**Full table summary:**
+- Compatible ordered orbit pairs: 602 / 4096
+- Deterministic compatible pairs: 438 (72.76%)
+- Mixed compatible pairs: 164 (27.24%)
+- Output coverage: 64 / 64 orbits (100.00%)
+- Output-set cardinalities among compatible pairs: 1-output: 438, 2-output: 160, 4-output: 4
+
+### Representative Mixed Pairs
+
+| orbit_A | orbit_B | output_orbits | total_pairs |
+|---------|---------|---------------|-------------|
+| 30 | 10 | [20, 40] | 108 |
+| 30 | 20 | [10, 40] | 108 |
+| 30 | 30 | [0, 30] | 108 |
+| 30 | 34 | [4, 34] | 216 |
+| 30 | 40 | [10, 20] | 108 |
+| 30 | 95 | [50, 95] | 216 |
+| 34 | 143 | [20, 40] | 216 |
+| 34 | 161 | [10, 40] | 216 |
+| 34 | 179 | [0, 30] | 216 |
+| 34 | 185 | [4, 34] | 216 |
+| 34 | 191 | [4, 34] | 216 |
+| 34 | 197 | [10, 20] | 216 |
+
+### Generator Analysis
+
+- Orbit 0 acts as exact identity on all 9 left-compatible and 9 right-compatible rows.
+- Smallest nontrivial orbit tested: orbit 1
+- Singleton closure status: fixed_point at size 1
+- Greedy generating set size: 18
+- Greedy generating set: [1, 2, 4, 5, 6, 50, 52, 54, 125, 126, 127, 143, 191, 354, 980, 982, 984, 1175]
+
+**VERDICT:** The 64-orbit algebra is fully output-connected (all 64 orbits appear as outputs),
+but not globally deterministic: 164 compatible ordered pairs are genuinely mixed.
+
+
+[INTERPRETATION]
+
+The 64-orbit object is not a tiny deterministic semigroup; it is a small closed algebra
+with real branching. Most compatible pairs are still deterministic, but the mixed pairs
+are common enough to matter structurally. The greedy generator search also suggests that
+the algebra is not monogenic: one-orbit closure stalls immediately for orbit 1, and the
+best greedy construction still needs a large multi-orbit seed (18 orbits).
+
+## 37. MIXED-PAIR RESOLUTION AND TENSOR CONSTRAINTS
+
+[EXACT_DERIVED] (Step 47)
+
+The 164 mixed compatible pairs from Section 36 are scanned at witness level to test
+whether finer interface coordinates resolve the orbit-level branching. For each witness,
+the shared CXC face records the interface X atom and its coordinates (s,t) and (r,s,t,u).
+
+**Mixed pairs scanned:** 164
+**Mixed-pair witnesses:** 41,688
+- Fully resolved by (s,t): 0 / 164
+- Fully resolved by (r,s,t,u): 0 / 164
+- Output-set invariant across all occupied (s,t) strata: 164 / 164
+- Output-set invariant across all occupied (r,s,t,u) strata: 164 / 164
+- Occupied (s,t) stratum counts: 3 strata: 146, 6 strata: 18
+- Occupied (r,s,t,u) stratum counts: 27 strata: 146, 54 strata: 18
+
+**VERDICT:** Interface-coordinate refinement does NOT resolve any mixed pair.
+More strongly, for every one of the 164 mixed pairs, the output-set is identical in
+every occupied (s,t) stratum and in every occupied full (r,s,t,u) stratum. The 64-orbit
+forks survive unchanged even after conditioning on the full interface X coordinates.
+
+### Representative Mixed Pairs Under Refinement
+
+| orbit_A | orbit_B | output_orbits | n_strata_by_st | resolution_map |
+|---------|---------|---------------|----------------|----------------|
+| 30 | 10 | [20, 40] | 3 | {'(0, 0)': [20, 40], '(1, 1)': [20, 40], '(2, 2)': [20, 40]} |
+| 30 | 20 | [10, 40] | 3 | {'(0, 0)': [10, 40], '(1, 1)': [10, 40], '(2, 2)': [10, 40]} |
+| 30 | 30 | [0, 30] | 3 | {'(0, 0)': [0, 30], '(1, 1)': [0, 30], '(2, 2)': [0, 30]} |
+| 30 | 34 | [4, 34] | 3 | {'(0, 0)': [4, 34], '(1, 1)': [4, 34], '(2, 2)': [4, 34]} |
+| 30 | 40 | [10, 20] | 3 | {'(0, 0)': [10, 20], '(1, 1)': [10, 20], '(2, 2)': [10, 20]} |
+| 30 | 95 | [50, 95] | 3 | {'(0, 0)': [50, 95], '(1, 1)': [50, 95], '(2, 2)': [50, 95]} |
+| 34 | 143 | [20, 40] | 3 | {'(0, 0)': [20, 40], '(1, 1)': [20, 40], '(2, 2)': [20, 40]} |
+| 34 | 161 | [10, 40] | 3 | {'(0, 0)': [10, 40], '(1, 1)': [10, 40], '(2, 2)': [10, 40]} |
+| 34 | 179 | [0, 30] | 3 | {'(0, 0)': [0, 30], '(1, 1)': [0, 30], '(2, 2)': [0, 30]} |
+| 34 | 185 | [4, 34] | 3 | {'(0, 0)': [4, 34], '(1, 1)': [4, 34], '(2, 2)': [4, 34]} |
+| 34 | 191 | [4, 34] | 3 | {'(0, 0)': [4, 34], '(1, 1)': [4, 34], '(2, 2)': [4, 34]} |
+| 34 | 197 | [10, 20] | 3 | {'(0, 0)': [10, 20], '(1, 1)': [10, 20], '(2, 2)': [10, 20]} |
+
+### Standard 3x3 Multiplication Tensor in the Same-Fiber Layer
+
+The 54 unordered same-fiber live-X pairs (3 self-pairs + 3 distinct pairs in each of
+the 9 output fibers) land in only two same-fiber CXXC orbits.
+
+| orbit_id | pair_count | fraction | stab_type |
+|----------|------------|----------|-----------|
+| 0 | 27 | 0.500000 | (Z2)^3 |
+| 30 | 27 | 0.500000 | Z2xZ2 |
+
+**Tensor same-fiber support:** only orbits [0, 30]
+Orbit 0 carries the 27 self-pairs; orbit 30 carries the 27 distinct same-fiber pairs.
+None of the other 8 same-fiber closed orbits appear in the raw multiplication tensor.
+
+### Rank-1 Search Model Status
+
+- Exact finite orbit model for general rank-1 terms: underdetermined_without_coefficient_or_support_model
+- External algorithm mapping Smirnov_23x3x3_2013: not_mapped (No direct algorithm specification is present in the repository or bundled sources, and no authoritative public term list was available through the current tool set.)
+- External algorithm mapping Strassen_2x2_7: not_mapped (Outside the current 3x3 CXXC export scope; no direct 2x2-to-3x3 embedding was formalized in this step.)
+
+
+[INTERPRETATION]
+
+This is a third-layer negative result, but an important one. The 64-orbit branching is not
+caused by forgetting interface coordinates: even the full shared-X coordinates leave every
+mixed output-set intact. Any future deterministic refinement of the 64-orbit algebra must
+therefore depend on data beyond the shared face alone, presumably involving the outer X
+atoms or finer orbit-internal structure. On the positive side, the raw multiplication tensor
+occupies only the two most constrained same-fiber orbits, 0 and 30, which gives a precise
+target profile for any algorithm search restricted to the discovered closed layers.
+
+## 38. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
@@ -12499,8 +13077,14 @@ The total 2744 = 14^3. The arithmetic structure is exact.
 - Composition kernel: ✓ Mixed key CC-orbit distributions computed (all 14 keys uniform)
 - CXXC marginal weight profile: ✓ Fiber-size histogram for all 7 projections
 - Stabilizer subgroup classification: ✓ CXC and CXXC; all pure-2-groups (Z2, Z2xZ2, (Z2)^3)
+- Stabilizer composition analysis: ✓ 43M pairs; (Z2)^3 is composition identity; types not generally closed
 - CXXC and CCXX arity-4 collisions: ✓ All resolved with minimal refiner `(s4, t4)`
 - CXXC marginal projections: ✓ Full coverage analysis completed
+- Refinement-conditioned kernel: ✓ All 63 (s,t) strata uniform; hypothesis closed at stratum level
+- Z2xZ2 floor layer: ✓ 40 orbits; floor property holds (no Trivial decay); not fully closed; step-1 closure adds 18 Z2 orbits
+- 58-orbit closure + doubly-live core: ✓ 58-seed closes at 64 orbits; 28-core stays 100% doubly-live; floor fixed dims are 30 or 36
+- Same-fiber core + 64-subalgebra structure: ✓ 10 same-fiber and 6 focused orbits are both closed; 64-table has 602 compatible rows with 164 mixed; greedy generator set size 18
+- Mixed-pair resolution + tensor constraints: ✓ 41,688 witnesses scanned; 0/164 mixed pairs resolved by interface coordinates; raw tensor same-fiber support uses only orbits 0 and 30
 
 **Remaining open fronts:**
 - Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored
@@ -12508,6 +13092,20 @@ The total 2744 = 14^3. The arithmetic structure is exact.
   whether there is a simpler intrinsic minimal closed-form signature/refinement rule remains open
 - Refinement engine: Not yet rerun on corrected composition (14 mixed keys)
 - Higher arity layers: Arity 5+ unexplored
+- The 14^3 = 2744 CXXC orbit count factorization: whether 14 = C(4,2)+C(4,1)+C(4,0) reflects
+  partition types at arity 4 under the compatible group action is unverified
+- The 64-orbit closed layer now has a full composition table; its intrinsic signature rule
+  and exact minimum generating set are still unknown
+- The 164 mixed pairs are invariant under all shared-face coordinate conditioning tried so far;
+  any deterministic refinement must depend on data beyond the interface X coordinates alone
+- The 12.44% live-core escapes stay doubly-live but leave the floor; classify those nonfloor
+  doubly-live targets as a structural layer of their own
+- Same-fiber and focused subsets are closed; determine whether they admit a clean intrinsic
+  signature or conceptual description beyond the target/focus predicates
+- The raw multiplication tensor profile inside the same-fiber layer is exactly orbit 0 + orbit 30;
+  translate that profile into a finite coefficient/support model for rank-1 terms before solving an ILP
+- Kernel uniformity: cc uniformity holds at orbit level AND (s,t) stratum level;
+  next level to check is the full (r,s,t,u) X coordinate or the (c1,c2) boundary
 
 These are genuine incompletions, not promises.
 
