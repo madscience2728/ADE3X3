@@ -312,6 +312,15 @@ def read_step64_outputs():
     greedy2_rows = read_csv("step64_2x2_full_tensor_greedy.csv")
     return summary_rows, top_rows, greedy3_rows, greedy2_collapsed_rows, greedy2_rows
 
+def read_step65_outputs():
+    """Read step 65 polyomino subtensor-rank and tiling-analysis exports."""
+    summary_rows = read_csv("step65_summary.csv")
+    rank_rows = read_csv("step65_polyomino_rank_table.csv")
+    mixed_rows = read_csv("step65_mixed_tilings.csv")
+    toroidal_rows = read_csv("step65_toroidal_l_tromino_tilings.csv")
+    cluster_rows = read_csv("step65_alphatensor_support_clusters.csv")
+    return summary_rows, rank_rows, mixed_rows, toroidal_rows, cluster_rows
+
 def generate_x_atoms():
     """Generate all 81 X atoms with live/dead status and target."""
     # Try to read from export first
@@ -407,7 +416,8 @@ def generate():
     w("and nuisance-first architecture analysis (step 61),")
     w("plus non-rectangular 6-fiber sub-tensor rank attack (step 62),")
     w("and reverse engineering with cancellation visualization (step 63),")
-    w("plus small-integer coefficient enumeration (step 64)")
+    w("plus small-integer coefficient enumeration (step 64),")
+    w("and polyomino subtensor-rank / tiling analysis (step 65)")
     w()
     w("**IMPORTANT:** This document contains all computed results inline.")
     w("No external files are required. All research findings are here.")
@@ -3037,6 +3047,100 @@ def generate():
     w("not prove impossibility, but it does show that naive matching pursuit over the finite ternary")
     w("profile pool is not by itself an adequate search strategy for genuine low-rank algorithms.")
 
+    # ── STEP 65 ──
+    w()
+    w(f"## {section_num}. POLYOMINO SUB-TENSOR RANKS + TILING ANALYSIS")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] + [MEASURED_FROM_CODE] (Step 65)")
+    w()
+    w("Step 65 reframes restricted output sets as tiny subtensors and asks whether a polyomino tiling of")
+    w("the 3x3 output grid can beat the known 23-term full algorithm when piece costs are estimated by")
+    w("subtensor rank. The step computes flat and toroidal L-tromino tilings, numerical ranks for the")
+    w("unknown tetromino classes, AlphaTensor support clustering, and an exact-cover search over the flat")
+    w("3x3 board. The central warning is that these tiling costs are only piecewise upper bounds on")
+    w("restricted subtensors. They are not by themselves certified full 3x3 multiplication algorithms.")
+    w()
+    (
+        sum65_rows,
+        rank65_rows,
+        mixed65_rows,
+        toroidal65_rows,
+        cluster65_rows,
+    ) = read_step65_outputs()
+    if sum65_rows:
+        sum65 = {row['summary_name']: row for row in sum65_rows}
+        l65_rows = [row for row in rank65_rows if row['family'] == 'L_tromino']
+        w("### Task 1: Priority L-Tromino Rank")
+        w()
+        if l65_rows:
+            l65 = l65_rows[0]
+            w(f"**Priority L-tromino entries:** {l65['representative_entries']}")
+            w(f"**Flattening lower bound:** {l65['flattening_lower_bound']}")
+            w(f"**Numerical rank upper bound:** {l65['numerical_rank_upper_bound']}")
+            w(f"**AlphaTensor upper bound:** {l65['alpha_tensor_upper_bound']}")
+            w(f"**Best verified loss:** {l65['best_verified_loss']}")
+        w(f"**Flat L-tromino placements:** {sum65['l_tromino_instance_count']['summary_value']}")
+        w(f"**Flat L-tromino symmetry classes:** {sum65['l_tromino_symmetry_classes']['summary_value']}")
+        w(f"**Flat 3x3 tilings by three L-trominoes:** {sum65['l_tromino_tiling_count']['summary_value']}")
+        w()
+        w("### Task 2 / 4: Polyomino Rank Table")
+        w()
+        w("| family | representative | flattening LB | numerical rank | AlphaTensor UB | exact rank if determined |")
+        w("|--------|----------------|---------------|----------------|----------------|--------------------------|")
+        for row in rank65_rows:
+            w(f"| {row['family']} | {row['representative_entries']} | {row['flattening_lower_bound']} | {row['numerical_rank_upper_bound']} | {row['alpha_tensor_upper_bound']} | {row['exact_rank_if_determined']} |")
+        w()
+        w("### Task 2 / 3: Toroidal L-Trominoes and AlphaTensor Support Clusters")
+        w()
+        w(f"**Exported toroidal L-tromino tiling classes:** {len(toroidal65_rows)}")
+        if toroidal65_rows:
+            w(f"**Best exported toroidal 3xL tiling upper bound:** {min(int(row['total_rank_upper_bound']) for row in toroidal65_rows)}")
+        w(f"**AlphaTensor support clusters:** {sum65['alphatensor_support_cluster_count']['summary_value']}")
+        w()
+        if toroidal65_rows:
+            w("| toroidal tiling | piece class ids | total upper-bound cost |")
+            w("|-----------------|-----------------|------------------------|")
+            for row in toroidal65_rows:
+                w(f"| {row['canonical_tiling']} | {row['piece_class_ids']} | {row['total_rank_upper_bound']} |")
+            w()
+        w("| support cluster | support entries | shape | term count | term ids |")
+        w("|----------------|-----------------|-------|------------|----------|")
+        for row in cluster65_rows[:10]:
+            w(f"| {row['support_cluster_id']} | {row['support_entries']} | {row['shape_label']} | {row['term_count']} | {row['term_ids']} |")
+        w()
+        w("### Task 5: Best Flat Exact-Cover Tilings")
+        w()
+        w(f"**Minimum flat tiling upper bound:** {sum65['minimum_tiling_upper_bound']['summary_value']}")
+        w(f"**Minimum tiling signature:** {sum65['minimum_tiling_signature']['summary_value']}")
+        w(f"**Low-cost tilings <= 22:** {sum65['low_cost_tiling_count_leq_22']['summary_value']}")
+        w()
+        if mixed65_rows:
+            w("| tiling signature | pieces | class ids | total upper-bound cost |")
+            w("|------------------|--------|-----------|------------------------|")
+            for row in mixed65_rows:
+                w(f"| {row['tiling_signature']} | {row['pieces']} | {row['class_ids']} | {row['total_rank_upper_bound']} |")
+            w()
+    else:
+        w("*Run ade3x3_step65_polyomino_subtensor_ranks_tiling_analysis.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("The make-or-break L-tromino result is now clear. The unique flat L-tromino class has numerical")
+    w("fits at essentially zero residual while the export table still leaves the numerical-rank field blank;")
+    w("combined with the flattening lower bound 6 and the AlphaTensor upper bound 14, this shows that the")
+    w("L-tromino is not obviously cheap enough to support a dramatic three-piece decomposition. In any case")
+    w("the flat 3x3 board admits no tiling by three L-trominoes at all. The toroidal variant behaves")
+    w("differently: at least one toroidal symmetry class is exported, with total upper-bound cost 27, so")
+    w("wrapping does create L-tilings but does not by itself produce a competitive cost.")
+    w("The broader polyomino picture is still suggestive. Several non-square tetromino scans achieve")
+    w("near-zero residual at the flattening lower-bound level 9, while the best flat exact-cover cost in")
+    w("the currently exported summary is 26 via domino-column + three monominoes + square tetromino.")
+    w("This remains structurally informative but must not be overinterpreted: it is only a")
+    w("polyomino-subtensor upper bound assembled from separate restricted problems. It does not yet")
+    w("certify any global rank-26 or better matrix multiplication algorithm, because the")
+    w("piecewise decompositions are not forced to coexist without cross-piece interference or extra sharing.")
+
     # ── OPEN FRONTS ──
     w()
     w(f"## {section_num}. CURRENT GAPS / OPEN FRONTS")
@@ -3075,6 +3179,7 @@ def generate():
     w("- Non-rectangular 6-fiber sub-tensor rank attack: ✓ exact substitution bounds and direct P4 constructions are now tabulated, the rectangular six-fiber cases remain ruled out by exact rank 15, and the current numerical CP-rank scan found no rank-13 or rank-14 witness for any nonrectangular six-fiber pattern")
     w("- Reverse engineering + cancellation visualization: ✓ a public exact rank-23 3x3 coefficient table has been recovered from AlphaTensor's public repo, measured directly in the Step 51-52 basis, shown to have nuisance rank 14 = 23-9 exactly, and tested for single/pair gamma-only redundancy with no feasible 22-term or 21-term sub-decomposition found")
     w("- Small-integer coefficient enumeration: ✓ the exact ternary profile pool has been counted modulo sign and symmetry (96,845,281 raw distinct profiles; 570,521 symmetry orbits), the top usefulness profiles have been ranked, and collapsed/full-tensor greedy diagnostics show that collapsed matching is vacuous while corrected 2x2 full-tensor greedy does not recover Strassen through rank 7")
+    w("- Polyomino subtensor-rank + tiling analysis: ✓ the priority L-tromino class was isolated with flattening lower bound 6 and near-zero numerical fits, flat 3x3 L-tromino tilings were shown impossible, at least one toroidal L-tromino tiling class was exported with total cost 27, and the current Step 65 summary records a best flat exact-cover upper bound 26")
     w()
     w("**Remaining open fronts:**")
     w("- Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored")
@@ -3099,6 +3204,8 @@ def generate():
     w("- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining open problem is to prove a decomposition-independent nuisance lower bound rather than only measure it on known examples")
     w("- Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity")
     w("- Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit")
+    w("- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; the remaining hard problem is whether any low-cost piecewise decomposition can be made globally compatible without reintroducing extra rank through cross-piece coupling")
+    w("- The toroidal extension confirms that L-trominoes can occur in wrapped tilings even though the flat board cannot be tiled by three L-trominoes; the remaining question is whether wrapped shapes or cross-piece sharing can lower the current exported toroidal cost 27")
     w("- Step 53 shows that support-only representative incidence is also vacuous; any sharper universal")
     w("  theorem must use coefficient identities or subspace geometry, not only index-support patterns")
     w("- Step 54 shows that generic low-rank factor models also fail constructively: low nuisance can")

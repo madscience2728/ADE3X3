@@ -1,0 +1,2 @@
+family,class_id,representative_entries,size,count_on_3x3,symmetry_class_size,row_profile,col_profile,flattening_rank_A_BC,flattening_rank_B_AC,flattening_rank_C_AB,flattening_lower_bound,numerical_rank_upper_bound,alpha_tensor_upper_bound,exact_rank_if_determined,best_verified_loss,note,provenance
+L_tromino,L_tromino_class_01,"(0,0); (0,1); (1,0)",3,16,16,"2,1","2,1",6,6,3,6,,14,,1.156179718345e-18,,EXACT_DERIVED + MEASURED_FROM_CODE

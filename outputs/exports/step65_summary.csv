@@ -1,0 +1,10 @@
+summary_name,summary_value,provenance,note
+l_tromino_instance_count,16,EXACT_DERIVED,All L-tromino placements on the 3x3 output grid.
+l_tromino_symmetry_classes,1,EXACT_DERIVED,Distinct L-tromino classes under S3xS3 row/column permutations.
+l_tromino_tiling_count,0,EXACT_DERIVED,Tilings of the 3x3 grid by three L-trominoes before symmetry reduction.
+l_tromino_tiling_classes,0,EXACT_DERIVED,Tiling classes by three L-trominoes under S3xS3.
+alphatensor_support_cluster_count,20,EXACT_DERIVED,Distinct gamma-support patterns among the 23 AlphaTensor terms.
+minimum_tiling_upper_bound,26,EXACT_DERIVED + MEASURED_FROM_CODE,Best exact-cover tiling cost using the best available per-piece upper bounds.
+minimum_tiling_signature,1x domino_col + 3x monomino + 1x square_tetromino,EXACT_DERIVED + MEASURED_FROM_CODE,Shape signature of the best exact-cover tiling.
+minimum_tiling_pieces,"(0,0) | (0,1) | (0,2) | (1,0); (2,0) | (1,1); (1,2); (2,1); (2,2)",EXACT_DERIVED + MEASURED_FROM_CODE,Representative best exact-cover tiling.
+low_cost_tiling_count_leq_22,0,EXACT_DERIVED + MEASURED_FROM_CODE,Number of exact-cover tilings with total upper-bound cost at most 22.

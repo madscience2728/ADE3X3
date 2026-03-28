@@ -1,0 +1,2 @@
+class_id,representative_entries,flattening_rank_A_BC,flattening_rank_B_AC,flattening_rank_C_AB,flattening_lower_bound,numerical_rank_upper_bound,alpha_tensor_upper_bound,best_loss_all_ranks,serving_terms,provenance
+L_tromino_class_01,"(0,0); (0,1); (1,0)",6,6,3,6,,14,1.156179718345e-18,t01;t02;t04;t07;t08;t09;t12;t13;t14;t15;t17;t19;t20;t23,EXACT_DERIVED + MEASURED_FROM_CODE

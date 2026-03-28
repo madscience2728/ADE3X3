@@ -1,0 +1,15 @@
+family,class_id,representative_entries,size,instance_count_on_3x3,symmetry_class_size,row_profile,col_profile,connected,provenance
+L_tetromino,L_tetromino_class_01,"(0,0); (0,1); (0,2); (1,0)",4,16,8,"3,1","2,1,1",True,EXACT_DERIVED
+L_tetromino,L_tetromino_class_02,"(0,0); (0,1); (1,0); (2,0)",4,16,8,"2,1,1","3,1",True,EXACT_DERIVED
+L_tromino,L_tromino_class_01,"(0,0); (0,1); (1,0)",3,16,16,"2,1","2,1",True,EXACT_DERIVED
+P4_anti_diagonal_missing,P4_anti_diagonal_missing_class_01,"(0,0); (0,1); (1,0); (1,2); (2,1); (2,2)",6,6,6,"2,2,2","2,2,2",False,EXACT_DERIVED
+S_Z_tetromino,S_Z_tetromino_class_01,"(0,0); (0,1); (1,0); (1,2)",4,8,4,"2,2","2,1,1",False,EXACT_DERIVED
+S_Z_tetromino,S_Z_tetromino_class_02,"(0,0); (0,1); (1,0); (2,1)",4,8,4,"2,1,1","2,2",False,EXACT_DERIVED
+T_tetromino,T_tetromino_class_01,"(0,0); (0,1); (0,2); (1,0)",4,8,4,"3,1","2,1,1",True,EXACT_DERIVED
+T_tetromino,T_tetromino_class_02,"(0,0); (0,1); (1,0); (2,0)",4,8,4,"2,1,1","3,1",True,EXACT_DERIVED
+domino_col,domino_col_class_01,"(0,0); (1,0)",2,6,6,"1,1",2,True,EXACT_DERIVED
+domino_row,domino_row_class_01,"(0,0); (0,1)",2,6,6,2,"1,1",True,EXACT_DERIVED
+monomino,monomino_class_01,"(0,0)",1,9,9,1,1,True,EXACT_DERIVED
+square_tetromino,square_tetromino_class_01,"(0,0); (0,1); (1,0); (1,1)",4,4,4,"2,2","2,2",True,EXACT_DERIVED
+tromino_col,tromino_col_class_01,"(0,0); (1,0); (2,0)",3,3,3,"1,1,1",3,True,EXACT_DERIVED
+tromino_row,tromino_row_class_01,"(0,0); (0,1); (0,2)",3,3,3,3,"1,1,1",True,EXACT_DERIVED

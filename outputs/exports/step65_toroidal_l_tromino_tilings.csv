@@ -1,0 +1,2 @@
+tiling_class_id,canonical_tiling,piece_class_ids,total_rank_upper_bound,provenance
+toroidal_L_tiling_01,"(0,0); (0,1); (1,0) | (0,2); (2,0); (2,2) | (1,1); (1,2); (2,1)",L_tromino_class_01;L_tromino_class_01;L_tromino_class_01,27,EXACT_DERIVED + MEASURED_FROM_CODE

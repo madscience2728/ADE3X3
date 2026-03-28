@@ -1,0 +1,2 @@
+family,class_id,representative_entries,size,instance_count_on_3x3,symmetry_class_size,row_profile,col_profile,connected,provenance
+L_tromino,L_tromino_class_01,"(0,0); (0,1); (1,0)",3,16,16,"2,1","2,1",True,EXACT_DERIVED

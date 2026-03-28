@@ -1,0 +1,21 @@
+support_cluster_id,support_entries,entry_count,shape_label,term_count,term_ids,provenance
+cluster_01,"(0,0)",1,monomino,2,t09;t12,EXACT_DERIVED
+cluster_02,"(0,0); (0,1); (1,1)",3,L_tromino,1,t08,EXACT_DERIVED
+cluster_03,"(0,0); (2,0)",2,disconnected_size_2,1,t19,EXACT_DERIVED
+cluster_04,"(0,0); (2,0); (2,1); (2,2)",4,disconnected_size_4,1,t13,EXACT_DERIVED
+cluster_05,"(0,0); (2,1)",2,disconnected_size_2,1,t07,EXACT_DERIVED
+cluster_06,"(0,1); (0,2)",2,domino_row,1,t01,EXACT_DERIVED
+cluster_07,"(0,1); (0,2); (1,0); (1,1); (1,2)",5,connected_size_5,1,t20,EXACT_DERIVED
+cluster_08,"(0,1); (0,2); (1,1)",3,L_tromino,1,t02,EXACT_DERIVED
+cluster_09,"(0,1); (1,1); (2,1)",3,tromino_col,1,t04,EXACT_DERIVED
+cluster_10,"(0,2)",1,monomino,1,t10,EXACT_DERIVED
+cluster_11,"(0,2); (2,1)",2,disconnected_size_2,1,t05,EXACT_DERIVED
+cluster_12,"(0,2); (2,2)",2,disconnected_size_2,1,t16,EXACT_DERIVED
+cluster_13,"(1,0)",1,monomino,2,t15;t17,EXACT_DERIVED
+cluster_14,"(1,0); (2,0); (2,1)",3,L_tromino,1,t23,EXACT_DERIVED
+cluster_15,"(1,0); (2,1); (2,2)",3,disconnected_size_3,1,t14,EXACT_DERIVED
+cluster_16,"(1,1)",1,monomino,2,t03;t06,EXACT_DERIVED
+cluster_17,"(1,2)",1,monomino,1,t22,EXACT_DERIVED
+cluster_18,"(1,2); (2,1); (2,2)",3,L_tromino,1,t18,EXACT_DERIVED
+cluster_19,"(2,1)",1,monomino,1,t11,EXACT_DERIVED
+cluster_20,"(2,1); (2,2)",2,domino_row,1,t21,EXACT_DERIVED
