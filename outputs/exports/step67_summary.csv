@@ -1,0 +1,11 @@
+summary_name,summary_value,provenance,note
+part_a_piece_count,5,MEASURED_FROM_CODE,Number of formerly blank/uncertain Step 65 classes that now have fresh exact numerical upper bounds from Step 67.
+best_verified_flat_tiling_cost,26,EXACT_DERIVED,Best flat exact-cover tiling cost using corrected verified piece ranks.
+best_verified_flat_tiling_signature,1x L_tetromino + 1x monomino + 1x square_tetromino,EXACT_DERIVED,Shape signature of the corrected best flat tiling.
+flat_tilings_cost_leq_24,0,EXACT_DERIVED,Number of flat exact-cover tilings with corrected verified cost at most 24.
+any_flat_tiling_beats_23,False,EXACT_DERIVED,Whether any corrected flat tiling costs strictly less than 23.
+alphatensor_signal_primary_terms,0,MEASURED_FROM_CODE,AlphaTensor terms with signal fraction > 0.5.
+alphatensor_anisotropy_primary_terms,1,MEASURED_FROM_CODE,AlphaTensor terms with anisotropy fraction > 0.5.
+alphatensor_dead_primary_terms,3,MEASURED_FROM_CODE,AlphaTensor terms with dead fraction > 0.5.
+alphatensor_mixed_terms,19,MEASURED_FROM_CODE,AlphaTensor terms with no dominant layer fraction > 0.5.
+alphatensor_nuisance_rank,14,EXACT_DERIVED,Rank of the 23 x 72 nuisance matrix [Eta1 | Eta2 | Delta].

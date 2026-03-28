@@ -334,6 +334,17 @@ def read_step66_piece_audits():
             audits.extend(rows)
     return audits
 
+def read_step67_outputs():
+    """Read step 67 complete rank-table audit and layered-tiling exports."""
+    summary_rows = read_csv("step67_summary.csv")
+    audit_rows = read_csv("step67_partA_rank_audit.csv")
+    rank_rows = read_csv("step67_corrected_rank_table.csv")
+    tiling_rows = read_csv("step67_corrected_tiling_table.csv")
+    low_cost_rows = read_csv("step67_low_cost_tilings_leq24.csv")
+    corrector_rows = read_csv("step67_alphatensor_corrector_terms.csv")
+    cluster_rows = read_csv("step67_nuisance_support_clusters.csv")
+    return summary_rows, audit_rows, rank_rows, tiling_rows, low_cost_rows, corrector_rows, cluster_rows
+
 def generate_x_atoms():
     """Generate all 81 X atoms with live/dead status and target."""
     # Try to read from export first
@@ -3082,6 +3093,16 @@ def generate():
         cluster65_rows,
     ) = read_step65_outputs()
     step66_audits = read_step66_piece_audits()
+    (
+        step67_summary_rows,
+        step67_audit_rows,
+        step67_rank_rows,
+        step67_tiling_rows,
+        step67_low_cost_rows,
+        step67_corrector_rows,
+        step67_cluster_rows,
+    ) = read_step67_outputs()
+    step67_summary = {row['summary_name']: row for row in step67_summary_rows}
     if sum65_rows:
         sum65 = {row['summary_name']: row for row in sum65_rows}
         l65_rows = [row for row in rank65_rows if row['family'] == 'L_tromino']
@@ -3100,7 +3121,25 @@ def generate():
         w()
         w("### Task 2 / 4: Polyomino Rank Table")
         w()
-        if step66_audits:
+        if step67_summary_rows:
+            w("**Step 67 completion:** the remaining blank Step 65 rows were rerun from scratch with 500 parallel restarts per rank.")
+            w("All five previously unresolved classes now have verified exact numerical upper bounds:")
+            w()
+            w("| audited class | outputs | flattening LB | first exact rank | best rank-11 near miss |")
+            w("|---------------|---------|---------------|------------------|-------------------------|")
+            latest67 = {}
+            for row in step67_audit_rows:
+                if row['exact_rank_upper_bound']:
+                    latest67[row['piece_id']] = row
+            near_miss67 = {}
+            for row in step67_audit_rows:
+                if row['rank_tested'] == '11':
+                    near_miss67[row['piece_id']] = row['best_verified_loss']
+            for piece_id in sorted(latest67):
+                row = latest67[piece_id]
+                w(f"| {piece_id} | {row['piece_outputs']} | {row['flattening_lower_bound']} | {row['exact_rank_upper_bound']} | {near_miss67.get(piece_id, '')} |")
+            w()
+        elif step66_audits:
             w("**Step 66 audit correction:** the Step 65 recovery export was unstable after the crash/recovery path.")
             w("Fresh independent parallel rescans now override the following tetromino entries:")
             w()
@@ -3118,20 +3157,10 @@ def generate():
             w()
         w("| family | representative | flattening LB | numerical rank | AlphaTensor UB | exact rank if determined |")
         w("|--------|----------------|---------------|----------------|----------------|--------------------------|")
-        for row in rank65_rows:
-            numerical = row['numerical_rank_upper_bound']
-            exact_rank = row['exact_rank_if_determined']
-            audit = None
-            if row['family'] == 'S_Z_tetromino' and row['representative_entries'] == '(0,0); (0,1); (1,0); (2,1)':
-                audit = next((item for item in step66_audits if item['piece_outputs'] == '(0,0); (0,1); (1,0); (2,1)'), None)
-            elif row['family'] == 'L_tetromino' and row['representative_entries'] == '(0,0); (0,1); (1,0); (2,0)':
-                audit = next((item for item in step66_audits if item['piece_outputs'] == '(0,2); (1,2); (2,1); (2,2)'), None)
-            if audit:
-                numerical = audit['exact_rank_upper_bound']
-                exact_rank = audit['exact_rank_upper_bound']
-            if row['family'] == 'T_tetromino' and row['representative_entries'] == '(0,0); (0,1); (1,0); (2,0)':
-                numerical = row['numerical_rank_upper_bound']
-                exact_rank = row['exact_rank_if_determined']
+        rank_source_rows = step67_rank_rows if step67_rank_rows else rank65_rows
+        for row in rank_source_rows:
+            numerical = row.get('verified_rank_upper_bound') or row.get('numerical_rank_upper_bound', '')
+            exact_rank = row.get('verified_rank_upper_bound') or row.get('exact_rank_if_determined', '')
             w(f"| {row['family']} | {row['representative_entries']} | {row['flattening_lower_bound']} | {numerical} | {row['alpha_tensor_upper_bound']} | {exact_rank} |")
         w()
         w("### Task 2 / 3: Toroidal L-Trominoes and AlphaTensor Support Clusters")
@@ -3154,15 +3183,23 @@ def generate():
         w()
         w("### Task 5: Best Flat Exact-Cover Tilings")
         w()
-        w(f"**Minimum flat tiling upper bound:** {sum65['minimum_tiling_upper_bound']['summary_value']}")
-        w(f"**Minimum tiling signature:** {sum65['minimum_tiling_signature']['summary_value']}")
-        w(f"**Low-cost tilings <= 22:** {sum65['low_cost_tiling_count_leq_22']['summary_value']}")
+        if step67_summary_rows:
+            w(f"**Corrected minimum flat tiling upper bound:** {step67_summary['best_verified_flat_tiling_cost']['summary_value']}")
+            w(f"**Corrected minimum tiling signature:** {step67_summary['best_verified_flat_tiling_signature']['summary_value']}")
+            w(f"**Corrected flat tilings <= 24:** {step67_summary['flat_tilings_cost_leq_24']['summary_value']}")
+            w(f"**Any corrected flat tiling beats 23:** {step67_summary['any_flat_tiling_beats_23']['summary_value']}")
+        else:
+            w(f"**Minimum flat tiling upper bound:** {sum65['minimum_tiling_upper_bound']['summary_value']}")
+            w(f"**Minimum tiling signature:** {sum65['minimum_tiling_signature']['summary_value']}")
+            w(f"**Low-cost tilings <= 22:** {sum65['low_cost_tiling_count_leq_22']['summary_value']}")
         w()
-        if mixed65_rows:
+        mixed_rows = step67_low_cost_rows if step67_summary_rows else mixed65_rows
+        if mixed_rows:
             w("| tiling signature | pieces | class ids | total upper-bound cost |")
             w("|------------------|--------|-----------|------------------------|")
-            for row in mixed65_rows:
-                w(f"| {row['tiling_signature']} | {row['pieces']} | {row['class_ids']} | {row['total_rank_upper_bound']} |")
+            for row in mixed_rows:
+                total_cost = row.get('total_verified_cost') or row.get('total_rank_upper_bound')
+                w(f"| {row['tiling_signature']} | {row['pieces']} | {row['class_ids']} | {total_cost} |")
             w()
     else:
         w("*Run ade3x3_step65_polyomino_subtensor_ranks_tiling_analysis.py to populate this section.*")
@@ -3176,7 +3213,19 @@ def generate():
     w("the flat 3x3 board admits no tiling by three L-trominoes at all. The toroidal variant behaves")
     w("differently: at least one toroidal symmetry class is exported, with total upper-bound cost 27, so")
     w("wrapping does create L-tilings but does not by itself produce a competitive cost.")
-    if step66_audits:
+    if step67_summary_rows:
+        w("Step 67 closes the remaining audit loop. The formerly blank rows now resolve to exact numerical")
+        w("upper bounds L-tromino = 9 and all four unresolved tetromino classes = 12, so every connected")
+        w("tetromino class on the 3x3 output board now sits at rank 11 or 12 rather than at the speculative")
+        w("rank-9 frontier suggested by the corrupted Step 65 recovery export. The corrected flat exact-cover")
+        w("optimum is 26, achieved by L-tetromino + monomino + square tetromino, and there are no verified")
+        w("flat tilings with cost 24 or below.")
+        w("The layered AlphaTensor readout also sharpens the nuisance story. In the Step 51/52 basis there are")
+        w("0 signal-dominant terms, 1 anisotropy-dominant term, 3 dead-X-dominant terms, and 19 mixed terms;")
+        w("the nuisance rank remains 14. So the public rank-23 algorithm is not built from mostly pure signal")
+        w("pieces. It is heavily nuisance-saturated, with only three clearly dead-X-heavy corrector terms in")
+        w("the exported decomposition.")
+    elif step66_audits:
         w("Step 66 changes the tetromino story materially. Fresh independent parallel rescans show that the")
         w("audited S/Z and L tetromino classes used in the former candidate low-cost tilings are both rank 12,")
         w("not rank 9. So the crash-recovery Step 65 export overstated the strength of those classes, and any")
@@ -3230,7 +3279,7 @@ def generate():
     w("- Non-rectangular 6-fiber sub-tensor rank attack: ✓ exact substitution bounds and direct P4 constructions are now tabulated, the rectangular six-fiber cases remain ruled out by exact rank 15, and the current numerical CP-rank scan found no rank-13 or rank-14 witness for any nonrectangular six-fiber pattern")
     w("- Reverse engineering + cancellation visualization: ✓ a public exact rank-23 3x3 coefficient table has been recovered from AlphaTensor's public repo, measured directly in the Step 51-52 basis, shown to have nuisance rank 14 = 23-9 exactly, and tested for single/pair gamma-only redundancy with no feasible 22-term or 21-term sub-decomposition found")
     w("- Small-integer coefficient enumeration: ✓ the exact ternary profile pool has been counted modulo sign and symmetry (96,845,281 raw distinct profiles; 570,521 symmetry orbits), the top usefulness profiles have been ranked, and collapsed/full-tensor greedy diagnostics show that collapsed matching is vacuous while corrected 2x2 full-tensor greedy does not recover Strassen through rank 7")
-    w("- Polyomino subtensor-rank + tiling analysis: ✓ the priority L-tromino class was isolated with flattening lower bound 6 and near-zero numerical fits, flat 3x3 L-tromino tilings were shown impossible, at least one toroidal L-tromino tiling class was exported with total cost 27, and Step 66 fresh rescans corrected corrupted Step 65 tetromino ranks by showing the audited S/Z and L tetromino classes have numerical rank 12")
+    w("- Polyomino subtensor-rank + tiling analysis: ✓ the full connected-polyomino rank table is now audited cleanly, the priority L-tromino class is verified at numerical rank 9, all four previously unresolved tetromino classes are verified at numerical rank 12, the corrected best flat exact-cover cost is 26 with no verified flat tiling at cost 24 or below, and the Step 51/52 layer split of the public rank-23 algorithm is exported with nuisance rank 14, 3 dead-X-dominant corrector terms, and no signal-dominant terms")
     w()
     w("**Remaining open fronts:**")
     w("- Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored")
@@ -3255,7 +3304,7 @@ def generate():
     w("- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining open problem is to prove a decomposition-independent nuisance lower bound rather than only measure it on known examples")
     w("- Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity")
     w("- Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit")
-    w("- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after Step 66's audit, the formerly claimed 21-cost tetromino tiling route is dead and the remaining hard problem is to rebuild the affected tetromino rank table cleanly before making any new low-cost claims")
+    w("- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, the corrected flat optimum is 26, and the remaining problem is whether cross-piece sharing or non-flat/layer-aware constructions can beat that restricted-subtensor bound")
     w("- The toroidal extension confirms that L-trominoes can occur in wrapped tilings even though the flat board cannot be tiled by three L-trominoes; the remaining question is whether wrapped shapes or cross-piece sharing can lower the current exported toroidal cost 27")
     w("- Step 53 shows that support-only representative incidence is also vacuous; any sharper universal")
     w("  theorem must use coefficient identities or subspace geometry, not only index-support patterns")

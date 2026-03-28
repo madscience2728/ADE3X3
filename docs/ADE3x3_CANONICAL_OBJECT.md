@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-28 18:18:05
+Generated: 2026-03-28 18:35:20
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-28 18:18:05
+**Generated:** 2026-03-28 18:35:20
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -14409,24 +14409,27 @@ restricted subtensors. They are not by themselves certified full 3x3 multiplicat
 
 ### Task 2 / 4: Polyomino Rank Table
 
-**Step 66 audit correction:** the Step 65 recovery export was unstable after the crash/recovery path.
-Fresh independent parallel rescans now override the following tetromino entries:
+**Step 67 completion:** the remaining blank Step 65 rows were rerun from scratch with 500 parallel restarts per rank.
+All five previously unresolved classes now have verified exact numerical upper bounds:
 
-| audited piece outputs | flattening LB | fresh exact numerical upper bound | best lower-rank near miss |
-|-----------------------|---------------|----------------------------------|---------------------------|
-| (0,0); (0,1); (1,0); (2,1) | 9 | 12 | R=11 best loss 1.4844916268325573e-03; extended 2000-restart test improves only to 1.1867109268390639e-03 |
-| (0,2); (1,2); (2,1); (2,2) | 9 | 12 | R=10 best loss 4.1316631254345992e-03; R=11 best loss 2.0633889273130681e-03 |
+| audited class | outputs | flattening LB | first exact rank | best rank-11 near miss |
+|---------------|---------|---------------|------------------|-------------------------|
+| L_tetromino_class_01 | (0,0); (0,1); (0,2); (1,0) | 9 | 12 | 1.6501924905718162e-03 |
+| L_tromino_class_01 | (0,0); (0,1); (1,0) | 6 | 9 |  |
+| S_Z_tetromino_class_01 | (0,0); (0,1); (1,0); (1,2) | 9 | 12 | 1.7312206197644252e-03 |
+| T_tetromino_class_01 | (0,0); (0,1); (0,2); (1,0) | 9 | 12 | 1.9109987577527450e-03 |
+| T_tetromino_class_02 | (0,0); (0,1); (1,0); (2,0) | 9 | 12 | 1.6668427593062862e-03 |
 
 | family | representative | flattening LB | numerical rank | AlphaTensor UB | exact rank if determined |
 |--------|----------------|---------------|----------------|----------------|--------------------------|
-| L_tetromino | (0,0); (0,1); (0,2); (1,0) | 9 |  | 17 |  |
+| L_tetromino | (0,0); (0,1); (0,2); (1,0) | 9 | 12 | 17 | 12 |
 | L_tetromino | (0,0); (0,1); (1,0); (2,0) | 9 | 12 | 14 | 12 |
-| L_tromino | (0,0); (0,1); (1,0) | 6 |  | 14 |  |
-| P4_anti_diagonal_missing | (0,0); (0,1); (1,0); (1,2); (2,1); (2,2) | 9 |  | 20 |  |
-| S_Z_tetromino | (0,0); (0,1); (1,0); (1,2) | 9 |  | 16 |  |
+| L_tromino | (0,0); (0,1); (1,0) | 6 | 9 | 14 | 9 |
+| P4_anti_diagonal_missing | (0,0); (0,1); (1,0); (1,2); (2,1); (2,2) | 9 | 18 | 20 | 18 |
+| S_Z_tetromino | (0,0); (0,1); (1,0); (1,2) | 9 | 12 | 16 | 12 |
 | S_Z_tetromino | (0,0); (0,1); (1,0); (2,1) | 9 | 12 | 18 | 12 |
-| T_tetromino | (0,0); (0,1); (0,2); (1,0) | 9 |  | 17 |  |
-| T_tetromino | (0,0); (0,1); (1,0); (2,0) | 9 |  | 14 |  |
+| T_tetromino | (0,0); (0,1); (0,2); (1,0) | 9 | 12 | 17 | 12 |
+| T_tetromino | (0,0); (0,1); (1,0); (2,0) | 9 | 12 | 14 | 12 |
 | domino_col | (0,0); (1,0) | 6 | 6 | 11 | 6 |
 | domino_row | (0,0); (0,1) | 6 | 6 | 10 | 6 |
 | monomino | (0,0) | 3 | 3 | 6 | 3 |
@@ -14459,9 +14462,10 @@ Fresh independent parallel rescans now override the following tetromino entries:
 
 ### Task 5: Best Flat Exact-Cover Tilings
 
-**Minimum flat tiling upper bound:** 26
-**Minimum tiling signature:** 1x domino_col + 3x monomino + 1x square_tetromino
-**Low-cost tilings <= 22:** 0
+**Corrected minimum flat tiling upper bound:** 26
+**Corrected minimum tiling signature:** 1x L_tetromino + 1x monomino + 1x square_tetromino
+**Corrected flat tilings <= 24:** 0
+**Any corrected flat tiling beats 23:** False
 
 
 [INTERPRETATION]
@@ -14473,12 +14477,17 @@ L-tromino is not obviously cheap enough to support a dramatic three-piece decomp
 the flat 3x3 board admits no tiling by three L-trominoes at all. The toroidal variant behaves
 differently: at least one toroidal symmetry class is exported, with total upper-bound cost 27, so
 wrapping does create L-tilings but does not by itself produce a competitive cost.
-Step 66 changes the tetromino story materially. Fresh independent parallel rescans show that the
-audited S/Z and L tetromino classes used in the former candidate low-cost tilings are both rank 12,
-not rank 9. So the crash-recovery Step 65 export overstated the strength of those classes, and any
-claimed 21-cost assembly based on them is invalid. The S/Z class is especially revealing: rank 11
-gets close but does not close even after 2000 parallel restarts, which suggests real structure rather
-than optimizer laziness.
+Step 67 closes the remaining audit loop. The formerly blank rows now resolve to exact numerical
+upper bounds L-tromino = 9 and all four unresolved tetromino classes = 12, so every connected
+tetromino class on the 3x3 output board now sits at rank 11 or 12 rather than at the speculative
+rank-9 frontier suggested by the corrupted Step 65 recovery export. The corrected flat exact-cover
+optimum is 26, achieved by L-tetromino + monomino + square tetromino, and there are no verified
+flat tilings with cost 24 or below.
+The layered AlphaTensor readout also sharpens the nuisance story. In the Step 51/52 basis there are
+0 signal-dominant terms, 1 anisotropy-dominant term, 3 dead-X-dominant terms, and 19 mixed terms;
+the nuisance rank remains 14. So the public rank-23 algorithm is not built from mostly pure signal
+pieces. It is heavily nuisance-saturated, with only three clearly dead-X-heavy corrector terms in
+the exported decomposition.
 This remains structurally informative but must not be overinterpreted: it is only a
 polyomino-subtensor upper bound assembled from separate restricted problems. It does not yet
 certify any global rank-26 or better matrix multiplication algorithm, because the
@@ -14519,7 +14528,7 @@ piecewise decompositions are not forced to coexist without cross-piece interfere
 - Non-rectangular 6-fiber sub-tensor rank attack: ✓ exact substitution bounds and direct P4 constructions are now tabulated, the rectangular six-fiber cases remain ruled out by exact rank 15, and the current numerical CP-rank scan found no rank-13 or rank-14 witness for any nonrectangular six-fiber pattern
 - Reverse engineering + cancellation visualization: ✓ a public exact rank-23 3x3 coefficient table has been recovered from AlphaTensor's public repo, measured directly in the Step 51-52 basis, shown to have nuisance rank 14 = 23-9 exactly, and tested for single/pair gamma-only redundancy with no feasible 22-term or 21-term sub-decomposition found
 - Small-integer coefficient enumeration: ✓ the exact ternary profile pool has been counted modulo sign and symmetry (96,845,281 raw distinct profiles; 570,521 symmetry orbits), the top usefulness profiles have been ranked, and collapsed/full-tensor greedy diagnostics show that collapsed matching is vacuous while corrected 2x2 full-tensor greedy does not recover Strassen through rank 7
-- Polyomino subtensor-rank + tiling analysis: ✓ the priority L-tromino class was isolated with flattening lower bound 6 and near-zero numerical fits, flat 3x3 L-tromino tilings were shown impossible, at least one toroidal L-tromino tiling class was exported with total cost 27, and Step 66 fresh rescans corrected corrupted Step 65 tetromino ranks by showing the audited S/Z and L tetromino classes have numerical rank 12
+- Polyomino subtensor-rank + tiling analysis: ✓ the full connected-polyomino rank table is now audited cleanly, the priority L-tromino class is verified at numerical rank 9, all four previously unresolved tetromino classes are verified at numerical rank 12, the corrected best flat exact-cover cost is 26 with no verified flat tiling at cost 24 or below, and the Step 51/52 layer split of the public rank-23 algorithm is exported with nuisance rank 14, 3 dead-X-dominant corrector terms, and no signal-dominant terms
 
 **Remaining open fronts:**
 - Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored
@@ -14544,7 +14553,7 @@ piecewise decompositions are not forced to coexist without cross-piece interfere
 - Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining open problem is to prove a decomposition-independent nuisance lower bound rather than only measure it on known examples
 - Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity
 - Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit
-- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after Step 66's audit, the formerly claimed 21-cost tetromino tiling route is dead and the remaining hard problem is to rebuild the affected tetromino rank table cleanly before making any new low-cost claims
+- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, the corrected flat optimum is 26, and the remaining problem is whether cross-piece sharing or non-flat/layer-aware constructions can beat that restricted-subtensor bound
 - The toroidal extension confirms that L-trominoes can occur in wrapped tilings even though the flat board cannot be tiled by three L-trominoes; the remaining question is whether wrapped shapes or cross-piece sharing can lower the current exported toroidal cost 27
 - Step 53 shows that support-only representative incidence is also vacuous; any sharper universal
   theorem must use coefficient identities or subspace geometry, not only index-support patterns

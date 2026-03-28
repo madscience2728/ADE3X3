@@ -1,0 +1,12 @@
+cluster_id,nuisance_output_support,shape,term_count,term_ids,provenance
+nuisance_cluster_01,"(0,0); (0,1); (0,2); (2,0); (2,1); (2,2)",disconnected_size_6,4,t07;t09;t11;t12,EXACT_DERIVED
+nuisance_cluster_02,"(0,1)",monomino,1,t04,EXACT_DERIVED
+nuisance_cluster_03,"(0,1); (0,2)",domino_row,1,t08,EXACT_DERIVED
+nuisance_cluster_04,"(0,1); (0,2); (1,1); (1,2)",square_tetromino,1,t02,EXACT_DERIVED
+nuisance_cluster_05,"(0,1); (0,2); (2,1); (2,2)",disconnected_size_4,2,t05;t10,EXACT_DERIVED
+nuisance_cluster_06,"(0,1); (1,1)",domino_col,3,t01;t03;t06,EXACT_DERIVED
+nuisance_cluster_07,"(1,0)",monomino,1,t17,EXACT_DERIVED
+nuisance_cluster_08,"(1,0); (1,2); (2,0); (2,2)",disconnected_size_4,3,t14;t15;t21,EXACT_DERIVED
+nuisance_cluster_09,"(1,2)",monomino,3,t18;t20;t22,EXACT_DERIVED
+nuisance_cluster_10,"(2,0)",monomino,3,t13;t19;t23,EXACT_DERIVED
+nuisance_cluster_11,"(2,2)",monomino,1,t16,EXACT_DERIVED
