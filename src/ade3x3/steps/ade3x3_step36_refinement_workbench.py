@@ -557,16 +557,25 @@ def main():
     import sys
     args = sys.argv[1:]
 
-    if not args:
-        # run all registered schemas
+    max_order = 2
+    targets = []
+    i = 0
+    while i < len(args):
+        if args[i] == '--max-order' and i + 1 < len(args):
+            max_order = int(args[i + 1])
+            i += 2
+        else:
+            targets.append(args[i].upper())
+            i += 1
+
+    if not targets:
         targets = list(SCHEMAS.keys())
-    else:
-        targets = [a.upper() for a in args]
-        for t in targets:
-            if t not in SCHEMAS:
-                print(f"Unknown schema: {t}")
-                print(f"Available: {', '.join(SCHEMAS.keys())}")
-                sys.exit(1)
+
+    for t in targets:
+        if t not in SCHEMAS:
+            print(f"Unknown schema: {t}")
+            print(f"Available: {', '.join(SCHEMAS.keys())}")
+            sys.exit(1)
 
     for name in targets:
         cfg = SCHEMAS[name]
@@ -576,7 +585,7 @@ def main():
             decode_fn=cfg['decode_fn'],
             feature_registry=cfg['feature_registry_fn'](),
             output_prefix=cfg['output_prefix'],
-            max_order=2,
+            max_order=max_order,
         )
         print()
 
