@@ -258,24 +258,46 @@ def run_workbench(schema_name, csv_path, decode_fn, feature_registry,
 
     # 2. Detect collisions
     collisions = detect_collisions(orbits)
-    print(f"Collision groups: {len(collisions)}")
-    print(f"Collisions: {count_collisions(collisions)}")
-
-    # 3. Feature registry info
+    n_coll = count_collisions(collisions)
+    n_sigs = len(set(o['signature_key'] for o in orbits))
     n_features = len(feature_registry)
-    print(f"Candidate features: {n_features}")
+    csv_out = output_dir / f'{output_prefix}_refinement_workbench.csv'
+    md_out = output_dir / f'{output_prefix}_refinement_workbench.md'
+
+    print(f"Collision groups: {len(collisions)}")
+    print(f"Collisions: {n_coll}")
+
+    # 3. Zero-collision fast path
+    if n_coll == 0:
+        print(f"  [OK] Orbit-complete — no refinement needed")
+
+        results = [{
+            'feature_count': 0,
+            'feature_names': '(none — orbit-complete)',
+            'distinct_signatures': len(orbits),
+            'remaining_collisions': 0,
+            'collision_reduction': 0,
+        }]
+
+        write_csv(results, csv_out)
+        write_report(schema_name, results, collisions, len(orbits),
+                     n_sigs, n_features, max_order, md_out)
+
+        print(f"\nWritten: {csv_out.name}")
+        print(f"Written: {md_out.name}")
+        print("=" * 70)
+        print("WORKBENCH COMPLETE")
+        print("=" * 70)
+        return results
 
     # 4. Evaluate
+    print(f"Candidate features: {n_features}")
     print(f"\nEvaluating candidates (max_order={max_order})...")
     results = evaluate_candidates(orbits, collisions, decode_fn,
                                   feature_registry, max_order=max_order)
     print(f"Evaluated {len(results)} feature sets")
 
     # 5. Export
-    n_sigs = len(set(o['signature_key'] for o in orbits))
-    csv_out = output_dir / f'{output_prefix}_refinement_workbench.csv'
-    md_out = output_dir / f'{output_prefix}_refinement_workbench.md'
-
     write_csv(results, csv_out)
     write_report(schema_name, results, collisions, len(orbits),
                  n_sigs, n_features, max_order, md_out)
@@ -454,6 +476,42 @@ def build_bx_feature_registry():
 
 
 # ═══════════════════════════════════════════════════════════════════════
+# Schema plug-in: CXC  (negative control — orbit-complete)
+# ═══════════════════════════════════════════════════════════════════════
+
+def decode_cxc(cfg):
+    c2 = cfg % 9
+    rem = cfg // 9
+    x = rem % 81
+    c1 = rem // 81
+    r1, u1 = divmod(c1, 3)
+    r2, s = divmod(x // 9, 3)
+    t, u2 = divmod(x % 9, 3)
+    r3, u3 = divmod(c2, 3)
+    return {
+        'c1': c1, 'x': x, 'c2': c2,
+        'r1': r1, 'u1': u1,
+        'r2': r2, 's': s, 't': t, 'u2': u2,
+        'r3': r3, 'u3': u3,
+    }
+
+
+def build_cxc_feature_registry():
+    features = {}
+    for c in ['r1', 'u1']:
+        features[f'c1_{c}'] = lambda d, k=c: d[k]
+    for c in ['r2', 's', 't', 'u2']:
+        features[f'x_{c}'] = lambda d, k=c: d[k]
+    for c in ['r3', 'u3']:
+        features[f'c2_{c}'] = lambda d, k=c: d[k]
+    features['x_live'] = lambda d: d['s'] == d['t']
+    features['c1_equals_c2'] = lambda d: d['c1'] == d['c2']
+    features['r1_eq_r3'] = lambda d: d['r1'] == d['r3']
+    features['u1_eq_u3'] = lambda d: d['u1'] == d['u3']
+    return features
+
+
+# ═══════════════════════════════════════════════════════════════════════
 # Schema registry
 # ═══════════════════════════════════════════════════════════════════════
 
@@ -481,6 +539,12 @@ SCHEMAS = {
         decode_fn=decode_bx,
         feature_registry_fn=build_bx_feature_registry,
         output_prefix='bx',
+    ),
+    'CXC': dict(
+        csv_path='outputs/exports/signatures_CXC.csv',
+        decode_fn=decode_cxc,
+        feature_registry_fn=build_cxc_feature_registry,
+        output_prefix='cxc',
     ),
 }
 
