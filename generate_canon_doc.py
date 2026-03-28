@@ -165,6 +165,25 @@ def read_step52_outputs():
     bound_rows = read_csv("step52_required_nuisance_bounds.csv")
     return summary_rows, theorem_rows, profile_rows, bound_rows
 
+def read_step53_outputs():
+    """Read step 53 support-type representative-incidence exports."""
+    summary_rows = read_csv("step53_summary.csv")
+    support_rows = read_csv("step53_support_type_classes.csv")
+    mask_rows = read_csv("step53_support_type_mask_summary.csv")
+    orbit0_rows = read_csv("step53_orbit0_feasible_histogram.csv")
+    return summary_rows, support_rows, mask_rows, orbit0_rows
+
+def read_step54_outputs():
+    """Read step 54 analytical low-nuisance construction exports."""
+    summary_rows = read_csv("step54_summary.csv")
+    dead_rows = read_csv("step54_dead_free_theorem.csv")
+    dead_profile_rows = read_csv("step54_dead_free_index_profiles.csv")
+    focus_rows = read_csv("step54_r22_focus.csv")
+    best_rows = read_csv("step54_r22_best_samples.csv")
+    lift_rows = read_csv("step54_strassen_corner_lift.csv")
+    smirnov_rows = read_csv("step54_smirnov_status.csv")
+    return summary_rows, dead_rows, dead_profile_rows, focus_rows, best_rows, lift_rows, smirnov_rows
+
 def generate_x_atoms():
     """Generate all 81 X atoms with live/dead status and target."""
     # Try to read from export first
@@ -249,7 +268,9 @@ def generate():
     w("tensor profile constraint modeling (step 48),")
     w("coefficient-level rank constraints (step 49),")
     w("symbolic fiber-mode decomposition (step 51),")
-    w("and quotient-space rank criterion analysis (step 52)")
+    w("quotient-space rank criterion analysis (step 52),")
+    w("support-type representative incidence analysis (step 53),")
+    w("and analytical low-nuisance construction analysis (step 54)")
     w()
     w("**IMPORTANT:** This document contains all computed results inline.")
     w("No external files are required. All research findings are here.")
@@ -1993,6 +2014,130 @@ def generate():
     w("2x2 Strassen check is the key validation: its nuisance matrix is 7x12 with rank exactly 3, so")
     w("Strassen is tight against the criterion R = 4 + rank(Nuisance).")
 
+    # ── STEP 53 ──
+    w()
+    w(f"## {section_num}. SUPPORT-TYPE REPRESENTATIVE INCIDENCE")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 53)")
+    w()
+    w("Step 53 asks whether support geometry alone can force any of the 8 exact representative")
+    w("equation types from Step 49 to be absent for a single rank-1 term. A support type keeps only")
+    w("the six subset supports of alpha, beta, and gamma, modulo the natural S3 x S3 x S3 action.")
+    w()
+    sum53_rows, support53_rows, mask53_rows, orbit053_rows = read_step53_outputs()
+    if sum53_rows:
+        sum53 = {row['summary_name']: row['summary_value'] for row in sum53_rows}
+        w(f"**Support-type classes:** {sum53['n_support_type_classes']}")
+        w(f"**Support-type orbit sizes:** {sum53['support_type_orbit_sizes']}")
+        w(f"**Type-0-feasible classes:** {sum53['n_with_orbit0_possible']}")
+        w(f"**Minimum auto-zero count among Type-0-feasible classes:** {sum53['min_auto_zero_among_orbit0_possible']}")
+        w(f"**All-8-active Type-0-feasible classes:** {sum53['n_all8_active_among_orbit0_possible']}")
+        w(f"**Support-only obstruction status:** {sum53['support_only_representative_obstruction']}")
+        w()
+        w("### Orbit-0-Feasible Histogram")
+        w()
+        w("| active_count | auto_zero_count | n_support_classes |")
+        w("|--------------|-----------------|-------------------|")
+        for row in orbit053_rows:
+            w(f"| {row['active_count']} | {row['auto_zero_count']} | {row['n_support_classes']} |")
+        w()
+        w("### Sample Support Classes")
+        w()
+        w("| support_type_id | alpha_row | alpha_col | beta_row | beta_col | gamma_row | gamma_col | active_mask |")
+        w("|-----------------|-----------|-----------|----------|----------|-----------|-----------|-------------|")
+        sample_rows = []
+        sample_rows.extend([row for row in support53_rows if row['orbit0_possible'] == 'True' and row['all8_active'] == 'True'][:3])
+        sample_rows.extend([row for row in support53_rows if row['orbit0_possible'] == 'True' and row['active_count'] == '1'][:3])
+        seen_ids = set()
+        for row in sample_rows:
+            if row['support_type_id'] in seen_ids:
+                continue
+            seen_ids.add(row['support_type_id'])
+            w(f"| {row['support_type_id']} | {row['alpha_row_support']} | {row['alpha_col_support']} | {row['beta_row_support']} | {row['beta_col_support']} | {row['gamma_row_support']} | {row['gamma_col_support']} | {row['active_mask']} |")
+        w()
+    else:
+        w("*Run ade3x3_step53_support_type_representative_incidence.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 53 closes off another support-only route. The Step 48 orbit-sum model was already too")
+    w("coarse; Step 53 shows that even exact support incidence against the 8 representative equation")
+    w("types is still vacuous. Once support is rich enough to allow the positive Type 0 equation,")
+    w("there are many support classes that also allow all 7 zero-RHS types. Any universal lower-bound")
+    w("argument must therefore use coefficient relations, quotient-space structure, or stronger")
+    w("algebraic constraints than support incidence alone.")
+
+    # ── STEP 54 ──
+    w()
+    w(f"## {section_num}. ANALYTICAL LOW-NUISANCE CONSTRUCTION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 54)")
+    w()
+    w("Step 54 pivots from obstruction to construction. It first corrects the dead-free term")
+    w("template exactly, then measures the nuisance-rank landscape for random low-rank factor")
+    w("families alpha=A*C and beta=B*D, with emphasis on the R=22 target nuisance threshold <= 13.")
+    w()
+    sum54_rows, dead54_rows, dead_profile54_rows, focus54_rows, best54_rows, lift54_rows, smirnov54_rows = read_step54_outputs()
+    if sum54_rows:
+        sum54 = {row['summary_name']: row['summary_value'] for row in sum54_rows}
+        w(f"**Dead-free implies nuisance-free?** {sum54['dead_free_term_nuisance_zero']}")
+        w(f"**Generic nonzero dead-free term nuisance rank:** {sum54['dead_free_generic_nonzero_term_nuisance_rank']}")
+        w(f"**Best observed R=22 nuisance rank:** {sum54['r22_best_observed_nuisance_rank']}")
+        w(f"**Best observed R=22 family:** {sum54['r22_best_observed_family']}")
+        w(f"**Any sampled R=22 family meeting nuisance target?** {sum54['r22_any_meets_nuisance_target']}")
+        w(f"**Any sampled R=22 family meeting full target?** {sum54['r22_any_meets_full_target']}")
+        w(f"**Naive 2x2-corner Strassen lift count:** {sum54['naive_corner_strassen_total']}")
+        w(f"**Smirnov profile status:** {sum54['smirnov_profile_status']}")
+        w()
+        w("### Dead-Free Term Correction")
+        w()
+        for row in dead54_rows:
+            w(f"- {row['statement_id']}: {row['statement']}")
+        w()
+        w("| active_sum_index | sigma_profile | eta1_profile | eta2_profile | dead_profile | nuisance_zero | generic_nuisance_rank |")
+        w("|------------------|---------------|--------------|--------------|--------------|---------------|-----------------------|")
+        for row in dead_profile54_rows:
+            w(f"| {row['active_sum_index']} | {row['sigma_profile']} | {row['eta1_profile']} | {row['eta2_profile']} | {row['dead_profile']} | {row['nuisance_zero']} | {row['generic_nonzero_term_nuisance_rank']} |")
+        w()
+        w("### R=22 Random-Factor Landscape")
+        w()
+        w("| p | q | trials | target | nuisance min | nuisance median | nuisance max | quotient gain max | criterion holds count | nuisance target hits | full target hits |")
+        w("|---|---|--------|--------|--------------|----------------|--------------|-------------------|-----------------------|---------------------|------------------|")
+        for row in focus54_rows:
+            w(f"| {row['p_rank']} | {row['q_rank']} | {row['trials']} | {row['nuisance_target']} | {row['nuisance_rank_min']} | {row['nuisance_rank_median']} | {row['nuisance_rank_max']} | {row['quotient_gain_max']} | {row['criterion_holds_count']} | {row['meets_nuisance_target_count']} | {row['meets_full_target_count']} |")
+        w()
+        w("### Best R=22 Samples By Family")
+        w()
+        w("| p | q | nuisance_rank | quotient_gain | full_product_rank | criterion_holds | meets_nuisance_target | meets_full_target |")
+        w("|---|---|---------------|---------------|-------------------|-----------------|-----------------------|------------------|")
+        for row in sorted(best54_rows, key=lambda entry: (int(entry['p_rank']), int(entry['q_rank']))):
+            w(f"| {row['p_rank']} | {row['q_rank']} | {row['nuisance_rank']} | {row['quotient_gain']} | {row['full_product_rank']} | {row['criterion_holds']} | {row['meets_nuisance_target']} | {row['meets_full_target']} |")
+        w()
+        w("### Strassen Lift Baseline")
+        w()
+        w("| component | multiplication_count | method | note |")
+        w("|-----------|----------------------|--------|------|")
+        for row in lift54_rows:
+            w(f"| {row['component']} | {row['multiplication_count']} | {row['method']} | {row['note']} |")
+        w()
+        for row in smirnov54_rows:
+            w(f"- {row['algorithm_name']}: {row['status']} ({row['note']})")
+        w()
+    else:
+        w("*Run ade3x3_step54_analytical_low_nuisance_construction.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 54 sharpens the constructive picture in two ways. First, dead-free terms do not give a")
+    w("free nuisance bypass: they kill Delta but still generate anisotropy, so the Strassen 2x2")
+    w("template does not port directly into the Step 51 basis. Second, generic low-rank factor")
+    w("families can indeed hit low nuisance numerically at R=22, but in the sampled families Sigma")
+    w("never escaped the nuisance span, so the quotient-space gain stayed far below the required 9.")
+    w("That points the next constructive search toward structured, nongeneric coefficient designs")
+    w("rather than random low-rank factor models.")
+
     # ── OPEN FRONTS ──
     w()
     w(f"## {section_num}. CURRENT GAPS / OPEN FRONTS")
@@ -2020,6 +2165,8 @@ def generate():
     w("- Coefficient-level rank constraints: ✓ explicit 8 equation types recorded with orbit sizes (27,54,54,108,54,108,108,216); standard 27-term basis algorithm and Strassen 2x2 both verified exactly; search-space dimensions exported")
     w("- Symbolic fiber-mode decomposition: ✓ the 729 equations now split exactly as 81 fiber-sum + 162 live-anisotropy + 486 dead-X equations, with matrix form Gamma*Sigma=3I_9 and Gamma annihilating the nuisance blocks")
     w("- Quotient-space rank criterion: ✓ for a fixed decomposition solvability is equivalent to quotient-space independence of Sigma modulo nuisance; standard 3x3 gives nuisance rank 18 and Strassen 2x2 gives rank 3, with Strassen exactly tight")
+    w("- Support-type representative incidence: ✓ there are 8000 support classes modulo S3^3; 1000 can realize Type 0, and 216 of those allow all 8 representative equation types, so support-only pruning is vacuous")
+    w("- Analytical low-nuisance construction: ✓ dead-free terms were shown not to be nuisance-free in the Step 51 basis; random low-rank factor families were profiled numerically, and although some R=22 families reached nuisance rank <= 13, none achieved the quotient-space gain required by Step 52")
     w()
     w("**Remaining open fronts:**")
     w("- Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored")
@@ -2043,6 +2190,11 @@ def generate():
     w("  the remaining open problem is whether the rank-R solution variety is nonempty for sparse or non-group-closed ansatze")
     w("- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining")
     w("  hard theorem is universal: prove a decomposition-independent lower bound on rank(Nuisance)")
+    w("- Step 53 shows that support-only representative incidence is also vacuous; any sharper universal")
+    w("  theorem must use coefficient identities or subspace geometry, not only index-support patterns")
+    w("- Step 54 shows that generic low-rank factor models also fail constructively: low nuisance can")
+    w("  occur without any quotient-space gain, so the next constructive family must impose structured")
+    w("  coefficient relations that separate Sigma from the nuisance span")
     w("- Kernel uniformity: cc uniformity holds at orbit level AND (s,t) stratum level;")
     w("  next level to check is the full (r,s,t,u) X coordinate or the (c1,c2) boundary")
     w()

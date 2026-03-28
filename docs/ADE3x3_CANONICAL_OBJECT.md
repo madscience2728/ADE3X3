@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-28 06:05:59
+Generated: 2026-03-28 11:22:20
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-28 06:05:59
+**Generated:** 2026-03-28 11:22:20
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -28,7 +28,9 @@ mixed-pair resolution / tensor-constraint extraction (step 47),
 tensor profile constraint modeling (step 48),
 coefficient-level rank constraints (step 49),
 symbolic fiber-mode decomposition (step 51),
-and quotient-space rank criterion analysis (step 52)
+quotient-space rank criterion analysis (step 52),
+support-type representative incidence analysis (step 53),
+and analytical low-nuisance construction analysis (step 54)
 
 **IMPORTANT:** This document contains all computed results inline.
 No external files are required. All research findings are here.
@@ -13394,7 +13396,149 @@ every candidate algorithm must compress its own nuisance span into dimension at 
 2x2 Strassen check is the key validation: its nuisance matrix is 7x12 with rank exactly 3, so
 Strassen is tight against the criterion R = 4 + rank(Nuisance).
 
-## 42. CURRENT GAPS / OPEN FRONTS
+## 42. SUPPORT-TYPE REPRESENTATIVE INCIDENCE
+
+[EXACT_DERIVED] (Step 53)
+
+Step 53 asks whether support geometry alone can force any of the 8 exact representative
+equation types from Step 49 to be absent for a single rank-1 term. A support type keeps only
+the six subset supports of alpha, beta, and gamma, modulo the natural S3 x S3 x S3 action.
+
+**Support-type classes:** 8000
+**Support-type orbit sizes:** 1,3,6,9,18,27,36,54,108,216
+**Type-0-feasible classes:** 1000
+**Minimum auto-zero count among Type-0-feasible classes:** 0
+**All-8-active Type-0-feasible classes:** 216
+**Support-only obstruction status:** vacuous
+
+### Orbit-0-Feasible Histogram
+
+| active_count | auto_zero_count | n_support_classes |
+|--------------|-----------------|-------------------|
+| 1 | 7 | 64 |
+| 2 | 6 | 288 |
+| 4 | 4 | 432 |
+| 8 | 0 | 216 |
+
+### Sample Support Classes
+
+| support_type_id | alpha_row | alpha_col | beta_row | beta_col | gamma_row | gamma_col | active_mask |
+|-----------------|-----------|-----------|----------|----------|-----------|-----------|-------------|
+| 2486 | {0} | {0} | {0,1} | {0} | {0,1} | {0,1} | 11111111 |
+| 2488 | {0} | {0} | {0,1} | {0} | {0,1} | {0,1,2} | 11111111 |
+| 2498 | {0} | {0} | {0,1} | {0} | {0,1,2} | {0,1} | 11111111 |
+| 2232 | {0} | {0} | {0} | {0} | {0} | {0} | 10000000 |
+| 2268 | {0} | {0} | {0} | {0,1} | {0} | {0} | 10000000 |
+| 2271 | {0} | {0} | {0} | {0,1} | {0} | {0,2} | 10000000 |
+
+
+[INTERPRETATION]
+
+Step 53 closes off another support-only route. The Step 48 orbit-sum model was already too
+coarse; Step 53 shows that even exact support incidence against the 8 representative equation
+types is still vacuous. Once support is rich enough to allow the positive Type 0 equation,
+there are many support classes that also allow all 7 zero-RHS types. Any universal lower-bound
+argument must therefore use coefficient relations, quotient-space structure, or stronger
+algebraic constraints than support incidence alone.
+
+## 43. ANALYTICAL LOW-NUISANCE CONSTRUCTION
+
+[EXACT_DERIVED] (Step 54)
+
+Step 54 pivots from obstruction to construction. It first corrects the dead-free term
+template exactly, then measures the nuisance-rank landscape for random low-rank factor
+families alpha=A*C and beta=B*D, with emphasis on the R=22 target nuisance threshold <= 13.
+
+**Dead-free implies nuisance-free?** False
+**Generic nonzero dead-free term nuisance rank:** 1
+**Best observed R=22 nuisance rank:** 9
+**Best observed R=22 family:** p=3, q=3
+**Any sampled R=22 family meeting nuisance target?** True
+**Any sampled R=22 family meeting full target?** False
+**Naive 2x2-corner Strassen lift count:** 26
+**Smirnov profile status:** not_available_in_repo_or_current_tool_set
+
+### Dead-Free Term Correction
+
+- D1: A nonzero rank-1 term is dead-free (all delta coordinates vanish) iff there exists a unique summation index s* such that alpha[:,t]=0 for all t!=s* and beta[t,:]=0 for all t!=s*. Equivalently, the alpha column support and beta row support are contained in the same singleton {s*}.
+- D2: For a nonzero dead-free term with active index s*, define v = a[:,s*] tensor b[s*,:] in the 9-dimensional fiber space. Then Sigma contributes v, while Eta1 and Eta2 are fixed signed embeddings of the same v; only Delta vanishes.
+- D3: Therefore dead-free does not imply nuisance-free in the Step 51 basis. A generic nonzero dead-free term has dead rank 0 but nuisance rank 1, because its anisotropy coordinates are nonzero unless v=0.
+- D4: The Strassen-style pure-live versus cancellation split does not transfer verbatim to Step 51. What survives is only the weaker statement that dead-free terms contribute no dead-X nuisance; they still contribute anisotropy nuisance.
+- D5: A family of dead-free terms has nuisance rows inside the union of three fixed 9-dimensional embeddings E0(v)=(v,0), E1(v)=(-v,v), E2(v)=(0,-v) of the fiber space into the 18-dimensional anisotropy space.
+
+| active_sum_index | sigma_profile | eta1_profile | eta2_profile | dead_profile | nuisance_zero | generic_nuisance_rank |
+|------------------|---------------|--------------|--------------|--------------|---------------|-----------------------|
+| 0 | Sigma = v | Eta1 = v | Eta2 = 0 | Delta = 0 | False | 1 |
+| 1 | Sigma = v | Eta1 = -v | Eta2 = v | Delta = 0 | False | 1 |
+| 2 | Sigma = v | Eta1 = 0 | Eta2 = -v | Delta = 0 | False | 1 |
+
+### R=22 Random-Factor Landscape
+
+| p | q | trials | target | nuisance min | nuisance median | nuisance max | quotient gain max | criterion holds count | nuisance target hits | full target hits |
+|---|---|--------|--------|--------------|----------------|--------------|-------------------|-----------------------|---------------------|------------------|
+| 3 | 3 | 24 | 13 | 9 | 9 | 9 | 0 | 0 | 24 | 0 |
+| 3 | 4 | 24 | 13 | 12 | 12 | 12 | 0 | 0 | 24 | 0 |
+| 3 | 5 | 24 | 13 | 15 | 15 | 15 | 0 | 0 | 0 | 0 |
+| 3 | 6 | 24 | 13 | 18 | 18 | 18 | 0 | 0 | 0 | 0 |
+| 4 | 3 | 24 | 13 | 12 | 12 | 12 | 0 | 0 | 24 | 0 |
+| 4 | 4 | 24 | 13 | 16 | 16 | 16 | 0 | 0 | 0 | 0 |
+| 4 | 5 | 24 | 13 | 20 | 20 | 20 | 0 | 0 | 0 | 0 |
+| 4 | 6 | 24 | 13 | 22 | 22 | 22 | 0 | 0 | 0 | 0 |
+| 5 | 3 | 24 | 13 | 15 | 15 | 15 | 0 | 0 | 0 | 0 |
+| 5 | 4 | 24 | 13 | 20 | 20 | 20 | 0 | 0 | 0 | 0 |
+| 5 | 5 | 24 | 13 | 22 | 22 | 22 | 0 | 0 | 0 | 0 |
+| 5 | 6 | 24 | 13 | 22 | 22 | 22 | 0 | 0 | 0 | 0 |
+| 6 | 3 | 24 | 13 | 18 | 18 | 18 | 0 | 0 | 0 | 0 |
+| 6 | 4 | 24 | 13 | 22 | 22 | 22 | 0 | 0 | 0 | 0 |
+| 6 | 5 | 24 | 13 | 22 | 22 | 22 | 0 | 0 | 0 | 0 |
+| 6 | 6 | 24 | 13 | 22 | 22 | 22 | 0 | 0 | 0 | 0 |
+
+### Best R=22 Samples By Family
+
+| p | q | nuisance_rank | quotient_gain | full_product_rank | criterion_holds | meets_nuisance_target | meets_full_target |
+|---|---|---------------|---------------|-------------------|-----------------|-----------------------|------------------|
+| 3 | 3 | 9 | 0 | 9 | False | True | False |
+| 3 | 4 | 12 | 0 | 12 | False | True | False |
+| 3 | 5 | 15 | 0 | 15 | False | False | False |
+| 3 | 6 | 18 | 0 | 18 | False | False | False |
+| 4 | 3 | 12 | 0 | 12 | False | True | False |
+| 4 | 4 | 16 | 0 | 16 | False | False | False |
+| 4 | 5 | 20 | 0 | 20 | False | False | False |
+| 4 | 6 | 22 | 0 | 22 | False | False | False |
+| 5 | 3 | 15 | 0 | 15 | False | False | False |
+| 5 | 4 | 20 | 0 | 20 | False | False | False |
+| 5 | 5 | 22 | 0 | 22 | False | False | False |
+| 5 | 6 | 22 | 0 | 22 | False | False | False |
+| 6 | 3 | 18 | 0 | 18 | False | False | False |
+| 6 | 4 | 22 | 0 | 22 | False | False | False |
+| 6 | 5 | 22 | 0 | 22 | False | False | False |
+| 6 | 6 | 22 | 0 | 22 | False | False | False |
+
+### Strassen Lift Baseline
+
+| component | multiplication_count | method | note |
+|-----------|----------------------|--------|------|
+| top_left_2x2_block | 7 | Strassen_on_A11_B11 | Apply 2x2 Strassen to the top-left 2x2 corner block. |
+| top_left_outer_fixup | 4 | a12_times_b21_outer_product | The a12*b21^T correction contributes 4 scalar products to C11. |
+| top_right_block | 6 | A11_b12_plus_a12_b22 | A11*b12 costs 4 and a12*b22 costs 2. |
+| bottom_left_block | 6 | a21T_B11_plus_a22_b21T | a21^T*B11 costs 4 and a22*b21^T costs 2. |
+| bottom_right_scalar | 3 | a21T_b12_plus_a22_b22 | The scalar corner uses 2 + 1 standard products. |
+| naive_corner_strassen_total | 26 | sum_of_above | A direct 2x2-corner Strassen lift already exceeds 23 before any cross-block optimization. |
+
+- Smirnov_23x3x3_2013: not_available_in_repo_or_current_tool_set (The repository contains only a not_mapped status note from Step 47 and no authoritative alpha,beta,gamma term list to profile directly.)
+
+
+[INTERPRETATION]
+
+Step 54 sharpens the constructive picture in two ways. First, dead-free terms do not give a
+free nuisance bypass: they kill Delta but still generate anisotropy, so the Strassen 2x2
+template does not port directly into the Step 51 basis. Second, generic low-rank factor
+families can indeed hit low nuisance numerically at R=22, but in the sampled families Sigma
+never escaped the nuisance span, so the quotient-space gain stayed far below the required 9.
+That points the next constructive search toward structured, nongeneric coefficient designs
+rather than random low-rank factor models.
+
+## 44. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
@@ -13418,6 +13562,8 @@ Strassen is tight against the criterion R = 4 + rank(Nuisance).
 - Coefficient-level rank constraints: ✓ explicit 8 equation types recorded with orbit sizes (27,54,54,108,54,108,108,216); standard 27-term basis algorithm and Strassen 2x2 both verified exactly; search-space dimensions exported
 - Symbolic fiber-mode decomposition: ✓ the 729 equations now split exactly as 81 fiber-sum + 162 live-anisotropy + 486 dead-X equations, with matrix form Gamma*Sigma=3I_9 and Gamma annihilating the nuisance blocks
 - Quotient-space rank criterion: ✓ for a fixed decomposition solvability is equivalent to quotient-space independence of Sigma modulo nuisance; standard 3x3 gives nuisance rank 18 and Strassen 2x2 gives rank 3, with Strassen exactly tight
+- Support-type representative incidence: ✓ there are 8000 support classes modulo S3^3; 1000 can realize Type 0, and 216 of those allow all 8 representative equation types, so support-only pruning is vacuous
+- Analytical low-nuisance construction: ✓ dead-free terms were shown not to be nuisance-free in the Step 51 basis; random low-rank factor families were profiled numerically, and although some R=22 families reached nuisance rank <= 13, none achieved the quotient-space gain required by Step 52
 
 **Remaining open fronts:**
 - Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored
@@ -13441,6 +13587,11 @@ Strassen is tight against the criterion R = 4 + rank(Nuisance).
   the remaining open problem is whether the rank-R solution variety is nonempty for sparse or non-group-closed ansatze
 - Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining
   hard theorem is universal: prove a decomposition-independent lower bound on rank(Nuisance)
+- Step 53 shows that support-only representative incidence is also vacuous; any sharper universal
+  theorem must use coefficient identities or subspace geometry, not only index-support patterns
+- Step 54 shows that generic low-rank factor models also fail constructively: low nuisance can
+  occur without any quotient-space gain, so the next constructive family must impose structured
+  coefficient relations that separate Sigma from the nuisance span
 - Kernel uniformity: cc uniformity holds at orbit level AND (s,t) stratum level;
   next level to check is the full (r,s,t,u) X coordinate or the (c1,c2) boundary
 
