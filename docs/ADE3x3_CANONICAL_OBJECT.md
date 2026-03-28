@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-28 18:35:20
+Generated: 2026-03-28 19:21:24
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-28 18:35:20
+**Generated:** 2026-03-28 19:21:24
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -14488,6 +14488,27 @@ The layered AlphaTensor readout also sharpens the nuisance story. In the Step 51
 the nuisance rank remains 14. So the public rank-23 algorithm is not built from mostly pure signal
 pieces. It is heavily nuisance-saturated, with only three clearly dead-X-heavy corrector terms in
 the exported decomposition.
+Step 68 then tested whether the canonical 9-term signal layer becomes cheaper after moving the
+dead-only correction slice into the 3-point Fourier basis on the summation indices. The answer is
+negative in the simplest exact decomposition: the canonical dead residual and the phase-j=1
+phase-weighted variant both concentrate on the same three Fourier modes, and each surviving mode
+still has exact component rank 9.
+For the canonical balanced residual the nonzero Fourier modes are (0,0);(1,2);(2,1), with component-rank sum upper bound 27.
+For the phase-j=1 residual the nonzero Fourier modes are (0,0);(1,2);(2,1), with component-rank sum upper bound 27.
+So the current Fourier steering verdict is: any immediate Fourier component-sum route below nuisance budget 14 = False.
+Step 69 resolves the interlocking question directly in term space. For each of the 23 public
+AlphaTensor terms, the dead-X bilinear profile was projected into the three Step 68 Fourier
+modes, producing three 23x9 participation matrices D^{00}, D^{12}, D^{21}. Their column spaces
+inside the 23-dimensional term space are the exact interlocking subspaces.
+The exact dimensions are V_00=8, V_12=8, V_21=8; pairwise intersections = (6, 6, 6); triple intersection = 6; and total union dimension = 10.
+So the dead-only interlocking is tighter than the earlier nuisance-budget shorthand suggested:
+the three Fourier-mode dead spans do not behave like three independent rank-9 blocks glued
+down to 14. They are already only rank 8 each, with a 6-dimensional triple overlap and total
+dead-mode union dimension 10 in term space.
+At the term level, Step 69 finds 18 genuinely multi-mode participants and 5 dead-silent terms; there are no dead-mode single-mode dominant terms under the requested 2x dominance rule.
+The mode-routed 3-fiber probe does not open a cheap path: every tested symmetry class for pure mode-12 or mode-21 dead routing lands at total cost 36 when repeated across three groups.
+The two-level three-mode probe is also unpromising in its current form: after one complex rank-1 mega-corrector per mode, the combined residual has flattening lower bound 15 and slice-rank upper bound 31, so the resulting total-cost window is 15..43 after adding the 9 signal terms and 3 mega-correctors.
+A reduced ternary-pool greedy cover on the Step 64 shortlist reaches rank 9 in all three modes by step 9, but that search is only heuristic because the project currently exports exact orbit counts for the ternary pool, not a full 570,521-orbit representative table. So Step 69 does not yet certify a 13-term correction layer, and it does not produce any verified route below rank 23.
 This remains structurally informative but must not be overinterpreted: it is only a
 polyomino-subtensor upper bound assembled from separate restricted problems. It does not yet
 certify any global rank-26 or better matrix multiplication algorithm, because the
@@ -14553,7 +14574,7 @@ piecewise decompositions are not forced to coexist without cross-piece interfere
 - Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining open problem is to prove a decomposition-independent nuisance lower bound rather than only measure it on known examples
 - Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity
 - Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit
-- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, the corrected flat optimum is 26, and the remaining problem is whether cross-piece sharing or non-flat/layer-aware constructions can beat that restricted-subtensor bound
+- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, and Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, but no verified routed, multilevel, or reduced-shortlist ternary construction yet beats rank 23
 - The toroidal extension confirms that L-trominoes can occur in wrapped tilings even though the flat board cannot be tiled by three L-trominoes; the remaining question is whether wrapped shapes or cross-piece sharing can lower the current exported toroidal cost 27
 - Step 53 shows that support-only representative incidence is also vacuous; any sharper universal
   theorem must use coefficient identities or subspace geometry, not only index-support patterns

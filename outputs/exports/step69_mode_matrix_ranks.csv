@@ -1,0 +1,4 @@
+mode_label,matrix_shape,numeric_rank,exact_rank,provenance
+mode_00,23x9,8,8,EXACT_DERIVED + MEASURED_FROM_CODE
+mode_12,23x9,8,8,EXACT_DERIVED + MEASURED_FROM_CODE
+mode_21,23x9,8,8,EXACT_DERIVED + MEASURED_FROM_CODE

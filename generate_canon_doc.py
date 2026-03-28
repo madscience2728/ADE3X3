@@ -345,6 +345,23 @@ def read_step67_outputs():
     cluster_rows = read_csv("step67_nuisance_support_clusters.csv")
     return summary_rows, audit_rows, rank_rows, tiling_rows, low_cost_rows, corrector_rows, cluster_rows
 
+def read_step68_fourier_outputs():
+    """Read Step 68 Fourier steering exports, if present."""
+    summary_rows = read_csv("step68_fourier_summary.csv")
+    mode_rows = read_csv("step68_fourier_mode_decomposition.csv")
+    component_rows = read_csv("step68_fourier_component_ranks.csv")
+    return summary_rows, mode_rows, component_rows
+
+def read_step69_outputs():
+    """Read Step 69 interlocking-mechanism exports, if present."""
+    summary_rows = read_csv("step69_summary.csv")
+    projection_rows = read_csv("step69_term_mode_projections.csv")
+    subspace_rows = read_csv("step69_mode_subspace_dimensions.csv")
+    routed_rows = read_csv("step69_mode_routed_three_fiber_ranks.csv")
+    multilevel_rows = read_csv("step69_multilevel_residual_probe.csv")
+    greedy_rows = read_csv("step69_reduced_ternary_greedy_cover.csv")
+    return summary_rows, projection_rows, subspace_rows, routed_rows, multilevel_rows, greedy_rows
+
 def generate_x_atoms():
     """Generate all 81 X atoms with live/dead status and target."""
     # Try to read from export first
@@ -3102,7 +3119,22 @@ def generate():
         step67_corrector_rows,
         step67_cluster_rows,
     ) = read_step67_outputs()
+    (
+        step68_fourier_summary_rows,
+        step68_fourier_mode_rows,
+        step68_fourier_component_rows,
+    ) = read_step68_fourier_outputs()
+    (
+        step69_summary_rows,
+        step69_projection_rows,
+        step69_subspace_rows,
+        step69_routed_rows,
+        step69_multilevel_rows,
+        step69_greedy_rows,
+    ) = read_step69_outputs()
     step67_summary = {row['summary_name']: row for row in step67_summary_rows}
+    step68_fourier_summary = {row['summary_name']: row for row in step68_fourier_summary_rows}
+    step69_summary = {row['summary_name']: row for row in step69_summary_rows}
     if sum65_rows:
         sum65 = {row['summary_name']: row for row in sum65_rows}
         l65_rows = [row for row in rank65_rows if row['family'] == 'L_tromino']
@@ -3225,6 +3257,49 @@ def generate():
         w("the nuisance rank remains 14. So the public rank-23 algorithm is not built from mostly pure signal")
         w("pieces. It is heavily nuisance-saturated, with only three clearly dead-X-heavy corrector terms in")
         w("the exported decomposition.")
+        if step68_fourier_summary_rows:
+            canonical_modes = step68_fourier_summary['canonical_fourier_nonzero_modes']['summary_value']
+            canonical_sum = step68_fourier_summary['canonical_fourier_component_rank_sum_upper_bound']['summary_value']
+            phase_modes = step68_fourier_summary['phase_j1_fourier_nonzero_modes']['summary_value']
+            phase_sum = step68_fourier_summary['phase_j1_fourier_component_rank_sum_upper_bound']['summary_value']
+            any_below_14 = step68_fourier_summary['any_fourier_component_sum_below_14']['summary_value']
+            w("Step 68 then tested whether the canonical 9-term signal layer becomes cheaper after moving the")
+            w("dead-only correction slice into the 3-point Fourier basis on the summation indices. The answer is")
+            w("negative in the simplest exact decomposition: the canonical dead residual and the phase-j=1")
+            w("phase-weighted variant both concentrate on the same three Fourier modes, and each surviving mode")
+            w("still has exact component rank 9.")
+            w(f"For the canonical balanced residual the nonzero Fourier modes are {canonical_modes}, with component-rank sum upper bound {canonical_sum}.")
+            w(f"For the phase-j=1 residual the nonzero Fourier modes are {phase_modes}, with component-rank sum upper bound {phase_sum}.")
+            w(f"So the current Fourier steering verdict is: any immediate Fourier component-sum route below nuisance budget 14 = {any_below_14}.")
+        if step69_summary_rows:
+            mode00_rank = step69_summary['alphatensor_mode00_rank']['summary_value']
+            mode12_rank = step69_summary['alphatensor_mode12_rank']['summary_value']
+            mode21_rank = step69_summary['alphatensor_mode21_rank']['summary_value']
+            pair00_12 = step69_summary['alphatensor_pair_intersection_00_12']['summary_value']
+            pair00_21 = step69_summary['alphatensor_pair_intersection_00_21']['summary_value']
+            pair12_21 = step69_summary['alphatensor_pair_intersection_12_21']['summary_value']
+            triple = step69_summary['alphatensor_triple_intersection_dimension']['summary_value']
+            union = step69_summary['alphatensor_three_mode_union_dimension']['summary_value']
+            routed_best = step69_summary['mode_routed_best_total_cost_upper_bound']['summary_value']
+            multilevel_lb = step69_summary['multilevel_total_cost_lower_bound_via_flattening']['summary_value']
+            multilevel_ub = step69_summary['multilevel_total_cost_upper_bound_via_slice_rank']['summary_value']
+            greedy_cover = step69_summary['reduced_greedy_first_rank9_cover_step']['summary_value']
+            greedy_scope = step69_summary['reduced_greedy_pool_scope']['summary_value']
+            silent_terms = sum(1 for row in step69_projection_rows if row['classification'] == 'silent')
+            multimode_terms = sum(1 for row in step69_projection_rows if row['classification'] == 'multi-mode')
+            w("Step 69 resolves the interlocking question directly in term space. For each of the 23 public")
+            w("AlphaTensor terms, the dead-X bilinear profile was projected into the three Step 68 Fourier")
+            w("modes, producing three 23x9 participation matrices D^{00}, D^{12}, D^{21}. Their column spaces")
+            w("inside the 23-dimensional term space are the exact interlocking subspaces.")
+            w(f"The exact dimensions are V_00={mode00_rank}, V_12={mode12_rank}, V_21={mode21_rank}; pairwise intersections = ({pair00_12}, {pair00_21}, {pair12_21}); triple intersection = {triple}; and total union dimension = {union}.")
+            w("So the dead-only interlocking is tighter than the earlier nuisance-budget shorthand suggested:")
+            w("the three Fourier-mode dead spans do not behave like three independent rank-9 blocks glued")
+            w("down to 14. They are already only rank 8 each, with a 6-dimensional triple overlap and total")
+            w("dead-mode union dimension 10 in term space.")
+            w(f"At the term level, Step 69 finds {multimode_terms} genuinely multi-mode participants and {silent_terms} dead-silent terms; there are no dead-mode single-mode dominant terms under the requested 2x dominance rule.")
+            w(f"The mode-routed 3-fiber probe does not open a cheap path: every tested symmetry class for pure mode-12 or mode-21 dead routing lands at total cost {routed_best} when repeated across three groups.")
+            w(f"The two-level three-mode probe is also unpromising in its current form: after one complex rank-1 mega-corrector per mode, the combined residual has flattening lower bound {multilevel_lb} and slice-rank upper bound {int(multilevel_ub) - 12}, so the resulting total-cost window is {multilevel_lb}..{multilevel_ub} after adding the 9 signal terms and 3 mega-correctors.")
+            w(f"A reduced ternary-pool greedy cover on the Step 64 shortlist reaches rank 9 in all three modes by step {greedy_cover}, but that search is only heuristic because the project currently exports exact orbit counts for the ternary pool, not a full 570,521-orbit representative table. So Step 69 does not yet certify a 13-term correction layer, and it does not produce any verified route below rank 23.")
     elif step66_audits:
         w("Step 66 changes the tetromino story materially. Fresh independent parallel rescans show that the")
         w("audited S/Z and L tetromino classes used in the former candidate low-cost tilings are both rank 12,")
@@ -3304,7 +3379,7 @@ def generate():
     w("- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining open problem is to prove a decomposition-independent nuisance lower bound rather than only measure it on known examples")
     w("- Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity")
     w("- Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit")
-    w("- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, the corrected flat optimum is 26, and the remaining problem is whether cross-piece sharing or non-flat/layer-aware constructions can beat that restricted-subtensor bound")
+    w("- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, and Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, but no verified routed, multilevel, or reduced-shortlist ternary construction yet beats rank 23")
     w("- The toroidal extension confirms that L-trominoes can occur in wrapped tilings even though the flat board cannot be tiled by three L-trominoes; the remaining question is whether wrapped shapes or cross-piece sharing can lower the current exported toroidal cost 27")
     w("- Step 53 shows that support-only representative incidence is also vacuous; any sharper universal")
     w("  theorem must use coefficient identities or subspace geometry, not only index-support patterns")

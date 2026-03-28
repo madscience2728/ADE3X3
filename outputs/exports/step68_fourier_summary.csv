@@ -1,0 +1,6 @@
+summary_name,summary_value,provenance,note
+canonical_fourier_nonzero_modes,"(0,0);(1,2);(2,1)",EXACT_DERIVED + MEASURED_FROM_CODE,Nonzero DFT modes of the canonical all-ones dead residual.
+canonical_fourier_component_rank_sum_upper_bound,27,EXACT_DERIVED + MEASURED_FROM_CODE,Sum of exact component ranks for the canonical dead residual Fourier support.
+phase_j1_fourier_nonzero_modes,"(0,0);(1,2);(2,1)",EXACT_DERIVED + MEASURED_FROM_CODE,Nonzero DFT modes of the j=1 phase-weighted dead residual.
+phase_j1_fourier_component_rank_sum_upper_bound,27,EXACT_DERIVED + MEASURED_FROM_CODE,Sum of exact component ranks for the j=1 phase-weighted dead residual Fourier support.
+any_fourier_component_sum_below_14,False,EXACT_DERIVED + MEASURED_FROM_CODE,Immediate flag requested by the steering note.

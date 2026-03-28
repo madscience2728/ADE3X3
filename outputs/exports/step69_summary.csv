@@ -1,0 +1,14 @@
+summary_name,summary_value,provenance,note
+alphatensor_mode00_rank,8,EXACT_DERIVED,Exact column-space rank of D^{00} inside the 23-dimensional term space.
+alphatensor_mode12_rank,8,EXACT_DERIVED,Exact column-space rank of D^{12} inside the 23-dimensional term space.
+alphatensor_mode21_rank,8,EXACT_DERIVED,Exact column-space rank of D^{21} inside the 23-dimensional term space.
+alphatensor_pair_intersection_00_12,6,EXACT_DERIVED,Exact dimension of V_00 ∩ V_12.
+alphatensor_pair_intersection_00_21,6,EXACT_DERIVED,Exact dimension of V_00 ∩ V_21.
+alphatensor_pair_intersection_12_21,6,EXACT_DERIVED,Exact dimension of V_12 ∩ V_21.
+alphatensor_triple_intersection_dimension,6,EXACT_DERIVED,Exact dimension of V_00 ∩ V_12 ∩ V_21.
+alphatensor_three_mode_union_dimension,10,EXACT_DERIVED,Exact dimension of V_00 + V_12 + V_21 inside the 23-dimensional term space.
+mode_routed_best_total_cost_upper_bound,36,EXACT_DERIVED + MEASURED_FROM_CODE,Best repeated-three-group total cost from the tested 3-fiber single-mode routing classes.
+multilevel_total_cost_lower_bound_via_flattening,15,MEASURED_FROM_CODE,9 signal terms + 3 mega-correctors + combined residual flattening lower bound.
+multilevel_total_cost_upper_bound_via_slice_rank,43,MEASURED_FROM_CODE,9 signal terms + 3 mega-correctors + combined residual slice-rank upper bound.
+reduced_greedy_pool_scope,reduced_shortlist_from_step64_top100_plus_alphatensor_orbit_seeds,MEASURED_FROM_CODE,Scope of the ternary-pool shortlist used in the reduced greedy covering probe.
+reduced_greedy_first_rank9_cover_step,9,MEASURED_FROM_CODE,"First greedy step where the reduced shortlist spans rank 9 in all three modes, if reached."

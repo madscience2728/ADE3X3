@@ -1,0 +1,5 @@
+family,rank1_als_loss,residual_flattening_rank_A_BC,residual_flattening_rank_B_AC,residual_flattening_rank_C_AB,residual_flattening_lower_bound,residual_slice_rank_upper_bound,provenance
+mode_00,5.0000000000000000e+01,9,9,9,9,36,MEASURED_FROM_CODE
+mode_12,4.9999999999999986e+01,9,9,9,9,36,MEASURED_FROM_CODE
+mode_21,4.9999999999999986e+01,9,9,9,9,36,MEASURED_FROM_CODE
+combined_three_mode_residual,,3,3,3,3,31,MEASURED_FROM_CODE

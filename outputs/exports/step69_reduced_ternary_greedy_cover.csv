@@ -1,0 +1,10 @@
+step,candidate_id,candidate_source,mode00_rank_after,mode12_rank_after,mode21_rank_after,mode00_residual_gain_norm,mode12_residual_gain_norm,mode21_residual_gain_norm,all_three_modes_rank9,alpha,beta,provenance
+1,step64_top_004,step64_top100_usefulness_profiles,1,1,1,1.8000000000000000e+01,9.0000000000000000e+00,9.0000000000000000e+00,False,"[[1,1,1],[1,1,1],[1,1,1]]","[[1,1,1],[1,1,1],[1,1,1]]",MEASURED_FROM_CODE
+2,step64_top_012,step64_top100_usefulness_profiles,2,2,2,1.6248076809271922e+01,8.1240384046359591e+00,8.1240384046359591e+00,False,"[[0,1,1],[1,1,1],[1,1,1]]","[[1,1,1],[1,1,1],[1,1,1]]",MEASURED_FROM_CODE
+3,step64_top_047,step64_top100_usefulness_profiles,3,3,3,1.6248076809271922e+01,8.1240384046359591e+00,8.1240384046359591e+00,False,"[[1,1,1],[0,1,1],[1,1,1]]","[[1,1,1],[1,1,1],[1,1,1]]",MEASURED_FROM_CODE
+4,step64_top_051,step64_top100_usefulness_profiles,4,4,4,1.6248076809271922e+01,8.1240384046359591e+00,8.1240384046359591e+00,False,"[[1,1,1],[1,1,1],[1,1,1]]","[[0,1,1],[1,1,1],[1,1,1]]",MEASURED_FROM_CODE
+5,step64_top_052,step64_top100_usefulness_profiles,5,5,5,1.6248076809271922e+01,8.1240384046359591e+00,8.1240384046359591e+00,False,"[[1,1,1],[1,1,1],[1,1,1]]","[[1,0,1],[1,1,1],[1,1,1]]",MEASURED_FROM_CODE
+6,t11_0295,alphatensor_term_orbit_seed,6,6,6,2.4494897427831779e+00,2.4494897427831779e+00,2.4494897427831779e+00,False,"[[0,-1,1],[0,0,0],[0,-1,1]]","[[0,0,0],[1,1,-1],[0,0,0]]",MEASURED_FROM_CODE
+7,t11_0296,alphatensor_term_orbit_seed,7,7,7,2.4494897427831779e+00,2.4494897427831779e+00,2.4494897427831779e+00,False,"[[0,-1,1],[0,0,0],[0,-1,1]]","[[0,0,0],[1,-1,1],[0,0,0]]",MEASURED_FROM_CODE
+8,t11_0301,alphatensor_term_orbit_seed,8,8,8,2.4494897427831779e+00,2.4494897427831779e+00,2.4494897427831779e+00,False,"[[0,-1,1],[0,-1,1],[0,0,0]]","[[0,0,0],[1,1,-1],[0,0,0]]",MEASURED_FROM_CODE
+9,t11_0302,alphatensor_term_orbit_seed,9,9,9,2.4494897427831779e+00,2.4494897427831779e+00,2.4494897427831779e+00,True,"[[0,-1,1],[0,-1,1],[0,0,0]]","[[0,0,0],[1,-1,1],[0,0,0]]",MEASURED_FROM_CODE

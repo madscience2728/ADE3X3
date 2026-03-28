@@ -1,0 +1,9 @@
+subspace_name,dimension,provenance
+V_00,8,EXACT_DERIVED
+V_12,8,EXACT_DERIVED
+V_21,8,EXACT_DERIVED
+V_00_intersect_V_12,6,EXACT_DERIVED
+V_00_intersect_V_21,6,EXACT_DERIVED
+V_12_intersect_V_21,6,EXACT_DERIVED
+V_00_intersect_V_12_intersect_V_21,6,EXACT_DERIVED
+V_00_union_V_12_union_V_21,10,EXACT_DERIVED

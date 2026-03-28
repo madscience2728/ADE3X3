@@ -1,0 +1,13 @@
+cell_class,orbit_size,mode_label,flattening_rank_A_BC,flattening_rank_B_AC,flattening_rank_C_AB,flattening_lower_bound,slice_rank_upper_bound,exact_rank_if_determined,total_algorithm_cost_if_repeated_three_times,provenance
+"(0,0); (0,1); (0,2)",3,mode_12,3,9,3,9,9,9,36,EXACT_DERIVED + MEASURED_FROM_CODE
+"(0,0); (0,1); (0,2)",3,mode_21,3,9,3,9,9,9,36,EXACT_DERIVED + MEASURED_FROM_CODE
+"(0,0); (0,1); (1,0)",36,mode_12,6,6,3,6,9,,36,EXACT_DERIVED + MEASURED_FROM_CODE
+"(0,0); (0,1); (1,0)",36,mode_21,6,6,3,6,9,,36,EXACT_DERIVED + MEASURED_FROM_CODE
+"(0,0); (0,1); (1,2)",18,mode_12,6,9,3,9,9,9,36,EXACT_DERIVED + MEASURED_FROM_CODE
+"(0,0); (0,1); (1,2)",18,mode_21,6,9,3,9,9,9,36,EXACT_DERIVED + MEASURED_FROM_CODE
+"(0,0); (1,0); (2,0)",3,mode_12,9,3,3,9,9,9,36,EXACT_DERIVED + MEASURED_FROM_CODE
+"(0,0); (1,0); (2,0)",3,mode_21,9,3,3,9,9,9,36,EXACT_DERIVED + MEASURED_FROM_CODE
+"(0,0); (1,0); (2,1)",18,mode_12,9,6,3,9,9,9,36,EXACT_DERIVED + MEASURED_FROM_CODE
+"(0,0); (1,0); (2,1)",18,mode_21,9,6,3,9,9,9,36,EXACT_DERIVED + MEASURED_FROM_CODE
+"(0,0); (1,1); (2,2)",6,mode_12,9,9,3,9,9,9,36,EXACT_DERIVED + MEASURED_FROM_CODE
+"(0,0); (1,1); (2,2)",6,mode_21,9,9,3,9,9,9,36,EXACT_DERIVED + MEASURED_FROM_CODE

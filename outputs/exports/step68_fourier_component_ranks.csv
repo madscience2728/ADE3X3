@@ -1,0 +1,7 @@
+family_id,mode_j,mode_k,flattening_rank_A_BC,flattening_rank_B_AC,flattening_rank_C_AB,flattening_lower_bound,exact_slice_rank_upper_bound,exact_rank_if_determined,provenance
+canonical_balanced_dead_residual,0,0,3,3,9,9,9,9,EXACT_DERIVED + MEASURED_FROM_CODE
+canonical_balanced_dead_residual,1,2,3,3,9,9,9,9,EXACT_DERIVED + MEASURED_FROM_CODE
+canonical_balanced_dead_residual,2,1,3,3,9,9,9,9,EXACT_DERIVED + MEASURED_FROM_CODE
+phase_j1_dead_residual,0,0,3,3,9,9,9,9,EXACT_DERIVED + MEASURED_FROM_CODE
+phase_j1_dead_residual,1,2,3,3,9,9,9,9,EXACT_DERIVED + MEASURED_FROM_CODE
+phase_j1_dead_residual,2,1,3,3,9,9,9,9,EXACT_DERIVED + MEASURED_FROM_CODE
