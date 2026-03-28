@@ -184,6 +184,18 @@ def read_step54_outputs():
     smirnov_rows = read_csv("step54_smirnov_status.csv")
     return summary_rows, dead_rows, dead_profile_rows, focus_rows, best_rows, lift_rows, smirnov_rows
 
+def read_step55_outputs():
+    """Read step 55 algebraic nuisance dependency and wildcard exports."""
+    summary_rows = read_csv("step55_summary.csv")
+    dimension_rows = read_csv("step55_dimension_targets.csv")
+    best_rows = read_csv("step55_structured_family_best.csv")
+    profile_rows = read_csv("step55_structured_family_profiles.csv")
+    symbolic_rows = read_csv("step55_symbolic_minor_witness.csv")
+    gf2_rows = read_csv("step55_gf2_flattening_ranks.csv")
+    tropical_rows = read_csv("step55_tropical_flattening_ranks.csv")
+    comm_rows = read_csv("step55_commutator_summary.csv")
+    return summary_rows, dimension_rows, best_rows, profile_rows, symbolic_rows, gf2_rows, tropical_rows, comm_rows
+
 def generate_x_atoms():
     """Generate all 81 X atoms with live/dead status and target."""
     # Try to read from export first
@@ -270,7 +282,8 @@ def generate():
     w("symbolic fiber-mode decomposition (step 51),")
     w("quotient-space rank criterion analysis (step 52),")
     w("support-type representative incidence analysis (step 53),")
-    w("and analytical low-nuisance construction analysis (step 54)")
+    w("and analytical low-nuisance construction analysis (step 54),")
+    w("plus algebraic nuisance dependency mining and wildcard exploration (step 55)")
     w()
     w("**IMPORTANT:** This document contains all computed results inline.")
     w("No external files are required. All research findings are here.")
@@ -2138,6 +2151,78 @@ def generate():
     w("That points the next constructive search toward structured, nongeneric coefficient designs")
     w("rather than random low-rank factor models.")
 
+    # ── STEP 55 ──
+    w()
+    w(f"## {section_num}. ALGEBRAIC NUISANCE DEPENDENCIES + WILDCARD EXPLORATION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Step 55)")
+    w()
+    w("Step 55 moves from generic low-rank profiling to explicit Hadamard-space dependency")
+    w("arithmetic. The main exact point is that in a p*q-dimensional Hadamard space, full")
+    w("9-dimensional quotient recovery forces nuisance rank <= p*q-9, which sharpens the")
+    w("R=22 nuisance target drastically in the structured p=3, q=4 regime.")
+    w()
+    sum55_rows, dim55_rows, best55_rows, profile55_rows, symbolic55_rows, gf255_rows, tropical55_rows, comm55_rows = read_step55_outputs()
+    if sum55_rows:
+        sum55 = {row['summary_name']: row['summary_value'] for row in sum55_rows}
+        w(f"**p=q=3 combined nuisance cap:** {sum55['p3q3_combined_max_nuisance_rank']}")
+        w(f"**p=3,q=4 combined nuisance cap:** {sum55['p3q4_combined_max_nuisance_rank']}")
+        w(f"**Best structured 3x4 nuisance rank:** {sum55['best_structured_family_nuisance_rank']}")
+        w(f"**Best structured 3x4 quotient gain:** {sum55['best_structured_family_quotient_gain']}")
+        w(f"**GF(2) flattening lower bound:** {sum55['gf2_flattening_rank_lower_bound']}")
+        w(f"**Tropical flattening rank:** {sum55['tropical_flattening_rank']}")
+        w(f"**Standard 3x3 zero commutators:** {sum55['standard_3x3_zero_commutators']}")
+        w(f"**Strassen 2x2 zero commutators:** {sum55['strassen_2x2_zero_commutators']}")
+        w()
+        w("### Track A: Hadamard-Space Targets")
+        w()
+        w("| regime | Hadamard dim upper bound | quotient target | max nuisance from geometry | max nuisance from R=22 | combined target |")
+        w("|--------|---------------------------|-----------------|----------------------------|------------------------|----------------|")
+        for row in dim55_rows:
+            w(f"| {row['regime']} | {row['hadamard_dim_upper_bound']} | {row['required_sigma_mod_nuisance_rank']} | {row['max_nuisance_rank_from_hadamard_geometry']} | {row['max_nuisance_rank_from_r22_constraint']} | {row['combined_max_nuisance_rank']} |")
+        w()
+        w("| family | label | c_rank | d_rank | hadamard_dim | sigma_rank | nuisance_rank | quotient_gain | meets nuisance<=3 | full quotient target |")
+        w("|--------|-------|--------|--------|--------------|------------|---------------|---------------|-------------------|----------------------|")
+        for row in best55_rows:
+            w(f"| {row['family']} | {row['label']} | {row['c_rank']} | {row['d_rank']} | {row['hadamard_dim']} | {row['sigma_rank']} | {row['nuisance_rank']} | {row['quotient_gain']} | {row['meets_hadamard_quotient_target']} | {row['full_quotient_target_holds']} |")
+        w()
+        if symbolic55_rows:
+            w("### Symbolic Minor Witness")
+            w()
+            for row in symbolic55_rows:
+                w(f"- {row['family']}: selected 4x4 minor rows {row['row_indices']} and columns {row['column_indices']} factor as {row['minor_factorization']}")
+            w()
+        w("### Track B")
+        w()
+        w("[WILDCARD]")
+        w()
+        w("| flattening | shape | GF(2) rank | tropical rank |")
+        w("|------------|-------|------------|---------------|")
+        tropical_map = {row['flattening']: row for row in tropical55_rows}
+        for row in gf255_rows:
+            w(f"| {row['flattening']} | {row['shape']} | {row['gf2_rank']} | {tropical_map[row['flattening']]['tropical_rank']} |")
+        w()
+        w("| algorithm | term_count | ordered_pairs | zero_commutators | nonzero_commutators | max_commutator_rank |")
+        w("|-----------|------------|---------------|------------------|---------------------|---------------------|")
+        for row in comm55_rows:
+            w(f"| {row['algorithm']} | {row['term_count']} | {row['ordered_pairs']} | {row['zero_commutators']} | {row['nonzero_commutators']} | {row['max_commutator_rank']} |")
+        w()
+    else:
+        w("*Run ade3x3_step55_algebraic_nuisance_dependencies.py to populate this section.*")
+    w()
+    w("[INTERPRETATION]")
+    w()
+    w("Step 55 makes the Step 54 constructive obstruction sharper. In the p=q=3 regime the")
+    w("Hadamard space itself has dimension only 9, so full quotient recovery would force the")
+    w("nuisance span to vanish entirely. In the p=3,q=4 regime the raw R=22 target rank(N)<=13")
+    w("is still far too loose: Hadamard geometry tightens it to rank(N)<=3. The structured")
+    w("families tested here did not produce such a collapse, and their quotient gains stayed")
+    w("well below the required 9. The wildcard checks are also informative but not decisive:")
+    w("GF(2) flattening rank only gives the obvious bound 9, tropical flattening rank is capped")
+    w("at 9 by the matrix dimensions, and the commutator profile shows real overlap structure")
+    w("even for the standard and Strassen decompositions rather than automatic vanishing.")
+
     # ── OPEN FRONTS ──
     w()
     w(f"## {section_num}. CURRENT GAPS / OPEN FRONTS")
@@ -2167,6 +2252,7 @@ def generate():
     w("- Quotient-space rank criterion: ✓ for a fixed decomposition solvability is equivalent to quotient-space independence of Sigma modulo nuisance; standard 3x3 gives nuisance rank 18 and Strassen 2x2 gives rank 3, with Strassen exactly tight")
     w("- Support-type representative incidence: ✓ there are 8000 support classes modulo S3^3; 1000 can realize Type 0, and 216 of those allow all 8 representative equation types, so support-only pruning is vacuous")
     w("- Analytical low-nuisance construction: ✓ dead-free terms were shown not to be nuisance-free in the Step 51 basis; random low-rank factor families were profiled numerically, and although some R=22 families reached nuisance rank <= 13, none achieved the quotient-space gain required by Step 52")
+    w("- Algebraic nuisance dependencies + wildcards: ✓ Hadamard-space geometry now sharpens the p=3,q=4 target to nuisance rank <= 3; tested Toeplitz, circulant, shared-latent, and DFT families still failed to produce quotient gain 9; GF(2) and tropical flattening ranks both stayed at 9, and fiber commutators were mostly nonzero")
     w()
     w("**Remaining open fronts:**")
     w("- Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored")
@@ -2195,6 +2281,13 @@ def generate():
     w("- Step 54 shows that generic low-rank factor models also fail constructively: low nuisance can")
     w("  occur without any quotient-space gain, so the next constructive family must impose structured")
     w("  coefficient relations that separate Sigma from the nuisance span")
+    w("- Step 55 tightens the structured p=3,q=4 target to rank(Nuisance) <= 3 inside Hadamard space;")
+    w("  the remaining constructive problem is to find explicit polynomial identities on C and D that")
+    w("  force that collapse without also collapsing Sigma")
+    w("- The current structured families were still too rigid or too generic; next candidates should")
+    w("  target exact nuisance-column identities rather than only symmetry patterns such as Toeplitz or DFT")
+    w("- The characteristic-2, tropical-flattening, and commutator wildcards did not produce a new")
+    w("  lower bound yet; if a wildcard route is to matter, it must retain more than flattening data")
     w("- Kernel uniformity: cc uniformity holds at orbit level AND (s,t) stratum level;")
     w("  next level to check is the full (r,s,t,u) X coordinate or the (c1,c2) boundary")
     w()
