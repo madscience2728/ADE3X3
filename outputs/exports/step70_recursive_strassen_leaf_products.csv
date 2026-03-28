@@ -1,0 +1,50 @@
+outer_term,inner_term,alpha_expr,beta_expr,alpha_nonzero,beta_nonzero,top_left_3x3_gamma_nonzero_count,kept_for_top_left_3x3,gamma_matrix_json,provenance
+m1,m1,a00 + a11 + a22,b00 + b11 + b22,True,True,3,True,"[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]",EXACT_DERIVED
+m1,m2,a10 + a11,b00 + b22,True,True,2,True,"[[0,0,0,0],[1,-1,0,0],[0,0,0,0],[0,0,1,-1]]",EXACT_DERIVED
+m1,m3,a00 + a22,b01 - b11,True,True,2,True,"[[0,1,0,0],[0,1,0,0],[0,0,0,1],[0,0,0,1]]",EXACT_DERIVED
+m1,m4,a11,-b00 + b10 - b22,True,True,3,True,"[[1,0,0,0],[1,0,0,0],[0,0,1,0],[0,0,1,0]]",EXACT_DERIVED
+m1,m5,a00 + a01 + a22,b11,True,True,3,True,"[[-1,1,0,0],[0,0,0,0],[0,0,-1,1],[0,0,0,0]]",EXACT_DERIVED
+m1,m6,-a00 + a10 - a22,b00 + b01 + b22,True,True,1,True,"[[0,0,0,0],[0,1,0,0],[0,0,0,0],[0,0,0,1]]",EXACT_DERIVED
+m1,m7,a01 - a11,b10 + b11,True,True,2,True,"[[1,0,0,0],[0,0,0,0],[0,0,1,0],[0,0,0,0]]",EXACT_DERIVED
+m2,m1,a20 + a22,b00 + b11,True,True,2,True,"[[0,0,0,0],[0,0,0,0],[1,0,-1,0],[0,1,0,-1]]",EXACT_DERIVED
+m2,m2,0,b00,False,True,0,False,"[[0,0,0,0],[0,0,0,0],[0,0,0,0],[1,-1,-1,1]]",EXACT_DERIVED
+m2,m3,a20 + a22,b01 - b11,True,True,1,True,"[[0,0,0,0],[0,0,0,0],[0,1,0,-1],[0,1,0,-1]]",EXACT_DERIVED
+m2,m4,0,-b00 + b10,False,True,2,False,"[[0,0,0,0],[0,0,0,0],[1,0,-1,0],[1,0,-1,0]]",EXACT_DERIVED
+m2,m5,a20 + a21 + a22,b11,True,True,3,True,"[[0,0,0,0],[0,0,0,0],[-1,1,1,-1],[0,0,0,0]]",EXACT_DERIVED
+m2,m6,-a20 - a22,b00 + b01,True,True,0,False,"[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,1,0,-1]]",EXACT_DERIVED
+m2,m7,a21,b10 + b11,True,True,2,True,"[[0,0,0,0],[0,0,0,0],[1,0,-1,0],[0,0,0,0]]",EXACT_DERIVED
+m3,m1,a00 + a11,b02 - b22,True,True,2,True,"[[0,0,1,0],[0,0,0,1],[0,0,1,0],[0,0,0,1]]",EXACT_DERIVED
+m3,m2,a10 + a11,b02 - b22,True,True,1,True,"[[0,0,0,0],[0,0,1,-1],[0,0,0,0],[0,0,1,-1]]",EXACT_DERIVED
+m3,m3,a00,0,True,False,0,False,"[[0,0,0,1],[0,0,0,1],[0,0,0,1],[0,0,0,1]]",EXACT_DERIVED
+m3,m4,a11,-b02 + b12 + b22,True,True,3,True,"[[0,0,1,0],[0,0,1,0],[0,0,1,0],[0,0,1,0]]",EXACT_DERIVED
+m3,m5,a00 + a01,0,True,False,2,False,"[[0,0,-1,1],[0,0,0,0],[0,0,-1,1],[0,0,0,0]]",EXACT_DERIVED
+m3,m6,-a00 + a10,b02 - b22,True,True,0,False,"[[0,0,0,0],[0,0,0,1],[0,0,0,0],[0,0,0,1]]",EXACT_DERIVED
+m3,m7,a01 - a11,b12,True,True,2,True,"[[0,0,1,0],[0,0,0,0],[0,0,1,0],[0,0,0,0]]",EXACT_DERIVED
+m4,m1,a22,-b00 - b11 + b20,True,True,3,True,"[[1,0,0,0],[0,1,0,0],[1,0,0,0],[0,1,0,0]]",EXACT_DERIVED
+m4,m2,0,-b00 + b20,False,True,2,False,"[[0,0,0,0],[1,-1,0,0],[0,0,0,0],[1,-1,0,0]]",EXACT_DERIVED
+m4,m3,a22,-b01 + b11 + b21,True,True,3,True,"[[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]]",EXACT_DERIVED
+m4,m4,0,b00 - b10 - b20,False,True,3,False,"[[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0]]",EXACT_DERIVED
+m4,m5,a22,-b11,True,True,4,True,"[[-1,1,0,0],[0,0,0,0],[-1,1,0,0],[0,0,0,0]]",EXACT_DERIVED
+m4,m6,-a22,-b00 - b01 + b20 + b21,True,True,1,True,"[[0,0,0,0],[0,1,0,0],[0,0,0,0],[0,1,0,0]]",EXACT_DERIVED
+m4,m7,0,-b10 - b11,False,True,2,False,"[[1,0,0,0],[0,0,0,0],[1,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m5,m1,a00 + a02 + a11,b22,True,True,3,True,"[[-1,0,1,0],[0,-1,0,1],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m5,m2,a10 + a11 + a12,b22,True,True,3,True,"[[0,0,0,0],[-1,1,1,-1],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m5,m3,a00 + a02,0,True,False,2,False,"[[0,-1,0,1],[0,-1,0,1],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m5,m4,a11,-b22,True,True,4,True,"[[-1,0,1,0],[-1,0,1,0],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m5,m5,a00 + a01 + a02,0,True,False,3,False,"[[1,-1,-1,1],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m5,m6,-a00 - a02 + a10 + a12,b22,True,True,1,True,"[[0,0,0,0],[0,-1,0,1],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m5,m7,a01 - a11,0,True,False,2,False,"[[-1,0,1,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m6,m1,-a00 - a11 + a20,b00 + b02 + b11,True,True,1,True,"[[0,0,0,0],[0,0,0,0],[0,0,1,0],[0,0,0,1]]",EXACT_DERIVED
+m6,m2,-a10 - a11,b00 + b02,True,True,0,False,"[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,1,-1]]",EXACT_DERIVED
+m6,m3,-a00 + a20,b01 - b11,True,True,0,False,"[[0,0,0,0],[0,0,0,0],[0,0,0,1],[0,0,0,1]]",EXACT_DERIVED
+m6,m4,-a11,-b00 - b02 + b10 + b12,True,True,1,True,"[[0,0,0,0],[0,0,0,0],[0,0,1,0],[0,0,1,0]]",EXACT_DERIVED
+m6,m5,-a00 - a01 + a20 + a21,b11,True,True,1,True,"[[0,0,0,0],[0,0,0,0],[0,0,-1,1],[0,0,0,0]]",EXACT_DERIVED
+m6,m6,a00 - a10 - a20,b00 + b01 + b02,True,True,0,False,"[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,1]]",EXACT_DERIVED
+m6,m7,-a01 + a11 + a21,b10 + b11 + b12,True,True,1,True,"[[0,0,0,0],[0,0,0,0],[0,0,1,0],[0,0,0,0]]",EXACT_DERIVED
+m7,m1,a02 - a22,b20 + b22,True,True,2,True,"[[1,0,0,0],[0,1,0,0],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m7,m2,a12,b20 + b22,True,True,2,True,"[[0,0,0,0],[1,-1,0,0],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m7,m3,a02 - a22,b21,True,True,2,True,"[[0,1,0,0],[0,1,0,0],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m7,m4,0,-b20 - b22,False,True,2,False,"[[1,0,0,0],[1,0,0,0],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m7,m5,a02 - a22,0,True,False,2,False,"[[-1,1,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m7,m6,-a02 + a12 + a22,b20 + b21 + b22,True,True,1,True,"[[0,0,0,0],[0,1,0,0],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED
+m7,m7,0,0,False,False,1,False,"[[1,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",EXACT_DERIVED

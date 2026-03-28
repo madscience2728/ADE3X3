@@ -1,0 +1,2 @@
+source_name,status,detail,provenance
+Pan_trilinear_aggregation_explicit_3x3_circuit,not_recovered_from_available_fetched_content,"Fetched public summaries confirm Pan's 1978 aggregating/uniting/canceling line and his 1982 practical subcubic algorithm, but they did not provide an explicit small-3x3 depth-2 circuit or concrete multiplication count that could be instantiated directly in ADE3x3.",MEASURED_FROM_CODE + WEB_FETCH

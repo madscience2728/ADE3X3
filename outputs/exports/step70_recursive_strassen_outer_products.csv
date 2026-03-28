@@ -1,0 +1,8 @@
+outer_term,outer_formula,left_block,right_block,inner_leaf_cost_for_top_left_3x3,pruned_zero_linear_leaves,pruned_outside_target_leaves,provenance
+m1,"(A[0,0] + A[1,1]) * (B[0,0] + B[1,1])","Matrix([[a00 + a22, a01], [a10, a11]])","Matrix([[b00 + b22, b01], [b10, b11]])",7,0,0,EXACT_DERIVED
+m2,"(A[1,0] + A[1,1]) * B[0,0]","Matrix([[a20 + a22, a21], [0, 0]])","Matrix([[b00, b01], [b10, b11]])",4,2,1,EXACT_DERIVED
+m3,"A[0,0] * (B[0,1] - B[1,1])","Matrix([[a00, a01], [a10, a11]])","Matrix([[b02 - b22, 0], [b12, 0]])",4,2,1,EXACT_DERIVED
+m4,"A[1,1] * (B[1,0] - B[0,0])","Matrix([[a22, 0], [0, 0]])","Matrix([[-b00 + b20, -b01 + b21], [-b10, -b11]])",4,3,0,EXACT_DERIVED
+m5,"(A[0,0] + A[0,1]) * B[1,1]","Matrix([[a00 + a02, a01], [a10 + a12, a11]])","Matrix([[b22, 0], [0, 0]])",4,3,0,EXACT_DERIVED
+m6,"(A[1,0] - A[0,0]) * (B[0,0] + B[0,1])","Matrix([[-a00 + a20, -a01 + a21], [-a10, -a11]])","Matrix([[b00 + b02, b01], [b10 + b12, b11]])",4,0,3,EXACT_DERIVED
+m7,"(A[0,1] - A[1,1]) * (B[1,0] + B[1,1])","Matrix([[a02 - a22, 0], [a12, 0]])","Matrix([[b20 + b22, b21], [0, 0]])",4,3,0,EXACT_DERIVED

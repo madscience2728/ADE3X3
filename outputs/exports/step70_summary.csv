@@ -1,0 +1,11 @@
+summary_name,summary_value,provenance,note
+recursive_strassen_full_leaf_count,49,EXACT_DERIVED,The full recursive 4x4 Strassen expansion has 49 leaf scalar multiplications before pruning.
+recursive_strassen_top_left_3x3_leaf_count,31,EXACT_DERIVED,Leaf scalar multiplications that survive after zero-padding and target-output pruning.
+recursive_strassen_top_left_3x3_verified,True,EXACT_DERIVED,Whether the kept leaf terms reconstruct the top-left 3x3 padded target exactly.
+recursive_strassen_beats_23,False,EXACT_DERIVED,Immediate flag requested by Step 70.
+alphatensor23_constant_multiple_pair_count,59,MEASURED_FROM_CODE,Pair-ratio structure count.
+alphatensor23_disjoint_support_pair_count,191,MEASURED_FROM_CODE,Pair-ratio structure count.
+alphatensor23_unstructured_overlap_pair_count,3,MEASURED_FROM_CODE,Pair-ratio structure count.
+strassen2x2_constant_multiple_pair_count,12,MEASURED_FROM_CODE,Pair-ratio structure count.
+strassen2x2_disjoint_support_pair_count,9,MEASURED_FROM_CODE,Pair-ratio structure count.
+strassen2x2_retained_missing_structured_pair_count,7,MEASURED_FROM_CODE,Pair-ratio structure count.

@@ -362,6 +362,15 @@ def read_step69_outputs():
     greedy_rows = read_csv("step69_reduced_ternary_greedy_cover.csv")
     return summary_rows, projection_rows, subspace_rows, routed_rows, multilevel_rows, greedy_rows
 
+def read_step70_outputs():
+    """Read Step 70 depth-2 arithmetic-circuit exports, if present."""
+    summary_rows = read_csv("step70_summary.csv")
+    outer_rows = read_csv("step70_recursive_strassen_outer_products.csv")
+    alpha_pair_rows = read_csv("step70_alphatensor_pair_ratios.csv")
+    strassen_pair_rows = read_csv("step70_strassen_pair_ratios.csv")
+    literature_rows = read_csv("step70_literature_status.csv")
+    return summary_rows, outer_rows, alpha_pair_rows, strassen_pair_rows, literature_rows
+
 def generate_x_atoms():
     """Generate all 81 X atoms with live/dead status and target."""
     # Try to read from export first
@@ -3132,9 +3141,17 @@ def generate():
         step69_multilevel_rows,
         step69_greedy_rows,
     ) = read_step69_outputs()
+    (
+        step70_summary_rows,
+        step70_outer_rows,
+        step70_alpha_pair_rows,
+        step70_strassen_pair_rows,
+        step70_literature_rows,
+    ) = read_step70_outputs()
     step67_summary = {row['summary_name']: row for row in step67_summary_rows}
     step68_fourier_summary = {row['summary_name']: row for row in step68_fourier_summary_rows}
     step69_summary = {row['summary_name']: row for row in step69_summary_rows}
+    step70_summary = {row['summary_name']: row for row in step70_summary_rows}
     if sum65_rows:
         sum65 = {row['summary_name']: row for row in sum65_rows}
         l65_rows = [row for row in rank65_rows if row['family'] == 'L_tromino']
@@ -3300,6 +3317,25 @@ def generate():
             w(f"The mode-routed 3-fiber probe does not open a cheap path: every tested symmetry class for pure mode-12 or mode-21 dead routing lands at total cost {routed_best} when repeated across three groups.")
             w(f"The two-level three-mode probe is also unpromising in its current form: after one complex rank-1 mega-corrector per mode, the combined residual has flattening lower bound {multilevel_lb} and slice-rank upper bound {int(multilevel_ub) - 12}, so the resulting total-cost window is {multilevel_lb}..{multilevel_ub} after adding the 9 signal terms and 3 mega-correctors.")
             w(f"A reduced ternary-pool greedy cover on the Step 64 shortlist reaches rank 9 in all three modes by step {greedy_cover}, but that search is only heuristic because the project currently exports exact orbit counts for the ternary pool, not a full 570,521-orbit representative table. So Step 69 does not yet certify a 13-term correction layer, and it does not produce any verified route below rank 23.")
+        if step70_summary_rows:
+            recursive_cost = step70_summary['recursive_strassen_top_left_3x3_leaf_count']['summary_value']
+            recursive_beats = step70_summary['recursive_strassen_beats_23']['summary_value']
+            recursive_verified = step70_summary['recursive_strassen_top_left_3x3_verified']['summary_value']
+            alpha_constant = step70_summary['alphatensor23_constant_multiple_pair_count']['summary_value']
+            alpha_disjoint = step70_summary['alphatensor23_disjoint_support_pair_count']['summary_value']
+            alpha_unstructured = step70_summary['alphatensor23_unstructured_overlap_pair_count']['summary_value']
+            strassen_structured = step70_summary['strassen2x2_retained_missing_structured_pair_count']['summary_value']
+            big_overlap = max((int(row['common_support_size']) for row in step70_alpha_pair_rows if row['classification'] == 'constant_multiple'), default=0)
+            lit_detail = step70_literature_rows[0]['detail'] if step70_literature_rows else 'No literature status recorded.'
+            w("Step 70 tests the first concrete depth-2 arithmetic-circuit escape route. The direct audit is a")
+            w("recursive Strassen computation on the 4x4 zero-padded embedding of the 3x3 product, with the")
+            w("full 49 recursive leaves expanded explicitly and then pruned whenever a leaf scalar product is")
+            w("identically zero under padding or contributes only to discarded padded outputs.")
+            w(f"That exact circuit still needs {recursive_cost} leaf multiplications for the top-left 3x3 block, and the retained leaves reconstruct the target exactly = {recursive_verified}; so this direct padded depth-2 route beats 23 = {recursive_beats}.")
+            w("The AlphaTensor pair-ratio scan also does not reveal an obvious depth-2 collapse. Among the 253")
+            w(f"term pairs, {alpha_disjoint} are support-disjoint, {alpha_constant} are merely constant multiples on their common support, and only {alpha_unstructured} have nonconstant overlap; the largest constant-overlap support size is {big_overlap} entries.")
+            w(f"For the obvious 2x2 Strassen split, the retained-vs-missing pair scan records {strassen_structured} structured overlaps, but these are only local common-support coincidences, not a certified 6-multiplication depth-2 replacement for Strassen.")
+            w(f"The literature pass recovers Pan's asymptotic trilinear-aggregation line but not a ready-to-instantiate small 3x3 circuit: {lit_detail}")
     elif step66_audits:
         w("Step 66 changes the tetromino story materially. Fresh independent parallel rescans show that the")
         w("audited S/Z and L tetromino classes used in the former candidate low-cost tilings are both rank 12,")
@@ -3379,7 +3415,7 @@ def generate():
     w("- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining open problem is to prove a decomposition-independent nuisance lower bound rather than only measure it on known examples")
     w("- Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity")
     w("- Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit")
-    w("- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, and Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, but no verified routed, multilevel, or reduced-shortlist ternary construction yet beats rank 23")
+    w("- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, and Step 70's first concrete depth-2 audit still leaves the recursive padded-Strassen route at 31 leaf multiplications with no pair-ratio evidence of an immediate AlphaTensor term-factor collapse below rank 23")
     w("- The toroidal extension confirms that L-trominoes can occur in wrapped tilings even though the flat board cannot be tiled by three L-trominoes; the remaining question is whether wrapped shapes or cross-piece sharing can lower the current exported toroidal cost 27")
     w("- Step 53 shows that support-only representative incidence is also vacuous; any sharper universal")
     w("  theorem must use coefficient identities or subspace geometry, not only index-support patterns")

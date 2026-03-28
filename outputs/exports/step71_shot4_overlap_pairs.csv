@@ -1,0 +1,4 @@
+term_i,term_j,overlap_positions_json,ratio_values_json,ratio_depends_only_on_alpha_index,ratio_depends_only_on_beta_index,overlap_ratio_separable,pair_merge_rank1_error_squared,provenance
+t09,t14,"[{""a_idx"":6,""b_idx"":0,""ratio"":1.0,""a_coord"":""(2,0)"",""b_coord"":""(0,0)""},{""a_idx"":6,""b_idx"":2,""ratio"":-1.0,""a_coord"":""(2,0)"",""b_coord"":""(0,2)""}]","[-1.0,1.0]",False,True,True,5.999999999999999,MEASURED_FROM_CODE
+t09,t15,"[{""a_idx"":6,""b_idx"":0,""ratio"":1.0,""a_coord"":""(2,0)"",""b_coord"":""(0,0)""},{""a_idx"":6,""b_idx"":2,""ratio"":-1.0,""a_coord"":""(2,0)"",""b_coord"":""(0,2)""}]","[-1.0,1.0]",False,True,True,5.999999999999999,MEASURED_FROM_CODE
+t11,t21,"[{""a_idx"":7,""b_idx"":3,""ratio"":1.0,""a_coord"":""(2,1)"",""b_coord"":""(1,0)""},{""a_idx"":7,""b_idx"":5,""ratio"":-1.0,""a_coord"":""(2,1)"",""b_coord"":""(1,2)""}]","[-1.0,1.0]",False,True,True,4.338096210309399,MEASURED_FROM_CODE
