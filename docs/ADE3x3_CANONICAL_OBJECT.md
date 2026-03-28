@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-28 04:07:35
+Generated: 2026-03-28 05:17:33
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,16 +15,18 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-28 04:07:35
+**Generated:** 2026-03-28 05:17:33
 **Generator Script:** generate_canon_doc.py
-**Provenance:** Built from steps 1-47+, including orbit metadata repair (step 10b),
+**Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
 composition kernel (step 39), CXXC marginal weight profile (step 40),
 stabilizer subgroup classification (step 41), stabilizer composition (step 42),
 refinement-conditioned kernel (step 43), floor-layer analysis (step 44),
 58-orbit closure / doubly-live core analysis (step 45),
 same-fiber / 64-subalgebra structure analysis (step 46),
-and mixed-pair resolution / tensor-constraint extraction (step 47)
+mixed-pair resolution / tensor-constraint extraction (step 47),
+tensor profile constraint modeling (step 48),
+and coefficient-level rank constraints (step 49)
 
 **IMPORTANT:** This document contains all computed results inline.
 No external files are required. All research findings are here.
@@ -13065,7 +13067,199 @@ atoms or finer orbit-internal structure. On the positive side, the raw multiplic
 occupies only the two most constrained same-fiber orbits, 0 and 30, which gives a precise
 target profile for any algorithm search restricted to the discovered closed layers.
 
-## 38. CURRENT GAPS / OPEN FRONTS
+## 38. TENSOR PROFILE CONSTRAINT MODEL
+
+[EXACT_DERIVED] (Step 48)
+
+Step 48 turns the Step 47 same-fiber tensor profile into an explicit rank-1 constraint
+model. There are three levels: the exact 729 coordinate equations, the support-level
+same-fiber activation counts of a single rank-1 term, and the 8-equation XC orbit-sum
+linearization obtained by aggregating the tensor equations by XC orbit class.
+
+**Exact tensor system:** 729 trilinear equations on 27R scalar unknowns
+**XC orbit classes on those equations:** 8
+**Positive XC orbit ids:** [0]
+**Positive tensor equations:** 27 / 729
+**Support-profile orbit types:** 531
+**Distinct support-level (CXXC orbit 0, CXXC orbit 30) pairs:** 111
+**Generic rank-1 support profile:** (3, 3, 3, 3, 3, 3, 3, 3, 3)
+- Generic CXXC orbit-0 support: 27
+- Generic CXXC orbit-30 support: 27
+
+**VERDICT:** The XC orbit-sum linearization is exact as a necessary condition, but it
+does NOT yield a nontrivial rank lower bound by itself. A single sparse rank-1 term can
+match the full 8-orbit RHS vector while still failing the 729 coordinate equations.
+
+### XC Orbit Decomposition of the Tensor Equations
+
+| XC orbit | orbit_size | x_live | c_relation_to_target | RHS constant | RHS sum |
+|----------|------------|--------|----------------------|--------------|---------|
+| 0 | 27 | True | exact_target | 1 | 27 |
+| 1 | 54 | True | same_row_diff_col | 0 | 0 |
+| 2 | 54 | True | diff_row_same_col | 0 | 0 |
+| 3 | 108 | True | diff_row_diff_col | 0 | 0 |
+| 4 | 54 | False | exact_target | 0 | 0 |
+| 5 | 108 | False | same_row_diff_col | 0 | 0 |
+| 6 | 108 | False | diff_row_same_col | 0 | 0 |
+| 7 | 216 | False | diff_row_diff_col | 0 | 0 |
+
+Only XC orbit 0 carries tensor RHS 1. The earlier informal split 'live XC orbits 0-3 = 1'
+is false: XC orbits 1-3 are live, but they are zero because the C output does not match
+the target of the live X atom.
+
+### XC Orbit-Sum Necessary Condition
+
+For each rank-1 term k define:
+- L_k[r,u] = sum_s a_k[r,s] * b_k[s,u]
+- D_k[r,u] = alpha_k[r] * beta_k[u] - L_k[r,u]
+- alpha_k[r] = sum_s a_k[r,s],  beta_k[u] = sum_t b_k[t,u]
+- R_k[r] = sum_v c_k[r,v],  U_k[u] = sum_w c_k[w,u],  S_k = sum_(r,u) c_k[r,u]
+
+| XC orbit | orbit_sum_formula | target RHS sum |
+|----------|-------------------|----------------|
+| 0 | q_k,0 = sum_(r,u) L_k[r,u] * c_k[r,u] | 27 |
+| 1 | q_k,1 = sum_(r,u) L_k[r,u] * (R_k[r] - c_k[r,u]) | 0 |
+| 2 | q_k,2 = sum_(r,u) L_k[r,u] * (U_k[u] - c_k[r,u]) | 0 |
+| 3 | q_k,3 = sum_(r,u) L_k[r,u] * (S_k - R_k[r] - U_k[u] + c_k[r,u]) | 0 |
+| 4 | q_k,4 = sum_(r,u) D_k[r,u] * c_k[r,u] | 0 |
+| 5 | q_k,5 = sum_(r,u) D_k[r,u] * (R_k[r] - c_k[r,u]) | 0 |
+| 6 | q_k,6 = sum_(r,u) D_k[r,u] * (U_k[u] - c_k[r,u]) | 0 |
+| 7 | q_k,7 = sum_(r,u) D_k[r,u] * (S_k - R_k[r] - U_k[u] + c_k[r,u]) | 0 |
+
+**Orbit-sum counterexample vector:** [27, 0, 0, 0, 0, 0, 0, 0]
+**Full tensor mismatches for that one-term witness:** 27
+
+
+[INTERPRETATION]
+
+Step 48 clarifies exactly where the current tensor-profile program stops being sharp.
+The support-level same-fiber profile is still extremely rigid: the generic rank-1 term
+has the same unweighted (orbit 0, orbit 30) counts, namely (27,27), as the full raw
+multiplication tensor. But once the 729 equations are aggregated down to 8 XC orbit
+classes, too much information is lost: the orbit-sum system becomes vacuous for rank
+lower bounds. Any useful lower-bound attack must therefore retain finer equation-level
+structure and real coefficient constraints, not just orbit-summed totals.
+
+## 39. COEFFICIENT-LEVEL RANK CONSTRAINTS
+
+[EXACT_DERIVED] (Step 49)
+
+Step 49 writes the exact tensor decomposition problem in explicit coordinates, but keeps
+the known symmetry reduction visible. The 729 coordinate equations have exactly 8 structural
+types under the S3 x S3 x S3 action, and those 8 types are the right coordinate-level
+replacement for the orbit-sum model from Step 48.
+
+**3x3 equation types:** 8
+**Orbit sizes:** [27, 54, 54, 108, 54, 108, 108, 216]
+**Step 48 roster cross-check:** True
+**Standard 27-term representative mismatches:** 0
+**Standard 27-term full 729-equation mismatches:** 0
+
+### The 8 Structural Equation Types
+
+| equation | structure | orbit_size | RHS | representative | transparent rewrite |
+|----------|-----------|------------|-----|----------------|---------------------|
+| E0 | s=t, r=r', u=u' | 27 | 1 | sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[0,0] = 1 | sum_k p_k * gamma_k[0,0] = 1 |
+| E1 | s=t, r=r', u!=u' | 54 | 0 | sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[0,1] = 0 | sum_k p_k * gamma_k[0,1] = 0 |
+| E2 | s=t, r!=r', u=u' | 54 | 0 | sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[1,0] = 0 | sum_k p_k * gamma_k[1,0] = 0 |
+| E3 | s=t, r!=r', u!=u' | 108 | 0 | sum_k alpha_k[0,0] * beta_k[0,0] * gamma_k[1,1] = 0 | sum_k p_k * gamma_k[1,1] = 0 |
+| E4 | s!=t, r=r', u=u' | 54 | 0 | sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[0,0] = 0 | sum_k q_k * gamma_k[0,0] = 0 |
+| E5 | s!=t, r=r', u!=u' | 108 | 0 | sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[0,1] = 0 | sum_k q_k * gamma_k[0,1] = 0 |
+| E6 | s!=t, r!=r', u=u' | 108 | 0 | sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[1,0] = 0 | sum_k q_k * gamma_k[1,0] = 0 |
+| E7 | s!=t, r!=r', u!=u' | 216 | 0 | sum_k alpha_k[0,0] * beta_k[1,0] * gamma_k[1,1] = 0 | sum_k q_k * gamma_k[1,1] = 0 |
+
+These are exactly the 8 index-relationship patterns:
+- Type 0: s=t, r=r', u=u' -> RHS 1 (27 instances)
+- Type 1: s=t, r=r', u!=u' -> RHS 0 (54 instances)
+- Type 2: s=t, r!=r', u=u' -> RHS 0 (54 instances)
+- Type 3: s=t, r!=r', u!=u' -> RHS 0 (108 instances)
+- Type 4: s!=t, r=r', u=u' -> RHS 0 (54 instances)
+- Type 5: s!=t, r=r', u!=u' -> RHS 0 (108 instances)
+- Type 6: s!=t, r!=r', u=u' -> RHS 0 (108 instances)
+- Type 7: s!=t, r!=r', u!=u' -> RHS 0 (216 instances)
+
+### Standard 27-Term Basis Algorithm Check
+
+| equation | observed_sum | expected_rhs | contributing_basis_terms | status |
+|----------|--------------|--------------|-------------------------|--------|
+| E0 | 1 | 1 | [(0, 0, 0)] | PASS |
+| E1 | 0 | 0 | [] | PASS |
+| E2 | 0 | 0 | [] | PASS |
+| E3 | 0 | 0 | [] | PASS |
+| E4 | 0 | 0 | [] | PASS |
+| E5 | 0 | 0 | [] | PASS |
+| E6 | 0 | 0 | [] | PASS |
+| E7 | 0 | 0 | [] | PASS |
+
+The standard basis algorithm therefore satisfies all 8 representatives and, in the Step 49
+script, all 729 coordinate equations exactly.
+
+### Matrix Form at Output C[0,0]
+
+T[:,:,C[0,0]] has exactly 3 ones, at: (A[0,0],B[0,0]), (A[0,1],B[1,0]), (A[0,2],B[2,0])
+
+### Symmetry Scope
+
+Representative equations imply all 729 only for group-closed multisets of terms.
+Non-group-closed algorithms require all 729 equations: True
+
+This is the exact boundary that matters for future lower-bound work: the 8 representatives
+are sufficient only for group-closed multisets of terms. They are NOT a general lower bound
+on arbitrary algorithms such as Smirnov-style decompositions.
+
+### Strassen 2x2 Worked Example
+
+**2x2 equation orbit classes under S2 x S2 x S2:** 8
+**Strassen terms:** 7
+**Full 64-equation mismatches:** 0
+**Coefficient-level term orbits used:** 4
+
+| term | coefficient_orbit_id | orbit_size | live_X_nonzero | dead_X_nonzero | active_equation_types |
+|------|----------------------|------------|----------------|----------------|-----------------------|
+| m1 | 0 | 4 | 8 | 8 | [0, 3, 5, 6] |
+| m2 | 1 | 8 | 4 | 4 | [0, 1, 4, 5] |
+| m3 | 2 | 8 | 4 | 4 | [0, 2, 4, 6] |
+| m4 | 2 | 8 | 4 | 4 | [0, 2, 4, 6] |
+| m5 | 1 | 8 | 4 | 4 | [0, 1, 4, 5] |
+| m6 | 3 | 8 | 16 | 0 | [0, 1, 2, 3] |
+| m7 | 3 | 8 | 16 | 0 | [0, 1, 2, 3] |
+
+| coefficient_orbit_id | coefficient_orbit_size | strassen_terms |
+|----------------------|------------------------|----------------|
+| 0 | 4 | ['m1'] |
+| 1 | 8 | ['m2', 'm5'] |
+| 2 | 8 | ['m3', 'm4'] |
+| 3 | 8 | ['m6', 'm7'] |
+
+Strassen is therefore not group-closed even in 2x2 language: the 7 terms split across 4
+coefficient-level term orbits, with the pairs {m2,m5}, {m3,m4}, and {m6,m7} matched by
+symmetry and m1 isolated. Dead-X activation is explicit in several terms, so cancellation
+rather than pure same-fiber support is essential.
+
+### Search-Space Dimensions for 3x3
+
+| R | K | dense_variables_27R | sparse_upper_bound_3KR | constraints | dense_balance | sparse_balance |
+|---|---|---------------------|-----------------------|-------------|---------------|----------------|
+| 23 | 9 | 621 | 621 | 729 | over | over |
+| 23 | 3 | 621 | 207 | 729 | over | over |
+| 23 | 2 | 621 | 138 | 729 | over | over |
+| 22 | 9 | 594 | 594 | 729 | over | over |
+| 21 | 9 | 567 | 567 | 729 | over | over |
+| 20 | 9 | 540 | 540 | 729 | over | over |
+| 19 | 9 | 513 | 513 | 729 | over | over |
+
+
+[INTERPRETATION]
+
+Step 49 converts the Step 48 obstruction into the right next object: the exact coordinate
+system with its 8 symmetry types still visible. That is a genuine reduction in structure, but
+not a reduction in mathematical difficulty. The unsolved problem is now precise: determine
+whether the 729 trilinear equations admit a rank-R solution, especially for sparse, non-group-
+closed ansatze. Strassen 2x2 shows exactly the kind of cancellation behavior that a 3x3 fast
+algorithm would need, so any future search has to keep real coefficients and dead-X cancellation
+in the model rather than support patterns alone.
+
+## 40. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
@@ -13085,6 +13279,8 @@ target profile for any algorithm search restricted to the discovered closed laye
 - 58-orbit closure + doubly-live core: ✓ 58-seed closes at 64 orbits; 28-core stays 100% doubly-live; floor fixed dims are 30 or 36
 - Same-fiber core + 64-subalgebra structure: ✓ 10 same-fiber and 6 focused orbits are both closed; 64-table has 602 compatible rows with 164 mixed; greedy generator set size 18
 - Mixed-pair resolution + tensor constraints: ✓ 41,688 witnesses scanned; 0/164 mixed pairs resolved by interface coordinates; raw tensor same-fiber support uses only orbits 0 and 30
+- Tensor profile constraint model: ✓ 729 tensor equations collapse to 8 XC orbit classes; only XC orbit 0 is positive; generic rank-1 support has profile (27,27); the 8-orbit linearization alone gives no rank lower bound
+- Coefficient-level rank constraints: ✓ explicit 8 equation types recorded with orbit sizes (27,54,54,108,54,108,108,216); standard 27-term basis algorithm and Strassen 2x2 both verified exactly; search-space dimensions exported
 
 **Remaining open fronts:**
 - Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored
@@ -13102,8 +13298,10 @@ target profile for any algorithm search restricted to the discovered closed laye
   doubly-live targets as a structural layer of their own
 - Same-fiber and focused subsets are closed; determine whether they admit a clean intrinsic
   signature or conceptual description beyond the target/focus predicates
-- The raw multiplication tensor profile inside the same-fiber layer is exactly orbit 0 + orbit 30;
-  translate that profile into a finite coefficient/support model for rank-1 terms before solving an ILP
+- Step 48 shows that the 8 XC-orbit linearization is exact but vacuous for rank lower bounds;
+  any useful lower-bound model must retain finer-than-orbit-sum equation structure
+- Step 49 now records the exact 729-equation trilinear system and the 8 representative types;
+  the remaining open problem is whether the rank-R solution variety is nonempty for sparse or non-group-closed ansatze
 - Kernel uniformity: cc uniformity holds at orbit level AND (s,t) stratum level;
   next level to check is the full (r,s,t,u) X coordinate or the (c1,c2) boundary
 
