@@ -1,0 +1,5 @@
+{
+  "universality_verdict": "decomposition-specific",
+  "orbit_connection_verdict": "The four exact identities are decomposition-specific rather than universal orbit invariants: their space is not G-invariant, and its full 216-orbit fills the entire 18-dimensional eta-space. At the same time, the 4-dimensional identity count survives every single AlphaTensor term deletion, so the phenomenon is collective and rigid inside the AlphaTensor class, not a single-term accident.",
+  "phase6_single_removal_rank_H": 14
+}

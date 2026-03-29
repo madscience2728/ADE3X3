@@ -1,0 +1,16 @@
+{
+  "base_source": "AlphaTensor public rank-23 decomposition via Step 63 loader",
+  "gamma_orientation": "transpose",
+  "exact_reconstruction_residual": 0,
+  "symmetry_actions": 216,
+  "perturb_sigmas": [
+    0.01,
+    0.05,
+    0.1,
+    0.5
+  ],
+  "perturb_target_valid": 100,
+  "perturb_max_attempts": 128,
+  "random_restarts": 512,
+  "exact_decompositions_written": 216
+}

@@ -1,0 +1,218 @@
+{
+  "source": "AlphaTensor public rank-23 decomposition via Step 63 loader",
+  "gamma_orientation": "transpose",
+  "exact_reconstruction_residual": 0,
+  "order_count": 21,
+  "original_order": {
+    "order_id": "original",
+    "first_k_rank_H_14": 18,
+    "first_k_quotient_gain_9": 23,
+    "final_rank_H": 14,
+    "final_rank_Delta": 10,
+    "final_rank_Nuisance": 14,
+    "final_quotient_gain": 9,
+    "terms_with_zero_additional_nuisance": 9
+  },
+  "random_orders": [
+    {
+      "order_id": "random_00",
+      "first_k_rank_H_14": 17,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_01",
+      "first_k_rank_H_14": 19,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_02",
+      "first_k_rank_H_14": 14,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_03",
+      "first_k_rank_H_14": 18,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_04",
+      "first_k_rank_H_14": 19,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_05",
+      "first_k_rank_H_14": 17,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_06",
+      "first_k_rank_H_14": 17,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_07",
+      "first_k_rank_H_14": 17,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_08",
+      "first_k_rank_H_14": 18,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_09",
+      "first_k_rank_H_14": 15,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_10",
+      "first_k_rank_H_14": 15,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_11",
+      "first_k_rank_H_14": 15,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_12",
+      "first_k_rank_H_14": 16,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_13",
+      "first_k_rank_H_14": 16,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_14",
+      "first_k_rank_H_14": 16,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_15",
+      "first_k_rank_H_14": 19,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_16",
+      "first_k_rank_H_14": 19,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_17",
+      "first_k_rank_H_14": 21,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_18",
+      "first_k_rank_H_14": 18,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    },
+    {
+      "order_id": "random_19",
+      "first_k_rank_H_14": 16,
+      "first_k_quotient_gain_9": 23,
+      "final_rank_H": 14,
+      "final_rank_Delta": 10,
+      "final_rank_Nuisance": 14,
+      "final_quotient_gain": 9,
+      "terms_with_zero_additional_nuisance": 9
+    }
+  ]
+}

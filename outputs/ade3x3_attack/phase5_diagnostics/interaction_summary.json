@@ -1,0 +1,130 @@
+{
+  "source": "AlphaTensor public rank-23 decomposition via Step 63 loader",
+  "gamma_orientation": "transpose",
+  "exact_reconstruction_residual": 0,
+  "pair_count": 506,
+  "max_h_compression": 0,
+  "max_nuisance_compression": 0,
+  "top_rows": [
+    {
+      "left_term": "t01",
+      "right_term": "t02",
+      "left_h_rank": 1,
+      "right_h_rank": 1,
+      "pair_h_rank": 2,
+      "left_nuisance_rank": 1,
+      "right_nuisance_rank": 1,
+      "pair_nuisance_rank": 2,
+      "h_compression": 0,
+      "nuisance_compression": 0
+    },
+    {
+      "left_term": "t01",
+      "right_term": "t03",
+      "left_h_rank": 1,
+      "right_h_rank": 1,
+      "pair_h_rank": 2,
+      "left_nuisance_rank": 1,
+      "right_nuisance_rank": 1,
+      "pair_nuisance_rank": 2,
+      "h_compression": 0,
+      "nuisance_compression": 0
+    },
+    {
+      "left_term": "t01",
+      "right_term": "t04",
+      "left_h_rank": 1,
+      "right_h_rank": 1,
+      "pair_h_rank": 2,
+      "left_nuisance_rank": 1,
+      "right_nuisance_rank": 1,
+      "pair_nuisance_rank": 2,
+      "h_compression": 0,
+      "nuisance_compression": 0
+    },
+    {
+      "left_term": "t01",
+      "right_term": "t05",
+      "left_h_rank": 1,
+      "right_h_rank": 1,
+      "pair_h_rank": 2,
+      "left_nuisance_rank": 1,
+      "right_nuisance_rank": 1,
+      "pair_nuisance_rank": 2,
+      "h_compression": 0,
+      "nuisance_compression": 0
+    },
+    {
+      "left_term": "t01",
+      "right_term": "t06",
+      "left_h_rank": 1,
+      "right_h_rank": 1,
+      "pair_h_rank": 2,
+      "left_nuisance_rank": 1,
+      "right_nuisance_rank": 1,
+      "pair_nuisance_rank": 2,
+      "h_compression": 0,
+      "nuisance_compression": 0
+    },
+    {
+      "left_term": "t01",
+      "right_term": "t07",
+      "left_h_rank": 1,
+      "right_h_rank": 1,
+      "pair_h_rank": 2,
+      "left_nuisance_rank": 1,
+      "right_nuisance_rank": 1,
+      "pair_nuisance_rank": 2,
+      "h_compression": 0,
+      "nuisance_compression": 0
+    },
+    {
+      "left_term": "t01",
+      "right_term": "t08",
+      "left_h_rank": 1,
+      "right_h_rank": 1,
+      "pair_h_rank": 2,
+      "left_nuisance_rank": 1,
+      "right_nuisance_rank": 1,
+      "pair_nuisance_rank": 2,
+      "h_compression": 0,
+      "nuisance_compression": 0
+    },
+    {
+      "left_term": "t01",
+      "right_term": "t09",
+      "left_h_rank": 1,
+      "right_h_rank": 1,
+      "pair_h_rank": 2,
+      "left_nuisance_rank": 1,
+      "right_nuisance_rank": 1,
+      "pair_nuisance_rank": 2,
+      "h_compression": 0,
+      "nuisance_compression": 0
+    },
+    {
+      "left_term": "t01",
+      "right_term": "t10",
+      "left_h_rank": 1,
+      "right_h_rank": 1,
+      "pair_h_rank": 2,
+      "left_nuisance_rank": 1,
+      "right_nuisance_rank": 1,
+      "pair_nuisance_rank": 2,
+      "h_compression": 0,
+      "nuisance_compression": 0
+    },
+    {
+      "left_term": "t01",
+      "right_term": "t11",
+      "left_h_rank": 1,
+      "right_h_rank": 1,
+      "pair_h_rank": 2,
+      "left_nuisance_rank": 1,
+      "right_nuisance_rank": 1,
+      "pair_nuisance_rank": 2,
+      "h_compression": 0,
+      "nuisance_compression": 0
+    }
+  ]
+}

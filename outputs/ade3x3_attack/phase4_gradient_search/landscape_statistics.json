@@ -1,0 +1,30 @@
+{
+  "base_source": "AlphaTensor public rank-23 decomposition via Step 63 loader",
+  "gamma_orientation": "transpose",
+  "exact_reconstruction_residual": 0,
+  "quotient_formulation_used": false,
+  "total_runs": 592,
+  "exact_r22_hits": 0,
+  "best_r22_max_abs": 0.0012922678297791618,
+  "best_r22_quotient_gain": 0,
+  "landscape_by_rank": {
+    "21": {
+      "count": 64,
+      "best_max_abs": 0.11569692085228467,
+      "median_max_abs": 0.33976026969260376,
+      "worst_max_abs": 0.5918264515442175
+    },
+    "22": {
+      "count": 432,
+      "best_max_abs": 0.020291573988653708,
+      "median_max_abs": 0.3215397304633286,
+      "worst_max_abs": 0.8882276401626558
+    },
+    "23": {
+      "count": 64,
+      "best_max_abs": 0.011067651761614068,
+      "median_max_abs": 0.046665883089979335,
+      "worst_max_abs": 0.46436260983840316
+    }
+  }
+}

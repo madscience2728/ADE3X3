@@ -1,0 +1,18 @@
+summary_name,summary_value,provenance,note
+step72_parameter_formula,P = 27R1 + R1R2 + 18R2 + n_QQ(R1 - 9),EXACT_DERIVED,"Simplified parameter-count formula after collecting Layer 1, Layer 2, and output parameters."
+step72_raw_constraint_upper_formula,C_upper = 729 + 3645*1_AA + 3645*1_BB + 18225*1_QQ,EXACT_DERIVED,"Upper-bound count from bilinear, A^2B, AB^2, and A^2B^2 coefficient slots."
+step72_exact_census_config_count,12650,EXACT_DERIVED,All exact-derived type assignments with R1 + R2 <= 22.
+step72_raw_upper_positive_deficit_count,0,EXACT_DERIVED,Configurations with more raw parameters than the raw upper-bound constraint count.
+step72_best_raw_upper_deficit,-135,EXACT_DERIVED,Largest raw upper-bound deficit attained at R22_r122_r20_aa0_bb0_qq0.
+step72_aa_only_max_parameter_count,636,EXACT_DERIVED,Maximum AA-only parameter count among R1 + R2 <= 22.
+step72_measured_config_count,506,MEASURED_FROM_CODE,Measured Jacobian-rank sweep rows.
+step72_measured_aa_bb_config_count,271,MEASURED_FROM_CODE,AA/BB-only measured families.
+step72_measured_aa_qq_config_count,235,MEASURED_FROM_CODE,AA/QQ-only measured families.
+step72_jacobian_positive_local_fiber_count,506,MEASURED_FROM_CODE,Measured configurations with parameter_count - rank(J) > 0.
+step72_jacobian_full_column_rank_count,0,MEASURED_FROM_CODE,Measured configurations with rank(J) = parameter_count.
+step72_jacobian_max_local_fiber_dimension,43,MEASURED_FROM_CODE,Largest measured local fiber dimension parameter_count - rank(J).
+step72_jacobian_best_config,R22_r120_r22_aa2_bb0_qq0,MEASURED_FROM_CODE,Configuration attaining the largest measured local fiber dimension.
+step72_jacobian_method,analytic,MEASURED_FROM_CODE,The Jacobian was assembled analytically instead of by finite differences.
+step72_search_status,not_run_dimension_count_only,MEASURED_FROM_CODE,"The Step 72 question was treated as a dimension census, not a nonlinear solution search."
+step72_major_result_flag,False,MEASURED_FROM_CODE,No verified R_total < 23 depth-2 algorithm was searched or claimed in this step.
+step72_runtime_seconds,73.413927,MEASURED_FROM_CODE,Wall-clock runtime for Step 72.

@@ -1,0 +1,49 @@
+{
+  "base_nullspace_dimension": 4,
+  "single_transformed_copy_max_augmented_rank": 8,
+  "full_orbit_span_rank": 18,
+  "stabilizer_actions": [
+    "pi_rA=(0, 1, 2);pi_shared=(0, 1, 2);pi_cB=(0, 1, 2)"
+  ],
+  "intersection_histogram": {
+    "0": 195,
+    "1": 19,
+    "3": 1,
+    "4": 1
+  },
+  "new_identity_examples": [
+    {
+      "action": "pi_rA=(0, 1, 2);pi_shared=(0, 1, 2);pi_cB=(0, 2, 1)",
+      "formula": "+1*eta1[0,1] +1*eta1[0,2] -1*eta1[1,2]"
+    },
+    {
+      "action": "pi_rA=(0, 1, 2);pi_shared=(0, 1, 2);pi_cB=(0, 2, 1)",
+      "formula": "+1*eta1[0,0] -1*eta1[2,2]"
+    },
+    {
+      "action": "pi_rA=(0, 1, 2);pi_shared=(0, 1, 2);pi_cB=(0, 2, 1)",
+      "formula": "+1*eta1[0,0] -1*eta1[1,0] +1*eta1[2,1]"
+    },
+    {
+      "action": "pi_rA=(0, 1, 2);pi_shared=(0, 1, 2);pi_cB=(0, 2, 1)",
+      "formula": "+1*eta2[0,1] +1*eta2[2,2]"
+    },
+    {
+      "action": "pi_rA=(0, 1, 2);pi_shared=(0, 1, 2);pi_cB=(1, 0, 2)",
+      "formula": "+1*eta1[0,0] +1*eta1[0,2] -1*eta1[1,0]"
+    },
+    {
+      "action": "pi_rA=(0, 1, 2);pi_shared=(0, 1, 2);pi_cB=(1, 0, 2)",
+      "formula": "+1*eta1[0,1] -1*eta1[2,0]"
+    },
+    {
+      "action": "pi_rA=(0, 1, 2);pi_shared=(0, 1, 2);pi_cB=(1, 0, 2)",
+      "formula": "+1*eta1[0,1] -1*eta1[1,1] +1*eta1[2,2]"
+    },
+    {
+      "action": "pi_rA=(0, 1, 2);pi_shared=(0, 1, 2);pi_cB=(1, 0, 2)",
+      "formula": "+1*eta2[0,2] +1*eta2[2,0]"
+    }
+  ],
+  "interpretation": "Symmetry transport does not preserve the original 4-dimensional identity space except for the identity action. A single transformed copy can enlarge the span to dimension 8, and the full 216-orbit spans all 18 eta coordinates. So symmetry generates identities for transformed decompositions, not new compatible identities for the fixed AlphaTensor decomposition."
+}

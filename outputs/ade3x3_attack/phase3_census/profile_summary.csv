@@ -1,0 +1,4 @@
+source,count,attempts,delta_in_eta_rate,rank_h_range,rank_h_mode,m_sparsity_range,m_integrality_rate
+perturbation,0,512,n/a,n/a,n/a,n/a,n/a
+random_rank23,0,512,n/a,n/a,n/a,n/a,n/a
+symmetry_orbit,216,216,216/216,14..14,14,42..80,216/216

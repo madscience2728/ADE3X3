@@ -1,0 +1,5 @@
+coordinate,formula_in_eta,formula_in_xi
+xi_plus,eta1 + eta2/2 + sqrt(3)*I*eta2/2,
+xi_minus,eta1 + eta2/2 - sqrt(3)*I*eta2/2,
+eta1,,xi_minus/2 - sqrt(3)*I*xi_minus/6 + xi_plus/2 + sqrt(3)*I*xi_plus/6
+eta2,,sqrt(3)*I*(xi_minus - xi_plus)/3

@@ -1,0 +1,29 @@
+scheme,p,M,A,cost,count_model,provenance
+standard_27_term,1,27,18,45,scheduled_output_accumulation,EXACT_DERIVED
+alphatensor_23_term,1,23,114,137,requested_term_scatter,EXACT_DERIVED
+alphatensor_23_term_scheduled_reference,1,23,105,128,scheduled_output_accumulation,EXACT_DERIVED
+best_26_tiling_proxy,1,26,160,186,scheduled_proxy_from_piece_witnesses,EXACT_DERIVED + MEASURED_FROM_CODE
+standard_27_term,2,27,18,72,scheduled_output_accumulation,EXACT_DERIVED
+alphatensor_23_term,2,23,114,160,requested_term_scatter,EXACT_DERIVED
+alphatensor_23_term_scheduled_reference,2,23,105,151,scheduled_output_accumulation,EXACT_DERIVED
+best_26_tiling_proxy,2,26,160,212,scheduled_proxy_from_piece_witnesses,EXACT_DERIVED + MEASURED_FROM_CODE
+standard_27_term,5,27,18,153,scheduled_output_accumulation,EXACT_DERIVED
+alphatensor_23_term,5,23,114,229,requested_term_scatter,EXACT_DERIVED
+alphatensor_23_term_scheduled_reference,5,23,105,220,scheduled_output_accumulation,EXACT_DERIVED
+best_26_tiling_proxy,5,26,160,290,scheduled_proxy_from_piece_witnesses,EXACT_DERIVED + MEASURED_FROM_CODE
+standard_27_term,10,27,18,288,scheduled_output_accumulation,EXACT_DERIVED
+alphatensor_23_term,10,23,114,344,requested_term_scatter,EXACT_DERIVED
+alphatensor_23_term_scheduled_reference,10,23,105,335,scheduled_output_accumulation,EXACT_DERIVED
+best_26_tiling_proxy,10,26,160,420,scheduled_proxy_from_piece_witnesses,EXACT_DERIVED + MEASURED_FROM_CODE
+standard_27_term,20,27,18,558,scheduled_output_accumulation,EXACT_DERIVED
+alphatensor_23_term,20,23,114,574,requested_term_scatter,EXACT_DERIVED
+alphatensor_23_term_scheduled_reference,20,23,105,565,scheduled_output_accumulation,EXACT_DERIVED
+best_26_tiling_proxy,20,26,160,680,scheduled_proxy_from_piece_witnesses,EXACT_DERIVED + MEASURED_FROM_CODE
+standard_27_term,50,27,18,1368,scheduled_output_accumulation,EXACT_DERIVED
+alphatensor_23_term,50,23,114,1264,requested_term_scatter,EXACT_DERIVED
+alphatensor_23_term_scheduled_reference,50,23,105,1255,scheduled_output_accumulation,EXACT_DERIVED
+best_26_tiling_proxy,50,26,160,1460,scheduled_proxy_from_piece_witnesses,EXACT_DERIVED + MEASURED_FROM_CODE
+standard_27_term,100,27,18,2718,scheduled_output_accumulation,EXACT_DERIVED
+alphatensor_23_term,100,23,114,2414,requested_term_scatter,EXACT_DERIVED
+alphatensor_23_term_scheduled_reference,100,23,105,2405,scheduled_output_accumulation,EXACT_DERIVED
+best_26_tiling_proxy,100,26,160,2760,scheduled_proxy_from_piece_witnesses,EXACT_DERIVED + MEASURED_FROM_CODE

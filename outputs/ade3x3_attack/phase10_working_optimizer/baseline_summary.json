@@ -1,0 +1,73 @@
+{
+  "orientation": "transpose",
+  "loader_residual": 0,
+  "target_validation": {
+    "shape": [
+      9,
+      81
+    ],
+    "nonzero_count": 27,
+    "unique_values": [
+      1.0
+    ]
+  },
+  "warm_start": {
+    "strategy": "warm_alphatensor_plus_noise",
+    "seed": 20260402,
+    "adam_steps": 5000,
+    "learning_rate": 0.003,
+    "noise_sigma": 0.01,
+    "final_loss": 1.003277906009718e-05,
+    "final_max_abs": 0.0004583747704334229,
+    "pass_lt_1e_10": false,
+    "pass_lt_1e_20": false,
+    "rank_H_numeric": 18,
+    "rank_Nuisance_numeric": 23,
+    "quotient_gain_numeric": 0,
+    "delta_in_eta_numeric": false
+  },
+  "cold_start": {
+    "count": 24,
+    "hit_count_lt_1e_10": 0,
+    "hit_rate_lt_1e_10": 0.0,
+    "hit_count_lt_1e_20": 0,
+    "hit_rate_lt_1e_20": 0.0,
+    "median_final_loss": 0.20087785384992995,
+    "median_final_max_abs": 0.056666759335731454,
+    "best_final_loss": 0.0015230691396819571,
+    "best_final_max_abs": 0.006390291680602583
+  },
+  "best_cold_restart": {
+    "restart_id": 12,
+    "seed": 730012,
+    "final_loss": 0.0015230691396819571,
+    "final_max_abs": 0.006390291680602583,
+    "pass_lt_1e_10": false,
+    "pass_lt_1e_20": false
+  },
+  "best_cold_profile": {
+    "rank_H_numeric": 18,
+    "rank_Delta_numeric": 23,
+    "rank_HDelta_numeric": 23,
+    "delta_in_eta_numeric": false,
+    "projection_max_residual_numeric": 0.0005143658148847319,
+    "projection_nonzero_count_numeric": 972,
+    "projection_unique_nonzero_coefficients_numeric": "-0;-1;-2;-3;-4;-5;-6;-7;-9;0;1;2;3;4;5;6;7",
+    "projection_allclose_to_integer_numeric": false,
+    "rank_Nuisance_numeric": 23,
+    "rank_Sigma_numeric": 9,
+    "quotient_gain_numeric": 0,
+    "max_abs_residual": 0.0063902916806026526,
+    "loss_value": 0.001523069139681988
+  },
+  "configuration": {
+    "warm_noise": 0.01,
+    "warm_adam_steps": 5000,
+    "cold_restarts": 24,
+    "cold_adam_steps": 4000,
+    "cold_batch_size": 8,
+    "warm_learning_rate": 0.003,
+    "cold_learning_rate": 0.002,
+    "init_scale": 0.3333333333333333
+  }
+}

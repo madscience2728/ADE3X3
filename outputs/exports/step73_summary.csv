@@ -1,0 +1,12 @@
+summary_name,summary_value,provenance,note
+step73_status,completed_structural_verification_not_nonlinear_solve,EXACT_DERIVED,Step 73 resolves the AA/QQ depth-2 issue structurally instead of by running a nonlinear solve.
+step73_aa_sample_config,R22_r120_r22_aa2_bb0_qq0,EXACT_DERIVED,Representative AA-only sample used for the coefficient-sector audit.
+step73_qq_sample_config,R22_r120_r22_aa0_bb0_qq2,EXACT_DERIVED,Representative QQ-only sample used for the coefficient-sector audit.
+step73_aa_second_layer_bilinear_norm,0.000000000000,EXACT_DERIVED,AA second-layer useful bilinear projection.
+step73_qq_second_layer_bilinear_norm,0.000000000000,EXACT_DERIVED,QQ second-layer useful bilinear projection.
+step73_higher_degree_theorem_status,verified,EXACT_DERIVED,AA contributes only A^2B and QQ contributes only A^2B^2 beyond Layer 1.
+step73_exact_depth_theorem_status,verified_via_homogeneous_degree_2_truncation,EXACT_DERIVED,Exact division-free depth does not improve bilinear complexity for bilinear targets.
+step73_border_rank_lower_bound,"underlineR(<3,3,3>) >= 15",EXTERNAL_SOURCE,"Landsberg-Ottaviani (2015), New Lower Bounds for the Border Rank of Matrix Multiplication"
+step73_exact_rank_online_status,"19 <= R(<3,3,3>) <= 23",EXTERNAL_SOURCE,MathOverflow discussion: best known lower and upper bounds for matrix multiplication tensor rank of 3x3 matrices
+step73_explicit_border_rank_witness_found_online,False,INTERPRETATION,No explicit 3x3 border-rank witness with coefficients was recovered during the Step 73 literature pass.
+step73_runtime_seconds,0.009500,MEASURED_FROM_CODE,Wall-clock runtime for Step 73.

@@ -1,0 +1,10 @@
+code,label,frobenius_cube_code,frobenius_cube_label,frobenius_order_two,provenance
+0,0,0,0,True,EXACT_DERIVED
+1,1,1,1,True,EXACT_DERIVED
+2,2,2,2,True,EXACT_DERIVED
+3,w,7,1+2w,True,EXACT_DERIVED
+4,1+w,8,2+2w,True,EXACT_DERIVED
+5,2+w,6,2w,True,EXACT_DERIVED
+6,2w,5,2+w,True,EXACT_DERIVED
+7,1+2w,3,w,True,EXACT_DERIVED
+8,2+2w,4,1+w,True,EXACT_DERIVED

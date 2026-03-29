@@ -1,0 +1,11 @@
+summary_name,summary_value,provenance,note
+step74_commutator_flattening_lb,8,EXACT_DERIVED,Flattening lower bound for commutator.
+step74_commutator_phase1_first_exact_rank,none,MEASURED_FROM_CODE,First exact rank hit in the 2000-restart wide scan for commutator.
+step74_commutator_phase2_exact_rank,none,MEASURED_FROM_CODE,Exact rank confirmed after the 5000-restart fine scan for commutator.
+step74_commutator_best_overall_max_abs_residual,2.7539672337040244e-07,MEASURED_FROM_CODE,Best max-abs residual seen across all Step 74 scans for commutator.
+step74_anticommutator_flattening_lb,9,EXACT_DERIVED,Flattening lower bound for anticommutator.
+step74_anticommutator_phase1_first_exact_rank,none,MEASURED_FROM_CODE,First exact rank hit in the 2000-restart wide scan for anticommutator.
+step74_anticommutator_phase2_exact_rank,none,MEASURED_FROM_CODE,Exact rank confirmed after the 5000-restart fine scan for anticommutator.
+step74_anticommutator_best_overall_max_abs_residual,4.6585177382318932e-10,MEASURED_FROM_CODE,Best max-abs residual seen across all Step 74 scans for anticommutator.
+step74_profile_public_rank23_multiplication_nuisance_rank,14,EXACT_DERIVED,Nuisance rank for public_rank23_multiplication.
+step74_runtime_seconds,1093.560480,MEASURED_FROM_CODE,Wall-clock runtime for Step 74.

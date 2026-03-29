@@ -1,0 +1,156 @@
+{
+  "equation_count": 4,
+  "ambient_dimension": 18,
+  "sample_count": 48,
+  "attempt_count": 51,
+  "constraint_rank_histogram_for_random_a": {
+    "3": 3,
+    "4": 48
+  },
+  "sample_jacobian_rank_histogram": {
+    "4": 48
+  },
+  "alphatensor_jacobian_rank_histogram": {
+    "1": 2,
+    "2": 4,
+    "3": 13,
+    "4": 4
+  },
+  "max_observed_jacobian_rank": 4,
+  "estimated_variety_dimension": 14,
+  "generic_kernel_dimension_in_b_given_a": 5,
+  "sampled_sigma_span_rank": 9,
+  "representative_solution_samples": [
+    {
+      "a": [
+        1,
+        -3,
+        -3,
+        1,
+        0,
+        -1,
+        -2,
+        -2,
+        -2
+      ],
+      "b": [
+        "-6",
+        "3",
+        "0",
+        "2",
+        "3",
+        "-3",
+        "1",
+        "0",
+        "-1"
+      ],
+      "constraint_rank": 4,
+      "jacobian_rank": 4
+    },
+    {
+      "a": [
+        0,
+        2,
+        3,
+        -2,
+        -3,
+        -1,
+        -3,
+        0,
+        3
+      ],
+      "b": [
+        "12",
+        "4",
+        "-2",
+        "6",
+        "-2",
+        "9",
+        "-3",
+        "3",
+        "3"
+      ],
+      "constraint_rank": 4,
+      "jacobian_rank": 4
+    },
+    {
+      "a": [
+        -2,
+        -2,
+        3,
+        1,
+        -3,
+        1,
+        0,
+        -3,
+        0
+      ],
+      "b": [
+        "9/4",
+        "10/3",
+        "-2",
+        "9/4",
+        "0",
+        "3",
+        "3",
+        "0",
+        "-2"
+      ],
+      "constraint_rank": 4,
+      "jacobian_rank": 4
+    },
+    {
+      "a": [
+        0,
+        3,
+        2,
+        -3,
+        0,
+        -2,
+        1,
+        0,
+        3
+      ],
+      "b": [
+        "5/9",
+        "-14/3",
+        "3",
+        "14/9",
+        "-3",
+        "-5/3",
+        "1",
+        "-3",
+        "2"
+      ],
+      "constraint_rank": 4,
+      "jacobian_rank": 4
+    },
+    {
+      "a": [
+        3,
+        0,
+        3,
+        0,
+        0,
+        3,
+        3,
+        1,
+        -2
+      ],
+      "b": [
+        "5",
+        "3",
+        "-3",
+        "0",
+        "-6",
+        "6",
+        "3",
+        "3",
+        "0"
+      ],
+      "constraint_rank": 4,
+      "jacobian_rank": 4
+    }
+  ],
+  "interpretation": "Random exact samples on V4 consistently realize constraint rank 4 and Jacobian rank 4, so the four bilinear identities cut the 18-dimensional factor space by the expected codimension 4, yielding an observed variety dimension of 14."
+}

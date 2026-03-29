@@ -1,0 +1,208 @@
+term_id,fiber,eta1,eta2,xi_plus,xi_minus,xi_plus_formula_holds,xi_minus_formula_holds,conjugacy_holds
+t01,"(0,0)",0,0,0,0,True,True,True
+t01,"(0,1)",-1,0,-1,-1,True,True,True
+t01,"(0,2)",0,0,0,0,True,True,True
+t01,"(1,0)",0,0,0,0,True,True,True
+t01,"(1,1)",-1,0,-1,-1,True,True,True
+t01,"(1,2)",0,0,0,0,True,True,True
+t01,"(2,0)",0,0,0,0,True,True,True
+t01,"(2,1)",0,0,0,0,True,True,True
+t01,"(2,2)",0,0,0,0,True,True,True
+t02,"(0,0)",0,0,0,0,True,True,True
+t02,"(0,1)",-2,1,-3/2 + sqrt(3)*I/2,-3/2 - sqrt(3)*I/2,True,True,True
+t02,"(0,2)",1,0,1,1,True,True,True
+t02,"(1,0)",0,0,0,0,True,True,True
+t02,"(1,1)",-1,0,-1,-1,True,True,True
+t02,"(1,2)",1,0,1,1,True,True,True
+t02,"(2,0)",0,0,0,0,True,True,True
+t02,"(2,1)",0,0,0,0,True,True,True
+t02,"(2,2)",0,0,0,0,True,True,True
+t03,"(0,0)",0,0,0,0,True,True,True
+t03,"(0,1)",0,-1,-1/2 - sqrt(3)*I/2,-1/2 + sqrt(3)*I/2,True,True,True
+t03,"(0,2)",0,0,0,0,True,True,True
+t03,"(1,0)",0,0,0,0,True,True,True
+t03,"(1,1)",0,-1,-1/2 - sqrt(3)*I/2,-1/2 + sqrt(3)*I/2,True,True,True
+t03,"(1,2)",0,0,0,0,True,True,True
+t03,"(2,0)",0,0,0,0,True,True,True
+t03,"(2,1)",0,0,0,0,True,True,True
+t03,"(2,2)",0,0,0,0,True,True,True
+t04,"(0,0)",0,0,0,0,True,True,True
+t04,"(0,1)",0,1,1/2 + sqrt(3)*I/2,1/2 - sqrt(3)*I/2,True,True,True
+t04,"(0,2)",0,0,0,0,True,True,True
+t04,"(1,0)",0,0,0,0,True,True,True
+t04,"(1,1)",0,0,0,0,True,True,True
+t04,"(1,2)",0,0,0,0,True,True,True
+t04,"(2,0)",0,0,0,0,True,True,True
+t04,"(2,1)",0,0,0,0,True,True,True
+t04,"(2,2)",0,0,0,0,True,True,True
+t05,"(0,0)",0,0,0,0,True,True,True
+t05,"(0,1)",-1,2,sqrt(3)*I,-sqrt(3)*I,True,True,True
+t05,"(0,2)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t05,"(1,0)",0,0,0,0,True,True,True
+t05,"(1,1)",0,0,0,0,True,True,True
+t05,"(1,2)",0,0,0,0,True,True,True
+t05,"(2,0)",0,0,0,0,True,True,True
+t05,"(2,1)",0,1,1/2 + sqrt(3)*I/2,1/2 - sqrt(3)*I/2,True,True,True
+t05,"(2,2)",0,0,0,0,True,True,True
+t06,"(0,0)",0,0,0,0,True,True,True
+t06,"(0,1)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t06,"(0,2)",0,0,0,0,True,True,True
+t06,"(1,0)",0,0,0,0,True,True,True
+t06,"(1,1)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t06,"(1,2)",0,0,0,0,True,True,True
+t06,"(2,0)",0,0,0,0,True,True,True
+t06,"(2,1)",0,0,0,0,True,True,True
+t06,"(2,2)",0,0,0,0,True,True,True
+t07,"(0,0)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t07,"(0,1)",0,0,0,0,True,True,True
+t07,"(0,2)",0,0,0,0,True,True,True
+t07,"(1,0)",0,0,0,0,True,True,True
+t07,"(1,1)",0,0,0,0,True,True,True
+t07,"(1,2)",0,0,0,0,True,True,True
+t07,"(2,0)",0,0,0,0,True,True,True
+t07,"(2,1)",1,0,1,1,True,True,True
+t07,"(2,2)",-1,0,-1,-1,True,True,True
+t08,"(0,0)",0,0,0,0,True,True,True
+t08,"(0,1)",-1,0,-1,-1,True,True,True
+t08,"(0,2)",1,0,1,1,True,True,True
+t08,"(1,0)",0,0,0,0,True,True,True
+t08,"(1,1)",0,0,0,0,True,True,True
+t08,"(1,2)",0,0,0,0,True,True,True
+t08,"(2,0)",0,0,0,0,True,True,True
+t08,"(2,1)",0,0,0,0,True,True,True
+t08,"(2,2)",0,0,0,0,True,True,True
+t09,"(0,0)",1,0,1,1,True,True,True
+t09,"(0,1)",1,0,1,1,True,True,True
+t09,"(0,2)",-1,0,-1,-1,True,True,True
+t09,"(1,0)",0,0,0,0,True,True,True
+t09,"(1,1)",0,0,0,0,True,True,True
+t09,"(1,2)",0,0,0,0,True,True,True
+t09,"(2,0)",1,0,1,1,True,True,True
+t09,"(2,1)",1,0,1,1,True,True,True
+t09,"(2,2)",-1,0,-1,-1,True,True,True
+t10,"(0,0)",0,0,0,0,True,True,True
+t10,"(0,1)",0,-1,-1/2 - sqrt(3)*I/2,-1/2 + sqrt(3)*I/2,True,True,True
+t10,"(0,2)",0,1,1/2 + sqrt(3)*I/2,1/2 - sqrt(3)*I/2,True,True,True
+t10,"(1,0)",0,0,0,0,True,True,True
+t10,"(1,1)",0,0,0,0,True,True,True
+t10,"(1,2)",0,0,0,0,True,True,True
+t10,"(2,0)",0,0,0,0,True,True,True
+t10,"(2,1)",0,-1,-1/2 - sqrt(3)*I/2,-1/2 + sqrt(3)*I/2,True,True,True
+t10,"(2,2)",0,1,1/2 + sqrt(3)*I/2,1/2 - sqrt(3)*I/2,True,True,True
+t11,"(0,0)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t11,"(0,1)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t11,"(0,2)",-1,1,-1/2 + sqrt(3)*I/2,-1/2 - sqrt(3)*I/2,True,True,True
+t11,"(1,0)",0,0,0,0,True,True,True
+t11,"(1,1)",0,0,0,0,True,True,True
+t11,"(1,2)",0,0,0,0,True,True,True
+t11,"(2,0)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t11,"(2,1)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t11,"(2,2)",-1,1,-1/2 + sqrt(3)*I/2,-1/2 - sqrt(3)*I/2,True,True,True
+t12,"(0,0)",0,1,1/2 + sqrt(3)*I/2,1/2 - sqrt(3)*I/2,True,True,True
+t12,"(0,1)",0,0,0,0,True,True,True
+t12,"(0,2)",0,0,0,0,True,True,True
+t12,"(1,0)",0,0,0,0,True,True,True
+t12,"(1,1)",0,0,0,0,True,True,True
+t12,"(1,2)",0,0,0,0,True,True,True
+t12,"(2,0)",0,1,1/2 + sqrt(3)*I/2,1/2 - sqrt(3)*I/2,True,True,True
+t12,"(2,1)",0,0,0,0,True,True,True
+t12,"(2,2)",0,0,0,0,True,True,True
+t13,"(0,0)",0,0,0,0,True,True,True
+t13,"(0,1)",0,0,0,0,True,True,True
+t13,"(0,2)",0,0,0,0,True,True,True
+t13,"(1,0)",0,0,0,0,True,True,True
+t13,"(1,1)",0,0,0,0,True,True,True
+t13,"(1,2)",0,0,0,0,True,True,True
+t13,"(2,0)",1,0,1,1,True,True,True
+t13,"(2,1)",0,0,0,0,True,True,True
+t13,"(2,2)",0,0,0,0,True,True,True
+t14,"(0,0)",0,0,0,0,True,True,True
+t14,"(0,1)",0,0,0,0,True,True,True
+t14,"(0,2)",0,0,0,0,True,True,True
+t14,"(1,0)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t14,"(1,1)",0,0,0,0,True,True,True
+t14,"(1,2)",0,0,0,0,True,True,True
+t14,"(2,0)",2,-1,3/2 - sqrt(3)*I/2,3/2 + sqrt(3)*I/2,True,True,True
+t14,"(2,1)",0,0,0,0,True,True,True
+t14,"(2,2)",1,0,1,1,True,True,True
+t15,"(0,0)",0,0,0,0,True,True,True
+t15,"(0,1)",0,0,0,0,True,True,True
+t15,"(0,2)",0,0,0,0,True,True,True
+t15,"(1,0)",1,0,1,1,True,True,True
+t15,"(1,1)",0,0,0,0,True,True,True
+t15,"(1,2)",1,0,1,1,True,True,True
+t15,"(2,0)",1,0,1,1,True,True,True
+t15,"(2,1)",0,0,0,0,True,True,True
+t15,"(2,2)",1,0,1,1,True,True,True
+t16,"(0,0)",0,0,0,0,True,True,True
+t16,"(0,1)",0,0,0,0,True,True,True
+t16,"(0,2)",0,0,0,0,True,True,True
+t16,"(1,0)",0,0,0,0,True,True,True
+t16,"(1,1)",0,0,0,0,True,True,True
+t16,"(1,2)",0,0,0,0,True,True,True
+t16,"(2,0)",0,0,0,0,True,True,True
+t16,"(2,1)",0,0,0,0,True,True,True
+t16,"(2,2)",0,-1,-1/2 - sqrt(3)*I/2,-1/2 + sqrt(3)*I/2,True,True,True
+t17,"(0,0)",0,0,0,0,True,True,True
+t17,"(0,1)",0,0,0,0,True,True,True
+t17,"(0,2)",0,0,0,0,True,True,True
+t17,"(1,0)",0,-1,-1/2 - sqrt(3)*I/2,-1/2 + sqrt(3)*I/2,True,True,True
+t17,"(1,1)",0,0,0,0,True,True,True
+t17,"(1,2)",0,0,0,0,True,True,True
+t17,"(2,0)",0,0,0,0,True,True,True
+t17,"(2,1)",0,0,0,0,True,True,True
+t17,"(2,2)",0,0,0,0,True,True,True
+t18,"(0,0)",0,0,0,0,True,True,True
+t18,"(0,1)",0,0,0,0,True,True,True
+t18,"(0,2)",0,0,0,0,True,True,True
+t18,"(1,0)",0,0,0,0,True,True,True
+t18,"(1,1)",0,0,0,0,True,True,True
+t18,"(1,2)",-1,1,-1/2 + sqrt(3)*I/2,-1/2 - sqrt(3)*I/2,True,True,True
+t18,"(2,0)",0,0,0,0,True,True,True
+t18,"(2,1)",0,0,0,0,True,True,True
+t18,"(2,2)",0,0,0,0,True,True,True
+t19,"(0,0)",0,0,0,0,True,True,True
+t19,"(0,1)",0,0,0,0,True,True,True
+t19,"(0,2)",0,0,0,0,True,True,True
+t19,"(1,0)",0,0,0,0,True,True,True
+t19,"(1,1)",0,0,0,0,True,True,True
+t19,"(1,2)",0,0,0,0,True,True,True
+t19,"(2,0)",0,-1,-1/2 - sqrt(3)*I/2,-1/2 + sqrt(3)*I/2,True,True,True
+t19,"(2,1)",0,0,0,0,True,True,True
+t19,"(2,2)",0,0,0,0,True,True,True
+t20,"(0,0)",0,0,0,0,True,True,True
+t20,"(0,1)",0,0,0,0,True,True,True
+t20,"(0,2)",0,0,0,0,True,True,True
+t20,"(1,0)",0,0,0,0,True,True,True
+t20,"(1,1)",0,0,0,0,True,True,True
+t20,"(1,2)",-1,0,-1,-1,True,True,True
+t20,"(2,0)",0,0,0,0,True,True,True
+t20,"(2,1)",0,0,0,0,True,True,True
+t20,"(2,2)",0,0,0,0,True,True,True
+t21,"(0,0)",0,0,0,0,True,True,True
+t21,"(0,1)",0,0,0,0,True,True,True
+t21,"(0,2)",0,0,0,0,True,True,True
+t21,"(1,0)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t21,"(1,1)",0,0,0,0,True,True,True
+t21,"(1,2)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t21,"(2,0)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t21,"(2,1)",0,0,0,0,True,True,True
+t21,"(2,2)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t22,"(0,0)",0,0,0,0,True,True,True
+t22,"(0,1)",0,0,0,0,True,True,True
+t22,"(0,2)",0,0,0,0,True,True,True
+t22,"(1,0)",0,0,0,0,True,True,True
+t22,"(1,1)",0,0,0,0,True,True,True
+t22,"(1,2)",0,-1,-1/2 - sqrt(3)*I/2,-1/2 + sqrt(3)*I/2,True,True,True
+t22,"(2,0)",0,0,0,0,True,True,True
+t22,"(2,1)",0,0,0,0,True,True,True
+t22,"(2,2)",0,0,0,0,True,True,True
+t23,"(0,0)",0,0,0,0,True,True,True
+t23,"(0,1)",0,0,0,0,True,True,True
+t23,"(0,2)",0,0,0,0,True,True,True
+t23,"(1,0)",0,0,0,0,True,True,True
+t23,"(1,1)",0,0,0,0,True,True,True
+t23,"(1,2)",0,0,0,0,True,True,True
+t23,"(2,0)",1,-1,1/2 - sqrt(3)*I/2,1/2 + sqrt(3)*I/2,True,True,True
+t23,"(2,1)",0,0,0,0,True,True,True
+t23,"(2,2)",0,0,0,0,True,True,True

@@ -1,0 +1,5 @@
+formula_name,formula,"total_degree_in_(A,B)",provenance
+tr(AB),"sum_{i=0}^2 sum_{s=0}^2 A[i,s] B[s,i]",2,EXACT_DERIVED
+tr((AB)^2),"sum_{i=0}^2 sum_{j=0}^2 sum_{s=0}^2 sum_{t=0}^2 A[i,s] B[s,j] A[j,t] B[t,i]",4,EXACT_DERIVED
+det(AB),det(A) det(B),6,EXACT_DERIVED
+cayley_hamilton,C^3 - tr(C) C^2 + ((tr(C)^2 - tr(C^2))/2) C - det(C) I = 0 with C=AB,6,EXACT_DERIVED

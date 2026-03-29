@@ -1,0 +1,15 @@
+{
+  "single_term_constant_containment_holds": false,
+  "delta_coordinates_tested": 54,
+  "solvable_delta_coordinates": [],
+  "jacobian_summary": {
+    "eta_rank_sample_min": 15,
+    "eta_rank_sample_max": 15,
+    "joint_rank_sample_min": 17,
+    "joint_rank_sample_max": 17,
+    "eta_upper_bound": 15,
+    "joint_upper_bound": 17,
+    "eta_generic_rank_if_sample_hits_upper_bound": 15,
+    "joint_generic_rank_if_sample_hits_upper_bound": 17
+  }
+}

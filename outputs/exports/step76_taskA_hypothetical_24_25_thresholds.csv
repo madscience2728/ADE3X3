@@ -1,0 +1,8 @@
+p,max_A_for_24M_to_beat_requested_alphatensor,max_A_for_25M_to_beat_requested_alphatensor,max_A_for_26M_to_beat_requested_alphatensor,known_certified_24M_or_25M_algorithm_in_repo,known_26M_configuration_in_repo,provenance
+1,112,111,110,False,True,EXACT_DERIVED
+2,111,109,107,False,True,EXACT_DERIVED
+5,108,103,98,False,True,EXACT_DERIVED
+10,103,93,83,False,True,EXACT_DERIVED
+20,93,73,53,False,True,EXACT_DERIVED
+50,63,13,-37,False,True,EXACT_DERIVED
+100,13,-87,-187,False,True,EXACT_DERIVED

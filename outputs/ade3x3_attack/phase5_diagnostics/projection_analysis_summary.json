@@ -1,0 +1,24 @@
+{
+  "shape": [
+    18,
+    54
+  ],
+  "rank_exact": 10,
+  "nullity_exact": 44,
+  "support_size_range": [
+    0,
+    4
+  ],
+  "eta_incidence_range": [
+    0,
+    9
+  ],
+  "coefficient_alphabet": [
+    -1,
+    1
+  ],
+  "simple_block_unfold_ranks": {
+    "eta_block_vs_rest": 2,
+    "reshaped_right_rank": 9
+  }
+}

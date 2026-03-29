@@ -1,0 +1,28 @@
+{
+  "eta_space_dimension": 18,
+  "decomposition": [
+    {
+      "component": "trivial_row__standard_shared__trivial_col",
+      "dimension": 2
+    },
+    {
+      "component": "trivial_row__standard_shared__standard_col",
+      "dimension": 4
+    },
+    {
+      "component": "standard_row__standard_shared__trivial_col",
+      "dimension": 4
+    },
+    {
+      "component": "standard_row__standard_shared__standard_col",
+      "dimension": 8
+    }
+  ],
+  "identity_projection_ranks": {
+    "trivial_row__standard_shared__trivial_col": 2,
+    "trivial_row__standard_shared__standard_col": 3,
+    "standard_row__standard_shared__trivial_col": 3,
+    "standard_row__standard_shared__standard_col": 4
+  },
+  "interpretation": "As a representation of S3(row) x S3(shared) x S3(col), eta-space decomposes as (1+2)_row x 2_shared x (1+2)_col = 2 + 4 + 4 + 8. The four AlphaTensor identities are not confined to a single low-dimensional orbit-average block; their projections are nonzero across all four isotypic pieces."
+}

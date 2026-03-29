@@ -1,0 +1,7 @@
+source,sigma,attempts,valid_exact_decompositions,target_valid_exact_decompositions,best_max_abs_residual,met_target
+symmetry_orbit,,216,216,216,0.0,True
+perturbation,0.01,128,0,100,1.113385432090148e-05,False
+perturbation,0.05,128,0,100,0.00011458340453377471,False
+perturbation,0.1,128,0,100,0.0005132852244140132,False
+perturbation,0.5,128,0,100,0.19122265142991496,False
+random_rank23,,512,0,,0.00025905048287589404,

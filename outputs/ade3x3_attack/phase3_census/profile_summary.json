@@ -1,0 +1,13 @@
+{
+  "profile_counts": {
+    "perturbation": 0,
+    "random_rank23": 0,
+    "symmetry_orbit": 216
+  },
+  "attempt_counts": {
+    "symmetry_orbit": 216,
+    "perturbation": 512,
+    "random_rank23": 512
+  },
+  "verdict": "delta subset eta is universal across the entire 216-element AlphaTensor symmetry orbit, but this run found no exact non-orbit rank-23 decompositions. Universality beyond the AlphaTensor equivalence class remains unclear."
+}

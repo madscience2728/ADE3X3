@@ -1,0 +1,16 @@
+{
+  "trial_count": 100,
+  "point_count_per_trial": 22,
+  "residual_tolerance": 1e-08,
+  "feasible_count": 0,
+  "feasible_rate": 0.0,
+  "best_trial": {
+    "trial": 14,
+    "sampled_points": 22,
+    "rank_W": 22,
+    "projection_max_abs": 0.898833335862747,
+    "projection_loss": 18.333884424173043,
+    "tensor_feasible": false
+  },
+  "median_projection_loss": 19.684633897635806
+}

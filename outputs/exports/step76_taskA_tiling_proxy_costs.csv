@@ -1,0 +1,6 @@
+configuration,M,A_scatter_proxy,A_scheduled_proxy,source,status,provenance
+2 monomino + tromino_col + square_tetromino,26,164,160,step67 tiling_id 18,tiling_configuration_not_certified_global_algorithm,EXACT_DERIVED + MEASURED_FROM_CODE
+L_tetromino + monomino + square_tetromino,26,164,160,step67 tiling_id 31/32,tiling_configuration_not_certified_global_algorithm,EXACT_DERIVED + MEASURED_FROM_CODE
+domino_col + 3 monomino + square_tetromino,26,164,160,step67 tiling_id 11,tiling_configuration_not_certified_global_algorithm,EXACT_DERIVED + MEASURED_FROM_CODE
+domino_col + domino_row + monomino + square_tetromino,26,164,160,step67 tiling_id 23,tiling_configuration_not_certified_global_algorithm,EXACT_DERIVED + MEASURED_FROM_CODE
+domino_row + tromino_col + square_tetromino,26,164,160,step67 tiling_id 37,tiling_configuration_not_certified_global_algorithm,EXACT_DERIVED + MEASURED_FROM_CODE

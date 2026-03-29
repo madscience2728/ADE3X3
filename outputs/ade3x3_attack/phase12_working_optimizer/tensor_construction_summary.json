@@ -1,0 +1,24 @@
+{
+  "orientation": "transpose",
+  "loader_residual": 0,
+  "shape": [
+    9,
+    9,
+    9
+  ],
+  "nonzero_count": 27,
+  "slice_nonzero_counts": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "mode0_rank": 9,
+  "exact_reconstruction_loss": 0.0,
+  "exact_reconstruction_max_abs": 0.0
+}

@@ -1,0 +1,2 @@
+label,rank_value,best_seed,best_loss,max_abs_residual,mean_abs_residual,entries_gt_1e-8,entries_gt_1e-6,verified_exact_under_1e-6,sigma_rank,eta_rank,delta_rank,nuisance_rank,quotient_gain,self_count,pair_count,unpaired_count,provenance
+commutator_rank20,20,9596813,1.5977318145768281e-12,2.7539672337040244e-07,3.6469353248264262e-08,592,0,True,9,18,20,20,0,0,0,20,MEASURED_FROM_CODE

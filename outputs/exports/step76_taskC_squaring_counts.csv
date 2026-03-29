@@ -1,0 +1,6 @@
+quantity,value,provenance
+distinct_alpha_forms,22,EXACT_DERIVED
+distinct_beta_forms,20,EXACT_DERIVED
+distinct_alpha_plus_or_minus_beta_forms,46,EXACT_DERIVED
+naive_two_squarings_total,46,EXACT_DERIVED
+sharing_saves_squarings,False,EXACT_DERIVED

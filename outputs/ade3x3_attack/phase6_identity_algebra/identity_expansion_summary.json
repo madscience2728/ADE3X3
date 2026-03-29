@@ -1,0 +1,1544 @@
+{
+  "eta_coordinate_order": [
+    "eta1[0,0]",
+    "eta1[0,1]",
+    "eta1[0,2]",
+    "eta1[1,0]",
+    "eta1[1,1]",
+    "eta1[1,2]",
+    "eta1[2,0]",
+    "eta1[2,1]",
+    "eta1[2,2]",
+    "eta2[0,0]",
+    "eta2[0,1]",
+    "eta2[0,2]",
+    "eta2[1,0]",
+    "eta2[1,1]",
+    "eta2[1,2]",
+    "eta2[2,0]",
+    "eta2[2,1]",
+    "eta2[2,2]"
+  ],
+  "alpha_coordinate_order": [
+    "a[0,0]",
+    "a[0,1]",
+    "a[0,2]",
+    "a[1,0]",
+    "a[1,1]",
+    "a[1,2]",
+    "a[2,0]",
+    "a[2,1]",
+    "a[2,2]"
+  ],
+  "beta_coordinate_order": [
+    "b[0,0]",
+    "b[0,1]",
+    "b[0,2]",
+    "b[1,0]",
+    "b[1,1]",
+    "b[1,2]",
+    "b[2,0]",
+    "b[2,1]",
+    "b[2,2]"
+  ],
+  "identities": [
+    {
+      "identity_id": 1,
+      "support_size": 3,
+      "formula": "+1*eta1[0,1] +1*eta1[0,2] -1*eta1[1,1]",
+      "eta_coefficients": {
+        "eta1[0,0]": 0,
+        "eta1[0,1]": 1,
+        "eta1[0,2]": 1,
+        "eta1[1,0]": 0,
+        "eta1[1,1]": -1,
+        "eta1[1,2]": 0,
+        "eta1[2,0]": 0,
+        "eta1[2,1]": 0,
+        "eta1[2,2]": 0,
+        "eta2[0,0]": 0,
+        "eta2[0,1]": 0,
+        "eta2[0,2]": 0,
+        "eta2[1,0]": 0,
+        "eta2[1,1]": 0,
+        "eta2[1,2]": 0,
+        "eta2[2,0]": 0,
+        "eta2[2,1]": 0,
+        "eta2[2,2]": 0
+      },
+      "q_matrix": [
+        [
+          "0",
+          "1",
+          "1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "-1",
+          "-1",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "-1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "all_public_terms_zero": true,
+      "term_evaluations": [
+        {
+          "term_id": "t01",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t02",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t03",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t04",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t05",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t06",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t07",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t08",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t09",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t10",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t11",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t12",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t13",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t14",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t15",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t16",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t17",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t18",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t19",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t20",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t21",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t22",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t23",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        }
+      ],
+      "nontrivial_witness": {
+        "a": [
+          2,
+          1,
+          2,
+          -2,
+          0,
+          -2,
+          1,
+          2,
+          -2
+        ],
+        "b": [
+          -2,
+          0,
+          -1,
+          0,
+          1,
+          -2,
+          -2,
+          1,
+          -2
+        ],
+        "value": "-1"
+      }
+    },
+    {
+      "identity_id": 2,
+      "support_size": 2,
+      "formula": "+1*eta1[0,0] -1*eta1[2,1]",
+      "eta_coefficients": {
+        "eta1[0,0]": 1,
+        "eta1[0,1]": 0,
+        "eta1[0,2]": 0,
+        "eta1[1,0]": 0,
+        "eta1[1,1]": 0,
+        "eta1[1,2]": 0,
+        "eta1[2,0]": 0,
+        "eta1[2,1]": -1,
+        "eta1[2,2]": 0,
+        "eta2[0,0]": 0,
+        "eta2[0,1]": 0,
+        "eta2[0,2]": 0,
+        "eta2[1,0]": 0,
+        "eta2[1,1]": 0,
+        "eta2[1,2]": 0,
+        "eta2[2,0]": 0,
+        "eta2[2,1]": 0,
+        "eta2[2,2]": 0
+      },
+      "q_matrix": [
+        [
+          "1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "-1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "-1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "all_public_terms_zero": true,
+      "term_evaluations": [
+        {
+          "term_id": "t01",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t02",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t03",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t04",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t05",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t06",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t07",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t08",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t09",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t10",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t11",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t12",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t13",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t14",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t15",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t16",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t17",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t18",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t19",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t20",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t21",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t22",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t23",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        }
+      ],
+      "nontrivial_witness": {
+        "a": [
+          1,
+          -1,
+          1,
+          -1,
+          2,
+          1,
+          1,
+          -1,
+          1
+        ],
+        "b": [
+          -1,
+          -2,
+          0,
+          -1,
+          -2,
+          2,
+          -2,
+          1,
+          2
+        ],
+        "value": "2"
+      }
+    },
+    {
+      "identity_id": 3,
+      "support_size": 3,
+      "formula": "+1*eta1[0,0] -1*eta1[1,0] +1*eta1[2,2]",
+      "eta_coefficients": {
+        "eta1[0,0]": 1,
+        "eta1[0,1]": 0,
+        "eta1[0,2]": 0,
+        "eta1[1,0]": -1,
+        "eta1[1,1]": 0,
+        "eta1[1,2]": 0,
+        "eta1[2,0]": 0,
+        "eta1[2,1]": 0,
+        "eta1[2,2]": 1,
+        "eta2[0,0]": 0,
+        "eta2[0,1]": 0,
+        "eta2[0,2]": 0,
+        "eta2[1,0]": 0,
+        "eta2[1,1]": 0,
+        "eta2[1,2]": 0,
+        "eta2[2,0]": 0,
+        "eta2[2,1]": 0,
+        "eta2[2,2]": 0
+      },
+      "q_matrix": [
+        [
+          "1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "-1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "-1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "-1",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "all_public_terms_zero": true,
+      "term_evaluations": [
+        {
+          "term_id": "t01",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t02",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t03",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t04",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t05",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t06",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t07",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t08",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t09",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t10",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t11",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t12",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t13",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t14",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t15",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t16",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t17",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t18",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t19",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t20",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t21",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t22",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t23",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        }
+      ],
+      "nontrivial_witness": {
+        "a": [
+          -1,
+          1,
+          2,
+          -1,
+          -1,
+          -2,
+          0,
+          1,
+          -2
+        ],
+        "b": [
+          2,
+          2,
+          -1,
+          -2,
+          -2,
+          0,
+          0,
+          2,
+          0
+        ],
+        "value": "4"
+      }
+    },
+    {
+      "identity_id": 4,
+      "support_size": 2,
+      "formula": "+1*eta2[0,2] +1*eta2[2,1]",
+      "eta_coefficients": {
+        "eta1[0,0]": 0,
+        "eta1[0,1]": 0,
+        "eta1[0,2]": 0,
+        "eta1[1,0]": 0,
+        "eta1[1,1]": 0,
+        "eta1[1,2]": 0,
+        "eta1[2,0]": 0,
+        "eta1[2,1]": 0,
+        "eta1[2,2]": 0,
+        "eta2[0,0]": 0,
+        "eta2[0,1]": 0,
+        "eta2[0,2]": 1,
+        "eta2[1,0]": 0,
+        "eta2[1,1]": 0,
+        "eta2[1,2]": 0,
+        "eta2[2,0]": 0,
+        "eta2[2,1]": 1,
+        "eta2[2,2]": 0
+      },
+      "q_matrix": [
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "-1"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "-1",
+          "0"
+        ]
+      ],
+      "all_public_terms_zero": true,
+      "term_evaluations": [
+        {
+          "term_id": "t01",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t02",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t03",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t04",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t05",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t06",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t07",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t08",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t09",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t10",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t11",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t12",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t13",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t14",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t15",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t16",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t17",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t18",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t19",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t20",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t21",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t22",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        },
+        {
+          "term_id": "t23",
+          "eta_evaluation": "0",
+          "bilinear_evaluation": "0"
+        }
+      ],
+      "nontrivial_witness": {
+        "a": [
+          1,
+          -2,
+          -2,
+          -2,
+          -2,
+          -2,
+          1,
+          -1,
+          -1
+        ],
+        "b": [
+          1,
+          2,
+          2,
+          0,
+          -2,
+          2,
+          0,
+          -1,
+          -1
+        ],
+        "value": "-5"
+      }
+    }
+  ],
+  "q_matrices": [
+    {
+      "identity_id": 1,
+      "formula": "+1*eta1[0,1] +1*eta1[0,2] -1*eta1[1,1]",
+      "q_matrix": [
+        [
+          "0",
+          "1",
+          "1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "-1",
+          "-1",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "-1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "identity_id": 2,
+      "formula": "+1*eta1[0,0] -1*eta1[2,1]",
+      "q_matrix": [
+        [
+          "1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "-1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "-1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "identity_id": 3,
+      "formula": "+1*eta1[0,0] -1*eta1[1,0] +1*eta1[2,2]",
+      "q_matrix": [
+        [
+          "1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "-1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "-1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "-1",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "identity_id": 4,
+      "formula": "+1*eta2[0,2] +1*eta2[2,1]",
+      "q_matrix": [
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "-1"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "-1",
+          "0"
+        ]
+      ]
+    }
+  ]
+}

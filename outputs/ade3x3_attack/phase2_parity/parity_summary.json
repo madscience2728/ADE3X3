@@ -1,0 +1,23 @@
+{
+  "gamma_orientation": "transpose",
+  "exact_reconstruction_residual": 0,
+  "symbolic_transform_checks": {
+    "xi_plus_equals_eta1_minus_omega_sq_eta2": true,
+    "xi_minus_equals_eta1_minus_omega_eta2": true,
+    "real_factor_conjugacy": true
+  },
+  "alpha_tensor_eta_rank_exact": 14,
+  "alpha_tensor_xi_plus_complex_rank_exact": 9,
+  "alpha_tensor_xi_realification_rank_numeric": 14,
+  "claimed_even_rank_theorem_holds": false,
+  "dead_free_counterexample": {
+    "example": "single_dead_free_term_s_star_0",
+    "eta1": "1",
+    "eta2": "0",
+    "eta_rank": 1,
+    "xi_plus": "1",
+    "xi_minus": "1",
+    "xi_plus_complex_rank": 1,
+    "claimed_even_rank_theorem_fails": true
+  }
+}

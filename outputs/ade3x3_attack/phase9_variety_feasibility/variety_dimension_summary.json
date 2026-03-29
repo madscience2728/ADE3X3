@@ -1,0 +1,97 @@
+{
+  "trial_count_per_k": 16,
+  "sigma_samples_per_trial": 48,
+  "summary": [
+    {
+      "k": 1,
+      "expected_dimension": 17,
+      "successful_trials": 16,
+      "trial_count": 16,
+      "median_observed_dimension": 17.0,
+      "min_observed_dimension": 17,
+      "max_observed_dimension": 17,
+      "median_sigma_sample_rank": 9.0
+    },
+    {
+      "k": 2,
+      "expected_dimension": 16,
+      "successful_trials": 16,
+      "trial_count": 16,
+      "median_observed_dimension": 16.0,
+      "min_observed_dimension": 16,
+      "max_observed_dimension": 16,
+      "median_sigma_sample_rank": 9.0
+    },
+    {
+      "k": 3,
+      "expected_dimension": 15,
+      "successful_trials": 16,
+      "trial_count": 16,
+      "median_observed_dimension": 15.0,
+      "min_observed_dimension": 15,
+      "max_observed_dimension": 15,
+      "median_sigma_sample_rank": 9.0
+    },
+    {
+      "k": 4,
+      "expected_dimension": 14,
+      "successful_trials": 16,
+      "trial_count": 16,
+      "median_observed_dimension": 14.0,
+      "min_observed_dimension": 14,
+      "max_observed_dimension": 14,
+      "median_sigma_sample_rank": 9.0
+    },
+    {
+      "k": 5,
+      "expected_dimension": 13,
+      "successful_trials": 16,
+      "trial_count": 16,
+      "median_observed_dimension": 13.0,
+      "min_observed_dimension": 13,
+      "max_observed_dimension": 13,
+      "median_sigma_sample_rank": 9.0
+    },
+    {
+      "k": 6,
+      "expected_dimension": 12,
+      "successful_trials": 16,
+      "trial_count": 16,
+      "median_observed_dimension": 12.0,
+      "min_observed_dimension": 12,
+      "max_observed_dimension": 12,
+      "median_sigma_sample_rank": 9.0
+    },
+    {
+      "k": 7,
+      "expected_dimension": 11,
+      "successful_trials": 16,
+      "trial_count": 16,
+      "median_observed_dimension": 11.0,
+      "min_observed_dimension": 11,
+      "max_observed_dimension": 11,
+      "median_sigma_sample_rank": 9.0
+    },
+    {
+      "k": 8,
+      "expected_dimension": 10,
+      "successful_trials": 16,
+      "trial_count": 16,
+      "median_observed_dimension": 10.0,
+      "min_observed_dimension": 10,
+      "max_observed_dimension": 10,
+      "median_sigma_sample_rank": 9.0
+    },
+    {
+      "k": 9,
+      "expected_dimension": 9,
+      "successful_trials": 0,
+      "trial_count": 16,
+      "median_observed_dimension": null,
+      "min_observed_dimension": null,
+      "max_observed_dimension": null,
+      "median_sigma_sample_rank": null
+    }
+  ],
+  "interpretation": "For generic random bilinear constraints, the observed Jacobian codimension tracks k across V_k. For k <= 8 the sampled sigma-image remains generically full 9-dimensional; k=9 requires singular-a sampling because nonzero points lie on a determinantal hypersurface."
+}

@@ -1,0 +1,18 @@
+summary_name,summary_value,provenance,note
+taskD_sweep_5_ops_0_div,"{""best_train_mse"":3.970807443845293,""best_valid_mse"":5.1451705476546605,""exact_hit_count"":0,""valid_structures"":6000,""restarts"":6000}",MEASURED_FROM_CODE,Staged sweep search for 5_ops_0_div.
+taskD_sweep_6_ops_0_div,"{""best_train_mse"":5.134703557899963,""best_valid_mse"":4.30105013390363,""exact_hit_count"":0,""valid_structures"":6000,""restarts"":6000}",MEASURED_FROM_CODE,Staged sweep search for 6_ops_0_div.
+taskD_sweep_6_ops_1_div,"{""best_train_mse"":5.310869045213689,""best_valid_mse"":4.786774611866475,""exact_hit_count"":0,""valid_structures"":6000,""restarts"":6000}",MEASURED_FROM_CODE,Staged sweep search for 6_ops_1_div.
+taskD_sweep_7_ops_1_div,"{""best_train_mse"":3.830814969411395,""best_valid_mse"":4.8177872893512435,""exact_hit_count"":0,""valid_structures"":6000,""restarts"":6000}",MEASURED_FROM_CODE,Staged sweep search for 7_ops_1_div.
+taskD_any_exact_hit,False,MEASURED_FROM_CODE,Whether any staged Task D search produced an exact candidate.
+taskD_focus_triggered,False,MEASURED_FROM_CODE,Whether the focus phase ran after the sweep.
+taskD_first_exact_case,None,MEASURED_FROM_CODE,"First sweep case with any exact candidate, if one occurred."
+taskD_sweep_best_case,6_ops_0_div,MEASURED_FROM_CODE,Sweep case with the lowest validation MSE among valid structures.
+taskD_sweep_best_valid_mse,4.30105013390363,MEASURED_FROM_CODE,Best validation MSE achieved in the sweep phase.
+taskE_GF9_sweep_best_covered_by_rank,"{""9"":0,""10"":0,""11"":0,""12"":0,""13"":0,""14"":0,""15"":0,""16"":0,""17"":0,""18"":0,""19"":0,""20"":0,""21"":0,""22"":0}",MEASURED_FROM_CODE,Best covered output count at each sweep rank in the ordinary GF(9) bilinear model.
+taskE_GF9_first_positive_rank,None,MEASURED_FROM_CODE,First sweep rank where best_covered_output_columns > 0.
+taskE_GF9_focus_triggered,False,MEASURED_FROM_CODE,Whether the 5000-restart focus phase ran.
+taskE_GF9_focus_best_covered,None,MEASURED_FROM_CODE,"Best covered output count in the focus phase, if triggered."
+taskE_GF9_any_exact_hit,False,MEASURED_FROM_CODE,Whether any staged GF(9) search hit all 9 output columns exactly.
+taskE_GF9_rank_bounds_after_quick_test,9 <= rank_GF9 <= 23,EXACT_DERIVED + MEASURED_FROM_CODE,"Flattenings still give 9 and the GF(3)-valued AlphaTensor coefficients embed into GF(9), giving a 23-term upper bound."
+taskE_frobenius_free_changes_tensor_rank_model,True,EXACT_DERIVED,"Free Frobenius makes the model semilinear over GF(3), not an ordinary GF(9)-bilinear tensor-rank problem."
+taskE_conservative_proxy_used,ordinary_GF9_tensor_rank_search_only,EXACT_DERIVED,"The quick test computes the exact ordinary GF(9) span condition and reports Frobenius-free semilinear rank as unresolved, because that is not standard tensor rank."

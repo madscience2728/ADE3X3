@@ -1,0 +1,17 @@
+{
+  "g_invariant": false,
+  "identity_space_dimension": 4,
+  "single_transformed_copy_max_augmented_rank": 8,
+  "orbit_span_dimension": 18,
+  "intersection_histogram": {
+    "0": 195,
+    "1": 19,
+    "3": 1,
+    "4": 1
+  },
+  "near_stabilizers": [
+    "pi_rA=(0, 1, 2);pi_shared=(0, 1, 2);pi_cB=(0, 1, 2)",
+    "pi_rA=(0, 1, 2);pi_shared=(1, 0, 2);pi_cB=(0, 1, 2)"
+  ],
+  "interpretation": "The 4-dimensional identity space is not G-invariant under the 216 compatible actions. Only the identity action preserves it exactly; one shared transposition has 3-dimensional intersection, and the full orbit of the identity space fills all 18 eta coordinates."
+}

@@ -12,12 +12,14 @@ No arguments. Just run it.
 
 import ast
 import csv
+import json
 from datetime import datetime
 from pathlib import Path
 from collections import defaultdict
 
 # Paths
 EXPORTS_DIR = Path(__file__).parent / "outputs" / "exports"
+ATTACK_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack"
 DOCS_DIR = Path(__file__).parent / "docs"
 
 def read_csv(filename):
@@ -27,6 +29,20 @@ def read_csv(filename):
         return []
     with open(path, 'r', encoding='utf-8') as f:
         return list(csv.DictReader(f))
+
+def read_csv_path(path):
+    """Read CSV file from an explicit path."""
+    if not path.exists():
+        return []
+    with open(path, 'r', encoding='utf-8') as f:
+        return list(csv.DictReader(f))
+
+def read_json_path(path):
+    """Read JSON file from an explicit path."""
+    if not path.exists():
+        return {}
+    with open(path, 'r', encoding='utf-8') as f:
+        return json.load(f)
 
 def read_axxc_signature_layer(rep_config_ids):
     """Read the current AXXC arity-4 signature layer for selected reps.
@@ -379,6 +395,108 @@ def read_step71_outputs():
     shot5_rows = read_csv("step71_shot5_random_subset_scan.csv")
     return summary_rows, shot2_rows, shot4_rows, shot5_rows
 
+def read_step72_outputs():
+    """Read Step 72 depth-2 dimension-census exports, if present."""
+    summary_rows = read_csv("step72_summary.csv")
+    exact_rows = read_csv("step72_exact_census.csv")
+    aa_rows = read_csv("step72_aa_only_case_study.csv")
+    measured_rows = read_csv("step72_measured_jacobian_sweep.csv")
+    promising_rows = read_csv("step72_promising_regimes.csv")
+    landscape_rows = read_csv("step72_deficit_landscape.csv")
+    return summary_rows, exact_rows, aa_rows, measured_rows, promising_rows, landscape_rows
+
+def read_step73_outputs():
+    """Read Step 73 depth-2 bilinear-theorem exports, if present."""
+    summary_rows = read_csv("step73_summary.csv")
+    family_rows = read_csv("step73_family_degree_audit.csv")
+    theorem_rows = read_csv("step73_theorem_status.csv")
+    literature_rows = read_csv("step73_border_rank_literature.csv")
+    return summary_rows, family_rows, theorem_rows, literature_rows
+
+def read_step74_outputs():
+    """Read Step 74 commutator / anticommutator rank-scan exports, if present."""
+    summary_rows = read_csv("step74_summary.csv")
+    comm_rows = read_csv("step74_commutator_rank_scan.csv")
+    anti_rows = read_csv("step74_anticommutator_rank_scan.csv")
+    verification_rows = read_csv("step74_exact_verification.csv")
+    shared_rows = read_csv("step74_shared_term_matches.csv")
+    profile_rows = read_csv("step74_fiber_mode_profiles.csv")
+    return summary_rows, comm_rows, anti_rows, verification_rows, shared_rows, profile_rows
+
+def read_step75_outputs():
+    """Read Step 75 anticommutator rank-19 extraction + Hamilton split exports, if present."""
+    anti_verif_rows = read_csv("step75_anticommutator_rank19_verification.csv")
+    comm_verif_rows = read_csv("step75_commutator_rank20_verification.csv")
+    anti_coeff_rows = read_csv("step75_anticommutator_rank19_coefficients.csv")
+    anti_fibermode_rows = read_csv("step75_anticommutator_rank19_fibermode.csv")
+    return anti_verif_rows, comm_verif_rows, anti_coeff_rows, anti_fibermode_rows
+
+def read_step76_outputs():
+    """Read Step 76 quick-test exports, if present."""
+    summary_rows = read_csv("step76_summary.csv")
+    taskA_cost_rows = read_csv("step76_taskA_costs.csv")
+    taskA_tiling_rows = read_csv("step76_taskA_tiling_proxy_costs.csv")
+    taskB_claim_rows = read_csv("step76_taskB_cayley_hamilton_claims.csv")
+    taskC_count_rows = read_csv("step76_taskC_squaring_counts.csv")
+    taskD_rows = read_csv("step76_taskD_division_augmented_search.csv")
+    taskE_element_rows = read_csv("step76_taskE_gf9_elements.csv")
+    taskE_search_rows = read_csv("step76_taskE_gf9_search.csv")
+    return (
+        summary_rows,
+        taskA_cost_rows,
+        taskA_tiling_rows,
+        taskB_claim_rows,
+        taskC_count_rows,
+        taskD_rows,
+        taskE_element_rows,
+        taskE_search_rows,
+    )
+
+def read_step77_outputs():
+    """Read Step 77 border-rank singular-pair witness exports, if present."""
+    summary_rows = read_csv("step77_summary.csv")
+    pair_analysis_rows = read_csv("step77_pair_analysis.csv")
+    witness_rows = read_csv("step77_border_rank_witnesses.csv")
+    return summary_rows, pair_analysis_rows, witness_rows
+
+def read_attack_route_outputs():
+    """Read Phase 1-5 attack-route outputs, if present."""
+    phase1_dir = ATTACK_DIR / "phase1_delta_containment"
+    phase2_dir = ATTACK_DIR / "phase2_parity"
+    phase3_dir = ATTACK_DIR / "phase3_census"
+    phase4_dir = ATTACK_DIR / "phase4_gradient_search"
+    phase5_dir = ATTACK_DIR / "phase5_diagnostics"
+    containment_summary = read_json_path(phase1_dir / "containment_summary.json")
+    symbolic_summary = read_json_path(phase1_dir / "symbolic_summary.json")
+    projection_rows = read_csv_path(phase1_dir / "delta_projection_matrix.csv")
+    parity_summary = read_json_path(phase2_dir / "parity_summary.json")
+    budget_rows = read_csv_path(phase2_dir / "budget_table.csv")
+    phase3_profile_summary = read_json_path(phase3_dir / "profile_summary.json")
+    phase3_profile_rows = read_csv_path(phase3_dir / "profile_summary.csv")
+    phase3_generation_rows = read_csv_path(phase3_dir / "generation_summary.csv")
+    phase4_landscape = read_json_path(phase4_dir / "landscape_statistics.json")
+    phase5_trajectory = read_json_path(phase5_dir / "trajectory_summary.json")
+    phase5_null_space = read_json_path(phase5_dir / "null_space_summary.json")
+    phase5_projection = read_json_path(phase5_dir / "projection_analysis_summary.json")
+    phase5_interaction = read_json_path(phase5_dir / "interaction_summary.json")
+    phase5_baseline = read_json_path(phase5_dir / "baseline_summary.json")
+    return (
+        containment_summary,
+        symbolic_summary,
+        projection_rows,
+        parity_summary,
+        budget_rows,
+        phase3_profile_summary,
+        phase3_profile_rows,
+        phase3_generation_rows,
+        phase4_landscape,
+        phase5_trajectory,
+        phase5_null_space,
+        phase5_projection,
+        phase5_interaction,
+        phase5_baseline,
+    )
+
 def generate_x_atoms():
     """Generate all 81 X atoms with live/dead status and target."""
     # Try to read from export first
@@ -475,7 +593,13 @@ def generate():
     w("plus non-rectangular 6-fiber sub-tensor rank attack (step 62),")
     w("and reverse engineering with cancellation visualization (step 63),")
     w("plus small-integer coefficient enumeration (step 64),")
-    w("and polyomino subtensor-rank / tiling analysis (step 65)")
+    w("and polyomino subtensor-rank / tiling analysis (step 65),")
+    w("plus complete rank-table audit / layered tiling framework (step 67),")
+    w("plus layered correction tiling (step 68),")
+    w("and interlocking-mechanism analysis (step 69),")
+    w("plus depth-2 arithmetic circuit attack (step 70),")
+    w("and five local wall shots (step 71),")
+    w("plus depth-2 circuit dimension census (step 72)")
     w()
     w("**IMPORTANT:** This document contains all computed results inline.")
     w("No external files are required. All research findings are here.")
@@ -3162,11 +3286,77 @@ def generate():
         step71_shot4_rows,
         step71_shot5_rows,
     ) = read_step71_outputs()
+    (
+        step72_summary_rows,
+        step72_exact_rows,
+        step72_aa_rows,
+        step72_measured_rows,
+        step72_promising_rows,
+        step72_landscape_rows,
+    ) = read_step72_outputs()
+    (
+        step73_summary_rows,
+        step73_family_rows,
+        step73_theorem_rows,
+        step73_literature_rows,
+    ) = read_step73_outputs()
+    (
+        step74_summary_rows,
+        step74_comm_rows,
+        step74_anti_rows,
+        step74_verification_rows,
+        step74_shared_rows,
+        step74_profile_rows,
+    ) = read_step74_outputs()
+    (
+        step75_anti_verif_rows,
+        step75_comm_verif_rows,
+        step75_anti_coeff_rows,
+        step75_anti_fibermode_rows,
+    ) = read_step75_outputs()
+    (
+        step76_summary_rows,
+        step76_taskA_cost_rows,
+        step76_taskA_tiling_rows,
+        step76_taskB_claim_rows,
+        step76_taskC_count_rows,
+        step76_taskD_rows,
+        step76_taskE_element_rows,
+        step76_taskE_search_rows,
+    ) = read_step76_outputs()
+    (
+        step77_summary_rows,
+        step77_pair_analysis_rows,
+        step77_witness_rows,
+    ) = read_step77_outputs()
+    (
+        attack_phase1_containment,
+        attack_phase1_symbolic,
+        attack_phase1_projection_rows,
+        attack_phase2_parity,
+        attack_phase2_budget_rows,
+        attack_phase3_profile_summary,
+        attack_phase3_profile_rows,
+        attack_phase3_generation_rows,
+        attack_phase4_landscape,
+        attack_phase5_trajectory,
+        attack_phase5_null_space,
+        attack_phase5_projection,
+        attack_phase5_interaction,
+        attack_phase5_baseline,
+    ) = read_attack_route_outputs()
     step67_summary = {row['summary_name']: row for row in step67_summary_rows}
     step68_fourier_summary = {row['summary_name']: row for row in step68_fourier_summary_rows}
     step69_summary = {row['summary_name']: row for row in step69_summary_rows}
     step70_summary = {row['summary_name']: row for row in step70_summary_rows}
     step71_summary = {row['summary_name']: row for row in step71_summary_rows}
+    step72_summary = {row['summary_name']: row for row in step72_summary_rows}
+    step73_summary = {row['summary_name']: row for row in step73_summary_rows}
+    step74_summary = {row['summary_name']: row for row in step74_summary_rows}
+    step75_anti_verif = step75_anti_verif_rows[0] if step75_anti_verif_rows else {}
+    step75_comm_verif = step75_comm_verif_rows[0] if step75_comm_verif_rows else {}
+    step76_summary = {row['summary_name']: row for row in step76_summary_rows}
+    step77_summary = {row['summary_name']: row for row in step77_summary_rows}
     if sum65_rows:
         sum65 = {row['summary_name']: row for row in sum65_rows}
         l65_rows = [row for row in rank65_rows if row['family'] == 'L_tromino']
@@ -3393,6 +3583,672 @@ def generate():
     w("certify any global rank-26 or better matrix multiplication algorithm, because the")
     w("piecewise decompositions are not forced to coexist without cross-piece interference or extra sharing.")
 
+    w()
+    w(f"## {section_num}. DEPTH-2 CIRCUIT DIMENSION CENSUS")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] + [MEASURED_FROM_CODE] (Step 72)")
+    w()
+    if step72_summary_rows:
+        w("Step 72 treats the depth-2 question as a dimension census rather than as a nonlinear solve.")
+        w("The exact side enumerates every type assignment with R1 + R2 <= 22. The measured side")
+        w("computes local Jacobian ranks for the requested AA/BB-only and AA/QQ-only families with")
+        w("R_total in {20,21,22} and R1 >= 9.")
+        w()
+        w(f"**Parameter formula:** {step72_summary['step72_parameter_formula']['summary_value']}")
+        w(f"**Raw upper-bound constraint formula:** {step72_summary['step72_raw_constraint_upper_formula']['summary_value']}")
+        w(f"**Exact census rows:** {step72_summary['step72_exact_census_config_count']['summary_value']}")
+        w(f"**Raw upper-bound positive deficits:** {step72_summary['step72_raw_upper_positive_deficit_count']['summary_value']}")
+        w(f"**Best raw upper-bound deficit:** {step72_summary['step72_best_raw_upper_deficit']['summary_value']}")
+        w(f"**Measured Jacobian rows:** {step72_summary['step72_measured_config_count']['summary_value']}")
+        w(f"**AA/BB measured families:** {step72_summary['step72_measured_aa_bb_config_count']['summary_value']}")
+        w(f"**AA/QQ measured families:** {step72_summary['step72_measured_aa_qq_config_count']['summary_value']}")
+        w(f"**Positive measured local-fiber count:** {step72_summary['step72_jacobian_positive_local_fiber_count']['summary_value']}")
+        w(f"**Full-column-rank count:** {step72_summary['step72_jacobian_full_column_rank_count']['summary_value']}")
+        w(f"**Maximum measured local fiber dimension:** {step72_summary['step72_jacobian_max_local_fiber_dimension']['summary_value']}")
+        w(f"**Best measured configuration:** {step72_summary['step72_jacobian_best_config']['summary_value']}")
+        w(f"**Jacobian method:** {step72_summary['step72_jacobian_method']['summary_value']}")
+        w(f"**Search status:** {step72_summary['step72_search_status']['summary_value']}")
+        w()
+        w("### Task 4: AA-Only Case Study")
+        w()
+        aa_focus = [row for row in step72_aa_rows if row['r_total'] == '22']
+        if aa_focus:
+            w("| R_total | R1 | R2 | parameters | raw D vs 4374/729 rule | D vs 729 only |")
+            w("|---------|----|----|------------|------------------------|---------------|")
+            for row in aa_focus[-6:]:
+                w(f"| {row['r_total']} | {row['r1']} | {row['r2']} | {row['parameter_count']} | {row['raw_upper_deficit']} | {row['bilinear_only_deficit']} |")
+            w()
+        w("### Task 5 / 6: Measured Landscape")
+        w()
+        measured_focus = step72_promising_rows if step72_promising_rows else step72_measured_rows
+        measured_focus = sorted(
+            measured_focus,
+            key=lambda row: (-int(row['local_fiber_dimension']), int(row['jacobian_rank']), int(row['r_total']), int(row['r1']))
+        )[:10]
+        w("| family | R_total | R1 | R2 | AA | BB | QQ | parameters | rows | rank(J) | local fiber | raw upper D | status |")
+        w("|--------|---------|----|----|----|----|----|------------|------|---------|-------------|-------------|--------|")
+        for row in measured_focus:
+            w(
+                f"| {row['family']} | {row['r_total']} | {row['r1']} | {row['r2']} | {row['n_aa']} | {row['n_bb']} | {row['n_qq']} | "
+                f"{row['parameter_count']} | {row['jacobian_row_count']} | {row['jacobian_rank']} | {row['local_fiber_dimension']} | {row['raw_upper_deficit']} | {row['status']} |"
+            )
+        w()
+        w("[INTERPRETATION]")
+        w()
+        w("Step 72 makes the raw-count issue explicit. Across the full exact census, the naive coefficient-slot")
+        w("upper bound stays far larger than the parameter count, so the raw dimension heuristic alone never")
+        w("supports a sub-23 depth-2 claim.")
+        w("The measured Jacobian sweep is therefore the more relevant local object: it records how many")
+        w("constraint directions are actually activated at a generic point inside the chosen parameterization.")
+        w("That is still only a local dimension signal. A positive local fiber dimension does not certify")
+        w("existence of an exact circuit, and Step 72 deliberately stops short of turning the census into a")
+        w("nonlinear search claim.")
+        w("The other key methodological result is that the requested Jacobian can be measured exactly. The")
+        w("implemented sweep uses the analytical Jacobian rather than finite differences, which preserves the")
+        w("rank object of interest while keeping the full AA/BB and AA/QQ landscape tractable.")
+    else:
+        w("*Run ade3x3_step72_depth2_circuit_dimension_census.py to populate this section.*")
+
+    w()
+    w(f"## {section_num}. DEPTH-2 BILINEAR THEOREM")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] + [INTERPRETATION] + [EXTERNAL_SOURCE] (Step 73)")
+    w()
+    if step73_summary_rows:
+        w("Step 73 resolves the proposed depth-2 nonlinear-solve follow-up structurally instead")
+        w("of numerically. Using the same Step 72 parameterization, it audits the AA-only and")
+        w("QQ-only second-layer families directly at the coefficient level and records the")
+        w("homogeneous-degree truncation argument for exact bilinear maps.")
+        w()
+        w(f"**AA sample configuration:** {step73_summary['step73_aa_sample_config']['summary_value']}")
+        w(f"**QQ sample configuration:** {step73_summary['step73_qq_sample_config']['summary_value']}")
+        w(f"**AA second-layer bilinear norm:** {step73_summary['step73_aa_second_layer_bilinear_norm']['summary_value']}")
+        w(f"**QQ second-layer bilinear norm:** {step73_summary['step73_qq_second_layer_bilinear_norm']['summary_value']}")
+        w(f"**Exact-depth theorem status:** {step73_summary['step73_exact_depth_theorem_status']['summary_value']}")
+        w(f"**Border-rank lower bound recovered online:** {step73_summary['step73_border_rank_lower_bound']['summary_value']}")
+        w(f"**Online exact-rank status:** {step73_summary['step73_exact_rank_online_status']['summary_value']}")
+        w(f"**Explicit border-rank witness found online in this pass:** {step73_summary['step73_explicit_border_rank_witness_found_online']['summary_value']}")
+        w()
+        w("### Task 1a / 1b: Coefficient-Sector Audit")
+        w()
+        w("| family | config | expected nonzero sectors | bilinear norm | A^2B norm | AB^2 norm | A^2B^2 norm | second-layer bilinear norm | reconstruction residual |")
+        w("|--------|--------|--------------------------|---------------|------------|------------|--------------|----------------------------|-------------------------|")
+        for row in step73_family_rows:
+            w(
+                f"| {row['family']} | {row['config_id']} | {row['expected_nonzero_sectors']} | {row['bilinear_coeff_norm']} | {row['aab_coeff_norm']} | {row['abb_coeff_norm']} | {row['aabb_coeff_norm']} | {row['second_layer_bilinear_norm']} | {row['coefficient_reconstruction_residual']} |"
+            )
+        w()
+        w("The AA audit leaves only bilinear + A^2B sectors, and the QQ audit leaves only")
+        w("bilinear + A^2B^2 sectors. So the useful degree-2 part always comes entirely from")
+        w("Layer 1 in these restricted families.")
+        w()
+        w("### Exact-Derived Consequence")
+        w()
+        for row in step73_theorem_rows:
+            w(f"- {row['statement']} Evidence: {row['evidence']}")
+        w()
+        w("[INTERPRETATION]")
+        w()
+        w("This changes how Step 72 should be read. The positive local fiber dimensions measured")
+        w("there are parameterization-level redundancy signals inside the chosen depth-2 ansatz,")
+        w("not evidence that AA or QQ second-layer branches create new exact bilinear freedom.")
+        w("If an AA/QQ-restricted depth-2 circuit with R1 < 23 were exact, then its homogeneous")
+        w("degree-2 truncation would already give a rank-R1 exact bilinear decomposition of the")
+        w("3x3 matrix-multiplication tensor.")
+        w()
+        w("### Border-Rank Literature Pass")
+        w()
+        w("| topic | source | claim |")
+        w("|-------|--------|-------|")
+        for row in step73_literature_rows:
+            source = row['source_title']
+            if row['source_url']:
+                source = f"[{row['source_title']}]({row['source_url']})"
+            w(f"| {row['topic']} | {source} | {row['claim']} |")
+        w()
+        w("The clean literature fact recovered in this pass is the border-rank lower bound")
+        w("underline(R)(<3,3,3>) >= 15. The online status for exact rank still reads 19 <= R <= 23.")
+        w("No explicit 3x3 border-rank witness with coefficients was harvested during this pass,")
+        w("so the border-rank-plus-correction route remains only a documented external escape")
+        w("route here, not a new computed artifact.")
+    else:
+        w("*Run ade3x3_step73_depth2_bilinear_theorem.py to populate this section.*")
+
+    w()
+    w(f"## {section_num}. COMMUTATOR / ANTICOMMUTATOR DEFINITIVE RANK SCAN")
+    section_num += 1
+    w()
+    w("[MEASURED_FROM_CODE] + [EXACT_DERIVED] (Step 74)")
+    w()
+    if step74_summary_rows:
+        w("Step 74 reruns the old Step 71 commutator / anticommutator split as a")
+        w("factor-preserving scan. The wide phase covers ranks 8..23 with 2000 restarts")
+        w("per rank, and the transition ranks are then rerun with 5000 restarts so the")
+        w("first exact hit can be extracted, verified entrywise, and profiled in the")
+        w("Step 51 fiber-mode basis.")
+        w()
+        w(f"**Commutator flattening lower bound:** {step74_summary['step74_commutator_flattening_lb']['summary_value']}")
+        w(f"**Commutator first exact rank in wide scan:** {step74_summary['step74_commutator_phase1_first_exact_rank']['summary_value']}")
+        w(f"**Commutator exact rank after fine scan:** {step74_summary['step74_commutator_phase2_exact_rank']['summary_value']}")
+        w(f"**Anticommutator flattening lower bound:** {step74_summary['step74_anticommutator_flattening_lb']['summary_value']}")
+        w(f"**Anticommutator first exact rank in wide scan:** {step74_summary['step74_anticommutator_phase1_first_exact_rank']['summary_value']}")
+        w(f"**Anticommutator exact rank after fine scan:** {step74_summary['step74_anticommutator_phase2_exact_rank']['summary_value']}")
+        w(f"**Best commutator residual seen:** {step74_summary['step74_commutator_best_overall_max_abs_residual']['summary_value']}")
+        w(f"**Best anticommutator residual seen:** {step74_summary['step74_anticommutator_best_overall_max_abs_residual']['summary_value']}")
+        if 'step74_shared_term_count' in step74_summary:
+            w(f"**Shared term count:** {step74_summary['step74_shared_term_count']['summary_value']}")
+            w(f"**Union distinct term count:** {step74_summary['step74_union_distinct_term_count']['summary_value']}")
+            w(f"**Combined nonzero term count for T = (T_comm + T_anti)/2:** {step74_summary['step74_combined_nonzero_term_count']['summary_value']}")
+            w(f"**Combined tensor beats rank 23:** {step74_summary['step74_combined_beats_23']['summary_value']}")
+            if 'step74_combined_tensor_max_abs_residual' in step74_summary:
+                w(f"**Combined tensor max-abs residual:** {step74_summary['step74_combined_tensor_max_abs_residual']['summary_value']}")
+        w()
+        w("### Wide + Fine Scan Tables")
+        w()
+        w("#### Commutator")
+        w()
+        w("| phase | rank | restarts | best verified loss | best max-abs residual | exact hit count | verified exact |")
+        w("|-------|------|----------|--------------------|------------------------|-----------------|----------------|")
+        for row in step74_comm_rows:
+            w(f"| {row['phase']} | {row['rank_tested']} | {row['restarts']} | {row['best_verified_loss']} | {row['best_max_abs_residual']} | {row['exact_hit_count']} | {row['verified_exact']} |")
+        w()
+        w("#### Anticommutator")
+        w()
+        w("| phase | rank | restarts | best verified loss | best max-abs residual | exact hit count | verified exact |")
+        w("|-------|------|----------|--------------------|------------------------|-----------------|----------------|")
+        for row in step74_anti_rows:
+            w(f"| {row['phase']} | {row['rank_tested']} | {row['restarts']} | {row['best_verified_loss']} | {row['best_max_abs_residual']} | {row['exact_hit_count']} | {row['verified_exact']} |")
+        w()
+        if step74_verification_rows:
+            w("### Entrywise Verification")
+            w()
+            w("| tensor | phase | rank | max-abs residual on all 729 entries | verified below 1e-15 |")
+            w("|--------|-------|------|-----------------------------------|----------------------|")
+            for row in step74_verification_rows:
+                w(f"| {row['tensor_name']} | {row['phase_used']} | {row['rank_value']} | {row['max_abs_residual_all_entries']} | {row['verified_entrywise_below_1e-15']} |")
+            w()
+        if step74_shared_rows:
+            w("### Shared-Term Matches")
+            w()
+            w("| commutator term | anticommutator term | comm scale | anti scale | half-sum scale in T | cancels in T |")
+            w("|-----------------|---------------------|------------|------------|----------------------|--------------|")
+            for row in step74_shared_rows:
+                w(f"| {row['comm_term_id']} | {row['anti_term_id']} | {row['comm_scale']} | {row['anti_scale']} | {row['combined_half_sum_scale']} | {row['cancels_in_T']} |")
+            w()
+        if step74_profile_rows:
+            w("### Step 51 Fiber-Mode Profiles")
+            w()
+            w("| profile | terms | sigma rank | eta1 rank | eta2 rank | eta rank | delta rank | nuisance rank | quotient gain |")
+            w("|---------|-------|------------|-----------|-----------|----------|------------|---------------|---------------|")
+            for row in step74_profile_rows:
+                w(f"| {row['profile_name']} | {row['term_count']} | {row['sigma_rank']} | {row['eta1_rank']} | {row['eta2_rank']} | {row['eta_rank']} | {row['delta_rank']} | {row['nuisance_rank']} | {row['quotient_gain']} |")
+            w()
+        w("[INTERPRETATION]")
+        w()
+        comm_rank = step74_summary['step74_commutator_phase2_exact_rank']['summary_value']
+        anti_rank = step74_summary['step74_anticommutator_phase2_exact_rank']['summary_value']
+        w(f"The old Step 71 commutator probe is now definitive at the exported scan budget: the fine-scan exact ranks are commutator = {comm_rank} and anticommutator = {anti_rank}.")
+        if 'step74_shared_term_count' in step74_summary:
+            shared = step74_summary['step74_shared_term_count']['summary_value']
+            union_count = step74_summary['step74_union_distinct_term_count']['summary_value']
+            combined_count = step74_summary['step74_combined_nonzero_term_count']['summary_value']
+            beats_23 = step74_summary['step74_combined_beats_23']['summary_value']
+            w(f"The shared-term follow-up then finds {shared} matched rank-1 terms, for union distinct count {union_count} and combined nonzero count {combined_count}; the resulting derived route beats rank 23 = {beats_23}.")
+        w("This should be read as a measured search result, not a universal proof: it settles the requested scan window and verification budget, and it records the exact decompositions that this budget actually found.")
+    else:
+        w("*Run ade3x3_step74_commutator_anticommutator_rank_scan.py to populate this section.*")
+
+    w()
+    w(f"## {section_num}. ANTICOMMUTATOR RANK-19 EXTRACTION + HAMILTON SPLIT")
+    section_num += 1
+    w()
+    w("[MEASURED_FROM_CODE] (Step 75)")
+    w()
+    if step75_anti_verif_rows:
+        av = step75_anti_verif
+        cv = step75_comm_verif
+        w("Step 75 uses the seeds located by Step 74 to run a dedicated 5000-restart search at")
+        w("rank 19 for the anticommutator and then re-verifies the rank-20 commutator. The exact")
+        w("decompositions are profiled in the Step 51 fiber-mode basis and the Hamilton split")
+        w("T = ({A,B} + [A,B]) / 2 is recorded with naive combined term count.")
+        w()
+        w("### Anticommutator {A,B} = AB + BA")
+        w()
+        w(f"**Rank:** {av.get('rank_value', 'n/a')}")
+        w(f"**Best seed:** {av.get('best_seed', 'n/a')}")
+        w(f"**Best loss:** {av.get('best_loss', 'n/a')}")
+        w(f"**Max residual:** {av.get('max_abs_residual', 'n/a')}")
+        w(f"**Mean residual:** {av.get('mean_abs_residual', 'n/a')}")
+        w(f"**Entries > 1e-8:** {av.get('entries_gt_1e-8', 'n/a')}")
+        w(f"**Entries > 1e-6:** {av.get('entries_gt_1e-6', 'n/a')}")
+        w(f"**Verified exact under 1e-6:** {av.get('verified_exact_under_1e-6', 'n/a')}")
+        w(f"**Fiber-mode:** sigma_rank={av.get('sigma_rank', 'n/a')}, eta_rank={av.get('eta_rank', 'n/a')}, delta_rank={av.get('delta_rank', 'n/a')}, nuisance_rank={av.get('nuisance_rank', 'n/a')}, quotient_gain={av.get('quotient_gain', 'n/a')}")
+        w(f"**Self-symmetric terms:** {av.get('self_count', 'n/a')} | **Symmetric pairs:** {av.get('pair_count', 'n/a')} | **Unpaired:** {av.get('unpaired_count', 'n/a')}")
+        w()
+        if step75_anti_coeff_rows:
+            w(f"**19-term coefficient table ({len(step75_anti_coeff_rows)} terms):**")
+            w()
+            w("| term | alpha (3×3) | beta (3×3) | gamma (3×3) |")
+            w("|------|-------------|------------|-------------|")
+            for row in step75_anti_coeff_rows:
+                w(f"| {row['term']} | {row['alpha']} | {row['beta']} | {row['gamma']} |")
+            w()
+        if step75_anti_fibermode_rows:
+            fm = step75_anti_fibermode_rows[0]
+            w("**Fiber-mode profile:**")
+            w()
+            w("| label | sigma_rank | eta_rank | delta_rank | nuisance_rank | quotient_gain |")
+            w("|-------|------------|----------|------------|---------------|---------------|")
+            w(f"| {fm.get('label', 'n/a')} | {fm.get('sigma_rank', 'n/a')} | {fm.get('eta_rank', 'n/a')} | {fm.get('delta_rank', 'n/a')} | {fm.get('nuisance_rank', 'n/a')} | {fm.get('quotient_gain', 'n/a')} |")
+            w()
+        if cv:
+            w("### Commutator [A,B] = AB - BA")
+            w()
+            w(f"**Rank:** {cv.get('rank_value', 'n/a')}")
+            w(f"**Best seed:** {cv.get('best_seed', 'n/a')}")
+            w(f"**Best loss:** {cv.get('best_loss', 'n/a')}")
+            w(f"**Max residual:** {cv.get('max_abs_residual', 'n/a')}")
+            w(f"**Verified exact under 1e-6:** {cv.get('verified_exact_under_1e-6', 'n/a')}")
+            w(f"**Fiber-mode:** sigma_rank={cv.get('sigma_rank', 'n/a')}, eta_rank={cv.get('eta_rank', 'n/a')}, delta_rank={cv.get('delta_rank', 'n/a')}, nuisance_rank={cv.get('nuisance_rank', 'n/a')}, quotient_gain={cv.get('quotient_gain', 'n/a')}")
+            w(f"**Self-antisymmetric terms:** {cv.get('self_count', 'n/a')} | **Antisymmetric pairs:** {cv.get('pair_count', 'n/a')} | **Unpaired:** {cv.get('unpaired_count', 'n/a')}")
+            w()
+        w("### Hamilton Split")
+        w()
+        try:
+            _naive_combined = int(av.get('rank_value', 0)) + int(cv.get('rank_value', 0) if cv else 0)
+        except (TypeError, ValueError):
+            _naive_combined = 'n/a'
+        w("T = ({A,B} + [A,B]) / 2 decomposes as the average of the two verified exact decompositions.")
+        w(f"rank(T_anti) = {av.get('rank_value', 'n/a')}, rank(T_comm) = {cv.get('rank_value', 'n/a') if cv else 'n/a'}")
+        w(f"Naive combined term count: {_naive_combined}")
+        w("Hamilton split sharing analysis: deferred to follow-up derivation.")
+        w()
+        w("[INTERPRETATION]")
+        w()
+        w(f"Step 75 confirms the anticommutator exact rank is {av.get('rank_value', 'n/a')}: all {av.get('self_count', 'n/a')} terms are")
+        w(f"self-symmetric, nuisance_rank = {av.get('nuisance_rank', 'n/a')}, quotient_gain = {av.get('quotient_gain', 'n/a')}. The commutator")
+        w(f"is separately verified at rank {cv.get('rank_value', 'n/a') if cv else 'n/a'} with {cv.get('unpaired_count', 'n/a') if cv else 'n/a'} unpaired terms.")
+        w(f"The naive Hamilton split costs {_naive_combined} terms total; whether sharing between the anticommutator")
+        w("and commutator supports can reduce this below the naive sum is left as an open derivation.")
+    else:
+        w("*Run ade3x3_step75_anticommutator_rank19_extraction.py to populate this section.*")
+
+    w()
+    w(f"## {section_num}. BATCH OF FIVE QUICK TESTS")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] + [MEASURED_FROM_CODE] (Step 76)")
+    w()
+    if step76_summary_rows:
+        w("Step 76 runs five independent quick tests around cost accounting, Cayley-Hamilton,")
+        w("squaring/Frobenius variants, a bounded division-augmented 2x2 circuit search, and")
+        w("bounded exact finite-field rank probes over GF(3) and GF(9). Two of the user-supplied")
+        w("premises are explicitly corrected in the exports: Cayley-Hamilton does not reduce the")
+        w("3x3 output dimension from 9 to 8, and over GF(3) one has x^3 = x rather than x^2 = x.")
+        w()
+        w("### Task A: Pareto Frontier")
+        w()
+        w(f"**Standard schedule cost:** M = {step76_summary.get('taskA_standard_M', {}).get('summary_value', 'n/a')}, A = {step76_summary.get('taskA_standard_A', {}).get('summary_value', 'n/a')}")
+        w(f"**AlphaTensor public rank-23:** M = {step76_summary.get('taskA_alphatensor_M', {}).get('summary_value', 'n/a')}, requested A = {step76_summary.get('taskA_alphatensor_A_requested', {}).get('summary_value', 'n/a')}, scheduled-reference A = {step76_summary.get('taskA_alphatensor_A_scheduled', {}).get('summary_value', 'n/a')}")
+        w(f"**Best exported 26-multiplication tiling proxy:** M = {step76_summary.get('taskA_best_tiling_M', {}).get('summary_value', 'n/a')}, scheduled proxy A = {step76_summary.get('taskA_best_tiling_A_scheduled_proxy', {}).get('summary_value', 'n/a')}")
+        w(f"**AlphaTensor beats standard under requested counting at:** p >= {step76_summary.get('taskA_alphatensor_beats_standard_requested_after_p', {}).get('summary_value', 'n/a')}")
+        w(f"**AlphaTensor beats standard under scheduled counting at:** p >= {step76_summary.get('taskA_alphatensor_beats_standard_scheduled_after_p', {}).get('summary_value', 'n/a')}")
+        w()
+        w("| scheme | p | M | A | cost | counting model |")
+        w("|--------|---|---|---|------|----------------|")
+        for row in step76_taskA_cost_rows:
+            w(f"| {row['scheme']} | {row['p']} | {row['M']} | {row['A']} | {row['cost']} | {row['count_model']} |")
+        w()
+        if step76_taskA_tiling_rows:
+            w("| 26-multiplication tiling configuration | scheduled proxy A | status |")
+            w("|----------------------------------------|-------------------|--------|")
+            for row in step76_taskA_tiling_rows:
+                w(f"| {row['configuration']} | {row['A_scheduled_proxy']} | {row['status']} |")
+            w()
+        w("The Step 67 tilings remain restricted-subtensor configurations rather than certified global 3x3 algorithms, so their exported addition counts are concrete proxy schedules built from the extracted square-tetromino witness plus direct piece formulas.")
+        w()
+        w("### Task B: Cayley-Hamilton")
+        w()
+        w("| claim | verdict | reason |")
+        w("|-------|---------|--------|")
+        for row in step76_taskB_claim_rows:
+            w(f"| {row['claim']} | {row['verdict']} | {row['reason']} |")
+        w()
+        w("The decisive point is surjectivity: every 3x3 matrix C occurs as AB by taking A = I and B = C, so Cayley-Hamilton cannot impose a nontrivial output relation that globally removes one coordinate from the image of matrix multiplication.")
+        w()
+        w("### Task C: Squaring as Primitive")
+        w()
+        c76 = {row['quantity']: row['value'] for row in step76_taskC_count_rows}
+        w(f"**Distinct alpha forms:** {c76.get('distinct_alpha_forms', 'n/a')}")
+        w(f"**Distinct beta forms:** {c76.get('distinct_beta_forms', 'n/a')}")
+        w(f"**Distinct (alpha·A ± beta·B) forms:** {c76.get('distinct_alpha_plus_or_minus_beta_forms', 'n/a')}")
+        w(f"**Naive two-squaring total:** {c76.get('naive_two_squarings_total', 'n/a')}")
+        w(f"**Any squaring sharing at all:** {c76.get('sharing_saves_squarings', 'n/a')}")
+        w(f"**GF(3) rank-22 exact hit in bounded search:** {step76_summary.get('taskC_gf3_rank22_random_exact_hit', {}).get('summary_value', 'n/a')}")
+        w(f"**Exported GF(3) rank bounds after the quick test:** {step76_summary.get('taskC_gf3_rank_bounds_after_quick_test', {}).get('summary_value', 'n/a')}")
+        w(f"**User premise x^2 = x over GF(3):** {step76_summary.get('taskC_user_claim_x2_equals_x_over_GF3', {}).get('summary_value', 'n/a')}")
+        w()
+        w("So the AlphaTensor 23-term decomposition has no plus/minus-form sharing at all in this model: the distinct alpha±beta count stays at the full 46. The bounded exact GF(3) rank-22 search likewise found no R < 23 witness.")
+        w()
+        w("### Task D: Division-Augmented 2x2")
+        w()
+        w(f"**Sweep-best case:** {step76_summary.get('taskD_sweep_best_case', {}).get('summary_value', 'n/a')}")
+        w(f"**Sweep-best validation MSE:** {step76_summary.get('taskD_sweep_best_valid_mse', {}).get('summary_value', 'n/a')}")
+        w(f"**Any exact hit in staged search:** {step76_summary.get('taskD_any_exact_hit', {}).get('summary_value', 'n/a')}")
+        w(f"**Focus triggered:** {step76_summary.get('taskD_focus_triggered', {}).get('summary_value', 'n/a')}")
+        w()
+        w("| phase | search case | restarts | valid structures | best train MSE | best valid MSE | exact hit count |")
+        w("|-------|-------------|----------|------------------|----------------|----------------|-----------------|")
+        for row in sorted(step76_taskD_rows, key=lambda row: (row['phase'], int(row['op_count']), int(row['div_count']))):
+            best_train = row['best_train_mse'] if row['best_train_mse'] not in ('', 'None') else 'n/a'
+            best_valid = row['best_valid_mse'] if row['best_valid_mse'] not in ('', 'None') else 'n/a'
+            w(f"| {row['phase']} | {row['search_case']} | {row['restarts']} | {row['valid_structures']} | {best_train} | {best_valid} | {row['exact_hit_count']} |")
+        w()
+        w("No staged randomized search produced an exact candidate. The export now separates the initial 500-restart sweep from any optional 5000-restart focus phase; in the current run, the sweep-best score still does not certify a low-op exact division circuit.")
+        w()
+        w("### Task E: GF(9) + Frobenius")
+        w()
+        w(f"**GF(9) sweep best-covered map:** {step76_summary.get('taskE_GF9_sweep_best_covered_by_rank', {}).get('summary_value', 'n/a')}")
+        w(f"**First positive GF(9) sweep rank:** {step76_summary.get('taskE_GF9_first_positive_rank', {}).get('summary_value', 'n/a')}")
+        w(f"**GF(9) focus triggered:** {step76_summary.get('taskE_GF9_focus_triggered', {}).get('summary_value', 'n/a')}")
+        w(f"**Any exact hit in staged ordinary GF(9) search:** {step76_summary.get('taskE_GF9_any_exact_hit', {}).get('summary_value', 'n/a')}")
+        w(f"**Exported GF(9) rank bounds after the quick test:** {step76_summary.get('taskE_GF9_rank_bounds_after_quick_test', {}).get('summary_value', 'n/a')}")
+        w(f"**Free Frobenius changes the model away from ordinary tensor rank:** {step76_summary.get('taskE_frobenius_free_changes_tensor_rank_model', {}).get('summary_value', 'n/a')}")
+        w()
+        w("| phase | rank | restarts | best covered outputs | positive restarts | exact hit count |")
+        w("|-------|------|----------|----------------------|-------------------|-----------------|")
+        for row in sorted(step76_taskE_search_rows, key=lambda row: (row['phase'], int(row['rank_tested']))):
+            w(f"| {row['phase']} | {row['rank_tested']} | {row['restarts']} | {row['best_covered_output_columns']} | {row['positive_restart_count']} | {row['exact_hit_count']} |")
+        w()
+        w("| element | Frobenius cube | Frobenius order 2? |")
+        w("|---------|----------------|--------------------|")
+        for row in step76_taskE_element_rows:
+            w(f"| {row['label']} | {row['frobenius_cube_label']} | {row['frobenius_order_two']} |")
+        w()
+        w("The conservative exact result here is ordinary GF(9) bilinear rank, not the semilinear 'free Frobenius' model. The export now records a parallel sweep over ranks 9..22 followed by a focus phase only if the sweep shows any coverage at a rank; that staged ordinary-tensor proxy still does not amount to a semilinear Frobenius-rank calculation.")
+        w()
+        w("[INTERPRETATION]")
+        w()
+        w("Step 76 is mostly negative, but in a useful way. The cost accounting makes the public 23-term algorithm look addition-heavy rather than universally Pareto-optimal; Cayley-Hamilton is ruled out as a bilinear-complexity shortcut; the squaring route shows zero form sharing in the public decomposition; the bounded 2x2 division search produces no exact low-op witness; and the finite-field quick tests find no sub-23 witness at rank 22 over either GF(3) or GF(9). The only model left genuinely ambiguous here is the semilinear Frobenius-free model over GF(9), because that is not ordinary tensor rank and would need a different exact formalization.")
+    else:
+        w("*Run ade3x3_step76_batch_of_five_quick_tests.py to populate this section.*")
+
+    # ── STEP 77: BORDER RANK SINGULAR-PAIR WITNESS ──
+    w()
+    w(f"## {section_num}. BORDER RANK SINGULAR-PAIR WITNESS CONSTRUCTION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] + [MEASURED_FROM_CODE] (Step 77)")
+    w()
+    if step77_summary_rows:
+        total = step77_summary.get('step77_total_constant_multiple_pairs', {}).get('summary_value', 'n/a')
+        disjoint = step77_summary.get('step77_gamma_disjoint_pairs', {}).get('summary_value', 'n/a')
+        prop = step77_summary.get('step77_gamma_proportional_pairs', {}).get('summary_value', 'n/a')
+        rank1 = step77_summary.get('step77_pair_tensor_rank1_count', {}).get('summary_value', 'n/a')
+        lb_max = step77_summary.get('step77_pair_flattening_lb_max', {}).get('summary_value', 'n/a')
+        lb_min = step77_summary.get('step77_pair_flattening_lb_min', {}).get('summary_value', 'n/a')
+        restarts = step77_summary.get('step77_search_restarts_per_pair', {}).get('summary_value', 'n/a')
+        any_hit = step77_summary.get('step77_any_exact_hit_rank22', {}).get('summary_value', 'n/a')
+        hit_count = step77_summary.get('step77_exact_hit_count', {}).get('summary_value', 'n/a')
+        best_resid = step77_summary.get('step77_best_max_abs_residual_across_pairs', {}).get('summary_value', 'n/a')
+        w("Step 77 implements the border-rank singular-pair witness test over all constant-multiple AlphaTensor pairs")
+        w("from Step 70. For each pair (t_i, t_j) with identical common alpha×beta support, the script:")
+        w("  1. Computes algebraic filters: gamma disjoint (support(γ_i) ∩ support(γ_j) = ∅) and gamma proportional.")
+        w("  2. Computes T_pair = term_tensor(t_i) + term_tensor(t_j) and its mode-unfolding rank lower bound.")
+        w("  3. Runs a bounded L-BFGS-B search for a rank-21 CP decomposition of T_full − T_pair.")
+        w("     If exact (max-abs residual < 1e-6), then rank(T_full) ≤ 22, i.e., a border-rank witness.")
+        w()
+        w("### Algebraic Filter Statistics")
+        w()
+        w(f"| metric | value |")
+        w(f"|--------|-------|")
+        w(f"| Constant-multiple pairs (from Step 70) | {total} |")
+        w(f"| Pairs with disjoint gamma support | {disjoint} |")
+        w(f"| Pairs with proportional gamma | {prop} |")
+        w(f"| Pair sub-tensors already rank-1 | {rank1} |")
+        w(f"| Pair flattening lower bound (min / max) | {lb_min} / {lb_max} |")
+        w()
+        w("### Search Results")
+        w()
+        w(f"| metric | value |")
+        w(f"|--------|-------|")
+        w(f"| Restarts per pair | {restarts} |")
+        w(f"| Search target (rank of T_full − T_pair) | 21 |")
+        w(f"| Any exact hit (max-abs residual < 1e-6) | {any_hit} |")
+        w(f"| Exact hit count | {hit_count} |")
+        w(f"| Best max-abs residual across all pairs | {best_resid} |")
+        w()
+        if step77_pair_analysis_rows:
+            w("### Per-Pair Summary (first 20 rows by pair index)")
+            w()
+            w("| # | t_i | t_j | γ_disjoint | γ_prop | γ_ratio | flat_lb | exact_hit | max_abs_resid |")
+            w("|---|-----|-----|-----------|--------|---------|---------|-----------|---------------|")
+            for i, row in enumerate(step77_pair_analysis_rows[:20]):
+                ratio_str = row.get('gamma_ratio', '') or '—'
+                w(f"| {i+1} | {row['term_i']} | {row['term_j']} | {row['gamma_disjoint']} | {row['gamma_proportional']} | {ratio_str} | {row['T_pair_flattening_lb']} | {row['search_exact_hit']} | {row['search_best_max_abs_residual']} |")
+            if len(step77_pair_analysis_rows) > 20:
+                w(f"*(... {len(step77_pair_analysis_rows) - 20} more rows in step77_pair_analysis.csv)*")
+            w()
+        if step77_witness_rows:
+            w("### Border-Rank-22 Witnesses Found")
+            w()
+            w("| t_i | t_j | γ_disjoint | flat_lb | max_abs_resid |")
+            w("|-----|-----|-----------|---------|---------------|")
+            for row in step77_witness_rows:
+                w(f"| {row['term_i']} | {row['term_j']} | {row['gamma_disjoint']} | {row['T_pair_flattening_lb']} | {row['search_best_max_abs_residual']} |")
+            w()
+        w("[INTERPRETATION]")
+        w()
+        if any_hit == 'True':
+            w(f"Step 77 found {hit_count} border-rank-22 witness(es) among the {total} constant-multiple AlphaTensor pairs.")
+            w("For each witness pair, the remaining T_full − T_pair tensor was decomposed exactly at rank 21,")
+            w("proving rank(T_full) ≤ 22 and thus establishing a border-rank upper bound of 22 for <3,3,3>.")
+        else:
+            w(f"Step 77 found no border-rank-22 witness among the {total} constant-multiple AlphaTensor pairs at {restarts} restarts.")
+            w(f"The best observed max-abs residual across all pairs was {best_resid}, well above the exact threshold of 1e-6.")
+            w(f"Of the {total} pairs, {disjoint} have disjoint gamma support (the cleanest algebraic case) and {prop} have proportional gamma.")
+            w("The absence of any exact hit is consistent with the AlphaTensor rank-23 decomposition being locally algebraically irreducible")
+            w("under the constant-multiple pair constraint, but does not rule out border-rank witnesses from other decomposition families.")
+    else:
+        w("*Run ade3x3_step77_border_rank_singular_pair_witness.py to populate this section.*")
+
+    w()
+    w(f"## {section_num}. ATTACK ROUTES: PHASES 1-5")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] + [MEASURED_FROM_CODE] (Attack Routes, Phases 1-5)")
+    w()
+    if attack_phase1_containment and attack_phase2_parity:
+        joint_summary = attack_phase1_symbolic.get('jacobian_summary', {}) if attack_phase1_symbolic else {}
+        transform_checks = attack_phase2_parity.get('symbolic_transform_checks', {})
+        phase3_summary_rows = {row.get('source', ''): row for row in attack_phase3_profile_rows}
+        phase3_generation_rows_by_source = {}
+        for row in attack_phase3_generation_rows:
+            phase3_generation_rows_by_source.setdefault(row.get('source', ''), []).append(row)
+        phase4_landscape_by_rank = attack_phase4_landscape.get('landscape_by_rank', {}) if attack_phase4_landscape else {}
+        trajectory_original = attack_phase5_trajectory.get('original_order', {}) if attack_phase5_trajectory else {}
+        trajectory_random = attack_phase5_trajectory.get('random_orders', []) if attack_phase5_trajectory else []
+        first_h14_values = [row.get('first_k_rank_H_14') for row in trajectory_random if row.get('first_k_rank_H_14') is not None]
+        representative_rows = [
+            row for row in attack_phase1_projection_rows
+            if row.get('support_size', '0') not in ('', '0')
+        ][:6]
+        w("This attack-route block imports the Phase 1 and Phase 2 follow-up results run directly against")
+        w("the public AlphaTensor rank-23 decomposition using the Step 63 loader and the Step 51 fiber-mode basis,")
+        w("and then extends that same exact profiling path through the Phase 3 census, the Phase 4 direct rank-22 search,")
+        w("and the Phase 5 structural diagnostics.")
+        w()
+        w("### Phase 1: Collection-Level Delta-in-Eta Test")
+        w()
+        w(f"**Source decomposition:** {attack_phase1_containment.get('source', 'n/a')}")
+        w(f"**Gamma orientation:** {attack_phase1_containment.get('gamma_orientation', 'n/a')}")
+        w(f"**Exact reconstruction residual:** {attack_phase1_containment.get('exact_reconstruction_residual', 'n/a')}")
+        w(f"**rank(H):** {attack_phase1_containment.get('rank_H_exact', 'n/a')}")
+        w(f"**rank(Delta):** {attack_phase1_containment.get('rank_Delta_exact', 'n/a')}")
+        w(f"**rank([H|Delta]):** {attack_phase1_containment.get('rank_HDelta_exact', 'n/a')}")
+        w(f"**Collection-level Delta subset span(H):** {attack_phase1_containment.get('collection_level_delta_in_eta', 'n/a')}")
+        w(f"**Exact projection verified:** {attack_phase1_containment.get('projection_exact_verification', 'n/a')}")
+        w(f"**Projection nonzero count:** {attack_phase1_containment.get('projection_nonzero_count', 'n/a')}")
+        w(f"**Projection nonzero coefficient alphabet:** {', '.join(attack_phase1_containment.get('projection_unique_nonzero_coefficients', [])) or 'n/a'}")
+        w(f"**Zero delta columns:** {attack_phase1_containment.get('zero_delta_column_count', 'n/a')} / 54")
+        w()
+        w("### Phase 1: Single-Term Obstruction")
+        w()
+        w(f"**Single-term constant containment holds for any delta coordinate:** {attack_phase1_symbolic.get('single_term_constant_containment_holds', 'n/a')}")
+        w(f"**Delta coordinates tested:** {attack_phase1_symbolic.get('delta_coordinates_tested', 'n/a')}")
+        w(f"**Sampled generic rank J_eta:** {joint_summary.get('eta_generic_rank_if_sample_hits_upper_bound', 'n/a')}")
+        w(f"**Sampled generic rank J_(eta,delta):** {joint_summary.get('joint_generic_rank_if_sample_hits_upper_bound', 'n/a')}")
+        w()
+        if representative_rows:
+            w("**Representative exact projection identities (from Delta = H M):**")
+            w()
+            w("| delta coordinate | support | exact eta combination |")
+            w("|------------------|---------|-----------------------|")
+            for row in representative_rows:
+                support = row.get('support', '') or '0'
+                coeff_parts = []
+                for key, value in row.items():
+                    if key.startswith('eta') and value not in ('', '0'):
+                        if value == '1':
+                            coeff_parts.append(key)
+                        elif value == '-1':
+                            coeff_parts.append(f"-{key}")
+                        else:
+                            coeff_parts.append(f"{value}*{key}")
+                combo = ' + '.join(coeff_parts).replace('+ -', '- ')
+                w(f"| {row['delta_coordinate']} | {support} | {combo or '0'} |")
+            w()
+        w("### Phase 2: Fourier / Parity Test")
+        w()
+        w(f"**xi_plus = eta1 - omega^2 eta2 verified:** {transform_checks.get('xi_plus_equals_eta1_minus_omega_sq_eta2', 'n/a')}")
+        w(f"**xi_minus = eta1 - omega eta2 verified:** {transform_checks.get('xi_minus_equals_eta1_minus_omega_eta2', 'n/a')}")
+        w(f"**Real-factor conjugacy xi_minus = conjugate(xi_plus) verified:** {transform_checks.get('real_factor_conjugacy', 'n/a')}")
+        w(f"**AlphaTensor eta rank:** {attack_phase2_parity.get('alpha_tensor_eta_rank_exact', 'n/a')}")
+        w(f"**AlphaTensor xi_plus complex rank:** {attack_phase2_parity.get('alpha_tensor_xi_plus_complex_rank_exact', 'n/a')}")
+        w(f"**AlphaTensor xi realification rank:** {attack_phase2_parity.get('alpha_tensor_xi_realification_rank_numeric', 'n/a')}")
+        w(f"**Claimed even-rank theorem holds:** {attack_phase2_parity.get('claimed_even_rank_theorem_holds', 'n/a')}")
+        dead_free_counterexample = attack_phase2_parity.get('dead_free_counterexample', {})
+        if dead_free_counterexample:
+            w(f"**Dead-free counterexample:** {dead_free_counterexample.get('example', 'n/a')} with eta rank {dead_free_counterexample.get('eta_rank', 'n/a')} and xi_plus complex rank {dead_free_counterexample.get('xi_plus_complex_rank', 'n/a')}")
+        w()
+        if attack_phase2_budget_rows:
+            w("**Counterfactual Step 52 budget tightening if the false parity theorem were true:**")
+            w()
+            w("| R | Step 52 max nuisance rank | claimed even eta cap | usable as theorem |")
+            w("|---|---------------------------|----------------------|------------------|")
+            for row in attack_phase2_budget_rows:
+                w(f"| {row['R']} | {row['step52_max_nuisance_rank']} | {row['claimed_even_eta_cap_if_theorem_held']} | {row['usable_as_theorem']} |")
+            w()
+        if attack_phase3_profile_summary:
+            sym_row = phase3_summary_rows.get('symmetry_orbit', {})
+            perturb_rows = phase3_generation_rows_by_source.get('perturbation', [])
+            random_rows = phase3_generation_rows_by_source.get('random_rank23', [])
+            perturb_attempts = sum(int(row.get('attempts', '0') or 0) for row in perturb_rows)
+            perturb_hits = sum(int(row.get('valid_exact_decompositions', '0') or 0) for row in perturb_rows)
+            perturb_best = min(
+                [float(row['best_max_abs_residual']) for row in perturb_rows if row.get('best_max_abs_residual') not in ('', None)],
+                default='n/a',
+            )
+            random_attempts = sum(int(row.get('attempts', '0') or 0) for row in random_rows)
+            random_hits = sum(int(row.get('valid_exact_decompositions', '0') or 0) for row in random_rows)
+            random_best = min(
+                [float(row['best_max_abs_residual']) for row in random_rows if row.get('best_max_abs_residual') not in ('', None)],
+                default='n/a',
+            )
+            w("### Phase 3: Multi-Decomposition Nuisance Census")
+            w()
+            w(f"**Symmetry-orbit exact decompositions profiled:** {sym_row.get('count', 'n/a')} / {sym_row.get('attempts', 'n/a')}")
+            w(f"**Symmetry-orbit Delta subset Eta rate:** {sym_row.get('delta_in_eta_rate', 'n/a')}")
+            w(f"**Symmetry-orbit rank(H) range:** {sym_row.get('rank_h_range', 'n/a')}")
+            w(f"**Symmetry-orbit projection sparsity range:** {sym_row.get('m_sparsity_range', 'n/a')}")
+            w(f"**Perturbation exact hits:** {perturb_hits} / {perturb_attempts}")
+            w(f"**Best perturbation near-hit residual (across sigma sweep):** {perturb_best}")
+            w(f"**Cold random rank-23 exact hits:** {random_hits} / {random_attempts}")
+            w(f"**Best cold random rank-23 residual:** {random_best}")
+            w()
+            w(f"**Phase 3 verdict:** {attack_phase3_profile_summary.get('verdict', 'n/a')}")
+            w()
+        if attack_phase4_landscape:
+            w("### Phase 4: Direct Gradient Search for R = 22")
+            w()
+            w(f"**Quotient-only formulation used:** {attack_phase4_landscape.get('quotient_formulation_used', 'n/a')}")
+            w(f"**Total search runs:** {attack_phase4_landscape.get('total_runs', 'n/a')}")
+            w(f"**Exact rank-22 hits:** {attack_phase4_landscape.get('exact_r22_hits', 'n/a')}")
+            w(f"**Best rank-22 max-abs residual:** {attack_phase4_landscape.get('best_r22_max_abs', 'n/a')}")
+            w(f"**Best rank-22 quotient gain:** {attack_phase4_landscape.get('best_r22_quotient_gain', 'n/a')}")
+            w()
+            if phase4_landscape_by_rank:
+                w("**Search landscape summary:**")
+                w()
+                w("| R | runs | best max-abs | median max-abs | worst max-abs |")
+                w("|---|------|--------------|----------------|---------------|")
+                for rank_key in ['21', '22', '23']:
+                    rank_row = phase4_landscape_by_rank.get(rank_key)
+                    if rank_row:
+                        w(f"| {rank_key} | {rank_row.get('count', 'n/a')} | {rank_row.get('best_max_abs', 'n/a')} | {rank_row.get('median_max_abs', 'n/a')} | {rank_row.get('worst_max_abs', 'n/a')} |")
+                w()
+        if attack_phase5_trajectory and attack_phase5_null_space and attack_phase5_projection and attack_phase5_interaction and attack_phase5_baseline:
+            w("### Phase 5: Structural Diagnostics")
+            w()
+            w("**Trajectory diagnostics:**")
+            w(f"original-order first k with rank(H)=14 = {trajectory_original.get('first_k_rank_H_14', 'n/a')}; first k with quotient gain 9 = {trajectory_original.get('first_k_quotient_gain_9', 'n/a')}; zero-additional-nuisance terms = {trajectory_original.get('terms_with_zero_additional_nuisance', 'n/a')}")
+            if first_h14_values:
+                w(f"Across the random-order sample, first k with rank(H)=14 ranged from {min(first_h14_values)} to {max(first_h14_values)}.")
+            w()
+            w("**Anisotropy null-space diagnostics:**")
+            w(f"rank(H) = {attack_phase5_null_space.get('rank_H_exact', 'n/a')}; eta nullity = {attack_phase5_null_space.get('nullity_exact', 'n/a')}")
+            basis_formulas = attack_phase5_null_space.get('basis_formulas', [])
+            if basis_formulas:
+                w("Primitive null-space basis:")
+                for formula in basis_formulas:
+                    w(f"- {formula} = 0")
+            w()
+            w("**Projection-matrix diagnostics:**")
+            coeff_alphabet = ', '.join(str(value) for value in attack_phase5_projection.get('coefficient_alphabet', [])) or 'n/a'
+            w(f"M shape = {attack_phase5_projection.get('shape', 'n/a')}; rank(M) = {attack_phase5_projection.get('rank_exact', 'n/a')}; nullity(M) = {attack_phase5_projection.get('nullity_exact', 'n/a')}; coefficient alphabet = {coeff_alphabet}")
+            w(f"Delta-column support range = {attack_phase5_projection.get('support_size_range', 'n/a')}; eta-row incidence range = {attack_phase5_projection.get('eta_incidence_range', 'n/a')}")
+            reshape_ranks = attack_phase5_projection.get('simple_block_unfold_ranks', {})
+            if reshape_ranks:
+                w(f"Coarse unfold ranks: eta-block-vs-rest = {reshape_ranks.get('eta_block_vs_rest', 'n/a')}, reshaped-right = {reshape_ranks.get('reshaped_right_rank', 'n/a')}")
+            w()
+            w("**Pairwise interaction diagnostics:**")
+            w(f"Ordered pairs scanned = {attack_phase5_interaction.get('pair_count', 'n/a')}; max pairwise anisotropy compression = {attack_phase5_interaction.get('max_h_compression', 'n/a')}; max pairwise nuisance compression = {attack_phase5_interaction.get('max_nuisance_compression', 'n/a')}")
+            w()
+            w("**Standard 27-term baseline:**")
+            w(f"rank(H) = {attack_phase5_baseline.get('rank_H_exact', attack_phase5_baseline.get('rank_H_numeric', 'n/a'))}; rank(Delta) = {attack_phase5_baseline.get('rank_Delta_exact', attack_phase5_baseline.get('rank_Delta_numeric', 'n/a'))}; rank(Nuisance) = {attack_phase5_baseline.get('rank_Nuisance_exact', attack_phase5_baseline.get('rank_Nuisance_numeric', 'n/a'))}; quotient gain = {attack_phase5_baseline.get('quotient_gain_exact', attack_phase5_baseline.get('quotient_gain_numeric', 'n/a'))}")
+            w()
+        w("[INTERPRETATION]")
+        w()
+        w("The strongest positive statement from this attack route is decomposition-specific: for the public")
+        w("AlphaTensor rank-23 decomposition, the full dead-X block Delta already lies inside the anisotropy")
+        w("span H = [Eta1|Eta2] at the collection level, and the exact projection matrix is sparse with only")
+        w("coefficients +/-1 on its nonzero entries.")
+        w("The strongest negative statement is structural: this containment does not lift to a single-term law,")
+        w("because every one of the 54 dead coordinates fails the constant-containment test and the sampled")
+        w("generic Jacobian ranks jump from rank J_eta = 15 to rank J_(eta,delta) = 17.")
+        w("Phase 2 then closes the proposed parity shortcut. The Fourier identities themselves are correct and")
+        w("real factors do impose xi_minus = conjugate(xi_plus), but the claimed universal even-rank theorem is")
+        w("false: AlphaTensor has eta rank 14 while xi_plus has complex rank 9, and there is a dead-free single-term")
+        w("counterexample with eta rank 1. So no parity tightening of the Step 52 nuisance budget is justified from this route.")
+        if attack_phase3_profile_summary:
+            w("Phase 3 sharpens the status of the positive result. Delta subset Eta is exact across the entire 216-element")
+            w("compatible symmetry orbit of the public AlphaTensor decomposition, but this run found no exact non-orbit")
+            w("rank-23 decompositions in either the perturbation sweep or the cold random search. So the current evidence")
+            w("supports orbit-level stability, not decomposition-independent universality.")
+        if attack_phase4_landscape:
+            w("Phase 4 then gives a direct negative computational check at R = 22. In this pass there was no exact hit, and")
+            w("the best candidate came from a border-style vanishing-tail search but still had quotient gain 0 and full-like")
+            w("nuisance behavior rather than the AlphaTensor-style compressed anisotropy profile.")
+        if attack_phase5_trajectory and attack_phase5_null_space and attack_phase5_projection and attack_phase5_interaction:
+            w("Phase 5 explains why the AlphaTensor profile is unusual. The H-rank deficiency is enforced by four exact")
+            w("anisotropy identities, the projection matrix M has rank 10 and nullity 44 with a rigid +/-1 alphabet, and the")
+            w("pairwise scan shows zero two-term compression across all 506 ordered pairs. So the observed compression is")
+            w("genuinely collective rather than pairwise or trivially factorizable.")
+    else:
+        w("*Run the Phase 1-5 attack-route scripts under outputs/ade3x3_attack/ to populate this section.*")
+
     # ── OPEN FRONTS ──
     w()
     w(f"## {section_num}. CURRENT GAPS / OPEN FRONTS")
@@ -3432,6 +4288,42 @@ def generate():
     w("- Reverse engineering + cancellation visualization: ✓ a public exact rank-23 3x3 coefficient table has been recovered from AlphaTensor's public repo, measured directly in the Step 51-52 basis, shown to have nuisance rank 14 = 23-9 exactly, and tested for single/pair gamma-only redundancy with no feasible 22-term or 21-term sub-decomposition found")
     w("- Small-integer coefficient enumeration: ✓ the exact ternary profile pool has been counted modulo sign and symmetry (96,845,281 raw distinct profiles; 570,521 symmetry orbits), the top usefulness profiles have been ranked, and collapsed/full-tensor greedy diagnostics show that collapsed matching is vacuous while corrected 2x2 full-tensor greedy does not recover Strassen through rank 7")
     w("- Polyomino subtensor-rank + tiling analysis: ✓ the full connected-polyomino rank table is now audited cleanly, the priority L-tromino class is verified at numerical rank 9, all four previously unresolved tetromino classes are verified at numerical rank 12, the corrected best flat exact-cover cost is 26 with no verified flat tiling at cost 24 or below, and the Step 51/52 layer split of the public rank-23 algorithm is exported with nuisance rank 14, 3 dead-X-dominant corrector terms, and no signal-dominant terms")
+    w("- Depth-2 circuit dimension census: ✓ exact parameter/constraint tables are now exported for every type assignment with R1 + R2 <= 22, and the requested AA/BB + AA/QQ Jacobian landscape for R_total = 20..22 is measured analytically as a dimension census without claiming any verified R < 23 circuit")
+    w("- Depth-2 bilinear theorem: ✓ AA-only and QQ-only second-layer branches are now verified to have zero bilinear projection, so Step 72 positive fibers are interpreted as parameter redundancy rather than new exact bilinear directions; the literature pass records underline(R)(<3,3,3>) >= 15, online exact-rank status 19 <= R <= 23, and no explicit 3x3 border-rank witness harvested in this pass")
+    if step74_summary_rows:
+        w(f"- Commutator / anticommutator definitive rank scan: ✓ the old Step 71 split is now rerun with a factor-preserving 2000-restart wide scan plus 5000-restart fine scan, yielding exported exact-rank status commutator = {step74_summary['step74_commutator_phase2_exact_rank']['summary_value']}, anticommutator = {step74_summary['step74_anticommutator_phase2_exact_rank']['summary_value']}, shared-term count = {step74_summary.get('step74_shared_term_count', {'summary_value': 'n/a'})['summary_value']}, and combined nonzero term count = {step74_summary.get('step74_combined_nonzero_term_count', {'summary_value': 'n/a'})['summary_value']}")
+    if step75_anti_verif_rows:
+        _anti_r75 = step75_anti_verif.get('rank_value', '0')
+        _comm_r75 = step75_comm_verif.get('rank_value', '0') if step75_comm_verif else '0'
+        try:
+            _naive75 = int(_anti_r75) + int(_comm_r75)
+        except (TypeError, ValueError):
+            _naive75 = 'n/a'
+        w(f"- Anticommutator rank-19 extraction + Hamilton split: ✓ 5000-restart rank-19 anticommutator verified exact (max residual {step75_anti_verif.get('max_abs_residual', 'n/a')}), all {step75_anti_verif.get('self_count', 'n/a')} terms self-symmetric, nuisance_rank = {step75_anti_verif.get('nuisance_rank', 'n/a')}, quotient_gain = {step75_anti_verif.get('quotient_gain', 'n/a')}; rank-20 commutator re-verified with {step75_comm_verif.get('unpaired_count', 'n/a') if step75_comm_verif else 'n/a'} unpaired terms; Hamilton split naive combined term count = {_naive75}")
+    if step76_summary_rows:
+        w(f"- Step 76 quick-test batch: ✓ Pareto accounting now records Standard (27,18), AlphaTensor (23,{step76_summary.get('taskA_alphatensor_A_requested', {}).get('summary_value', 'n/a')}) under the requested scatter count and (23,{step76_summary.get('taskA_alphatensor_A_scheduled', {}).get('summary_value', 'n/a')}) under scheduled accumulation, the best exported 26-multiplication tiling proxy lands at A = {step76_summary.get('taskA_best_tiling_A_scheduled_proxy', {}).get('summary_value', 'n/a')}, Cayley-Hamilton is ruled out as a bilinear shortcut, the public rank-23 decomposition has no alpha±beta sharing (D = {step76_summary.get('taskC_distinct_alpha_pm_beta_forms', {}).get('summary_value', 'n/a')}), and the staged GF(9) / division-augmented sweeps report exact-hit status GF(9) = {step76_summary.get('taskE_GF9_any_exact_hit', {}).get('summary_value', 'n/a')}, Task D = {step76_summary.get('taskD_any_exact_hit', {}).get('summary_value', 'n/a')}")
+    if step77_summary_rows:
+        _s77_hit = step77_summary.get('step77_any_exact_hit_rank22', {}).get('summary_value', 'n/a')
+        _s77_n = step77_summary.get('step77_total_constant_multiple_pairs', {}).get('summary_value', 'n/a')
+        _s77_disj = step77_summary.get('step77_gamma_disjoint_pairs', {}).get('summary_value', 'n/a')
+        _s77_prop = step77_summary.get('step77_gamma_proportional_pairs', {}).get('summary_value', 'n/a')
+        _s77_restarts = step77_summary.get('step77_search_restarts_per_pair', {}).get('summary_value', 'n/a')
+        _s77_resid = step77_summary.get('step77_best_max_abs_residual_across_pairs', {}).get('summary_value', 'n/a')
+        _s77_hit_count = step77_summary.get('step77_exact_hit_count', {}).get('summary_value', 'n/a')
+        if _s77_hit == 'True':
+            w(f"- Border-rank singular-pair witness construction (Step 77): ✓ FOUND {_s77_hit_count} border-rank-22 witness(es) among {_s77_n} constant-multiple AlphaTensor pairs; exact rank-21 CP decomposition of T_full − T_pair certified (max-abs residual < 1e-6)")
+        else:
+            w(f"- Border-rank singular-pair witness construction (Step 77): ✓ scanned {_s77_n} constant-multiple AlphaTensor pairs; {_s77_disj} with disjoint gamma support, {_s77_prop} proportional; no exact border-rank-22 witness found at {_s77_restarts} restarts (best residual {_s77_resid})")
+    if attack_phase1_containment and attack_phase2_parity:
+        _attack_h = attack_phase1_containment.get('rank_H_exact', 'n/a')
+        _attack_delta = attack_phase1_containment.get('rank_Delta_exact', 'n/a')
+        _attack_joint = attack_phase1_containment.get('rank_HDelta_exact', 'n/a')
+        _attack_eta = attack_phase2_parity.get('alpha_tensor_eta_rank_exact', 'n/a')
+        _attack_xip = attack_phase2_parity.get('alpha_tensor_xi_plus_complex_rank_exact', 'n/a')
+        _attack_even = attack_phase2_parity.get('claimed_even_rank_theorem_holds', 'n/a')
+        _attack_phase4_best = attack_phase4_landscape.get('best_r22_max_abs', 'n/a') if attack_phase4_landscape else 'n/a'
+        _attack_phase5_nullity = attack_phase5_null_space.get('nullity_exact', 'n/a') if attack_phase5_null_space else 'n/a'
+        w(f"- Attack-route Phases 1-5: ✓ the public AlphaTensor rank-23 decomposition passes the collection-level Delta-in-Eta test exactly with rank(H) = {_attack_h}, rank(Delta) = {_attack_delta}, rank([H|Delta]) = {_attack_joint}; the single-term containment route fails; the proposed parity theorem is false (eta rank = {_attack_eta}, xi_plus complex rank = {_attack_xip}, even-rank theorem = {_attack_even}); Phase 3 proves orbit-level stability across all 216 compatible symmetry transforms while finding no exact non-orbit rank-23 hit; Phase 4 finds no exact rank-22 hit (best residual {_attack_phase4_best}); and Phase 5 identifies eta-nullity {_attack_phase5_nullity} with collective, not pairwise, nuisance compression")
     w()
     w("**Remaining open fronts:**")
     w("- Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored")
@@ -3456,8 +4348,28 @@ def generate():
     w("- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining open problem is to prove a decomposition-independent nuisance lower bound rather than only measure it on known examples")
     w("- Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity")
     w("- Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit")
-    w("- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, Step 70's first concrete depth-2 audit still leaves the recursive padded-Strassen route at 31 leaf multiplications with no pair-ratio evidence of an immediate AlphaTensor term-factor collapse below rank 23, and Step 71's five local perturbation/merge/neighborhood shots found 0 exact slot replacements in a 5123-profile explicit pool, 0 exact pair merges, no exact commutator or anticommutator witness through rank 20, and no random-neighborhood feasible subset at R<=22 in a 123-term local pool")
+    if step74_summary_rows:
+        w(f"- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, Step 70's first concrete depth-2 audit still leaves the recursive padded-Strassen route at 31 leaf multiplications with no pair-ratio evidence of an immediate AlphaTensor term-factor collapse below rank 23, Step 71's five local perturbation/merge/neighborhood shots remain negative on slot replacement and pair merge, Step 72 exports the local depth-2 Jacobian landscape only as a dimension census, Step 73 shows that the AA/QQ second-layer branches themselves do not create new useful bilinear directions, and Step 74 now records definitive exported exact-rank status for the commutator split at commutator = {step74_summary['step74_commutator_phase2_exact_rank']['summary_value']} and anticommutator = {step74_summary['step74_anticommutator_phase2_exact_rank']['summary_value']} with combined nonzero count {step74_summary.get('step74_combined_nonzero_term_count', {'summary_value': 'n/a'})['summary_value']}. Any remaining escape route now needs either a genuinely different circuit model or an explicit border-rank-plus-correction witness.")
+    else:
+        w("- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, Step 70's first concrete depth-2 audit still leaves the recursive padded-Strassen route at 31 leaf multiplications with no pair-ratio evidence of an immediate AlphaTensor term-factor collapse below rank 23, Step 71's five local perturbation/merge/neighborhood shots found 0 exact slot replacements in a 5123-profile explicit pool, 0 exact pair merges, no exact commutator or anticommutator witness through rank 20, Step 72 exports the local depth-2 Jacobian landscape only as a dimension census, and Step 73 shows that the AA/QQ second-layer branches themselves do not create new useful bilinear directions. Any remaining escape route now needs either a genuinely different circuit model or an explicit border-rank-plus-correction witness.")
     w("- The toroidal extension confirms that L-trominoes can occur in wrapped tilings even though the flat board cannot be tiled by three L-trominoes; the remaining question is whether wrapped shapes or cross-piece sharing can lower the current exported toroidal cost 27")
+    if step75_anti_verif_rows:
+        _anti_r75b = step75_anti_verif.get('rank_value', '0')
+        _comm_r75b = step75_comm_verif.get('rank_value', '0') if step75_comm_verif else '0'
+        try:
+            _naive75b = int(_anti_r75b) + int(_comm_r75b)
+        except (TypeError, ValueError):
+            _naive75b = 'n/a'
+        w(f"- Step 75 anticommutator rank-19 extraction is complete; the open problem is whether any sharing between the anticommutator (rank {_anti_r75b}, {step75_anti_verif.get('self_count', 'n/a')} self-symmetric terms) and commutator (rank {_comm_r75b}, {step75_comm_verif.get('unpaired_count', 'n/a') if step75_comm_verif else 'n/a'} unpaired terms) supports can reduce the Hamilton split naive combined cost {_naive75b} below {_naive75b}")
+    if step76_summary_rows:
+        w("- Step 76 leaves one model-theoretic ambiguity explicit: a 'free Frobenius' GF(9) search is semilinear over GF(3), not ordinary tensor rank over GF(9), so any serious follow-up there needs a precise semilinear circuit/tensor formalization before further computation is interpretable")
+    if step77_summary_rows:
+        _s77_hit_of = step77_summary.get('step77_any_exact_hit_rank22', {}).get('summary_value', 'n/a')
+        if _s77_hit_of != 'True':
+            _s77_n2 = step77_summary.get('step77_total_constant_multiple_pairs', {}).get('summary_value', 'n/a')
+            w(f"- Step 77 border-rank witness search found no exact hit across {_s77_n2} constant-multiple AlphaTensor pairs; the open question is whether a positive witness exists in other term-pair families (non-constant-multiple pairs, or pairs from inequivalent rank-23 decompositions)")
+    if attack_phase1_containment and attack_phase2_parity:
+        w("- The attack-route follow-up is now sharper: Delta subset Eta is exact across the full AlphaTensor symmetry orbit, but still unverified beyond that equivalence class because the current perturbation and cold random rank-23 searches found no exact non-orbit decomposition. The current rank-22 search also found no exact hit. The next open step is either a stronger continuation / homotopy route to non-orbit rank-23 decompositions or a more structured border/correction ansatz that can reproduce the collective H-rank collapse seen in AlphaTensor")
     w("- Step 53 shows that support-only representative incidence is also vacuous; any sharper universal")
     w("  theorem must use coefficient identities or subspace geometry, not only index-support patterns")
     w("- Step 54 shows that generic low-rank factor models also fail constructively: low nuisance can")

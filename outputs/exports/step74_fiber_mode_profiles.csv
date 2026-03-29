@@ -1,0 +1,2 @@
+profile_name,term_count,sigma_rank,eta1_rank,eta2_rank,eta_rank,delta_rank,nuisance_rank,augmented_rank,quotient_gain,provenance
+public_rank23_multiplication,23,9,6,8,14,10,14,23,9,EXACT_DERIVED
