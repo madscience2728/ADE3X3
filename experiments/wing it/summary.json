@@ -1,0 +1,33 @@
+{
+  "base_source": "AlphaTensor public rank-23 decomposition via Step 63 loader",
+  "gamma_orientation": "transpose",
+  "exact_reconstruction_residual": 0,
+  "warm_structured_restarts": 0,
+  "warm_random_masks": 0,
+  "warm_random_restarts": 0,
+  "border23_to_19_restarts": 32,
+  "cold19_restarts": 0,
+  "cold18_restarts": 0,
+  "tail_penalty": 0.03,
+  "total_runs": 32,
+  "exact_hits_total": 0,
+  "best_by_rank": {
+    "19": {
+      "search_id": "wing19_border_0017",
+      "rank": 19,
+      "strategy": "border23_to_19",
+      "init_detail": "border_tail_t19_t12_t11_t04",
+      "seed": 930017,
+      "final_loss": 1.1380489673898316e-05,
+      "final_max_abs": 0.0005268423997085019,
+      "exact_hit": false,
+      "rank_H_numeric": 18,
+      "rank_Delta_numeric": 19,
+      "rank_Nuisance_numeric": 19,
+      "quotient_gain_numeric": 0,
+      "delta_in_eta_numeric": false,
+      "projection_max_residual_numeric": 8.966150773911442e-05,
+      "border_tail_norm": 0.2840754657392633
+    }
+  }
+}

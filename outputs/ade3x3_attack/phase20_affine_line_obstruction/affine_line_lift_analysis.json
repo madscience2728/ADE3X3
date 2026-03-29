@@ -1,0 +1,32 @@
+{
+  "alphatensor_orientation": "transpose",
+  "alphatensor_reconstruction_max_abs": 0,
+  "rows": [
+    {
+      "label": "alphatensor_rank23_transpose",
+      "R": 23,
+      "lift_span_rank_numeric": 2,
+      "sum_lifts_max_abs": 1.1102230246251565e-16,
+      "lambda_10_best": -0.5985401459854013,
+      "lambda_20_best": -0.4014598540145985,
+      "lambda_21_best": -0.3740458015267175,
+      "residual_10_max_abs": 1.0,
+      "residual_20_max_abs": 1.0,
+      "residual_21_max_abs": 0.6259541984732825,
+      "affine_line_defect_numeric": 1
+    },
+    {
+      "label": "standard_rank27",
+      "R": 27,
+      "lift_span_rank_numeric": 2,
+      "sum_lifts_max_abs": 1.1102230246251565e-16,
+      "lambda_10_best": -0.5,
+      "lambda_20_best": -0.5,
+      "lambda_21_best": -0.5,
+      "residual_10_max_abs": 0.5000000000000001,
+      "residual_20_max_abs": 0.5000000000000001,
+      "residual_21_max_abs": 0.5000000000000001,
+      "affine_line_defect_numeric": 1
+    }
+  ]
+}

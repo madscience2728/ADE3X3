@@ -1,0 +1,28 @@
+{
+  "alphatensor_orientation": "transpose",
+  "alphatensor_reconstruction_max_abs": 0,
+  "rows": [
+    {
+      "label": "alphatensor_rank23_transpose",
+      "R": 23,
+      "rank_gamma_numeric": 9,
+      "ker_gamma_dim_numeric": 14,
+      "rank_H_numeric": 14,
+      "restricted_rank_numeric": 14,
+      "restricted_min_singular_value": 0.6245923009701736,
+      "restricted_max_singular_value": 5.2470782360524035,
+      "functional_defect_dim_numeric": 0
+    },
+    {
+      "label": "standard_rank27",
+      "R": 27,
+      "rank_gamma_numeric": 9,
+      "ker_gamma_dim_numeric": 18,
+      "rank_H_numeric": 18,
+      "restricted_rank_numeric": 18,
+      "restricted_min_singular_value": 0.9999999999999997,
+      "restricted_max_singular_value": 1.7320508075688779,
+      "functional_defect_dim_numeric": 0
+    }
+  ]
+}

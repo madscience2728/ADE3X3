@@ -1,0 +1,26 @@
+{
+  "alphatensor_orientation": "transpose",
+  "alphatensor_reconstruction_max_abs": 0,
+  "summaries": [
+    {
+      "base_label": "alphatensor_rank23_transpose",
+      "trial_count": 80,
+      "best_tensor_max_abs_residual": 0.6680211384226139,
+      "best_tensor_loss": 3.878045707158768,
+      "best_rank_H_numeric": 14,
+      "best_functional_defect_dim_numeric": 0,
+      "best_lambda_kernel_distance": 1.1927905953557112,
+      "best_trial_index": 78
+    },
+    {
+      "base_label": "standard_rank27",
+      "trial_count": 80,
+      "best_tensor_max_abs_residual": 2.220446049250313e-16,
+      "best_tensor_loss": 9.860761315262648e-32,
+      "best_rank_H_numeric": 18,
+      "best_functional_defect_dim_numeric": 0,
+      "best_lambda_kernel_distance": 1.4142135623730898,
+      "best_trial_index": 22
+    }
+  ]
+}

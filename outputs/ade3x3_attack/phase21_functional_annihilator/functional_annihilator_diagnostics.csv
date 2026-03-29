@@ -1,0 +1,3 @@
+label,R,rank_gamma_numeric,ker_gamma_dim_numeric,rank_H_numeric,restricted_rank_numeric,restricted_min_singular_value,restricted_max_singular_value,functional_defect_dim_numeric
+alphatensor_rank23_transpose,23,9,14,14,14,0.6245923009701736,5.2470782360524035,0
+standard_rank27,27,9,18,18,18,0.9999999999999997,1.7320508075688779,0

@@ -1,0 +1,15 @@
+base_label,total_budget,min_rotation_cap_deg_for_descent,accepted_steps,total_gain,wildcard_wins
+alphatensor_rank23_transpose,0.05,4.0,1,0.007586376465052225,1
+alphatensor_rank23_transpose,0.1,4.0,3,0.015740894651657622,3
+alphatensor_rank23_transpose,0.2,4.0,3,0.02913205541164743,3
+alphatensor_rank23_transpose,0.4,4.0,4,0.05985134090886213,4
+alphatensor_rank23_transpose,0.8,4.0,7,0.10742929732142414,7
+alphatensor_rank23_transpose,1.2,4.0,6,0.16843468093714586,6
+alphatensor_rank23_transpose,2.0,4.0,11,0.25790627206616634,11
+standard_rank27,0.05,12.0,2,0.032353699188881646,1
+standard_rank27,0.1,12.0,2,0.060192234385167964,2
+standard_rank27,0.2,12.0,4,0.11664396269178778,3
+standard_rank27,0.4,12.0,7,0.18307763788798015,7
+standard_rank27,0.8,12.0,7,0.3450722697339885,7
+standard_rank27,1.2,12.0,11,0.4693290749945265,10
+standard_rank27,2.0,12.0,16,0.6311947499146155,16

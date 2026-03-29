@@ -1,0 +1,84 @@
+{
+  "alphatensor_orientation": "transpose",
+  "alphatensor_reconstruction_max_abs": 0,
+  "exactness_tolerance": 1e-10,
+  "step_epsilons": [
+    0.001,
+    0.003,
+    0.01,
+    0.03,
+    0.05
+  ],
+  "policies": [
+    {
+      "policy_name": "smooth_greedy",
+      "max_steps": 8,
+      "total_budget": Infinity,
+      "rotation_cap_deg": 12.0,
+      "budget_weight": 0.0,
+      "rotation_weight": 0.0
+    },
+    {
+      "policy_name": "smooth_budgeted_long",
+      "max_steps": 24,
+      "total_budget": 1.2,
+      "rotation_cap_deg": 12.0,
+      "budget_weight": 0.6,
+      "rotation_weight": 0.02
+    }
+  ],
+  "summaries": [
+    {
+      "policy_name": "smooth_greedy",
+      "base_label": "alphatensor_rank23_transpose",
+      "initial_kappa_ker": 0.6245923009701738,
+      "final_kappa_ker": 0.37602350369115983,
+      "min_kappa_ker": 0.37602350369115983,
+      "accepted_steps": 8,
+      "wildcard_wins": 8,
+      "initial_restricted_rank": 14,
+      "rotation_cap_deg": 12.0,
+      "total_budget": null,
+      "budget_used": 1.956624093599254
+    },
+    {
+      "policy_name": "smooth_greedy",
+      "base_label": "standard_rank27",
+      "initial_kappa_ker": 0.9999999999999996,
+      "final_kappa_ker": 0.607502204723264,
+      "min_kappa_ker": 0.607502204723264,
+      "accepted_steps": 8,
+      "wildcard_wins": 8,
+      "initial_restricted_rank": 18,
+      "rotation_cap_deg": 12.0,
+      "total_budget": null,
+      "budget_used": 0.9134797844495537
+    },
+    {
+      "policy_name": "smooth_budgeted_long",
+      "base_label": "alphatensor_rank23_transpose",
+      "initial_kappa_ker": 0.6245923009701738,
+      "final_kappa_ker": 0.6099009207075097,
+      "min_kappa_ker": 0.6099009207075097,
+      "accepted_steps": 24,
+      "wildcard_wins": 2,
+      "initial_restricted_rank": 14,
+      "rotation_cap_deg": 12.0,
+      "total_budget": 1.2,
+      "budget_used": 0.07624610604030692
+    },
+    {
+      "policy_name": "smooth_budgeted_long",
+      "base_label": "standard_rank27",
+      "initial_kappa_ker": 0.9999999999999996,
+      "final_kappa_ker": 0.7966188942955966,
+      "min_kappa_ker": 0.7966188942955966,
+      "accepted_steps": 24,
+      "wildcard_wins": 0,
+      "initial_restricted_rank": 18,
+      "rotation_cap_deg": 12.0,
+      "total_budget": 1.2,
+      "budget_used": 0.31916923028785094
+    }
+  ]
+}

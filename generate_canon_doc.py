@@ -21,6 +21,21 @@ from collections import defaultdict
 EXPORTS_DIR = Path(__file__).parent / "outputs" / "exports"
 DOCS_DIR = Path(__file__).parent / "docs"
 PHASE17_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase17_conservation_law"
+PHASE18_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase18_kernel_saturation"
+PHASE19_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase19_factorized_defect_loci"
+PHASE20_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase20_affine_line_obstruction"
+PHASE21_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase21_functional_annihilator"
+PHASE22_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase22_kernel_linked_annihilator"
+PHASE23_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase23_staged_layering_bridge"
+PHASE24_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase24_tangent_transversality"
+PHASE25_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase25_honest_kernel_retention"
+PHASE26_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase26_regularized_kernel_retention"
+PHASE27_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase27_coupled_continuation"
+PHASE28_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase28_wildcard_regularized_continuation"
+PHASE29_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase29_smooth_budgeted_continuation"
+PHASE30_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase30_budget_efficiency_sweep"
+PHASE31_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase31_feasibility_boundary"
+PHASE32_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase32_boundary_sharpening"
 
 def read_csv(filename):
     """Read CSV file from exports directory."""
@@ -44,6 +59,72 @@ def read_phase17_outputs():
     gamma_analysis = read_json_path(PHASE17_DIR / "gamma_propagation_analysis.json")
     collective = read_json_path(PHASE17_DIR / "collective_containment_summary.json")
     return faithfulness, identities, gamma_analysis, collective
+
+def read_phase18_outputs():
+    """Read Phase 18 kernel-saturation outputs."""
+    return read_json_path(PHASE18_DIR / "kernel_saturation_summary.json")
+
+def read_phase19_outputs():
+    """Read Phase 19 factorized defect-locus outputs."""
+    diagnostics = read_json_path(PHASE19_DIR / "factorized_defect_diagnostics.json")
+    search = read_json_path(PHASE19_DIR / "constrained_defect_family_summary.json")
+    return diagnostics, search
+
+def read_phase20_outputs():
+    """Read Phase 20 affine-line obstruction outputs."""
+    diagnostics = read_json_path(PHASE20_DIR / "affine_line_lift_analysis.json")
+    search = read_json_path(PHASE20_DIR / "affine_line_family_summary.json")
+    return diagnostics, search
+
+def read_phase21_outputs():
+    """Read Phase 21 functional-annihilator outputs."""
+    diagnostics = read_json_path(PHASE21_DIR / "functional_annihilator_diagnostics.json")
+    search = read_json_path(PHASE21_DIR / "weighted_annihilator_family_summary.json")
+    return diagnostics, search
+
+def read_phase22_outputs():
+    """Read Phase 22 kernel-linked annihilator outputs."""
+    return read_json_path(PHASE22_DIR / "kernel_linked_annihilator_homotopy.json")
+
+def read_phase23_outputs():
+    """Read Phase 23 staged-layering bridge outputs."""
+    return read_json_path(PHASE23_DIR / "staged_homotopy_thresholds.json")
+
+def read_phase24_outputs():
+    """Read Phase 24 tangent-transversality outputs."""
+    return read_json_path(PHASE24_DIR / "kernel_forcing_tangent_transversality.json")
+
+def read_phase25_outputs():
+    """Read Phase 25 honest-kernel-retention outputs."""
+    return read_json_path(PHASE25_DIR / "honest_kernel_retention_scan.json")
+
+def read_phase26_outputs():
+    """Read Phase 26 regularized-kernel-retention outputs."""
+    return read_json_path(PHASE26_DIR / "regularized_kernel_retention_summary.json")
+
+def read_phase27_outputs():
+    """Read Phase 27 coupled-continuation prototype outputs."""
+    return read_json_path(PHASE27_DIR / "coupled_continuation_probe.json")
+
+def read_phase28_outputs():
+    """Read Phase 28 wildcard-regularized continuation outputs."""
+    return read_json_path(PHASE28_DIR / "wildcard_regularized_continuation.json")
+
+def read_phase29_outputs():
+    """Read Phase 29 smooth-budgeted continuation outputs."""
+    return read_json_path(PHASE29_DIR / "smooth_budgeted_continuation.json")
+
+def read_phase30_outputs():
+    """Read Phase 30 budget-efficiency sweep outputs."""
+    return read_json_path(PHASE30_DIR / "budget_efficiency_sweep.json")
+
+def read_phase31_outputs():
+    """Read Phase 31 feasibility-boundary outputs."""
+    return read_json_path(PHASE31_DIR / "feasibility_boundary_scan.json")
+
+def read_phase32_outputs():
+    """Read Phase 32 boundary-sharpening outputs."""
+    return read_json_path(PHASE32_DIR / "boundary_sharpening_scan.json")
 
 def read_axxc_signature_layer(rep_config_ids):
     """Read the current AXXC arity-4 signature layer for selected reps.
@@ -3478,6 +3559,29 @@ def generate():
         w(f"- Combined independent cross-ratio identities: {cross17.get('combined_independent_count', 0)}")
         w(f"- Linear propagation from live slices to dead slices: {gamma17.get('verdict', {}).get('linear_propagation_from_live_slices')}")
         w()
+        w("### Proof Skeleton For The Remaining Gap")
+        w()
+        w("Part 1 gives rank([Sigma|H|Delta]) = R. Since rank(Gamma) = 9 and Gamma annihilates H and Delta,")
+        w("every valid minimum-rank decomposition satisfies col([H|Delta]) subset ker(Gamma) and")
+        w("rank([H|Delta]) = R - 9 = dim(ker(Gamma)), hence col([H|Delta]) = ker(Gamma).")
+        w()
+        w("Therefore the unresolved step is equivalent to a pure kernel-saturation statement:")
+        w("Delta subset span(H) iff col(H) = ker(Gamma) iff rank(H) = R - 9.")
+        w()
+        w("For matrix multiplication one has the stronger per-channel equations Gamma * P_s = I_9 for")
+        w("s = 0, 1, 2, where P_s is the R x 9 live-product matrix of channel s. Writing")
+        w("P_s = X_0 + K_s for any fixed right inverse X_0 of Gamma shows that Eta1 = K_0 - K_1 and")
+        w("Eta2 = K_1 - K_2, so H is generated by the difference sector of three right inverses of Gamma.")
+        w()
+        w("This identifies the next theorem target:")
+        w("if (P_0, P_1, P_2) comes from a valid minimum-rank multiplication decomposition and")
+        w("Gamma * P_s = I_9 for each s, then span(col(P_0 - P_1), col(P_1 - P_2)) = ker(Gamma).")
+        w()
+        w("That route is stronger than a genericity argument. Genericity can only show that failure of")
+        w("rank(H) = R - 9 is lower-dimensional; it cannot rule out exceptional valid decompositions.")
+        w("The anticommutator failure supports this diagnosis: it lies outside the per-channel identity")
+        w("regime, and its H block correspondingly does not saturate ker(Gamma).")
+        w()
         w("[INTERPRETATION]")
         w()
         w("Phase 17 resolves the logical split behind the conservation law. Part 1 is now proved and")
@@ -3486,6 +3590,606 @@ def generate():
         w("collections, and it also fails on the exported Step 75 anticommutator rank-19 fibermode data.")
     else:
         w("*Run the Phase 17 scripts to populate this section.*")
+
+    # ── PHASE 18 KERNEL SATURATION ──
+    w()
+    w(f"## {section_num}. RIGHT-INVERSE KERNEL-SATURATION DIAGNOSTICS")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 18)")
+    w()
+    w("Phase 18 moves the remaining gap into testable compute by working directly with the")
+    w("per-channel right-inverse equations Gamma * P_s = I_9 and the difference-sector block")
+    w("H = [P_0 - P_1 | P_1 - P_2].")
+    w()
+    phase18 = read_phase18_outputs()
+    if phase18:
+        ref18 = phase18.get("reference_decompositions", {})
+        synth18 = phase18.get("synthetic_right_inverse_trials", {})
+        defects18 = phase18.get("forced_defect_examples", [])
+        alpha18 = next((row for row in ref18.get("rows", []) if "alphatensor" in row.get("label", "")), None)
+        standard18 = next((row for row in ref18.get("rows", []) if "standard" in row.get("label", "")), None)
+        alpha_synth18 = synth18.get("alphatensor_gamma", {})
+        standard_synth18 = synth18.get("standard_gamma", {})
+
+        w("### Known Exact Decompositions")
+        w()
+        if alpha18:
+            w(f"- AlphaTensor rank-23: ker-dimension = {alpha18.get('ker_gamma_dim_numeric')}, rank(H) = {alpha18.get('rank_H_numeric')}, kernel saturation = {alpha18.get('kernel_saturation_numeric')}, and all three channel identities Gamma * P_s = I_9 hold exactly = {alpha18.get('channel0_identity_exact') and alpha18.get('channel1_identity_exact') and alpha18.get('channel2_identity_exact')}.")
+        if standard18:
+            w(f"- Standard rank-27: ker-dimension = {standard18.get('ker_gamma_dim_numeric')}, rank(H) = {standard18.get('rank_H_numeric')}, kernel saturation = {standard18.get('kernel_saturation_numeric')}, and all three channel identities Gamma * P_s = I_9 hold exactly = {standard18.get('channel0_identity_exact') and standard18.get('channel1_identity_exact') and standard18.get('channel2_identity_exact')}.")
+        w()
+
+        w("### Synthetic Right-Inverse Genericity")
+        w()
+        if alpha_synth18:
+            w(f"- AlphaTensor Gamma: {alpha_synth18.get('saturation_count', 0)} / {alpha_synth18.get('trial_count', 0)} random right-inverse triples saturated ker(Gamma), with observed rank(H) range {alpha_synth18.get('min_rank_H_numeric')}..{alpha_synth18.get('max_rank_H_numeric')}.")
+        if standard_synth18:
+            w(f"- Standard Gamma: {standard_synth18.get('saturation_count', 0)} / {standard_synth18.get('trial_count', 0)} random right-inverse triples saturated ker(Gamma), with observed rank(H) range {standard_synth18.get('min_rank_H_numeric')}..{standard_synth18.get('max_rank_H_numeric')}.")
+        w()
+        w("This does not prove the multiplication theorem, because synthetic right inverses need not arise")
+        w("from factorized rank-1 terms, but it gives direct computational evidence that failure of")
+        w("rank(H) = dim(ker Gamma) is nongeneric inside the affine right-inverse model.")
+        w()
+
+        w("### Explicit Defective Loci")
+        w()
+        alpha_defects18 = [row for row in defects18 if row.get('family') == 'alphatensor_gamma']
+        standard_defects18 = [row for row in defects18 if row.get('family') == 'standard_gamma']
+        if alpha_defects18:
+            w(f"- AlphaTensor Gamma defective examples: all-equal gives rank(H) = {alpha_defects18[0].get('rank_H_numeric')} with deficiency {alpha_defects18[0].get('deficiency_numeric')}; the k0 = k1 and collinear examples both drop to rank(H) = {alpha_defects18[1].get('rank_H_numeric')} with deficiency {alpha_defects18[1].get('deficiency_numeric')}.")
+        if standard_defects18:
+            w(f"- Standard Gamma defective examples: all-equal gives rank(H) = {standard_defects18[0].get('rank_H_numeric')} with deficiency {standard_defects18[0].get('deficiency_numeric')}; the k0 = k1 and collinear examples both drop to rank(H) = {standard_defects18[1].get('rank_H_numeric')} with deficiency {standard_defects18[1].get('deficiency_numeric')}.")
+        w()
+        w("These defective triples still satisfy Gamma * P_s = I_9 up to roundoff and still satisfy")
+        w("Gamma * H = 0, so the failure mechanism is not violation of the affine right-inverse equations")
+        w("themselves. The failure comes from special algebraic coincidences among the kernel lifts")
+        w("(K_0, K_1, K_2).")
+    else:
+        w("*Run the Phase 18 script to populate this section.*")
+
+    # ── PHASE 19 FACTORIZED DEFECT LOCI ──
+    w()
+    w(f"## {section_num}. FACTORIZED DEFECT-LOCUS DIAGNOSTICS")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 19)")
+    w()
+    w("Phase 19 pushes the remaining obstruction question back into factorized term space. It measures")
+    w("the centered kernel lifts K_s = P_s - (P_0 + P_1 + P_2)/3 on the known exact decompositions and")
+    w("then projects factorized families onto explicit defect loci such as P_0 = P_1 before solving")
+    w("the best least-squares gamma fit to the multiplication tensor.")
+    w()
+    diag19, search19 = read_phase19_outputs()
+    if diag19 and search19:
+        diag_rows19 = diag19.get('rows', [])
+        alpha_diag19 = next((row for row in diag_rows19 if 'alphatensor' in row.get('label', '')), None)
+        standard_diag19 = next((row for row in diag_rows19 if 'standard' in row.get('label', '')), None)
+        summaries19 = search19.get('summaries', [])
+        alpha_pair01 = next((row for row in summaries19 if row.get('base_label', '').startswith('alphatensor') and row.get('family') == 'pair_equal_01'), None)
+        alpha_pair12 = next((row for row in summaries19 if row.get('base_label', '').startswith('alphatensor') and row.get('family') == 'pair_equal_12'), None)
+        alpha_all_equal = next((row for row in summaries19 if row.get('base_label', '').startswith('alphatensor') and row.get('family') == 'all_equal'), None)
+        alpha_collinear = next((row for row in summaries19 if row.get('base_label', '').startswith('alphatensor') and row.get('family') == 'collinear'), None)
+        standard_pair01 = next((row for row in summaries19 if row.get('base_label') == 'standard_rank27' and row.get('family') == 'pair_equal_01'), None)
+        standard_all_equal = next((row for row in summaries19 if row.get('base_label') == 'standard_rank27' and row.get('family') == 'all_equal'), None)
+        standard_collinear = next((row for row in summaries19 if row.get('base_label') == 'standard_rank27' and row.get('family') == 'collinear'), None)
+
+        w("### Centered-Lift Diagnostics On Known Decompositions")
+        w()
+        if alpha_diag19:
+            w(f"- AlphaTensor rank-23: defect dimension = {alpha_diag19.get('defect_dim_numeric')}, lift-span rank = {alpha_diag19.get('lift_span_rank_numeric')}, center identity residual = {alpha_diag19.get('center_identity_max_abs')}, and K_0 + K_1 + K_2 = 0 exactly = {alpha_diag19.get('sum_lifts_exact')}.")
+        if standard_diag19:
+            w(f"- Standard rank-27: defect dimension = {standard_diag19.get('defect_dim_numeric')}, lift-span rank = {standard_diag19.get('lift_span_rank_numeric')}, center identity residual = {standard_diag19.get('center_identity_max_abs')}, and K_0 + K_1 + K_2 = 0 exactly = {standard_diag19.get('sum_lifts_exact')}.")
+        w()
+        w("Both valid decompositions therefore realize the centered right-inverse picture with no extra")
+        w("kernel defect beyond the unavoidable relation K_0 + K_1 + K_2 = 0.")
+        w()
+
+        w("### Constrained Defect Families")
+        w()
+        if alpha_pair01 and alpha_pair12 and alpha_all_equal and alpha_collinear:
+            w(f"- AlphaTensor-projected pair-equality families: best max-abs residuals are {alpha_pair01.get('best_tensor_max_abs_residual')} for P_0 = P_1 and {alpha_pair12.get('best_tensor_max_abs_residual')} for P_1 = P_2, both with rank(H) = 9.")
+            w(f"- AlphaTensor-projected all-equal family: best max-abs residual is {alpha_all_equal.get('best_tensor_max_abs_residual')} with rank(H) = 0.")
+            w(f"- AlphaTensor-projected collinear family: best max-abs residual is {alpha_collinear.get('best_tensor_max_abs_residual')}; this family is not an immediate obstruction.")
+        if standard_pair01 and standard_all_equal and standard_collinear:
+            w(f"- Standard-projected pair-equality family: best max-abs residual is {standard_pair01.get('best_tensor_max_abs_residual')} with rank(H) = 9.")
+            w(f"- Standard-projected all-equal family: best max-abs residual is {standard_all_equal.get('best_tensor_max_abs_residual')} with rank(H) = 0.")
+            w(f"- Standard-projected collinear family: exact residual = {standard_collinear.get('best_tensor_max_abs_residual')}, so per-term live-channel collinearity already contains a valid exact multiplication algorithm.")
+        w()
+        w("This sharply narrows the obstruction target. Pair-equality-type coincidences look genuinely")
+        w("incompatible with exact multiplication in these searches, while the broader collinear family is")
+        w("too large because it already contains the standard algorithm.")
+    else:
+        w("*Run the Phase 19 scripts to populate this section.*")
+
+    # ── PHASE 20 AFFINE-LINE OBSTRUCTION ──
+    w()
+    w(f"## {section_num}. AFFINE-LINE LIFT OBSTRUCTION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 20)")
+    w()
+    w("Phase 20 tests a specific codimension-one defect suggested by the centered-lift derivation.")
+    w("Writing X_0 = (P_0 + P_1 + P_2)/3 and K_s = P_s - X_0 gives the universal relation")
+    w("K_0 + K_1 + K_2 = 0. Any second independent scalar relation would force the three K_s onto")
+    w("a single matrix line, so the flattened lift span would drop from rank 2 to rank 1.")
+    w()
+    diag20, search20 = read_phase20_outputs()
+    if diag20 and search20:
+        rows20 = diag20.get('rows', [])
+        alpha20 = next((row for row in rows20 if 'alphatensor' in row.get('label', '')), None)
+        standard20 = next((row for row in rows20 if 'standard' in row.get('label', '')), None)
+        summaries20 = search20.get('summaries', [])
+        r23 = next((row for row in summaries20 if int(row.get('R', 0)) == 23), None)
+        r27 = next((row for row in summaries20 if int(row.get('R', 0)) == 27), None)
+
+        w("### Exact Decompositions")
+        w()
+        if alpha20:
+            w(f"- AlphaTensor rank-23: lift-span rank = {alpha20.get('lift_span_rank_numeric')}, with best pairwise scalar-fit residuals {alpha20.get('residual_10_max_abs')}, {alpha20.get('residual_20_max_abs')}, and {alpha20.get('residual_21_max_abs')}.")
+        if standard20:
+            w(f"- Standard rank-27: lift-span rank = {standard20.get('lift_span_rank_numeric')}, with best pairwise scalar-fit residuals {standard20.get('residual_10_max_abs')}, {standard20.get('residual_20_max_abs')}, and {standard20.get('residual_21_max_abs')}.")
+        w()
+        w("So neither known exact decomposition lies on the affine-line lift defect locus.")
+        w()
+
+        w("### Factorized Affine-Line Family")
+        w()
+        w("A factorized family was then searched with alpha_k[:,s] = a_s * u_k and beta_k[s,:] = b_s * v_k^T,")
+        w("which forces P_s = (a_s b_s) * M and therefore lift-span rank 1 by construction.")
+        w()
+        if r23:
+            w(f"- R = 23: best max-abs residual = {r23.get('best_tensor_max_abs_residual')}, best loss = {r23.get('best_tensor_loss')}, best rank(H) = {r23.get('best_rank_H_numeric')}, best lift-span rank = {r23.get('best_lift_span_rank_numeric')}.")
+        if r27:
+            w(f"- R = 27: best max-abs residual = {r27.get('best_tensor_max_abs_residual')}, best loss = {r27.get('best_tensor_loss')}, best rank(H) = {r27.get('best_rank_H_numeric')}, best lift-span rank = {r27.get('best_lift_span_rank_numeric')}.")
+        w()
+        w("This family realizes the codimension-one defect exactly but stays far from exact multiplication")
+        w("under least-squares-optimal gamma fitting. That is direct computational evidence against a")
+        w("second scalar relation among the centered lifts as a viable failure mode.")
+    else:
+        w("*Run the Phase 20 scripts to populate this section.*")
+
+    # ── PHASE 21 FUNCTIONAL ANNIHILATOR ──
+    w()
+    w(f"## {section_num}. FUNCTIONAL ANNIHILATOR INSIDE KER(GAMMA)")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 21)")
+    w()
+    w("Phase 21 separates two notions that initially look similar but are not. The relevant")
+    w("codimension-one defect is not merely the existence of lambda with lambda^T H = 0; it is the")
+    w("existence of nonzero lambda in ker(Gamma) such that lambda^T H = 0. Equivalently, the")
+    w("restriction of H to a basis of ker(Gamma) must lose rank.")
+    w()
+    diag21, search21 = read_phase21_outputs()
+    if diag21 and search21:
+        rows21 = diag21.get('rows', [])
+        alpha21 = next((row for row in rows21 if 'alphatensor' in row.get('label', '')), None)
+        standard21 = next((row for row in rows21 if 'standard' in row.get('label', '')), None)
+        summaries21 = search21.get('summaries', [])
+        alpha_search21 = next((row for row in summaries21 if row.get('base_label', '').startswith('alphatensor')), None)
+        standard_search21 = next((row for row in summaries21 if row.get('base_label') == 'standard_rank27'), None)
+
+        w("### Known Exact Decompositions")
+        w()
+        if alpha21:
+            w(f"- AlphaTensor rank-23: restricted rank = {alpha21.get('restricted_rank_numeric')} inside ker(Gamma), smallest singular value = {alpha21.get('restricted_min_singular_value')}, functional defect dimension = {alpha21.get('functional_defect_dim_numeric')}.")
+        if standard21:
+            w(f"- Standard rank-27: restricted rank = {standard21.get('restricted_rank_numeric')} inside ker(Gamma), smallest singular value = {standard21.get('restricted_min_singular_value')}, functional defect dimension = {standard21.get('functional_defect_dim_numeric')}.")
+        w()
+        w("So neither known exact decomposition has even a near-annihilator inside ker(Gamma).")
+        w()
+
+        w("### Weighted Annihilator Family")
+        w()
+        w("A factorized family was then built that enforces lambda^T P_0 = lambda^T P_1 = lambda^T P_2")
+        w("exactly by channel-wise term rescaling, which makes lambda^T H = 0 hold by construction.")
+        w()
+        if alpha_search21:
+            w(f"- AlphaTensor-derived family: best max-abs residual = {alpha_search21.get('best_tensor_max_abs_residual')}, best functional defect dimension = {alpha_search21.get('best_functional_defect_dim_numeric')}, best lambda-to-ker(Gamma) distance = {alpha_search21.get('best_lambda_kernel_distance')}.")
+        if standard_search21:
+            w(f"- Standard-derived family: best max-abs residual = {standard_search21.get('best_tensor_max_abs_residual')}, best functional defect dimension = {standard_search21.get('best_functional_defect_dim_numeric')}, best lambda-to-ker(Gamma) distance = {standard_search21.get('best_lambda_kernel_distance')}.")
+        w()
+        w("This shows that forcing a shared annihilator of H alone is too weak. Exact multiplication can")
+        w("survive when that annihilator stays far away from ker(Gamma), so the true obstruction must")
+        w("couple the annihilator condition directly to ker(Gamma) rather than treating them separately.")
+    else:
+        w("*Run the Phase 21 scripts to populate this section.*")
+
+    # ── PHASE 22 KERNEL-LINKED HOMOTOPY ──
+    w()
+    w(f"## {section_num}. KERNEL-LINKED ANNIHILATOR HOMOTOPY")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 22)")
+    w()
+    w("Phase 22 couples the two conditions directly. It chooses lambda inside the original ker(Gamma),")
+    w("then deforms the factor matrices toward lambda^T H = 0 while measuring the residual-angle")
+    w("tradeoff between tensor exactness and the principal angle from span(lambda) to the new ker(Gamma_t).")
+    w()
+    phase22 = read_phase22_outputs()
+    if phase22:
+        summaries22 = phase22.get('summaries', [])
+        alpha22 = [row for row in summaries22 if row.get('base_label', '').startswith('alphatensor')]
+        standard22 = [row for row in summaries22 if row.get('base_label') == 'standard_rank27']
+        alpha_soft22 = next((row for row in alpha22 if row.get('candidate') == 'softest_kernel_direction'), None)
+        standard_soft22 = next((row for row in standard22 if row.get('candidate') == 'softest_kernel_direction'), None)
+
+        w("### AlphaTensor")
+        w()
+        if alpha_soft22:
+            w(f"- Softest kernel direction: residual at minimum angle = {alpha_soft22.get('residual_at_min_angle')}, while the fully enforced endpoint t = 1 has residual {alpha_soft22.get('residual_at_t1')}.")
+        if alpha22:
+            w("- All tested AlphaTensor kernel directions show the same pattern: as lambda^T H is driven to zero, the angle to ker(Gamma_t) grows sharply and the tensor residual rises to about 1.")
+        w()
+
+        w("### Standard Algorithm")
+        w()
+        if standard_soft22:
+            w(f"- Softest kernel direction: residual at minimum angle = {standard_soft22.get('residual_at_min_angle')}, while the fully enforced endpoint t = 1 has residual {standard_soft22.get('residual_at_t1')}.")
+        if standard22:
+            w("- The standard algorithm is more flexible under this homotopy: some sampled kernel directions stay exact for long stretches or even at the endpoint within floating-point precision, while others only break at the fully enforced endpoint.")
+        w()
+        w("This means the kernel-linked annihilator idea is structurally meaningful, but the raw homotopy")
+        w("template is not yet a universal obstruction. It strongly disfavors the AlphaTensor geometry while")
+        w("leaving extra room inside the highly symmetric standard algorithm.")
+    else:
+        w("*Run the Phase 22 script to populate this section.*")
+
+    # ── PHASE 23 STAGED LAYERING BRIDGE ──
+    w()
+    w(f"## {section_num}. STAGED LAYERING VS. DEPTH-2 CIRCUITS")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 23)")
+    w()
+    w("Phase 23 reconnects the older depth-2 circuit dead end to the newer staged bilinear")
+    w("obstruction scans. Step 70 ruled out the direct recursive depth-2 padding route, Step 72")
+    w("showed only parameter-level fiber redundancy, and Step 73 proved that exact division-free")
+    w("depth-2 AA/QQ circuits collapse back to the ordinary bilinear problem via degree-2 truncation.")
+    w()
+    w("The new staged homotopies should therefore be read as a diagnostic replacement for the old")
+    w("layered-circuit idea: they force the prospective obstruction pattern gradually inside bilinear")
+    w("factor space rather than by adding exact higher-degree circuit layers.")
+    w()
+    phase23 = read_phase23_outputs()
+    if phase23:
+        summaries23 = phase23.get('summaries', [])
+        alpha_soft23 = next((row for row in summaries23 if row.get('base_label', '').startswith('alphatensor') and row.get('candidate') == 'softest_kernel_direction'), None)
+        alpha_rand23 = next((row for row in summaries23 if row.get('base_label', '').startswith('alphatensor') and row.get('candidate') == 'random_kernel_direction_1'), None)
+        standard_soft23 = next((row for row in summaries23 if row.get('base_label') == 'standard_rank27' and row.get('candidate') == 'softest_kernel_direction'), None)
+        standard_rand23 = next((row for row in summaries23 if row.get('base_label') == 'standard_rank27' and row.get('candidate') == 'random_kernel_direction_1'), None)
+
+        w("### Threshold Summary")
+        w()
+        if alpha_soft23:
+            alpha_first = alpha_soft23.get('first_residual_over_0p05')
+            if alpha_first:
+                w(f"- AlphaTensor, softest kernel direction: the first tensor residual above 0.05 occurs already at t = {alpha_first.get('t_value')}.")
+        if alpha_rand23:
+            alpha_first_rand = alpha_rand23.get('first_residual_over_0p05')
+            if alpha_first_rand:
+                w(f"- AlphaTensor, random kernel direction: the first tensor residual above 0.05 also occurs at t = {alpha_first_rand.get('t_value')}.")
+        if standard_soft23:
+            standard_first = standard_soft23.get('first_residual_over_0p05')
+            w(f"- Standard algorithm, softest kernel direction: the first tensor residual above 0.05 occurs at t = {standard_first.get('t_value') if standard_first else 'none'}.")
+        if standard_rand23:
+            standard_first_rand = standard_rand23.get('first_residual_over_0p05')
+            w(f"- Standard algorithm, random kernel direction: the first tensor residual above 0.05 occurs at t = {standard_first_rand.get('t_value') if standard_first_rand else 'none'}.")
+        w()
+        w("This is the operational bridge between the old circuit story and the new obstruction story.")
+        w("Exact depth-2 layering still does not create new bilinear directions, but staged forcing inside")
+        w("bilinear factor space reveals when a candidate obstruction starts to damage exactness. On the")
+        w("AlphaTensor rank-23 geometry, that damage appears immediately; on the standard algorithm, it")
+        w("does not.")
+    else:
+        w("*Run the Phase 23 extractor to populate this section.*")
+
+    # ── PHASE 24 TANGENT TRANSVERSALITY ──
+    w()
+    w(f"## {section_num}. TANGENT TRANSVERSALITY OF KERNEL-LINKED FORCING")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 24)")
+    w()
+    w("Phase 24 asks whether the Phase 22 instability is already an infinitesimal obstruction or")
+    w("whether it depends on a particular gauge choice for the annihilator-forcing direction.")
+    w("It linearizes the exact multiplication condition after optimally re-solving gamma, then")
+    w("compares the canonical minimum-norm forcing direction against the best corrected direction")
+    w("inside the same affine annihilator constraint.")
+    w()
+    phase24 = read_phase24_outputs()
+    if phase24:
+        rows24 = phase24.get('rows', [])
+        alpha24 = [row for row in rows24 if row.get('base_label', '').startswith('alphatensor')]
+        standard24 = [row for row in rows24 if row.get('base_label') == 'standard_rank27']
+        alpha_soft24 = next((row for row in alpha24 if row.get('candidate') == 'softest_kernel_direction'), None)
+        standard_soft24 = next((row for row in standard24 if row.get('candidate') == 'softest_kernel_direction'), None)
+
+        w("### Canonical Forcing Direction")
+        w()
+        if alpha_soft24:
+            w(f"- AlphaTensor, softest kernel direction: the minimum-norm forcing direction already has first-order tensor residual L2 = {alpha_soft24.get('min_norm_first_order_residual_l2')} and max-abs = {alpha_soft24.get('min_norm_first_order_residual_max_abs')}.")
+        if standard_soft24:
+            w(f"- Standard algorithm, softest kernel direction: the same minimum-norm forcing direction has first-order tensor residual L2 = {standard_soft24.get('min_norm_first_order_residual_l2')} and max-abs = {standard_soft24.get('min_norm_first_order_residual_max_abs')}.")
+        w("This pins down the Phase 22 asymmetry more sharply: the natural minimum-norm forcing path is already transverse on AlphaTensor but already tangent on the standard algorithm.")
+        w()
+
+        w("### Corrected Tangent Directions")
+        w()
+        if alpha_soft24:
+            w(f"- AlphaTensor still has corrected tangent-compatible forcing directions, but they require a substantial sideways correction: for the softest direction the tangent-correction ratio is {alpha_soft24.get('tangent_correction_ratio')}.")
+        if standard24:
+            w("- The standard algorithm needs no such repair in the sampled cases: the tangent correction is numerically zero for all three tested directions.")
+        w("So there is no universal first-order obstruction. What differs is how much symmetry-driven tangent freedom is available before the forcing direction has to be repaired.")
+        w()
+
+        w("### Nonlinear Escape Mechanism")
+        w()
+        if alpha_soft24:
+            w(f"- Along AlphaTensor's corrected softest-direction path, the tensor stays exact to floating-point precision while lambda^T H is driven from its baseline down to a ratio of {alpha_soft24.get('path_lambda_h_ratio_eps_1p0')} at t = 1, but the angle from lambda to ker(Gamma_t) grows to {alpha_soft24.get('path_angle_deg_eps_1p0')} degrees.")
+            w(f"- The first sampled stage where this corrected AlphaTensor path exceeds 5 degrees is t = {alpha_soft24.get('first_path_angle_over_5_deg')}, and the first sampled stage above 15 degrees is t = {alpha_soft24.get('first_path_angle_over_15_deg')}.")
+        if standard_soft24:
+            w(f"- The corrected standard softest-direction path behaves differently again: it stays kernel-linked longer, but its tensor residual only breaks at the fully enforced endpoint, where the residual reaches {standard_soft24.get('path_residual_eps_1p0')}.")
+        w("This shows exactly how the corrected exact paths evade the naïve obstruction: they preserve exactness by letting lambda drift away from the moving kernel rather than by satisfying the kernel-linked annihilator condition honestly.")
+        w()
+        w("Phase 24 therefore isolates the remaining gap as a genuinely simultaneous nonlinear condition: one must control exactness, annihilator progress, and kernel linkage at the same time.")
+    else:
+        w("*Run the Phase 24 script to populate this section.*")
+
+    # ── PHASE 25 HONEST KERNEL RETENTION ──
+    w()
+    w(f"## {section_num}. HONEST KERNEL-RETENTION: DERIVATION AND SCAN")
+    section_num += 1
+    w()
+    w("[INTERPRETATION] (Phase 25 derivation session + compute scan)")
+    w()
+    w("Phase 25 is a narrow derivation step motivated directly by Phase 24. The key conclusion")
+    w("is that the corrected exact escape paths do not approximate an honest kernel-linked")
+    w("annihilator. They only make lambda^T H small while allowing the reference lambda to rotate")
+    w("far away from the moving kernel ker(Gamma_t).")
+    w()
+    w("This leads to a clean coupled defect operator for any decomposition state x:")
+    w()
+    w("- C_x(lambda) = (Gamma(x) lambda, H(x)^T lambda)")
+    w("- A genuine kernel-linked annihilator is exactly a nonzero vector in ker(C_x).")
+    w("- The ambient coupled defect size is therefore kappa_full(x) = sigma_min(C_x).")
+    w()
+    w("More intrinsically, if Q_x is an orthonormal basis of ker(Gamma(x)), then the honest")
+    w("kernel-restricted defect is")
+    w()
+    w("- kappa_ker(x) = sigma_min(Q_x^T H_x)")
+    w()
+    w("This is the quantitative version of the Phase 21 rank test: kappa_ker(x) = 0 if and only if")
+    w("there exists a nonzero lambda in ker(Gamma(x)) with lambda^T H(x) = 0.")
+    w()
+    w("The derivation also identifies the correct first-order continuation equations. If x(t) is an")
+    w("exact path and lambda(t) is a unit term-space vector that stays honestly kernel-linked, then")
+    w("the coupled constraints are")
+    w()
+    w("- Gamma(t) lambda(t) = 0")
+    w("- lambda(t)^T H(t) = 0")
+    w("- ||lambda(t)|| = 1")
+    w()
+    w("and differentiating gives")
+    w()
+    w("- dot(Gamma) lambda + Gamma dot(lambda) = 0")
+    w("- dot(lambda)^T H + lambda^T dot(H) = 0")
+    w("- lambda^T dot(lambda) = 0")
+    w()
+    w("So the next compute phase should no longer freeze lambda. It should solve a coupled")
+    w("continuation problem in both the decomposition variables and lambda itself, ideally by")
+    w("tracking the softest singular direction of Q_x^T H_x along an exact path.")
+    w()
+    w("This sharpens the open problem again: the right target is no longer generic annihilator")
+    w("forcing, nor even fixed-lambda kernel forcing, but whether an exact path can drive the")
+    w("kernel-restricted defect kappa_ker(x) toward zero while lambda remains inside the moving")
+    w("kernel.")
+    w()
+
+    phase25 = read_phase25_outputs()
+    if phase25:
+        summaries25 = phase25.get('summaries', [])
+        alpha25 = [row for row in summaries25 if row.get('base_label', '').startswith('alphatensor')]
+        standard25 = [row for row in summaries25 if row.get('base_label') == 'standard_rank27']
+        alpha_soft25 = next((row for row in alpha25 if row.get('candidate') == 'softest_kernel_direction'), None)
+        standard_soft25 = next((row for row in standard25 if row.get('candidate') == 'softest_kernel_direction'), None)
+
+        w("### Scan Of The Honest Kernel-Restricted Soft Mode")
+        w()
+        if alpha_soft25:
+            w(f"- AlphaTensor, softest corrected path: kappa_ker starts at {alpha_soft25.get('base_kappa_ker')} and falls to {alpha_soft25.get('min_kappa_ker')} by t = {alpha_soft25.get('min_kappa_ker_t')}, with tensor residual {alpha_soft25.get('tensor_residual_at_min_kappa_ker')} at that minimum.")
+        if standard_soft25:
+            w(f"- Standard algorithm, softest corrected path: kappa_ker starts at {standard_soft25.get('base_kappa_ker')} and falls to {standard_soft25.get('min_kappa_ker')} by t = {standard_soft25.get('min_kappa_ker_t')}, with tensor residual {standard_soft25.get('tensor_residual_at_min_kappa_ker')} at that minimum.")
+        w()
+        w("The first compute scan against the derived quantity shows a more refined asymmetry than Phase 24.")
+        w("AlphaTensor's softest exact path can push kappa_ker very low while remaining numerically exact")
+        w("and without rank collapse, but in this scan it still does not hit zero. The standard softest")
+        w("path reaches an actual honest defect only at the singular endpoint where the restricted rank")
+        w("collapses and exact multiplication fails.")
+        w()
+        w("So the derived quantity is useful, but not yet a universal separator by itself: some standard")
+        w("random corrected directions also drive kappa_ker low while staying exact. The remaining gap is")
+        w("therefore even sharper now: distinguish smooth honest continuation toward kappa_ker = 0 from")
+        w("mere endpoint collapse or other highly symmetric escape mechanisms.")
+    else:
+        w("*Run the Phase 25 scan to populate the compute portion of this section.*")
+
+    # ── PHASE 26 REGULARIZED KERNEL RETENTION ──
+    w()
+    w(f"## {section_num}. REGULARIZED KERNEL RETENTION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 26)")
+    w()
+    w("Phase 26 applies the first regularity filter to the Phase 25 paths: keep only states that")
+    w("remain numerically exact and whose kernel-restricted rank does not collapse. This removes")
+    w("the obvious standard soft-path endpoint singularity from the comparison.")
+    w()
+    phase26 = read_phase26_outputs()
+    if phase26:
+        summaries26 = phase26.get('summaries', [])
+        alpha26 = [row for row in summaries26 if row.get('base_label', '').startswith('alphatensor')]
+        standard26 = [row for row in summaries26 if row.get('base_label') == 'standard_rank27']
+        alpha_soft26 = next((row for row in alpha26 if row.get('candidate') == 'softest_kernel_direction'), None)
+        standard_soft26 = next((row for row in standard26 if row.get('candidate') == 'softest_kernel_direction'), None)
+        standard_rand26 = next((row for row in standard26 if row.get('candidate') == 'random_kernel_direction_2'), None)
+
+        if alpha_soft26:
+            w(f"- AlphaTensor, softest regular path: minimum regular kappa_ker = {alpha_soft26.get('min_regular_kappa_ker')} at t = {alpha_soft26.get('min_regular_kappa_ker_t')}, with no restricted-rank collapse.")
+        if standard_soft26:
+            w(f"- Standard, softest regular path: minimum regular kappa_ker = {standard_soft26.get('min_regular_kappa_ker')} at t = {standard_soft26.get('min_regular_kappa_ker_t')}; the singular endpoint at t = 1 is excluded by the filter.")
+        if standard_rand26:
+            w(f"- Standard still retains a higher-symmetry regular escape in one sampled random direction, reaching kappa_ker = {standard_rand26.get('min_regular_kappa_ker')} without collapse.")
+        w()
+        w("So the no-collapse filter is necessary and already meaningful: it separates the softest AlphaTensor and standard paths. But it is not sufficient globally, because some more symmetric standard corrected paths still survive it.")
+    else:
+        w("*Run the Phase 26 script to populate this section.*")
+
+    # ── PHASE 27 COUPLED CONTINUATION PROTOTYPE ──
+    w()
+    w(f"## {section_num}. COUPLED CONTINUATION PROTOTYPE")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 27)")
+    w()
+    w("Phase 27 implements the first actual coupled continuation solve in both the decomposition")
+    w("variables and lambda. It enforces exactness, moving-kernel consistency, and normalization")
+    w("to first order, then minimizes the linearized honest defect.")
+    w()
+    phase27 = read_phase27_outputs()
+    if phase27:
+        summaries27 = phase27.get('summaries', [])
+        alpha27 = next((row for row in summaries27 if row.get('base_label', '').startswith('alphatensor')), None)
+        standard27 = next((row for row in summaries27 if row.get('base_label') == 'standard_rank27'), None)
+        if alpha27:
+            w(f"- AlphaTensor: the linearized solve predicts a near-perfect first-order defect cancellation with reduction factor {alpha27.get('predicted_reduction_factor')}, but the finite probe at eps = 1e-2 still leaves an honest defect of {alpha27.get('probe_eps_1e_2_honest_defect_l2')}.")
+        if standard27:
+            w(f"- Standard algorithm: the same phenomenon occurs; the first-order reduction factor is {standard27.get('predicted_reduction_factor')}, but the finite probe at eps = 1e-2 still leaves an honest defect of {standard27.get('probe_eps_1e_2_honest_defect_l2')}.")
+        w()
+        w("So even the honest coupled local model is too optimistic if interpreted literally. Local solvability is not the issue; the real obstruction problem now sits in nonlinear persistence beyond first order.")
+    else:
+        w("*Run the Phase 27 script to populate this section.*")
+
+    # ── PHASE 28 WILDCARD-REGULARIZED CONTINUATION ──
+    w()
+    w(f"## {section_num}. WILDCARD-REGULARIZED CONTINUATION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 28)")
+    w()
+    w("Phase 28 upgrades the coupled continuation test again: it keeps the Phase 26 regularity")
+    w("filter, uses the Phase 27 coupled local model, and adds an explicit wildcard search over")
+    w("admissible nullspace directions at every finite probe.")
+    w()
+    phase28 = read_phase28_outputs()
+    if phase28:
+        summaries28 = phase28.get('summaries', [])
+        alpha28 = next((row for row in summaries28 if row.get('base_label', '').startswith('alphatensor')), None)
+        standard28 = next((row for row in summaries28 if row.get('base_label') == 'standard_rank27'), None)
+        if alpha28:
+            w(f"- AlphaTensor: over {alpha28.get('accepted_steps')} accepted regular steps, wildcard continuation lowers kappa_ker from {alpha28.get('initial_kappa_ker')} to {alpha28.get('final_kappa_ker')}; wildcard wins all {alpha28.get('wildcard_wins')} accepted steps.")
+        if standard28:
+            w(f"- Standard algorithm: over {standard28.get('accepted_steps')} accepted regular steps, wildcard continuation lowers kappa_ker from {standard28.get('initial_kappa_ker')} to {standard28.get('final_kappa_ker')}; wildcard also wins all {standard28.get('wildcard_wins')} accepted steps.")
+        w()
+        w("So wildcard search is not optional bookkeeping. It materially expands the regular finite-step descent cone in both families. The separator problem therefore has to survive not just the structured coupled step, but a broader admissible nullspace search.")
+    else:
+        w("*Run the Phase 28 script to populate this section.*")
+
+    # ── PHASE 29 SMOOTH-BUDGETED CONTINUATION ──
+    w()
+    w(f"## {section_num}. SMOOTH-BUDGETED CONTINUATION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 29)")
+    w()
+    w("Phase 29 executes two refinements on top of the wildcard continuation test: a per-step")
+    w("mode-rotation cap, and a longer-horizon budgeted continuation policy that penalizes costly")
+    w("finite moves.")
+    w()
+    phase29 = read_phase29_outputs()
+    if phase29:
+        summaries29 = phase29.get('summaries', [])
+        alpha29_smooth = next((row for row in summaries29 if row.get('policy_name') == 'smooth_greedy' and row.get('base_label', '').startswith('alphatensor')), None)
+        standard29_smooth = next((row for row in summaries29 if row.get('policy_name') == 'smooth_greedy' and row.get('base_label') == 'standard_rank27'), None)
+        alpha29_budget = next((row for row in summaries29 if row.get('policy_name') == 'smooth_budgeted_long' and row.get('base_label', '').startswith('alphatensor')), None)
+        standard29_budget = next((row for row in summaries29 if row.get('policy_name') == 'smooth_budgeted_long' and row.get('base_label') == 'standard_rank27'), None)
+        if alpha29_smooth and standard29_smooth:
+            w(f"- Smooth greedy policy: with a 12 degree mode-rotation cap, AlphaTensor still drops kappa_ker from {alpha29_smooth.get('initial_kappa_ker')} to {alpha29_smooth.get('final_kappa_ker')} and the standard algorithm drops from {standard29_smooth.get('initial_kappa_ker')} to {standard29_smooth.get('final_kappa_ker')}; all accepted steps in both families are still wildcard steps.")
+        if alpha29_budget and standard29_budget:
+            w(f"- Smooth budgeted long-horizon policy: over 24 accepted steps, AlphaTensor only moves from {alpha29_budget.get('initial_kappa_ker')} to {alpha29_budget.get('final_kappa_ker')} using budget {alpha29_budget.get('budget_used')}, while the standard algorithm moves from {standard29_budget.get('initial_kappa_ker')} to {standard29_budget.get('final_kappa_ker')} using budget {standard29_budget.get('budget_used')}; wildcard wins nearly vanish under the cost-penalized objective.")
+        w()
+        w("So smoothness alone does not remove wildcard escape routes, but budget does change the continuation geometry substantially. The remaining target is now a persistence-style separator: not just whether descent exists, but how much honest defect reduction can be bought per unit smooth continuation budget.")
+    else:
+        w("*Run the Phase 29 script to populate this section.*")
+
+    # ── PHASE 30 BUDGET-EFFICIENCY SWEEP ──
+    w()
+    w(f"## {section_num}. BUDGET-EFFICIENCY SWEEP")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 30)")
+    w()
+    w("Phase 30 turns the Phase 29 continuation policies into explicit gain-per-budget and")
+    w("gain-per-rotation summaries, then runs a small sweep over rotation caps and budget weights")
+    w("to test whether the budget-aware story is robust.")
+    w()
+    phase30 = read_phase30_outputs()
+    if phase30:
+        delta_rows30 = phase30.get('delta_rows', [])
+        rot8 = next((row for row in delta_rows30 if row.get('policy_name') == 'sweep_rot8_bw0p0'), None)
+        rot12 = next((row for row in delta_rows30 if row.get('policy_name') == 'sweep_rot12_bw0p6'), None)
+        if rot8:
+            w("- Tight rotation-cap wall: under the 8 degree cap policy, AlphaTensor still admits regular descent while the standard algorithm stalls immediately with no accepted steps.")
+        if rot12:
+            w(f"- Naive efficiency reversal: under the cost-penalized 12 degree policy, AlphaTensor's gain-per-budget is {rot12.get('alpha_total_gain_per_budget')}, while the standard algorithm's is {rot12.get('standard_total_gain_per_budget')}; so plain gain-per-budget is not the right separator.")
+        w()
+        w("So the useful object now looks less like a single scalar efficiency quotient and more like a feasibility boundary in the space of allowed rotation, allowed cost, and achievable regular defect decrease.")
+    else:
+        w("*Run the Phase 30 sweep to populate this section.*")
+
+    # ── PHASE 31 FEASIBILITY BOUNDARY ──
+    w()
+    w(f"## {section_num}. FEASIBILITY BOUNDARY")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 31)")
+    w()
+    w("Phase 31 turns the continuation problem into a phase-diagram question: for each total")
+    w("budget, what is the smallest per-step mode-rotation cap under which any regular descent is")
+    w("still feasible?")
+    w()
+    phase31 = read_phase31_outputs()
+    if phase31:
+        delta_rows31 = phase31.get('delta_rows', [])
+        if delta_rows31:
+            first_gap = delta_rows31[0]
+            w(f"- Across the full scanned budget range, AlphaTensor remains feasible already at rotation cap {first_gap.get('alpha_min_rotation_cap_deg_for_descent')}, while the standard algorithm requires rotation cap {first_gap.get('standard_min_rotation_cap_deg_for_descent')}; the gap is {first_gap.get('rotation_cap_gap_standard_minus_alpha')} degrees.")
+        w()
+        w("So the continuation branch now has its cleanest separator to date: not a scalar efficiency quotient, but a stable feasibility-boundary gap in the joint space of smoothness and cost.")
+    else:
+        w("*Run the Phase 31 scan to populate this section.*")
+
+    # ── PHASE 32 BOUNDARY SHARPENING ──
+    w()
+    w(f"## {section_num}. BOUNDARY SHARPENING")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 32)")
+    w()
+    w("Phase 32 densifies the feasibility-boundary scan near the observed thresholds to test whether")
+    w("the Phase 31 frontier gap was a coarse-grid artifact or a stable feature.")
+    w()
+    phase32 = read_phase32_outputs()
+    if phase32:
+        delta_rows32 = phase32.get('delta_rows', [])
+        if delta_rows32:
+            first_gap = delta_rows32[0]
+            w(f"- On the refined grid, AlphaTensor remains feasible already at rotation cap {first_gap.get('alpha_min_rotation_cap_deg_for_descent')}, while the standard algorithm still requires {first_gap.get('standard_min_rotation_cap_deg_for_descent')}; the gap sharpens to {first_gap.get('rotation_cap_gap_standard_minus_alpha')} degrees.")
+        w()
+        w("So the feasibility-boundary effect is not weakening under refinement. It sharpens. The empirical separator now looks like a critical smoothness threshold with AlphaTensor and the standard algorithm in different phases.")
+    else:
+        w("*Run the Phase 32 scan to populate this section.*")
 
     # ── OPEN FRONTS ──
     w()
@@ -3525,6 +4229,21 @@ def generate():
     w("- Non-rectangular 6-fiber sub-tensor rank attack: ✓ exact substitution bounds and direct P4 constructions are now tabulated, the rectangular six-fiber cases remain ruled out by exact rank 15, and the current numerical CP-rank scan found no rank-13 or rank-14 witness for any nonrectangular six-fiber pattern")
     w("- Reverse engineering + cancellation visualization: ✓ a public exact rank-23 3x3 coefficient table has been recovered from AlphaTensor's public repo, measured directly in the Step 51-52 basis, shown to have nuisance rank 14 = 23-9 exactly, and tested for single/pair gamma-only redundancy with no feasible 22-term or 21-term sub-decomposition found")
     w("- Conservation-law proof status: ✓ Phase 17 proves fiber-mode faithfulness, verifies dim(ker Gamma) = rank([H|Delta]) on the known valid decompositions, and confirms that AlphaTensor plus all 23 single deletions satisfy Delta subset span(H), while random collections and the exported Step 75 anticommutator fibermode do not")
+    w("- Right-inverse kernel-saturation diagnostics: ✓ Phase 18 verifies exact per-channel identities Gamma * P_s = I_9 and exact kernel saturation rank(H) = dim(ker Gamma) on AlphaTensor and the standard algorithm, shows 250/250 synthetic right-inverse triples saturate for each known Gamma, and exhibits explicit defective lower-dimensional loci such as K_0 = K_1")
+    w("- Factorized defect-locus diagnostics: ✓ Phase 19 shows the known exact decompositions have zero centered-lift defect dimension, while projected pair-equality families P_0 = P_1 and P_1 = P_2 leave hard residual floors 0.5 with rank(H) = 9, the all-equal family leaves residual 2/3 with rank(H) = 0, and the broader collinear family is not an obstruction because it already contains the standard algorithm exactly")
+    w("- Affine-line lift obstruction: ✓ Phase 20 derives the codimension-one defect where a second scalar relation forces the centered lifts K_0, K_1, K_2 onto one matrix line, verifies that neither AlphaTensor nor the standard algorithm lies there, and shows a factorized family that enforces lift-span rank 1 stays far from exact multiplication (best residuals about 0.74 at R=23 and 0.81 at R=27)")
+    w("- Functional annihilator inside ker(Gamma): ✓ Phase 21 shows the known exact decompositions have no annihilator defect inside ker(Gamma), and that a factorized family can enforce lambda^T H = 0 while still leaving defect dimension 0 because the enforced lambda stays far from ker(Gamma); therefore a plain annihilator of H is too weak to serve as the missing obstruction")
+    w("- Kernel-linked annihilator homotopy: ✓ Phase 22 forces lambda to start inside the original ker(Gamma) and tracks the residual-angle tradeoff while driving lambda^T H toward 0; AlphaTensor degrades quickly, while the standard algorithm remains much more flexible, so the next obstruction must distinguish saturated low-rank geometry from the highly symmetric standard family")
+    w("- Staged layering bridge: ✓ Phase 23 links the old depth-2 circuit dead end to the new staged bilinear homotopies; exact depth-2 layering still collapses back to bilinear rank, but staged forcing shows AlphaTensor destabilizes already at t = 0.1 while the standard algorithm often stays exact far longer")
+    w("- Tangent transversality of kernel-linked forcing: ✓ Phase 24 shows the canonical minimum-norm forcing direction is already first-order transverse on AlphaTensor but tangent on the standard algorithm; however AlphaTensor still admits corrected exact tangent paths, and those paths evade the obstruction by rotating lambda out of ker(Gamma_t) rather than by keeping the kernel link intact")
+    w("- Honest kernel-retention derivation + scan: ✓ Phase 25 formalizes the correct coupled defect operator C_x(lambda) = (Gamma lambda, H^T lambda), identifies the intrinsic kernel-restricted quantity kappa_ker(x) = sigma_min(Q_x^T H_x), and then tracks that soft mode along exact corrected paths; AlphaTensor's softest path lowers kappa_ker to about 0.00469 without rank collapse, while the standard softest path reaches a true defect only at a singular endpoint collapse")
+    w("- Regularized kernel retention: ✓ Phase 26 filters the Phase 25 paths by near-exactness and no restricted-rank collapse; under that filter AlphaTensor's softest path still reaches kappa_ker about 0.00469, while the standard softest path only reaches 0.1 before the excluded endpoint collapse, although one more symmetric standard random path still gets down to about 0.00571")
+    w("- Coupled continuation prototype: ✓ Phase 27 implements the first linearized solve in both dot(x) and dot(lambda); both AlphaTensor and the standard algorithm admit near-perfect first-order cancellation of the honest defect, but finite probes show only modest reduction, so the remaining barrier is nonlinear persistence rather than mere local solvability")
+    w("- Wildcard-regularized continuation: ✓ Phase 28 adds an explicit wildcard search over admissible nullspace directions on top of the coupled continuation model and no-collapse filter; wildcard steps beat the structured branch on every accepted step for both AlphaTensor and the standard algorithm, so future tests must include wildcard stress directions by default")
+    w("- Smooth-budgeted continuation: ✓ Phase 29 adds a 12 degree mode-rotation cap and a longer-horizon budgeted continuation policy; smoothness alone still permits wildcard descent, but the cost-penalized policy largely suppresses wildcards and turns continuation into many tiny structured steps")
+    w("- Budget-efficiency sweep: ✓ Phase 30 shows that naive gain-per-budget favors the standard algorithm on looser policies, so that scalar ratio is not the right invariant; however a strict 8 degree rotation cap stalls the standard continuation immediately while AlphaTensor still moves, revealing a sharper feasibility-boundary effect")
+    w("- Feasibility boundary: ✓ Phase 31 scans rotation-cap and budget pairs directly and finds a stable frontier gap across the tested budget range: AlphaTensor remains feasible at 4 degrees while the standard algorithm requires 12 degrees before any regular descent appears")
+    w("- Boundary sharpening: ✓ Phase 32 densifies the cap grid and strengthens the frontier gap: AlphaTensor is already feasible at 2 degrees across the scanned budgets, while the standard algorithm still requires 12 degrees")
     w("- Small-integer coefficient enumeration: ✓ the exact ternary profile pool has been counted modulo sign and symmetry (96,845,281 raw distinct profiles; 570,521 symmetry orbits), the top usefulness profiles have been ranked, and collapsed/full-tensor greedy diagnostics show that collapsed matching is vacuous while corrected 2x2 full-tensor greedy does not recover Strassen through rank 7")
     w("- Polyomino subtensor-rank + tiling analysis: ✓ the full connected-polyomino rank table is now audited cleanly, the priority L-tromino class is verified at numerical rank 9, all four previously unresolved tetromino classes are verified at numerical rank 12, the corrected best flat exact-cover cost is 26 with no verified flat tiling at cost 24 or below, and the Step 51/52 layer split of the public rank-23 algorithm is exported with nuisance rank 14, 3 dead-X-dominant corrector terms, and no signal-dominant terms")
     w()
@@ -3544,11 +4263,26 @@ def generate():
     w("  doubly-live targets as a structural layer of their own")
     w("- Same-fiber and focused subsets are closed; determine whether they admit a clean intrinsic")
     w("  signature or conceptual description beyond the target/focus predicates")
+    w("- Wildcard-aware obstruction: the next invariant must survive explicit wildcard nullspace search, not just the named structured continuation directions")
+    w("- Budget-aware obstruction: the next invariant should measure defect reduction versus smooth continuation cost, not just whether a low-defect step exists")
+    w("- Feasibility boundary: determine the smallest rotation cap and cost budget under which each family still admits any regular descent; this now looks more promising than a single gain-per-budget score")
+    w("- Boundary sharpening: densify the cap grid near 4 and 12 degrees and test whether the frontier gap persists under finer resolution and larger continuation budgets")
+    w("- Threshold localization: determine whether AlphaTensor's true critical cap lies below 2 degrees and whether the standard threshold is exactly 12 degrees or just above 11.5 degrees")
     w("- Step 48 shows that the 8 XC-orbit linearization is exact but vacuous for rank lower bounds;")
     w("  any useful lower-bound model must retain finer-than-orbit-sum equation structure")
     w("- Step 49 now records the exact 729-equation trilinear system and the 8 representative types;")
     w("  the remaining open problem is whether the rank-R solution variety is nonempty for sparse or non-group-closed ansatze")
     w("- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance), and Phase 17 now proves the accompanying fiber-mode faithfulness theorem; the remaining open problem is the universal Delta subset span(H) step needed to turn the observed AlphaTensor conservation law R + eta_nullity = 27 into a theorem for all minimum-rank 3x3 decompositions")
+    w("- Phase 18 shows that full kernel saturation is stable inside the affine right-inverse model and that failures arise on explicit lower-dimensional loci such as K_0 = K_1; the remaining compute problem is to determine which such loci are actually compatible with factorized rank-1 terms (alpha_k, beta_k, gamma_k)")
+    w("- Phase 19 narrows that factorized compatibility question: pair-equality-type loci already look strongly incompatible with exact multiplication in direct factorized searches, while channel-collinearity is too weak because it contains the standard algorithm; the next obstruction candidates must therefore be sharper than generic collinearity but weaker than literal equality of two live channels")
+    w("- Phase 20 rules out one such sharper candidate computationally: a second scalar relation among the centered lifts, equivalently lift-span rank 1, appears incompatible with exact multiplication in the tested factorized affine-line family, so the remaining bad locus must be subtler than a single extra scalar relation among K_0, K_1, K_2")
+    w("- Phase 21 shows that coupling matters: a shared annihilator lambda^T H = 0 is not enough unless lambda also lies in ker(Gamma), so the next obstruction candidates must encode a kernel-linked annihilator rather than an unconstrained one")
+    w("- Phase 22 shows that even the kernel-linked annihilator needs refinement: it is strongly incompatible with the AlphaTensor rank-23 geometry under the tested homotopy, but not with the highly symmetric standard algorithm, so any universal obstruction must incorporate extra structure such as minimal-rank saturation or nonstandard symmetry breaking")
+    w("- Phase 24 sharpens that refinement target: there is no universal first-order obstruction because AlphaTensor still has corrected exact tangent-compatible forcing directions, but those corrected paths succeed only by letting lambda rotate away from ker(Gamma_t); the remaining open problem is therefore to control exactness, annihilator progress, and kernel linkage simultaneously at the nonlinear level")
+    w("- Phase 25 completes the first version of that target and refines it further: kappa_ker(x) is the right honest quantity to track, but it is not yet a universal separator by itself because some highly symmetric standard continuations can also push it low; the next open problem is to exclude singular endpoint collapse and other nonregular escape mechanisms while testing smooth exact continuation toward kappa_ker = 0")
+    w("- Phase 26 shows that forbidding endpoint collapse is necessary but still not sufficient: it removes the standard softest-path loophole but not all high-symmetry standard escape routes")
+    w("- Phase 27 shows that even the honest coupled first-order continuation equations are too weak as a final criterion, because both families admit near-perfect linearized cancellation while finite probes only reduce the honest defect modestly; the remaining obstruction problem is therefore nonlinear and regularized at once")
+    w("- The old depth-2 route should now be treated as structurally closed for exact division-free circuits by Step 73; any remaining use of layering is as a staged diagnostic inside bilinear factor space, and Phase 23 shows that this diagnostic sharply separates AlphaTensor-like low-rank geometry from the standard algorithm")
     w("- Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity")
     w("- Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit")
     w("- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, Step 70's first concrete depth-2 audit still leaves the recursive padded-Strassen route at 31 leaf multiplications with no pair-ratio evidence of an immediate AlphaTensor term-factor collapse below rank 23, and Step 71's five local perturbation/merge/neighborhood shots found 0 exact slot replacements in a 5123-profile explicit pool, 0 exact pair merges, no exact commutator or anticommutator witness through rank 20, and no random-neighborhood feasible subset at R<=22 in a 123-term local pool")

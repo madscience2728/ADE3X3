@@ -1,0 +1,10 @@
+total_budget,alpha_min_rotation_cap_deg_for_descent,standard_min_rotation_cap_deg_for_descent,rotation_cap_gap_standard_minus_alpha
+0.02,2.0,12.0,10.0
+0.05,2.0,12.0,10.0
+0.1,2.0,12.0,10.0
+0.2,2.0,12.0,10.0
+0.4,2.0,12.0,10.0
+0.8,2.0,12.0,10.0
+1.2,2.0,12.0,10.0
+2.0,2.0,12.0,10.0
+3.0,2.0,12.0,10.0

@@ -1,0 +1,34 @@
+{
+  "alphatensor_orientation": "transpose",
+  "alphatensor_reconstruction_max_abs": 0,
+  "exactness_tolerance": 1e-10,
+  "max_steps": 8,
+  "step_epsilons": [
+    0.001,
+    0.003,
+    0.01,
+    0.03,
+    0.05
+  ],
+  "wildcard_samples": 48,
+  "summaries": [
+    {
+      "base_label": "alphatensor_rank23_transpose",
+      "initial_kappa_ker": 0.6245923009701738,
+      "final_kappa_ker": 0.3655885791544301,
+      "min_kappa_ker": 0.3655885791544301,
+      "accepted_steps": 8,
+      "wildcard_wins": 8,
+      "initial_restricted_rank": 14
+    },
+    {
+      "base_label": "standard_rank27",
+      "initial_kappa_ker": 0.9999999999999996,
+      "final_kappa_ker": 0.6116041118104862,
+      "min_kappa_ker": 0.6116041118104862,
+      "accepted_steps": 8,
+      "wildcard_wins": 8,
+      "initial_restricted_rank": 18
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "summaries": [
+    {
+      "R": 23,
+      "trial_count": 120,
+      "best_tensor_max_abs_residual": 0.7361786988441493,
+      "best_tensor_loss": 19.08981833812571,
+      "best_rank_H_numeric": 9,
+      "best_rank_HDelta_numeric": 9,
+      "best_lift_span_rank_numeric": 1,
+      "best_channel_identity_max_abs": 0.7361786988441493,
+      "best_trial_index": 32
+    },
+    {
+      "R": 27,
+      "trial_count": 120,
+      "best_tensor_max_abs_residual": 0.8063413133156774,
+      "best_tensor_loss": 19.661087559288475,
+      "best_rank_H_numeric": 9,
+      "best_rank_HDelta_numeric": 9,
+      "best_lift_span_rank_numeric": 1,
+      "best_channel_identity_max_abs": 0.8063413133156774,
+      "best_trial_index": 29
+    }
+  ]
+}

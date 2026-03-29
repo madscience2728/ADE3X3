@@ -1,0 +1,94 @@
+{
+  "alphatensor_orientation": "transpose",
+  "alphatensor_reconstruction_max_abs": 0,
+  "summaries": [
+    {
+      "base_label": "alphatensor_rank23_transpose",
+      "family": "pair_equal_01",
+      "trial_count": 30,
+      "best_tensor_max_abs_residual": 0.5000000000000003,
+      "best_tensor_loss": 9.0,
+      "best_rank_H_numeric": 9,
+      "best_rank_HDelta_numeric": 18,
+      "best_channel_identity_max_abs": 0.5000000000000003,
+      "best_trial_index": 1
+    },
+    {
+      "base_label": "alphatensor_rank23_transpose",
+      "family": "pair_equal_12",
+      "trial_count": 30,
+      "best_tensor_max_abs_residual": 0.5000000000000007,
+      "best_tensor_loss": 9.0,
+      "best_rank_H_numeric": 9,
+      "best_rank_HDelta_numeric": 19,
+      "best_channel_identity_max_abs": 0.5000000000000006,
+      "best_trial_index": 1
+    },
+    {
+      "base_label": "alphatensor_rank23_transpose",
+      "family": "all_equal",
+      "trial_count": 30,
+      "best_tensor_max_abs_residual": 0.6666666666666667,
+      "best_tensor_loss": 18.0,
+      "best_rank_H_numeric": 0,
+      "best_rank_HDelta_numeric": 9,
+      "best_channel_identity_max_abs": 0.6666666666666667,
+      "best_trial_index": 4
+    },
+    {
+      "base_label": "alphatensor_rank23_transpose",
+      "family": "collinear",
+      "trial_count": 30,
+      "best_tensor_max_abs_residual": 0.7420931243330606,
+      "best_tensor_loss": 10.186991576391474,
+      "best_rank_H_numeric": 18,
+      "best_rank_HDelta_numeric": 23,
+      "best_channel_identity_max_abs": 0.7420931243330606,
+      "best_trial_index": 5
+    },
+    {
+      "base_label": "standard_rank27",
+      "family": "pair_equal_01",
+      "trial_count": 30,
+      "best_tensor_max_abs_residual": 0.5000000000000002,
+      "best_tensor_loss": 9.0,
+      "best_rank_H_numeric": 9,
+      "best_rank_HDelta_numeric": 18,
+      "best_channel_identity_max_abs": 0.5000000000000002,
+      "best_trial_index": 1
+    },
+    {
+      "base_label": "standard_rank27",
+      "family": "pair_equal_12",
+      "trial_count": 30,
+      "best_tensor_max_abs_residual": 0.5000000000000002,
+      "best_tensor_loss": 9.0,
+      "best_rank_H_numeric": 9,
+      "best_rank_HDelta_numeric": 18,
+      "best_channel_identity_max_abs": 0.5000000000000002,
+      "best_trial_index": 1
+    },
+    {
+      "base_label": "standard_rank27",
+      "family": "all_equal",
+      "trial_count": 30,
+      "best_tensor_max_abs_residual": 0.6666666666666667,
+      "best_tensor_loss": 18.0,
+      "best_rank_H_numeric": 0,
+      "best_rank_HDelta_numeric": 9,
+      "best_channel_identity_max_abs": 0.6666666666666667,
+      "best_trial_index": 1
+    },
+    {
+      "base_label": "standard_rank27",
+      "family": "collinear",
+      "trial_count": 30,
+      "best_tensor_max_abs_residual": 0.0,
+      "best_tensor_loss": 0.0,
+      "best_rank_H_numeric": 18,
+      "best_rank_HDelta_numeric": 18,
+      "best_channel_identity_max_abs": 0.0,
+      "best_trial_index": 1
+    }
+  ]
+}

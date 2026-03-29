@@ -1,0 +1,3 @@
+label,R,rank_gamma_numeric,ker_gamma_dim_numeric,rank_H_numeric,rank_kernel_coords_numeric,kernel_saturation_numeric,channel0_identity_max_abs,channel1_identity_max_abs,channel2_identity_max_abs,H_kernel_residual_max_abs,rank_gamma_exact,ker_gamma_dim_exact,rank_H_exact,kernel_saturation_exact,channel0_identity_exact,channel1_identity_exact,channel2_identity_exact,H_kernel_exact
+alphatensor_rank23_transpose,23,9,14,14,14,True,0.0,0.0,0.0,0.0,9,14,14,True,True,True,True,True
+standard_rank27,27,9,18,18,18,True,0.0,0.0,0.0,0.0,9,18,18,True,True,True,True,True

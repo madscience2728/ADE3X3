@@ -1,0 +1,71 @@
+{
+  "exactness_tolerance": 1e-10,
+  "summaries": [
+    {
+      "base_label": "alphatensor_rank23_transpose",
+      "candidate": "softest_kernel_direction",
+      "base_restricted_rank": 14,
+      "base_kappa_ker": 0.6245923009701738,
+      "regular_row_count": 11,
+      "min_regular_kappa_ker": 0.004687401734031592,
+      "min_regular_kappa_ker_t": 1.0,
+      "tensor_residual_at_min_regular_kappa_ker": 1.6353585152728556e-13,
+      "first_regular_kappa_ker_below_10pct_t": 1.0
+    },
+    {
+      "base_label": "alphatensor_rank23_transpose",
+      "candidate": "random_kernel_direction_1",
+      "base_restricted_rank": 14,
+      "base_kappa_ker": 0.6245923009701738,
+      "regular_row_count": 11,
+      "min_regular_kappa_ker": 0.045015644556162006,
+      "min_regular_kappa_ker_t": 1.0,
+      "tensor_residual_at_min_regular_kappa_ker": 1.0880185641326534e-14,
+      "first_regular_kappa_ker_below_10pct_t": 1.0
+    },
+    {
+      "base_label": "alphatensor_rank23_transpose",
+      "candidate": "random_kernel_direction_2",
+      "base_restricted_rank": 14,
+      "base_kappa_ker": 0.6245923009701738,
+      "regular_row_count": 11,
+      "min_regular_kappa_ker": 0.06486190587044158,
+      "min_regular_kappa_ker_t": 1.0,
+      "tensor_residual_at_min_regular_kappa_ker": 2.653433028854124e-13,
+      "first_regular_kappa_ker_below_10pct_t": null
+    },
+    {
+      "base_label": "standard_rank27",
+      "candidate": "softest_kernel_direction",
+      "base_restricted_rank": 18,
+      "base_kappa_ker": 0.9999999999999996,
+      "regular_row_count": 10,
+      "min_regular_kappa_ker": 0.09999999999999981,
+      "min_regular_kappa_ker_t": 0.9,
+      "tensor_residual_at_min_regular_kappa_ker": 0.0,
+      "first_regular_kappa_ker_below_10pct_t": 0.9
+    },
+    {
+      "base_label": "standard_rank27",
+      "candidate": "random_kernel_direction_1",
+      "base_restricted_rank": 18,
+      "base_kappa_ker": 0.9999999999999996,
+      "regular_row_count": 11,
+      "min_regular_kappa_ker": 0.08198406982723286,
+      "min_regular_kappa_ker_t": 1.0,
+      "tensor_residual_at_min_regular_kappa_ker": 3.3306690738754696e-16,
+      "first_regular_kappa_ker_below_10pct_t": 1.0
+    },
+    {
+      "base_label": "standard_rank27",
+      "candidate": "random_kernel_direction_2",
+      "base_restricted_rank": 18,
+      "base_kappa_ker": 0.9999999999999996,
+      "regular_row_count": 11,
+      "min_regular_kappa_ker": 0.005706537391332286,
+      "min_regular_kappa_ker_t": 1.0,
+      "tensor_residual_at_min_regular_kappa_ker": 3.3306690738754696e-16,
+      "first_regular_kappa_ker_below_10pct_t": 1.0
+    }
+  ]
+}

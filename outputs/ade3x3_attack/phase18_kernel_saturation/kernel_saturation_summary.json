@@ -1,0 +1,138 @@
+{
+  "reference_decompositions": {
+    "alphatensor_orientation": "transpose",
+    "alphatensor_reconstruction_max_abs": 0,
+    "rows": [
+      {
+        "label": "alphatensor_rank23_transpose",
+        "R": 23,
+        "rank_gamma_numeric": 9,
+        "ker_gamma_dim_numeric": 14,
+        "rank_H_numeric": 14,
+        "rank_kernel_coords_numeric": 14,
+        "kernel_saturation_numeric": true,
+        "channel0_identity_max_abs": 0.0,
+        "channel1_identity_max_abs": 0.0,
+        "channel2_identity_max_abs": 0.0,
+        "H_kernel_residual_max_abs": 0.0,
+        "rank_gamma_exact": 9,
+        "ker_gamma_dim_exact": 14,
+        "rank_H_exact": 14,
+        "kernel_saturation_exact": true,
+        "channel0_identity_exact": true,
+        "channel1_identity_exact": true,
+        "channel2_identity_exact": true,
+        "H_kernel_exact": true
+      },
+      {
+        "label": "standard_rank27",
+        "R": 27,
+        "rank_gamma_numeric": 9,
+        "ker_gamma_dim_numeric": 18,
+        "rank_H_numeric": 18,
+        "rank_kernel_coords_numeric": 18,
+        "kernel_saturation_numeric": true,
+        "channel0_identity_max_abs": 0.0,
+        "channel1_identity_max_abs": 0.0,
+        "channel2_identity_max_abs": 0.0,
+        "H_kernel_residual_max_abs": 0.0,
+        "rank_gamma_exact": 9,
+        "ker_gamma_dim_exact": 18,
+        "rank_H_exact": 18,
+        "kernel_saturation_exact": true,
+        "channel0_identity_exact": true,
+        "channel1_identity_exact": true,
+        "channel2_identity_exact": true,
+        "H_kernel_exact": true
+      }
+    ]
+  },
+  "synthetic_right_inverse_trials": {
+    "alphatensor_gamma": {
+      "family": "alphatensor_gamma",
+      "trial_count": 250,
+      "ker_gamma_dim_numeric": 14,
+      "saturation_count": 250,
+      "saturation_rate": 1.0,
+      "min_rank_H_numeric": 14,
+      "max_rank_H_numeric": 14
+    },
+    "standard_gamma": {
+      "family": "standard_gamma",
+      "trial_count": 250,
+      "ker_gamma_dim_numeric": 18,
+      "saturation_count": 250,
+      "saturation_rate": 1.0,
+      "min_rank_H_numeric": 18,
+      "max_rank_H_numeric": 18
+    }
+  },
+  "forced_defect_examples": [
+    {
+      "family": "alphatensor_gamma",
+      "case": "all_equal",
+      "ker_gamma_dim_numeric": 14,
+      "rank_H_numeric": 0,
+      "deficiency_numeric": 14,
+      "channel0_identity_max_abs": 1.4432899320127035e-15,
+      "channel1_identity_max_abs": 1.4432899320127035e-15,
+      "channel2_identity_max_abs": 1.4432899320127035e-15,
+      "H_kernel_residual_max_abs": 0.0
+    },
+    {
+      "family": "alphatensor_gamma",
+      "case": "k0_equals_k1",
+      "ker_gamma_dim_numeric": 14,
+      "rank_H_numeric": 9,
+      "deficiency_numeric": 5,
+      "channel0_identity_max_abs": 1.4432899320127035e-15,
+      "channel1_identity_max_abs": 1.4432899320127035e-15,
+      "channel2_identity_max_abs": 2.55351295663786e-15,
+      "H_kernel_residual_max_abs": 1.9984014443252818e-15
+    },
+    {
+      "family": "alphatensor_gamma",
+      "case": "all_collinear",
+      "ker_gamma_dim_numeric": 14,
+      "rank_H_numeric": 9,
+      "deficiency_numeric": 5,
+      "channel0_identity_max_abs": 1.4432899320127035e-15,
+      "channel1_identity_max_abs": 2.886579864025407e-15,
+      "channel2_identity_max_abs": 1.4432899320127035e-15,
+      "H_kernel_residual_max_abs": 4.440892098500626e-15
+    },
+    {
+      "family": "standard_gamma",
+      "case": "all_equal",
+      "ker_gamma_dim_numeric": 18,
+      "rank_H_numeric": 0,
+      "deficiency_numeric": 18,
+      "channel0_identity_max_abs": 1.1102230246251565e-15,
+      "channel1_identity_max_abs": 1.1102230246251565e-15,
+      "channel2_identity_max_abs": 1.1102230246251565e-15,
+      "H_kernel_residual_max_abs": 0.0
+    },
+    {
+      "family": "standard_gamma",
+      "case": "k0_equals_k1",
+      "ker_gamma_dim_numeric": 18,
+      "rank_H_numeric": 9,
+      "deficiency_numeric": 9,
+      "channel0_identity_max_abs": 1.1102230246251565e-15,
+      "channel1_identity_max_abs": 1.1102230246251565e-15,
+      "channel2_identity_max_abs": 1.3322676295501878e-15,
+      "H_kernel_residual_max_abs": 2.220446049250313e-15
+    },
+    {
+      "family": "standard_gamma",
+      "case": "all_collinear",
+      "ker_gamma_dim_numeric": 18,
+      "rank_H_numeric": 9,
+      "deficiency_numeric": 9,
+      "channel0_identity_max_abs": 1.1102230246251565e-15,
+      "channel1_identity_max_abs": 1.9984014443252818e-15,
+      "channel2_identity_max_abs": 9.992007221626409e-16,
+      "H_kernel_residual_max_abs": 3.1086244689504383e-15
+    }
+  ]
+}
