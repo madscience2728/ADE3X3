@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-29 15:31:38
+Generated: 2026-03-29 17:04:06
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-29 15:31:38
+**Generated:** 2026-03-29 17:04:06
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -42,6 +42,8 @@ and reverse engineering with cancellation visualization (step 63),
 plus small-integer coefficient enumeration (step 64),
 and polyomino subtensor-rank / tiling analysis (step 65),
 and 27-symbol faithful encoding analysis (step 69 / Phase 33)
+and 27-symbol live alphabet infrastructure (step 70 / Phase 33b)
+and hand derivation of conservation constant and defect condition (step 71 / Phase 33 hand derivation)
 
 **IMPORTANT:** This document contains all computed results inline.
 No external files are required. All research findings are here.
@@ -15003,13 +15005,14 @@ factorized rank-1 faces can coexist with H-defect.
 | alphatensor_rank23 | 14 | 14 | True | False |
 | standard_rank27 | 18 | 18 | True | False |
 
-### Track C: Gauge Orbit
+### Track C: Tiling-Preserving Rescaling Test
 
 [EXACT_DERIVED]
 
-The tiling identities Gamma * P_s = I leave the matched faces gauge-invariant, but
-the cross-sections D_st rescale rowwise. Phase 33 therefore tested whether the
-resulting gauge orbits stay inside span(H).
+The tiling identities Gamma * P_s = I leave the matched faces invariant, but the
+cross-sections D_st rescale rowwise. These rescalings preserve the 81 matched-face
+equations but generally change the full bilinear algorithm because they do not
+preserve the nuisance cancellation equations Gamma * H = 0 and Gamma * Delta = 0.
 
 | decomposition | observed gauge-orbit dim | tangent escape from span(H)? | sampled finite escape? |
 |---------------|--------------------------|-------------------------------|------------------------|
@@ -15033,18 +15036,175 @@ all tested for recovery from span([Sigma|H]).
 
 The positive result is decomposition-specific but strong: on both known exact 3x3
 decompositions, every individual dead cross-section block D_st is already exactly
-recoverable from H alone. The mandatory Strassen 2x2 sanity check also passes.
+recoverable from H alone. The mandatory Strassen 2x2 sanity check also passes, and
+the measured recovery matrices are sparse, low-rank, and use only coefficients in
+{-1, 0, 1}, which points to combinatorial structure rather than numerical accident.
 
-The negative result is equally important: the tiling identities by themselves do
-not make the dead cross-sections gauge-rigid inside span(H). Phase 33 detects both
-tangent and finite gauge escapes, so Delta containment does not follow from gauge
-orbit rigidity under Gamma * P_s = I alone.
+Track C is not an obstruction to Delta containment; it confirms that the
+tiling-preserving rescalings are not true algorithm symmetries. They preserve
+Gamma * P_s = I but generally violate Gamma * H = 0 and Gamma * Delta = 0, so the
+observed escapes show only that the 81 tiling equations alone are insufficient.
 
-So Phase 33 strengthens the coding-theory framing on the known decompositions while
-also isolating a concrete obstruction to a universal proof: the missing argument must
-use exact constraints beyond the matched-face tiling identities and their residual gauge freedom.
+So the Phase 34 target is now precise: derive the sparse recovery matrices M_st from
+the fiber-mode identities together with the full nuisance cancellation system, showing
+that the linear recovery is forced by index structure rather than the specific values
+of alpha and beta on the known decompositions.
 
-## 71. CURRENT GAPS / OPEN FRONTS
+## 70. 27-SYMBOL LIVE ALPHABET INFRASTRUCTURE
+
+[EXACT_DERIVED] / [MEASURED_FROM_CODE] (Phase 33b)
+
+Phase 33b promotes the live part of X to a first-class typed schema L[r,s,u],
+with L[r,s,u] identified exactly with the live atom X[r,s|s,u]. The goal is to
+put the 27-symbol live alphabet on permanent warehouse footing: orbit rosters,
+bridges to existing schemas, fiber structure, and recovery diagnostics.
+
+### Track 1: L / LL / LLL / LLLL Orbit Rosters
+
+[EXACT_DERIVED]
+
+Under the independent S3 actions on row, shared-channel, and output-column
+coordinates, the L-orbit invariants factor exactly into partition patterns of
+those three coordinate tuples. The computed orbit counts match the predicted
+cube counts exactly.
+
+| schema | predicted orbits | computed orbits | verified |
+|--------|------------------|-----------------|----------|
+| L | 1 | 1 | True |
+| LL | 8 | 8 | True |
+| LLL | 125 | 125 | True |
+| LLLL | 2744 | 2744 | True |
+
+### Track 2: Explicit Bridges To Existing Schemas
+
+[MEASURED_FROM_CODE]
+
+The L -> X bridge hits the 27 live X atoms exactly once, and action-commutation verifies True.
+At arity 2, LL lands in 8 distinct XX orbits but only 4 distinct CX orbits.
+So the proposed direct LL -> CX bijection is false for the stated bridge: the C projection forgets one channel coordinate, while the LL -> XX image count matches the expected 8-orbit roster exactly.
+At arity 4, the LLLL -> CXXC orbit-key bijection verifies True across all 2744 orbits.
+
+### Track 3: Fiber Structure In The L Alphabet
+
+[EXACT_DERIVED]
+
+The 27 live atoms split into 9 fibers of size 3 indexed by C[r,u], and this matches the Step 51 live-fiber decomposition exactly.
+Within each fiber, sigma is the three-term sum and eta1, eta2 are the two independent within-fiber differences.
+
+### Track 4: Recovery In L Coordinates
+
+[MEASURED_FROM_CODE]
+
+For the public AlphaTensor rank-23 decomposition, all tested D_st recovery matrices are non-fiber-diagonal = True.
+For the standard rank-27 decomposition, the D_st blocks are all zero and therefore fiber-diagonal = True.
+For Strassen 2x2, the concrete D_01 and D_10 recoveries are also non-fiber-diagonal = True.
+
+### Track 5: Defect Condition Scan
+
+[EXACT_DERIVED]
+
+The exact defect target is now explicit. Rank(H) can drop below dim(ker Gamma) only if
+there exists nonzero w in ker(Gamma) with w^T H = 0. Equivalently, if
+W_s = sum_k w_k (alpha_k[:,s] otimes beta_k[s,:]), then one must have
+W_0 = W_1 = ... = W_{n-1}.
+
+| decomposition | exact defect exists? | defect nullity | softest channel-gap norm |
+|---------------|----------------------|----------------|---------------------------|
+| alphatensor_rank23 | False | 0 | 0.4455365956769507 |
+| standard_rank27 | False | 0 | 0.7071067811865478 |
+| strassen_2x2 | False | 0 | 1.414213562373095 |
+
+| random control case | exact defects found | min softest gap | median softest gap | max softest gap |
+|---------------------|---------------------|-----------------|--------------------|-----------------|
+| random_2x2_R7 | 0 / 8 | 0.5359758891771664 | 0.8907677300202599 | 1.4983802390309195 |
+| random_3x3_R23 | 0 / 8 | 0.19570732751134798 | 0.3850742225856755 | 0.6440686814053406 |
+| random_3x3_R27 | 0 / 8 | 0.013767897963925402 | 0.09512481696172324 | 0.22346452922309457 |
+
+[INTERPRETATION]
+
+The live alphabet is now permanent infrastructure: its orbit theory closes exactly at
+1, 8, 125, 2744, its fiber structure matches the Step 51 split on the nose, and its
+arity-4 orbit-key layer is canonically aligned with CXXC.
+
+The honest negative results matter just as much. The stated LL -> CX bijection does not
+hold under the natural bridge, and the known recovery matrices are not fiber-diagonal on
+AlphaTensor or Strassen. So the dead-coordinate recovery mechanism is not a purely local
+three-number computation inside each C fiber; it genuinely uses cross-fiber nuisance
+cancellation encoded by Gamma * H = 0 and Gamma * Delta = 0.
+
+The conservation law is now best read as L-alphabet compression: the information content
+of a valid n x n decomposition is exactly |L| = n^3, split as R live term directions plus
+eta_nullity nuisance slack.
+
+The measured gap values are structured, not accidental. Since alpha and beta are integer
+on the known exact decompositions, each channel-separation norm ||W_s-W_t||^2 is a
+rational quadratic form restricted to ker(Gamma). The observed values 1.414214, 0.707107,
+0.577350, 1.732051, 2.236068, 2.449490, and 1.290994 are therefore square roots of small
+rationals coming from that spectrum, not floating-point numerology.
+
+This points the next proof step toward a spectral-gap statement: show that the
+channel-separation quadratic form stays uniformly positive on ker(Gamma) over the
+multiplication variety, ruling out W_0 = W_1 = ... = W_{n-1} for nonzero w.
+
+## 71. HAND DERIVATION: CONSERVATION LAW AS L-ALPHABET COMPRESSION
+
+[EXACT_DERIVED] (Phase 33 hand derivation)
+
+### Conservation Constant
+
+The conservation law R + eta_nullity = n^3 holds for n x n matrix multiplication,
+where n^3 = |L| is the L-alphabet size. For 3x3: n^3 = 27. For 2x2: n^3 = 8.
+
+This follows from the definition of eta_nullity once rank(H) = R - n^2 is assumed:
+  eta_nullity = n^2(n-1) - rank(H) = n^2(n-1) - (R - n^2) = n^3 - R
+
+| case | n | R | n^3 | dim(ker Gamma) | H cols | eta_nullity | conservation |
+|------|---|---|-----|----------------|--------|-------------|--------------|
+| 3x3 AlphaTensor | 3 | 23 | 27 | 14 | 18 | 4 | 23+4=27 ✓ |
+| 3x3 Standard | 3 | 27 | 27 | 18 | 18 | 0 | 27+0=27 ✓ |
+| 2x2 Strassen | 2 | 7 | 8 | 3 | 4 | 1 | 7+1=8 ✓ |
+
+### Strassen 2x2 Recovery Matrices
+
+Exact M_st for Strassen, verified entry-by-entry:
+
+| block | nonzero column | recovery | coefficients | fiber-diagonal |
+|-------|----------------|----------|--------------|----------------|
+| D_01 | (0,1) | h^(0,0) - h^(0,1) | {-1, 1} | False |
+| D_10 | (1,0) | h^(0,0) + h^(1,0) | {1} | False |
+
+All other D_st columns are identically zero on Strassen.
+
+Recovery is NOT fiber-diagonal: D_01[:,(0,1)] uses H columns from two
+different output fibers C[0,0] and C[0,1]. This is structurally necessary.
+
+Recovery is per-term on Strassen (each e_k = 0 individually) but this is
+NOT algebraically forced: random alpha,beta give nonzero e_k. For general
+decompositions, containment is collective (e = 0 in R^R, not per-term).
+
+### Defect Condition: Exact Algebraic Form
+
+For rank(H) < dim(ker Gamma) to occur, there must exist nonzero w in ker(Gamma)
+with w^T H = 0. Equivalently, defining W_s = sum_k w_k (alpha_k[:,s] otimes beta_k[s,:]):
+
+  W_0 = W_1 = ... = W_{n-1}    (channel-matrix equality)
+
+Combined with w in ker(Gamma): sum_k w_k gamma_k[r',u'] = 0.
+
+This is the exact obstruction target for Phase 34: show that factorized
+minimum-rank multiplication decompositions cannot satisfy W_0 = W_1 = ... = W_{n-1}
+for any nonzero w in ker(Gamma).
+
+### Status
+
+The conservation law is now cleanly reformulated as an L-alphabet compression
+theorem. The defect condition is identified exactly. What remains open is proving
+the defect condition is incompatible with valid multiplication. The current
+best formulation is spectral: prove the channel-separation quadratic form on
+ker(Gamma) has a strictly positive minimum on the multiplication variety. That
+is the Phase 34 target.
+
+## 73. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 

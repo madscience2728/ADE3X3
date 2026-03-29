@@ -100,9 +100,9 @@
 
 [WILDCARD] Additional wildcard synthetic trials are exported in JSONL; the sample above shows the defect families actually tested.
 
-## 33c. Track C: Gauge Orbit
+## 33c. Track C: Tiling-Preserving Rescaling Test
 
-[EXACT_DERIVED] Under the tiling identities Gamma * P_s = I, the matched faces P_s are gauge-invariant while each D_st row is rescaled by lambda_s^(k) / lambda_t^(k).
+[EXACT_DERIVED] Under the tiling identities Gamma * P_s = I, the matched faces P_s are invariant while each D_st row is rescaled by lambda_s^(k) / lambda_t^(k). These rescalings preserve the 81 matched-face equations but generally change the full bilinear algorithm because they do not preserve the nuisance cancellation equations Gamma * H = 0 and Gamma * Delta = 0.
 
 ### alphatensor_rank23
 
@@ -178,12 +178,12 @@
 
 ## 33e. Interpretation
 
-[INTERPRETATION] Track A is the central positive result: on both known 3x3 decompositions, every individual cross-section block D_st is already exactly recoverable from H alone, not merely from [Sigma|H]. That is stronger than the fallback absorption statement and numerically supports the 27-symbol-faithful-encoding picture on the known examples.
+[INTERPRETATION] Track A is the central positive result: on both known 3x3 decompositions, every individual cross-section block D_st is already exactly recoverable from H alone, not merely from [Sigma|H]. The resulting recovery matrices M_st are sparse, low-rank, and use only coefficients in {-1, 0, 1}, which points to combinatorial structure in the fiber coordinates rather than a numerical accident.
 
 [INTERPRETATION] Track B gives a second positive result and one negative obstruction. Positive: every clone frame already saturates ker(Gamma) individually on AlphaTensor and the standard algorithm, so the union-of-clones argument is unnecessary on the known exact decompositions. Negative: in synthetic defective families inside ker(Gamma), the low-rank H defects are easy to manufacture at the right-inverse level but did not survive the sampled factorized rank-1 face test.
 
-[INTERPRETATION] Track C is the key obstruction. The tiling identities alone do not rigidify the dead cross-sections inside span(H): both tangent and finite gauge escapes appear. So Delta containment does not follow from gauge-orbit rigidity under Gamma * P_s = I alone. Any proof must use more than the matched-face tiling constraint.
+[INTERPRETATION] Track C is not an obstruction to Delta containment; it is a confirmation that the tiling-preserving rescalings are not true algorithm symmetries. They preserve Gamma * P_s = I but generally violate Gamma * H = 0 and Gamma * Delta = 0, so the observed escapes simply show that the 81 tiling equations alone are insufficient. The full 729 multiplication equations, and especially the 648 nuisance cancellation equations, are the constraints that must force containment.
 
-[INTERPRETATION] Track D passes the mandatory Strassen sanity check and then matches Track A on the known 3x3 decompositions. The symbolic absorption route remains viable as a decomposition-specific identity, but the negative Track C result means it is not yet a universal proof of Delta containment.
+[INTERPRETATION] Track D passes the mandatory Strassen sanity check and then matches Track A on the known 3x3 decompositions. The remaining gap is therefore not whether the known decompositions exhibit faithful encoding, but how to derive the observed M_st matrices directly from the fiber-mode definitions together with the full nuisance cancellation system.
 
-[OPEN_FRONT] The concrete next gap for Phase 34 is now precise: characterize what additional exact constraints, beyond the tiling identities and per-term gauge freedom, force the measured H-recovery matrices M_st to exist on every minimum-rank decomposition rather than only on the known ones.
+[OPEN_FRONT] The concrete next gap for Phase 34 is now precise: start from the per-term identity D_st[k,:] = diag(beta_k[t,:] / beta_k[s,:]) * P_s[k,:], expand P_s = X_0 + K_s in the centered-lift basis, eliminate with K_0 + K_1 + K_2 = 0 and H = [K_0-K_1 | K_1-K_2], and then use the full nuisance cancellation equations Gamma * H = 0 and Gamma * Delta = 0 to show that the resulting expression linearizes to the sparse {-1, 0, 1} recovery matrices M_st by index structure alone.

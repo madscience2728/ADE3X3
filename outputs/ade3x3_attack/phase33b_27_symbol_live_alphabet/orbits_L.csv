@@ -1,0 +1,2 @@
+schema,orbit_id,rep_config_id,rep_readable,orbit_size,stabilizer_size,signature_key,row_pattern,channel_pattern,col_pattern
+L,0,0,"L[0,0,0]",27,8,"rows=(0,); channels=(0,); cols=(0,)","(0,)","(0,)","(0,)"

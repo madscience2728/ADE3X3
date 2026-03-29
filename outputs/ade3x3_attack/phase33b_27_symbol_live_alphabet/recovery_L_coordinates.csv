@@ -1,0 +1,15 @@
+label,block,rank_M,nnz_M,density_M,coefficients,fiber_diagonal,fiber_witness
+alphatensor_rank23,D_01,2,7,0.043209876543209874,"-1, 1",False,"{""target_col"": 1, ""allowed_rows"": [1, 10], ""actual_rows"": [1, 2], ""unexpected_rows"": [2]}"
+alphatensor_rank23,D_02,3,12,0.07407407407407407,"-1, 1",False,"{""target_col"": 1, ""allowed_rows"": [1, 10], ""actual_rows"": [1, 2, 13], ""unexpected_rows"": [2, 13]}"
+alphatensor_rank23,D_10,2,8,0.04938271604938271,"-1, 1",False,"{""target_col"": 1, ""allowed_rows"": [1, 10], ""actual_rows"": [0, 2], ""unexpected_rows"": [0, 2]}"
+alphatensor_rank23,D_12,2,5,0.030864197530864196,"-1, 1",False,"{""target_col"": 1, ""allowed_rows"": [1, 10], ""actual_rows"": [10, 11, 13], ""unexpected_rows"": [11, 13]}"
+alphatensor_rank23,D_20,1,8,0.04938271604938271,"-1, 1",False,"{""target_col"": 1, ""allowed_rows"": [1, 10], ""actual_rows"": [9, 11], ""unexpected_rows"": [9, 11]}"
+alphatensor_rank23,D_21,2,6,0.037037037037037035,"-1, 1",False,"{""target_col"": 1, ""allowed_rows"": [1, 10], ""actual_rows"": [11], ""unexpected_rows"": [11]}"
+standard_rank27,D_01,0,0,0.0,none,True,
+standard_rank27,D_02,0,0,0.0,none,True,
+standard_rank27,D_10,0,0,0.0,none,True,
+standard_rank27,D_12,0,0,0.0,none,True,
+standard_rank27,D_20,0,0,0.0,none,True,
+standard_rank27,D_21,0,0,0.0,none,True,
+strassen_2x2,D_01,1,2,0.125,"-1, 1",False,"{""target_col"": 1, ""allowed_rows"": [1], ""actual_rows"": [0, 1], ""unexpected_rows"": [0]}"
+strassen_2x2,D_10,1,2,0.125,1,False,"{""target_col"": 2, ""allowed_rows"": [2], ""actual_rows"": [0, 2], ""unexpected_rows"": [0]}"
