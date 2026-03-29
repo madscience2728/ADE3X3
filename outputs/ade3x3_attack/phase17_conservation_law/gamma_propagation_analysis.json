@@ -1,0 +1,19 @@
+{
+  "slice_factorization": {
+    "live_slice": "P_s = a[:,s] * b[s,:]^T",
+    "dead_slice": "Delta_{s,t} = a[:,s] * b[t,:]^T for s != t",
+    "shared_left_identity": "Delta_{s,t}[r,u] * P_s[r_prime,u_prime] = Delta_{s,t}[r_prime,u] * P_s[r,u_prime]",
+    "shared_right_identity": "Delta_{s,t}[r,u] * P_t[r_prime,u_prime] = Delta_{s,t}[r,u_prime] * P_t[r_prime,u]"
+  },
+  "gamma_delta_slice_formula": {
+    "formula": "(Gamma * Delta_{s,t})[c,(r,u)] = sum_k Gamma[c,k] * a_k[r,s] * b_k[t,u]",
+    "comparison": [
+      "(Gamma * P_s)[c,(r,u)] = sum_k Gamma[c,k] * a_k[r,s] * b_k[s,u]",
+      "(Gamma * P_t)[c,(r,u)] = sum_k Gamma[c,k] * a_k[r,t] * b_k[t,u]"
+    ]
+  },
+  "verdict": {
+    "linear_propagation_from_live_slices": false,
+    "reason": "The dead slice uses cross-channel outer products a[:,s] * b[t,:]^T, so summing Gamma-weighted dead coordinates is not a linear function of the Gamma-weighted live slices P_s and P_t. The single-term algebra provides rational/cross-ratio constraints, not a direct linear implication Gamma*Delta = 0 from Gamma*Eta = 0."
+  }
+}

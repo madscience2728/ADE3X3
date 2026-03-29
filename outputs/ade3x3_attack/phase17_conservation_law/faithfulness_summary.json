@@ -1,0 +1,104 @@
+{
+  "valid_decompositions": {
+    "labels": [
+      "alphatensor_rank23_valid_transpose",
+      "standard_rank27_valid"
+    ],
+    "all_faithful_numeric": true,
+    "all_corollary_holds_numeric": true,
+    "rows": [
+      {
+        "label": "alphatensor_rank23_valid_transpose",
+        "category": "valid_decomposition",
+        "valid_decomposition": true,
+        "R": 23,
+        "rank_sigma_numeric": 9,
+        "rank_H_numeric": 14,
+        "rank_HDelta_numeric": 14,
+        "rank_stacked_numeric": 23,
+        "rank_bilinear_numeric": 23,
+        "faithfulness_numeric": true,
+        "rank_gamma_numeric": 9,
+        "ker_gamma_dim_numeric": 14,
+        "corollary_numeric": true,
+        "eta_nullity_numeric": 4,
+        "conservation_sum_numeric": 27,
+        "rank_sigma_exact": 9,
+        "rank_H_exact": 14,
+        "rank_HDelta_exact": 14,
+        "rank_stacked_exact": 23,
+        "rank_bilinear_exact": 23,
+        "faithfulness_exact": true,
+        "rank_gamma_exact": 9,
+        "ker_gamma_dim_exact": 14,
+        "corollary_exact": true,
+        "eta_nullity_exact": 4,
+        "conservation_sum_exact": 27,
+        "orientation": "transpose",
+        "reconstruction_max_abs": 0
+      },
+      {
+        "label": "standard_rank27_valid",
+        "category": "valid_decomposition",
+        "valid_decomposition": true,
+        "R": 27,
+        "rank_sigma_numeric": 9,
+        "rank_H_numeric": 18,
+        "rank_HDelta_numeric": 18,
+        "rank_stacked_numeric": 27,
+        "rank_bilinear_numeric": 27,
+        "faithfulness_numeric": true,
+        "rank_gamma_numeric": 9,
+        "ker_gamma_dim_numeric": 18,
+        "corollary_numeric": true,
+        "eta_nullity_numeric": 0,
+        "conservation_sum_numeric": 27,
+        "rank_sigma_exact": 9,
+        "rank_H_exact": 18,
+        "rank_HDelta_exact": 18,
+        "rank_stacked_exact": 27,
+        "rank_bilinear_exact": 27,
+        "faithfulness_exact": true,
+        "rank_gamma_exact": 9,
+        "ker_gamma_dim_exact": 18,
+        "corollary_exact": true,
+        "eta_nullity_exact": 0,
+        "conservation_sum_exact": 27,
+        "orientation": "direct",
+        "reconstruction_max_abs": 0
+      }
+    ]
+  },
+  "perturbed_alphatensor": {
+    "trial_count": 20,
+    "all_faithful_numeric": true,
+    "min_rank_stacked_numeric": 23,
+    "max_rank_stacked_numeric": 23
+  },
+  "random_rank1_collections": {
+    "trial_count": 25,
+    "all_faithful_numeric": true,
+    "by_rank": {
+      "9": {
+        "trial_count": 5,
+        "faithful_trial_count": 5
+      },
+      "14": {
+        "trial_count": 5,
+        "faithful_trial_count": 5
+      },
+      "18": {
+        "trial_count": 5,
+        "faithful_trial_count": 5
+      },
+      "23": {
+        "trial_count": 5,
+        "faithful_trial_count": 5
+      },
+      "27": {
+        "trial_count": 5,
+        "faithful_trial_count": 5
+      }
+    }
+  }
+}

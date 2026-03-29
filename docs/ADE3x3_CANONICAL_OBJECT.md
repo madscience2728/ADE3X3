@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-29 10:32:28
+Generated: 2026-03-29 11:19:51
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-29 10:32:28
+**Generated:** 2026-03-29 11:19:51
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -40,13 +40,7 @@ and nuisance-first architecture analysis (step 61),
 plus non-rectangular 6-fiber sub-tensor rank attack (step 62),
 and reverse engineering with cancellation visualization (step 63),
 plus small-integer coefficient enumeration (step 64),
-and polyomino subtensor-rank / tiling analysis (step 65),
-plus complete rank-table audit / layered tiling framework (step 67),
-plus layered correction tiling (step 68),
-and interlocking-mechanism analysis (step 69),
-plus depth-2 arithmetic circuit attack (step 70),
-and five local wall shots (step 71),
-plus depth-2 circuit dimension census (step 72)
+and polyomino subtensor-rank / tiling analysis (step 65)
 
 **IMPORTANT:** This document contains all computed results inline.
 No external files are required. All research findings are here.
@@ -14537,630 +14531,59 @@ polyomino-subtensor upper bound assembled from separate restricted problems. It 
 certify any global rank-26 or better matrix multiplication algorithm, because the
 piecewise decompositions are not forced to coexist without cross-piece interference or extra sharing.
 
-## 54. DEPTH-2 CIRCUIT DIMENSION CENSUS
+## 54. CONSERVATION LAW PROOF STATUS
 
-[EXACT_DERIVED] + [MEASURED_FROM_CODE] (Step 72)
+[EXACT_DERIVED] (Phase 17)
 
-Step 72 treats the depth-2 question as a dimension census rather than as a nonlinear solve.
-The exact side enumerates every type assignment with R1 + R2 <= 22. The measured side
-computes local Jacobian ranks for the requested AA/BB-only and AA/QQ-only families with
-R_total in {20,21,22} and R1 >= 9.
+Phase 17 separates the observed conservation law into a proved fiber-mode faithfulness step
+and an open Delta-containment step.
 
-**Parameter formula:** P = 27R1 + R1R2 + 18R2 + n_QQ(R1 - 9)
-**Raw upper-bound constraint formula:** C_upper = 729 + 3645*1_AA + 3645*1_BB + 18225*1_QQ
-**Exact census rows:** 12650
-**Raw upper-bound positive deficits:** 0
-**Best raw upper-bound deficit:** -135
-**Measured Jacobian rows:** 506
-**AA/BB measured families:** 271
-**AA/QQ measured families:** 235
-**Positive measured local-fiber count:** 506
-**Full-column-rank count:** 0
-**Maximum measured local fiber dimension:** 43
-**Best measured configuration:** R22_r120_r22_aa2_bb0_qq0
-**Jacobian method:** analytic
-**Search status:** not_run_dimension_count_only
+### Part 1: Fiber-Mode Faithfulness
 
-### Task 4: AA-Only Case Study
+**Theorem:** For any minimum-rank decomposition, rank([Sigma|H|Delta]) = R.
 
-| R_total | R1 | R2 | parameters | raw D vs 4374/729 rule | D vs 729 only |
-|---------|----|----|------------|------------------------|---------------|
-| 22 | 17 | 5 | 634 | -3740 | -95 |
-| 22 | 18 | 4 | 630 | -3744 | -99 |
-| 22 | 19 | 3 | 624 | -3750 | -105 |
-| 22 | 20 | 2 | 616 | -3758 | -113 |
-| 22 | 21 | 1 | 606 | -3768 | -123 |
-| 22 | 22 | 0 | 594 | -135 | -135 |
+**Proof text:** the fiber-mode map is an invertible change of basis on the 81 A x B
+monomials, so rank([Sigma|H|Delta]) equals the rank of the bilinear profiles
+{alpha_k tensor beta_k}. A linear dependence among those profiles would remove one term,
+contradicting minimum rank.
 
-### Task 5 / 6: Measured Landscape
+**Verified on valid decompositions:** True across 2 cases.
+- AlphaTensor rank-23: rank([Sigma|H|Delta]) = 23, rank(H) = 14, eta-nullity = 4, conservation sum = 27.
+- Standard rank-27: rank([Sigma|H|Delta]) = 27, rank(H) = 18, eta-nullity = 0, conservation sum = 27.
+**Corollary dim(ker Gamma) = rank([H|Delta]) on valid decompositions:** True.
+**Perturbed AlphaTensor trials:** 20 / 20 faithful.
+**Random generic rank-1 collections:** 25 / 25 faithful.
 
-| family | R_total | R1 | R2 | AA | BB | QQ | parameters | rows | rank(J) | local fiber | raw upper D | status |
-|--------|---------|----|----|----|----|----|------------|------|---------|-------------|-------------|--------|
-| AA_BB_only | 22 | 20 | 2 | 2 | 0 | 0 | 616 | 4374 | 573 | 43 | -3758 | positive_local_fiber |
-| AA_BB_only | 21 | 20 | 1 | 0 | 1 | 0 | 578 | 4374 | 536 | 42 | -3796 | positive_local_fiber |
-| AA_BB_only | 22 | 21 | 1 | 0 | 1 | 0 | 606 | 4374 | 564 | 42 | -3768 | positive_local_fiber |
-| AA_BB_only | 22 | 20 | 2 | 1 | 1 | 0 | 616 | 8019 | 574 | 42 | -7403 | positive_local_fiber |
-| AA_BB_only | 22 | 18 | 4 | 2 | 2 | 0 | 630 | 8019 | 588 | 42 | -7389 | positive_local_fiber |
-| AA_BB_only | 21 | 19 | 2 | 2 | 0 | 0 | 587 | 4374 | 546 | 41 | -3787 | positive_local_fiber |
-| AA_BB_only | 22 | 19 | 3 | 1 | 2 | 0 | 624 | 8019 | 583 | 41 | -7395 | positive_local_fiber |
-| AA_BB_only | 20 | 19 | 1 | 1 | 0 | 0 | 550 | 4374 | 510 | 40 | -3824 | positive_local_fiber |
-| AA_BB_only | 21 | 20 | 1 | 1 | 0 | 0 | 578 | 4374 | 538 | 40 | -3796 | positive_local_fiber |
-| AA_BB_only | 21 | 19 | 2 | 1 | 1 | 0 | 587 | 8019 | 547 | 40 | -7432 | positive_local_fiber |
+### Part 2: Delta Containment Evidence
+
+If Delta subset span(H) holds universally, then rank(H) = R - 9 and therefore
+R + eta_nullity = 27 for 3x3 matrix multiplication.
+
+| evidence source | rank(H) | rank([H|Delta]) | Delta subset span(H) | note |
+|-----------------|---------|------------------|-----------------------|------|
+| AlphaTensor rank-23 | 14 | 14 | True | conservation sum = 27 |
+| AlphaTensor single deletions (23 cases) | 14 throughout | 14 throughout | True | exact containment count = 23 |
+| Step 75 anticommutator rank-19 | 17 | 19 | False | not a matrix-multiplication decomposition |
+| Random rank-23 collections (1000 trials) | 18..18 | 23..23 | 0 / 1000 | containment rate = 0.000000 |
+
+**AlphaTensor projection inheritance:** exact Delta = H*M was re-verified = True, and the Gamma-weighted projection identities were checked on 54 delta columns with max residual 0.0.
+
+### Single-Term Cross-Ratio Structure
+
+- Live-product recovery from (sigma, eta1, eta2): True
+- Left-factor identities: 324 total, 162 independent
+- Right-factor identities: 324 total, 162 independent
+- Combined independent cross-ratio identities: 324
+- Linear propagation from live slices to dead slices: False
 
 [INTERPRETATION]
 
-Step 72 makes the raw-count issue explicit. Across the full exact census, the naive coefficient-slot
-upper bound stays far larger than the parameter count, so the raw dimension heuristic alone never
-supports a sub-23 depth-2 claim.
-The measured Jacobian sweep is therefore the more relevant local object: it records how many
-constraint directions are actually activated at a generic point inside the chosen parameterization.
-That is still only a local dimension signal. A positive local fiber dimension does not certify
-existence of an exact circuit, and Step 72 deliberately stops short of turning the census into a
-nonlinear search claim.
-The other key methodological result is that the requested Jacobian can be measured exactly. The
-implemented sweep uses the analytical Jacobian rather than finite differences, which preserves the
-rank object of interest while keeping the full AA/BB and AA/QQ landscape tractable.
-
-## 55. DEPTH-2 BILINEAR THEOREM
-
-[EXACT_DERIVED] + [INTERPRETATION] + [EXTERNAL_SOURCE] (Step 73)
-
-Step 73 resolves the proposed depth-2 nonlinear-solve follow-up structurally instead
-of numerically. Using the same Step 72 parameterization, it audits the AA-only and
-QQ-only second-layer families directly at the coefficient level and records the
-homogeneous-degree truncation argument for exact bilinear maps.
-
-**AA sample configuration:** R22_r120_r22_aa2_bb0_qq0
-**QQ sample configuration:** R22_r120_r22_aa0_bb0_qq2
-**AA second-layer bilinear norm:** 0.000000000000
-**QQ second-layer bilinear norm:** 0.000000000000
-**Exact-depth theorem status:** verified_via_homogeneous_degree_2_truncation
-**Border-rank lower bound recovered online:** underlineR(<3,3,3>) >= 15
-**Online exact-rank status:** 19 <= R(<3,3,3>) <= 23
-**Explicit border-rank witness found online in this pass:** False
-
-### Task 1a / 1b: Coefficient-Sector Audit
-
-| family | config | expected nonzero sectors | bilinear norm | A^2B norm | AB^2 norm | A^2B^2 norm | second-layer bilinear norm | reconstruction residual |
-|--------|--------|--------------------------|---------------|------------|------------|--------------|----------------------------|-------------------------|
-| AA_only | R22_r120_r22_aa2_bb0_qq0 | bilinear + A^2B | 115.043758813732 | 463.647715543417 | 0.000000000000 | 0.000000000000 | 0.000000000000 | 1.375042478483e-13 |
-| QQ_only | R22_r120_r22_aa0_bb0_qq2 | bilinear + A^2B^2 | 120.167035677964 | 0.000000000000 | 0.000000000000 | 7667.131437586283 | 0.000000000000 | 1.071255111195e-12 |
-
-The AA audit leaves only bilinear + A^2B sectors, and the QQ audit leaves only
-bilinear + A^2B^2 sectors. So the useful degree-2 part always comes entirely from
-Layer 1 in these restricted families.
-
-### Exact-Derived Consequence
-
-- In the Step 72 AA-only family, the second layer contributes only A^2B coefficients; its bilinear projection is identically zero. Evidence: Sample R22_r120_r22_aa2_bb0_qq0 has second-layer bilinear norm 0.000000000000 and unexpected-sector max abs 0.000000000000.
-- In the Step 72 QQ-only family, the second layer contributes only A^2B^2 coefficients; its bilinear projection is identically zero. Evidence: Sample R22_r120_r22_aa0_bb0_qq2 has second-layer bilinear norm 0.000000000000 and unexpected-sector max abs 0.000000000000.
-- For a bilinear target and a division-free exact circuit, taking homogeneous degree-2 parts yields a bilinear circuit with no more multiplication gates. Exact division-free depth therefore does not lower bilinear complexity. Evidence: Higher-degree AA/QQ branches vanish in the bilinear projection, so any exact success would already be witnessed by the degree-2 truncation. Step 73 records the standard homogeneous-components argument explicitly and cites Bürgisser-Clausen-Shokrollahi as the external reference point.
-- Step 72 positive local fiber dimensions should be read as gauge or parameterization redundancy in the chosen depth-2 ansatz, not as evidence that AA/QQ branches create new exact bilinear directions. Evidence: Step 72 measured max local fiber 43 at R22_r120_r22_aa2_bb0_qq0, but Step 73 shows the AA and QQ second-layer branches have zero useful bilinear projection.
-
-[INTERPRETATION]
-
-This changes how Step 72 should be read. The positive local fiber dimensions measured
-there are parameterization-level redundancy signals inside the chosen depth-2 ansatz,
-not evidence that AA or QQ second-layer branches create new exact bilinear freedom.
-If an AA/QQ-restricted depth-2 circuit with R1 < 23 were exact, then its homogeneous
-degree-2 truncation would already give a rank-R1 exact bilinear decomposition of the
-3x3 matrix-multiplication tensor.
-
-### Border-Rank Literature Pass
-
-| topic | source | claim |
-|-------|--------|-------|
-| exact_depth_theorem_reference | [Bürgisser, Clausen, Shokrollahi: Algebraic Complexity Theory](https://link.springer.com/book/10.1007/978-3-662-03338-8) | Standard reference for homogeneous-components and bilinear-complexity arguments used to justify degree-2 truncation for exact division-free circuits. |
-| border_rank_lower_bound | [Landsberg-Ottaviani (2015), New Lower Bounds for the Border Rank of Matrix Multiplication](https://theoryofcomputing.org/articles/v011a011/) | For n x n matrix multiplication, border rank is at least 2n^2 - n; for n = 3 this gives underline(R)(<3,3,3>) >= 15. |
-| exact_rank_status_online | [MathOverflow discussion: best known lower and upper bounds for matrix multiplication tensor rank of 3x3 matrices](https://mathoverflow.net/questions/383956/what-are-the-best-known-lower-and-upper-bounds-for-the-rank-of-the-matrix-multip) | The online summary still reports exact-rank bounds 19 <= R(<3,3,3>) <= 23 and points to Schonhage-style approximate constructions. |
-| border_rank_escape_route | Step 73 literature synthesis | The only external escape route surfaced in this pass is border rank plus explicit correction terms. No explicit 3x3 border-rank witness with coefficients was recovered online here, so no correction computation was attempted. |
-
-The clean literature fact recovered in this pass is the border-rank lower bound
-underline(R)(<3,3,3>) >= 15. The online status for exact rank still reads 19 <= R <= 23.
-No explicit 3x3 border-rank witness with coefficients was harvested during this pass,
-so the border-rank-plus-correction route remains only a documented external escape
-route here, not a new computed artifact.
-
-## 56. COMMUTATOR / ANTICOMMUTATOR DEFINITIVE RANK SCAN
-
-[MEASURED_FROM_CODE] + [EXACT_DERIVED] (Step 74)
-
-Step 74 reruns the old Step 71 commutator / anticommutator split as a
-factor-preserving scan. The wide phase covers ranks 8..23 with 2000 restarts
-per rank, and the transition ranks are then rerun with 5000 restarts so the
-first exact hit can be extracted, verified entrywise, and profiled in the
-Step 51 fiber-mode basis.
-
-**Commutator flattening lower bound:** 8
-**Commutator first exact rank in wide scan:** none
-**Commutator exact rank after fine scan:** none
-**Anticommutator flattening lower bound:** 9
-**Anticommutator first exact rank in wide scan:** none
-**Anticommutator exact rank after fine scan:** none
-**Best commutator residual seen:** 2.7539672337040244e-07
-**Best anticommutator residual seen:** 4.6585177382318932e-10
-
-### Wide + Fine Scan Tables
-
-#### Commutator
-
-| phase | rank | restarts | best verified loss | best max-abs residual | exact hit count | verified exact |
-|-------|------|----------|--------------------|------------------------|-----------------|----------------|
-| phase1 | 8 | 2000 | 2.7396558986022633e+01 | 7.4634621775850873e-01 | 0 | False |
-| phase1 | 9 | 2000 | 2.3929139142687163e+01 | 6.6022732867566258e-01 | 0 | False |
-| phase1 | 10 | 2000 | 2.0112108957524541e+01 | 5.3059145356839543e-01 | 0 | False |
-| phase1 | 11 | 2000 | 1.8029854072353416e+01 | 5.1011896558108893e-01 | 0 | False |
-| phase1 | 12 | 2000 | 1.6011526089659917e+01 | 4.8180334649048040e-01 | 0 | False |
-| phase1 | 13 | 2000 | 1.2615309599263512e+01 | 4.0601870866485473e-01 | 0 | False |
-| phase1 | 14 | 2000 | 9.9983209325595208e+00 | 3.6660312883963120e-01 | 0 | False |
-| phase1 | 15 | 2000 | 7.2977082213554265e+00 | 2.9413134640856820e-01 | 0 | False |
-| phase1 | 16 | 2000 | 4.2934979073931974e+00 | 2.1254612598080058e-01 | 0 | False |
-| phase1 | 17 | 2000 | 8.0168792135689015e-01 | 1.4085834260184699e-01 | 0 | False |
-| phase1 | 18 | 2000 | 2.7096445594650995e-02 | 2.2888530112534222e-02 | 0 | False |
-| phase1 | 19 | 2000 | 2.0748150516089938e-03 | 9.2355296479492699e-03 | 0 | False |
-| phase1 | 20 | 2000 | 1.5977318145768281e-12 | 2.7539672337040244e-07 | 0 | False |
-| phase1 | 21 | 2000 | 3.7779946354637915e-10 | 5.3783727011411098e-06 | 0 | False |
-| phase1 | 22 | 2000 | 8.0708093205469677e-07 | 1.2830461580537467e-04 | 0 | False |
-| phase1 | 23 | 2000 | 3.0091816013546604e-04 | 2.4115865228737168e-03 | 0 | False |
-
-#### Anticommutator
-
-| phase | rank | restarts | best verified loss | best max-abs residual | exact hit count | verified exact |
-|-------|------|----------|--------------------|------------------------|-----------------|----------------|
-| phase1 | 8 | 2000 | 3.0118748286934128e+01 | 6.8191257495277124e-01 | 0 | False |
-| phase1 | 9 | 2000 | 2.6159552530203378e+01 | 6.2675277120619377e-01 | 0 | False |
-| phase1 | 10 | 2000 | 2.3229415870790788e+01 | 5.6558864106223405e-01 | 0 | False |
-| phase1 | 11 | 2000 | 1.9164442100684884e+01 | 4.7582409497244416e-01 | 0 | False |
-| phase1 | 12 | 2000 | 1.5069965707754926e+01 | 4.3744819975162275e-01 | 0 | False |
-| phase1 | 13 | 2000 | 1.1532499410964636e+01 | 3.6754272932935861e-01 | 0 | False |
-| phase1 | 14 | 2000 | 8.4886446493843568e+00 | 2.7865570453361221e-01 | 0 | False |
-| phase1 | 15 | 2000 | 6.3704170532646751e+00 | 2.2282161227087827e-01 | 0 | False |
-| phase1 | 16 | 2000 | 3.6681231360072921e+00 | 1.5853192998144072e-01 | 0 | False |
-| phase1 | 17 | 2000 | 1.3139769567365472e-01 | 3.7305271481275937e-02 | 0 | False |
-| phase1 | 18 | 2000 | 4.4241435761321384e-02 | 1.8837015666016463e-02 | 0 | False |
-| phase1 | 19 | 2000 | 6.0692161485123209e-17 | 1.4700994605681972e-09 | 0 | False |
-| phase1 | 20 | 2000 | 8.8530419835373545e-15 | 1.5613738815756228e-08 | 0 | False |
-| phase1 | 21 | 2000 | 1.4503002913411803e-16 | 2.2791660399257285e-09 | 0 | False |
-| phase1 | 22 | 2000 | 1.5965020493288776e-17 | 4.6585177382318932e-10 | 0 | False |
-| phase1 | 23 | 2000 | 1.3554428277793224e-17 | 4.9156154841023536e-10 | 0 | False |
-
-### Step 51 Fiber-Mode Profiles
-
-| profile | terms | sigma rank | eta1 rank | eta2 rank | eta rank | delta rank | nuisance rank | quotient gain |
-|---------|-------|------------|-----------|-----------|----------|------------|---------------|---------------|
-| public_rank23_multiplication | 23 | 9 | 6 | 8 | 14 | 10 | 14 | 9 |
-
-[INTERPRETATION]
-
-The old Step 71 commutator probe is now definitive at the exported scan budget: the fine-scan exact ranks are commutator = none and anticommutator = none.
-This should be read as a measured search result, not a universal proof: it settles the requested scan window and verification budget, and it records the exact decompositions that this budget actually found.
-
-## 57. ANTICOMMUTATOR RANK-19 EXTRACTION + HAMILTON SPLIT
-
-[MEASURED_FROM_CODE] (Step 75)
-
-Step 75 uses the seeds located by Step 74 to run a dedicated 5000-restart search at
-rank 19 for the anticommutator and then re-verifies the rank-20 commutator. The exact
-decompositions are profiled in the Step 51 fiber-mode basis and the Hamilton split
-T = ({A,B} + [A,B]) / 2 is recorded with naive combined term count.
-
-### Anticommutator {A,B} = AB + BA
-
-**Rank:** 19
-**Best seed:** 9491818
-**Best loss:** 6.0692161485123209e-17
-**Max residual:** 1.4700994605681972e-09
-**Mean residual:** 2.0046762423902785e-10
-**Entries > 1e-8:** 0
-**Entries > 1e-6:** 0
-**Verified exact under 1e-6:** True
-**Fiber-mode:** sigma_rank=9, eta_rank=18, delta_rank=19, nuisance_rank=19, quotient_gain=0
-**Self-symmetric terms:** 19 | **Symmetric pairs:** 0 | **Unpaired:** 0
-
-**19-term coefficient table (19 terms):**
-
-| term | alpha (3×3) | beta (3×3) | gamma (3×3) |
-|------|-------------|------------|-------------|
-| s01 | [[-0.366848,-0.890108,-0.32762],[-0.298319,-0.635525,-0.236703],[-0.572787,0.156904,0.008939]] | [[0.422284,1.024615,0.377128],[0.343399,0.731561,0.272472],[0.659343,-0.180614,-0.010289]] | [[-0.365705,-0.297389,-0.571002],[-0.887334,-0.633544,0.156415],[-0.326599,-0.235965,0.008911]] |
-| s02 | [[-0.574234,0.833982,0.122545],[0.541907,-0.599739,-0.041204],[-0.036735,0.061177,0.01095]] | [[0.681349,-0.98955,-0.145404],[-0.642992,0.711612,0.04889],[0.043587,-0.072589,-0.012993]] | [[-0.460781,0.434841,-0.029477],[0.66921,-0.481247,0.04909],[0.098333,-0.033063,0.008787]] |
-| s03 | [[-0.4812,0.885287,0.137595],[-0.338978,-0.470784,-0.283681],[-0.633329,0.186126,-0.159389]] | [[-0.332731,0.612142,0.095142],[-0.23439,-0.325529,-0.196155],[-0.437923,0.128699,-0.110211]] | [[-0.614472,-0.43286,-0.808735],[1.130474,-0.601171,0.237675],[0.175703,-0.362248,-0.203532]] |
-| s04 | [[-0.1211,0.418888,1.104006],[0.12066,0.555716,-0.263219],[0.636156,-0.500894,-0.434616]] | [[0.132514,-0.458369,-1.208061],[-0.132033,-0.608093,0.288028],[-0.696115,0.548104,0.475579]] | [[-0.120299,0.119863,0.63195],[0.416118,0.552041,-0.497582],[1.096706,-0.261479,-0.431742]] |
-| s05 | [[0.291585,0.087072,0.96834],[-0.094586,-0.454528,0.424963],[-0.689403,0.322046,0.162943]] | [[-0.289571,-0.08647,-0.961651],[0.093933,0.451388,-0.422027],[0.68464,-0.319821,-0.161817]] | [[0.350711,-0.113765,-0.829195],[0.104728,-0.546695,0.387348],[1.164694,0.511134,0.195983]] |
-| s06 | [[-0.044122,-0.076561,-0.016917],[-0.079371,1.018715,0.346561],[-0.094759,0.698522,0.244984]] | [[-0.045579,-0.079089,-0.017475],[-0.081992,1.052357,0.358006],[-0.097888,0.72159,0.253075]] | [[-0.040933,-0.073635,-0.08791],[-0.071028,0.945088,0.648037],[-0.015694,0.321514,0.227278]] |
-| s07 | [[0.434083,-0.486201,0.741113],[0.078539,0.256876,-0.399719],[0.743987,-0.179162,0.257608]] | [[0.461777,-0.517221,0.788397],[0.08355,0.273264,-0.425221],[0.791454,-0.190593,0.274043]] | [[0.41343,0.074803,0.708591],[-0.463069,0.244654,-0.170638],[0.705853,-0.380701,0.245351]] |
-| s08 | [[1.241949,-0.078042,0.254768],[0.093117,-0.13561,0.093439],[-0.128231,0.038544,-0.04377]] | [[1.192149,-0.074913,0.244552],[0.089383,-0.130172,0.089692],[-0.123089,0.036998,-0.042015]] | [[1.315592,0.098638,-0.135834],[-0.08267,-0.143651,0.040829],[0.269875,0.09898,-0.046365]] |
-| s09 | [[0.063698,0.03249,0.708983],[-0.145681,0.595824,-0.486662],[-0.121463,0.9602,0.379013]] | [[-0.066071,-0.033701,-0.735397],[0.151108,-0.618021,0.504793],[0.125988,-0.995973,-0.393134]] | [[0.051292,-0.117307,-0.097806],[0.026162,0.479777,0.773185],[0.570897,-0.391877,0.305194]] |
-| s10 | [[-0.242655,0.049328,-1.188837],[-0.554727,-0.075091,0.322859],[0.411802,-0.749398,0.317745]] | [[0.231774,-0.047116,1.135532],[0.529853,0.071724,-0.308383],[-0.393337,0.715796,-0.303498]] | [[-0.223379,-0.510662,0.37909],[0.04541,-0.069126,-0.689869],[-1.094402,0.297213,0.292505]] |
-| s11 | [[0.091709,0.085778,0.678646],[0.077926,-0.033534,0.511649],[0.11058,0.57141,1.104129]] | [[-0.083406,-0.078011,-0.617199],[-0.07087,0.030498,-0.465322],[-0.100568,-0.519673,-1.004158]] | [[-0.066668,-0.056649,-0.080387],[-0.062357,0.024378,-0.415389],[-0.493344,-0.371945,-0.802651]] |
-| s12 | [[0.022933,-0.543663,-1.02855],[0.492093,0.023701,-0.500252],[-0.244228,0.819155,-0.046634]] | [[0.023766,-0.563416,-1.065921],[0.509972,0.024562,-0.518428],[-0.253101,0.848917,-0.048328]] | [[-0.022576,-0.484443,0.240431],[0.535212,-0.023332,-0.806421],[1.012562,0.492475,0.045909]] |
-| s13 | [[-0.287705,-0.738881,-0.287028],[0.443019,-0.458468,-0.131962],[-0.046559,0.174334,0.059228]] | [[0.500909,1.28643,0.49973],[-0.771319,0.798217,0.229754],[0.081062,-0.303525,-0.103118]] | [[0.392145,-0.60384,0.063461],[1.007103,0.624897,-0.23762],[0.391222,0.179866,-0.080728]] |
-| s14 | [[0.519308,0.511092,-0.695466],[0.480451,0.374085,-0.481128],[-0.400036,-0.156357,0.145697]] | [[0.42993,0.423128,-0.575769],[0.39776,0.309701,-0.398321],[-0.331185,-0.129446,0.120621]] | [[0.554343,0.512865,-0.427024],[0.545574,0.399323,-0.166906],[-0.742386,-0.513587,0.155527]] |
-| s15 | [[-0.034776,0.453423,0.801381],[-0.031869,0.460668,0.676546],[0.020442,-1.069159,0.557396]] | [[0.030623,-0.399265,-0.705662],[0.028063,-0.405645,-0.595737],[-0.018,0.941456,-0.490819]] | [[-0.028646,-0.026251,0.016838],[0.373491,0.379459,-0.880682],[0.660109,0.55728,0.459135]] |
-| s16 | [[-0.127078,0.188938,-0.269788],[-0.117112,0.250121,-0.373117],[0.092345,-0.818392,1.311658]] | [[0.09413,-0.139951,0.199839],[0.086748,-0.185271,0.276377],[-0.068402,0.606204,-0.971579]] | [[0.092941,0.085652,-0.067538],[-0.138183,-0.182931,0.598547],[0.197315,0.272886,-0.959306]] |
-| s17 | [[-0.611128,0.582057,-0.927255],[-0.573137,-0.198845,0.352008],[0.476837,-0.061287,0.079047]] | [[-0.570192,0.543069,-0.865144],[-0.534747,-0.185526,0.328429],[0.444897,-0.057182,0.073752]] | [[-0.62123,-0.582612,0.48472],[0.591679,-0.202132,-0.062301],[-0.942583,0.357827,0.080354]] |
-| s18 | [[-0.097099,0.371723,0.819417],[-0.08398,1.010613,-0.333334],[0.072584,-0.577502,-0.159455]] | [[0.086584,-0.331467,-0.730679],[0.074885,-0.90117,0.297236],[-0.064724,0.514962,0.142187]] | [[0.119009,0.102929,-0.088962],[-0.455601,-1.238654,0.707813],[-1.004315,0.408549,0.195435]] |
-| s19 | [[0.156258,0.603441,-0.839304],[0.063169,0.42337,-0.600894],[0.86632,-0.060093,0.312186]] | [[-0.152988,-0.590814,0.821742],[-0.061848,-0.414511,0.58832],[-0.848193,0.058836,-0.305654]] | [[0.127618,0.051591,0.707532],[0.492836,0.345771,-0.049079],[-0.685468,-0.490756,0.254965]] |
-
-**Fiber-mode profile:**
-
-| label | sigma_rank | eta_rank | delta_rank | nuisance_rank | quotient_gain |
-|-------|------------|----------|------------|---------------|---------------|
-| anticommutator_rank19 | 9 | 18 | 19 | 19 | 0 |
-
-### Commutator [A,B] = AB - BA
-
-**Rank:** 20
-**Best seed:** 9596813
-**Best loss:** 1.5977318145768281e-12
-**Max residual:** 2.7539672337040244e-07
-**Verified exact under 1e-6:** True
-**Fiber-mode:** sigma_rank=9, eta_rank=18, delta_rank=20, nuisance_rank=20, quotient_gain=0
-**Self-antisymmetric terms:** 0 | **Antisymmetric pairs:** 0 | **Unpaired:** 20
-
-### Hamilton Split
-
-T = ({A,B} + [A,B]) / 2 decomposes as the average of the two verified exact decompositions.
-rank(T_anti) = 19, rank(T_comm) = 20
-Naive combined term count: 39
-Hamilton split sharing analysis: deferred to follow-up derivation.
-
-[INTERPRETATION]
-
-Step 75 confirms the anticommutator exact rank is 19: all 19 terms are
-self-symmetric, nuisance_rank = 19, quotient_gain = 0. The commutator
-is separately verified at rank 20 with 20 unpaired terms.
-The naive Hamilton split costs 39 terms total; whether sharing between the anticommutator
-and commutator supports can reduce this below the naive sum is left as an open derivation.
-
-## 58. BATCH OF FIVE QUICK TESTS
-
-[EXACT_DERIVED] + [MEASURED_FROM_CODE] (Step 76)
-
-Step 76 runs five independent quick tests around cost accounting, Cayley-Hamilton,
-squaring/Frobenius variants, a bounded division-augmented 2x2 circuit search, and
-bounded exact finite-field rank probes over GF(3) and GF(9). Two of the user-supplied
-premises are explicitly corrected in the exports: Cayley-Hamilton does not reduce the
-3x3 output dimension from 9 to 8, and over GF(3) one has x^3 = x rather than x^2 = x.
-
-### Task A: Pareto Frontier
-
-**Standard schedule cost:** M = n/a, A = n/a
-**AlphaTensor public rank-23:** M = n/a, requested A = n/a, scheduled-reference A = n/a
-**Best exported 26-multiplication tiling proxy:** M = n/a, scheduled proxy A = n/a
-**AlphaTensor beats standard under requested counting at:** p >= n/a
-**AlphaTensor beats standard under scheduled counting at:** p >= n/a
-
-| scheme | p | M | A | cost | counting model |
-|--------|---|---|---|------|----------------|
-| standard_27_term | 1 | 27 | 18 | 45 | scheduled_output_accumulation |
-| alphatensor_23_term | 1 | 23 | 114 | 137 | requested_term_scatter |
-| alphatensor_23_term_scheduled_reference | 1 | 23 | 105 | 128 | scheduled_output_accumulation |
-| best_26_tiling_proxy | 1 | 26 | 160 | 186 | scheduled_proxy_from_piece_witnesses |
-| standard_27_term | 2 | 27 | 18 | 72 | scheduled_output_accumulation |
-| alphatensor_23_term | 2 | 23 | 114 | 160 | requested_term_scatter |
-| alphatensor_23_term_scheduled_reference | 2 | 23 | 105 | 151 | scheduled_output_accumulation |
-| best_26_tiling_proxy | 2 | 26 | 160 | 212 | scheduled_proxy_from_piece_witnesses |
-| standard_27_term | 5 | 27 | 18 | 153 | scheduled_output_accumulation |
-| alphatensor_23_term | 5 | 23 | 114 | 229 | requested_term_scatter |
-| alphatensor_23_term_scheduled_reference | 5 | 23 | 105 | 220 | scheduled_output_accumulation |
-| best_26_tiling_proxy | 5 | 26 | 160 | 290 | scheduled_proxy_from_piece_witnesses |
-| standard_27_term | 10 | 27 | 18 | 288 | scheduled_output_accumulation |
-| alphatensor_23_term | 10 | 23 | 114 | 344 | requested_term_scatter |
-| alphatensor_23_term_scheduled_reference | 10 | 23 | 105 | 335 | scheduled_output_accumulation |
-| best_26_tiling_proxy | 10 | 26 | 160 | 420 | scheduled_proxy_from_piece_witnesses |
-| standard_27_term | 20 | 27 | 18 | 558 | scheduled_output_accumulation |
-| alphatensor_23_term | 20 | 23 | 114 | 574 | requested_term_scatter |
-| alphatensor_23_term_scheduled_reference | 20 | 23 | 105 | 565 | scheduled_output_accumulation |
-| best_26_tiling_proxy | 20 | 26 | 160 | 680 | scheduled_proxy_from_piece_witnesses |
-| standard_27_term | 50 | 27 | 18 | 1368 | scheduled_output_accumulation |
-| alphatensor_23_term | 50 | 23 | 114 | 1264 | requested_term_scatter |
-| alphatensor_23_term_scheduled_reference | 50 | 23 | 105 | 1255 | scheduled_output_accumulation |
-| best_26_tiling_proxy | 50 | 26 | 160 | 1460 | scheduled_proxy_from_piece_witnesses |
-| standard_27_term | 100 | 27 | 18 | 2718 | scheduled_output_accumulation |
-| alphatensor_23_term | 100 | 23 | 114 | 2414 | requested_term_scatter |
-| alphatensor_23_term_scheduled_reference | 100 | 23 | 105 | 2405 | scheduled_output_accumulation |
-| best_26_tiling_proxy | 100 | 26 | 160 | 2760 | scheduled_proxy_from_piece_witnesses |
-
-| 26-multiplication tiling configuration | scheduled proxy A | status |
-|----------------------------------------|-------------------|--------|
-| 2 monomino + tromino_col + square_tetromino | 160 | tiling_configuration_not_certified_global_algorithm |
-| L_tetromino + monomino + square_tetromino | 160 | tiling_configuration_not_certified_global_algorithm |
-| domino_col + 3 monomino + square_tetromino | 160 | tiling_configuration_not_certified_global_algorithm |
-| domino_col + domino_row + monomino + square_tetromino | 160 | tiling_configuration_not_certified_global_algorithm |
-| domino_row + tromino_col + square_tetromino | 160 | tiling_configuration_not_certified_global_algorithm |
-
-The Step 67 tilings remain restricted-subtensor configurations rather than certified global 3x3 algorithms, so their exported addition counts are concrete proxy schedules built from the extracted square-tetromino witness plus direct piece formulas.
-
-### Task B: Cayley-Hamilton
-
-| claim | verdict | reason |
-|-------|---------|--------|
-| Cayley-Hamilton reduces the number of independently specifiable 3x3 output entries from 9 to 8. | False | Matrix multiplication is surjective onto M_3: for every C choose A=I and B=C. Since every 3x3 matrix occurs as AB, no nontrivial algebraic relation can eliminate one output coordinate globally. |
-| Cayley-Hamilton can be used directly in the pure bilinear model to replace one bilinear output coordinate by the other eight. | False | The identity is nonlinear in C and degree 6 in (A,B). The pure bilinear model allows only linear recombination of bilinear quantities, not quadratic or cubic elimination among outputs. |
-| Allowing division changes that conclusion for direct computation of the ninth entry from the other eight. | False_as_a_general_reduction | Division can rearrange the identity, but solving for a missing entry still requires nonlinear operations on the already-known matrix C. It does not decrease the number of bilinear quantities needed to obtain C in the first place. |
-
-The decisive point is surjectivity: every 3x3 matrix C occurs as AB by taking A = I and B = C, so Cayley-Hamilton cannot impose a nontrivial output relation that globally removes one coordinate from the image of matrix multiplication.
-
-### Task C: Squaring as Primitive
-
-**Distinct alpha forms:** 22
-**Distinct beta forms:** 20
-**Distinct (alpha·A ± beta·B) forms:** 46
-**Naive two-squaring total:** 46
-**Any squaring sharing at all:** False
-**GF(3) rank-22 exact hit in bounded search:** n/a
-**Exported GF(3) rank bounds after the quick test:** n/a
-**User premise x^2 = x over GF(3):** n/a
-
-So the AlphaTensor 23-term decomposition has no plus/minus-form sharing at all in this model: the distinct alpha±beta count stays at the full 46. The bounded exact GF(3) rank-22 search likewise found no R < 23 witness.
-
-### Task D: Division-Augmented 2x2
-
-**Sweep-best case:** 6_ops_0_div
-**Sweep-best validation MSE:** 4.30105013390363
-**Any exact hit in staged search:** False
-**Focus triggered:** False
-
-| phase | search case | restarts | valid structures | best train MSE | best valid MSE | exact hit count |
-|-------|-------------|----------|------------------|----------------|----------------|-----------------|
-| sweep | 5_ops_0_div | 20000 | 20000 | 4.120961601673718 | 5.1125200720163155 | 0 |
-| sweep | 6_ops_0_div | 20000 | 20000 | 4.984943370372511 | 4.181034227901675 | 0 |
-| sweep | 6_ops_1_div | 20000 | 20000 | 5.310869045213689 | 4.786774611866475 | 0 |
-| sweep | 7_ops_1_div | 20000 | 20000 | 3.749259616141171 | 4.092207884235127 | 0 |
-
-No staged randomized search produced an exact candidate. The export now separates the initial 500-restart sweep from any optional 5000-restart focus phase; in the current run, the sweep-best score still does not certify a low-op exact division circuit.
-
-### Task E: GF(9) + Frobenius
-
-**GF(9) sweep best-covered map:** {"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0}
-**First positive GF(9) sweep rank:** None
-**GF(9) focus triggered:** False
-**Any exact hit in staged ordinary GF(9) search:** False
-**Exported GF(9) rank bounds after the quick test:** 9 <= rank_GF9 <= 23
-**Free Frobenius changes the model away from ordinary tensor rank:** True
-
-| phase | rank | restarts | best covered outputs | positive restarts | exact hit count |
-|-------|------|----------|----------------------|-------------------|-----------------|
-| sweep | 9 | 6000 | 0 | 0 | 0 |
-| sweep | 10 | 6000 | 0 | 0 | 0 |
-| sweep | 11 | 6000 | 0 | 0 | 0 |
-| sweep | 12 | 6000 | 0 | 0 | 0 |
-| sweep | 13 | 6000 | 0 | 0 | 0 |
-| sweep | 14 | 6000 | 0 | 0 | 0 |
-| sweep | 15 | 6000 | 0 | 0 | 0 |
-| sweep | 16 | 6000 | 0 | 0 | 0 |
-| sweep | 17 | 6000 | 0 | 0 | 0 |
-| sweep | 18 | 6000 | 0 | 0 | 0 |
-| sweep | 19 | 6000 | 0 | 0 | 0 |
-| sweep | 20 | 6000 | 0 | 0 | 0 |
-| sweep | 21 | 6000 | 0 | 0 | 0 |
-| sweep | 22 | 6000 | 0 | 0 | 0 |
-
-| element | Frobenius cube | Frobenius order 2? |
-|---------|----------------|--------------------|
-| 0 | 0 | True |
-| 1 | 1 | True |
-| 2 | 2 | True |
-| w | 1+2w | True |
-| 1+w | 2+2w | True |
-| 2+w | 2w | True |
-| 2w | 2+w | True |
-| 1+2w | w | True |
-| 2+2w | 1+w | True |
-
-The conservative exact result here is ordinary GF(9) bilinear rank, not the semilinear 'free Frobenius' model. The export now records a parallel sweep over ranks 9..22 followed by a focus phase only if the sweep shows any coverage at a rank; that staged ordinary-tensor proxy still does not amount to a semilinear Frobenius-rank calculation.
-
-[INTERPRETATION]
-
-Step 76 is mostly negative, but in a useful way. The cost accounting makes the public 23-term algorithm look addition-heavy rather than universally Pareto-optimal; Cayley-Hamilton is ruled out as a bilinear-complexity shortcut; the squaring route shows zero form sharing in the public decomposition; the bounded 2x2 division search produces no exact low-op witness; and the finite-field quick tests find no sub-23 witness at rank 22 over either GF(3) or GF(9). The only model left genuinely ambiguous here is the semilinear Frobenius-free model over GF(9), because that is not ordinary tensor rank and would need a different exact formalization.
-
-## 59. BORDER RANK SINGULAR-PAIR WITNESS CONSTRUCTION
-
-[EXACT_DERIVED] + [MEASURED_FROM_CODE] (Step 77)
-
-Step 77 implements the border-rank singular-pair witness test over all constant-multiple AlphaTensor pairs
-from Step 70. For each pair (t_i, t_j) with identical common alpha×beta support, the script:
-  1. Computes algebraic filters: gamma disjoint (support(γ_i) ∩ support(γ_j) = ∅) and gamma proportional.
-  2. Computes T_pair = term_tensor(t_i) + term_tensor(t_j) and its mode-unfolding rank lower bound.
-  3. Runs a bounded L-BFGS-B search for a rank-21 CP decomposition of T_full − T_pair.
-     If exact (max-abs residual < 1e-6), then rank(T_full) ≤ 22, i.e., a border-rank witness.
-
-### Algebraic Filter Statistics
-
-| metric | value |
-|--------|-------|
-| Constant-multiple pairs (from Step 70) | 59 |
-| Pairs with disjoint gamma support | 23 |
-| Pairs with proportional gamma | 1 |
-| Pair sub-tensors already rank-1 | 0 |
-| Pair flattening lower bound (min / max) | 2 / 2 |
-
-### Search Results
-
-| metric | value |
-|--------|-------|
-| Restarts per pair | 50 |
-| Search target (rank of T_full − T_pair) | 21 |
-| Any exact hit (max-abs residual < 1e-6) | False |
-| Exact hit count | 0 |
-| Best max-abs residual across all pairs | 0.6361445827733396 |
-
-### Per-Pair Summary (first 20 rows by pair index)
-
-| # | t_i | t_j | γ_disjoint | γ_prop | γ_ratio | flat_lb | exact_hit | max_abs_resid |
-|---|-----|-----|-----------|--------|---------|---------|-----------|---------------|
-| 1 | t01 | t02 | False | False | — | 2 | False | 0.7755683848253161 |
-| 2 | t01 | t03 | True | False | — | 2 | False | 0.6882934397484193 |
-| 3 | t01 | t06 | True | False | — | 2 | False | 0.887420220004668 |
-| 4 | t01 | t08 | False | False | — | 2 | False | 0.90659656410029 |
-| 5 | t01 | t09 | True | False | — | 2 | False | 0.828399433578887 |
-| 6 | t02 | t03 | False | False | — | 2 | False | 0.8913206995698149 |
-| 7 | t02 | t04 | False | False | — | 2 | False | 0.8494591481842845 |
-| 8 | t02 | t05 | False | False | — | 2 | False | 0.6980471286873217 |
-| 9 | t02 | t06 | False | False | — | 2 | False | 0.7696440075248769 |
-| 10 | t02 | t07 | True | False | — | 2 | False | 0.8156676985040394 |
-| 11 | t02 | t08 | False | False | — | 2 | False | 0.9117893772452378 |
-| 12 | t02 | t09 | True | False | — | 2 | False | 0.8409458071075988 |
-| 13 | t02 | t11 | True | False | — | 2 | False | 0.745792832703329 |
-| 14 | t02 | t15 | True | False | — | 2 | False | 0.8695915256126125 |
-| 15 | t02 | t20 | False | False | — | 2 | False | 0.8071575614199102 |
-| 16 | t03 | t04 | False | False | — | 2 | False | 0.8896174940286689 |
-| 17 | t03 | t05 | True | False | — | 2 | False | 0.7385165237504292 |
-| 18 | t03 | t10 | True | False | — | 2 | False | 0.8246416894421496 |
-| 19 | t04 | t05 | False | False | — | 2 | False | 0.8435727012510904 |
-| 20 | t04 | t10 | True | False | — | 2 | False | 0.7696305502059186 |
-*(... 39 more rows in step77_pair_analysis.csv)*
-
-[INTERPRETATION]
-
-Step 77 found no border-rank-22 witness among the 59 constant-multiple AlphaTensor pairs at 50 restarts.
-The best observed max-abs residual across all pairs was 0.6361445827733396, well above the exact threshold of 1e-6.
-Of the 59 pairs, 23 have disjoint gamma support (the cleanest algebraic case) and 1 have proportional gamma.
-The absence of any exact hit is consistent with the AlphaTensor rank-23 decomposition being locally algebraically irreducible
-under the constant-multiple pair constraint, but does not rule out border-rank witnesses from other decomposition families.
-
-## 60. ATTACK ROUTES: PHASES 1-5
-
-[EXACT_DERIVED] + [MEASURED_FROM_CODE] (Attack Routes, Phases 1-5)
-
-This attack-route block imports the Phase 1 and Phase 2 follow-up results run directly against
-the public AlphaTensor rank-23 decomposition using the Step 63 loader and the Step 51 fiber-mode basis,
-and then extends that same exact profiling path through the Phase 3 census, the Phase 4 direct rank-22 search,
-and the Phase 5 structural diagnostics.
-
-### Phase 1: Collection-Level Delta-in-Eta Test
-
-**Source decomposition:** AlphaTensor public rank-23 decomposition via Step 63 loader
-**Gamma orientation:** transpose
-**Exact reconstruction residual:** 0
-**rank(H):** 14
-**rank(Delta):** 10
-**rank([H|Delta]):** 14
-**Collection-level Delta subset span(H):** True
-**Exact projection verified:** True
-**Projection nonzero count:** 46
-**Projection nonzero coefficient alphabet:** -1, 1
-**Zero delta columns:** 28 / 54
-
-### Phase 1: Single-Term Obstruction
-
-**Single-term constant containment holds for any delta coordinate:** False
-**Delta coordinates tested:** 54
-**Sampled generic rank J_eta:** 15
-**Sampled generic rank J_(eta,delta):** 17
-
-**Representative exact projection identities (from Delta = H M):**
-
-| delta coordinate | support | exact eta combination |
-|------------------|---------|-----------------------|
-| delta[0,0,1,1] | eta1[0,1];eta1[0,2] | eta1[0,1] + eta1[0,2] |
-| delta[0,0,2,1] | eta1[0,1];eta1[0,2];eta2[1,1] | eta1[0,1] + eta1[0,2] + eta2[1,1] |
-| delta[0,1,0,1] | eta1[0,0];eta1[0,2] | eta1[0,0] + eta1[0,2] |
-| delta[0,1,0,2] | eta1[0,0];eta1[0,2] | -eta1[0,0] - eta1[0,2] |
-| delta[0,1,2,1] | eta2[0,1];eta2[0,2];eta2[1,1] | eta2[0,1] + eta2[0,2] - eta2[1,1] |
-| delta[0,2,0,1] | eta2[0,0];eta2[0,2] | eta2[0,0] + eta2[0,2] |
-
-### Phase 2: Fourier / Parity Test
-
-**xi_plus = eta1 - omega^2 eta2 verified:** True
-**xi_minus = eta1 - omega eta2 verified:** True
-**Real-factor conjugacy xi_minus = conjugate(xi_plus) verified:** True
-**AlphaTensor eta rank:** 14
-**AlphaTensor xi_plus complex rank:** 9
-**AlphaTensor xi realification rank:** 14
-**Claimed even-rank theorem holds:** False
-**Dead-free counterexample:** single_dead_free_term_s_star_0 with eta rank 1 and xi_plus complex rank 1
-
-**Counterfactual Step 52 budget tightening if the false parity theorem were true:**
-
-| R | Step 52 max nuisance rank | claimed even eta cap | usable as theorem |
-|---|---------------------------|----------------------|------------------|
-| 23 | 14 | 14 | False |
-| 22 | 13 | 12 | False |
-| 21 | 12 | 12 | False |
-| 20 | 11 | 10 | False |
-| 19 | 10 | 10 | False |
-
-### Phase 3: Multi-Decomposition Nuisance Census
-
-**Symmetry-orbit exact decompositions profiled:** 216 / 216
-**Symmetry-orbit Delta subset Eta rate:** 216/216
-**Symmetry-orbit rank(H) range:** 14..14
-**Symmetry-orbit projection sparsity range:** 42..80
-**Perturbation exact hits:** 0 / 512
-**Best perturbation near-hit residual (across sigma sweep):** 1.113385432090148e-05
-**Cold random rank-23 exact hits:** 0 / 512
-**Best cold random rank-23 residual:** 0.00025905048287589404
-
-**Phase 3 verdict:** delta subset eta is universal across the entire 216-element AlphaTensor symmetry orbit, but this run found no exact non-orbit rank-23 decompositions. Universality beyond the AlphaTensor equivalence class remains unclear.
-
-### Phase 4: Direct Gradient Search for R = 22
-
-**Quotient-only formulation used:** False
-**Total search runs:** 592
-**Exact rank-22 hits:** 0
-**Best rank-22 max-abs residual:** 0.0012922678297791618
-**Best rank-22 quotient gain:** 0
-
-**Search landscape summary:**
-
-| R | runs | best max-abs | median max-abs | worst max-abs |
-|---|------|--------------|----------------|---------------|
-| 21 | 64 | 0.11569692085228467 | 0.33976026969260376 | 0.5918264515442175 |
-| 22 | 432 | 0.020291573988653708 | 0.3215397304633286 | 0.8882276401626558 |
-| 23 | 64 | 0.011067651761614068 | 0.046665883089979335 | 0.46436260983840316 |
-
-### Phase 5: Structural Diagnostics
-
-**Trajectory diagnostics:**
-original-order first k with rank(H)=14 = 18; first k with quotient gain 9 = 23; zero-additional-nuisance terms = 9
-Across the random-order sample, first k with rank(H)=14 ranged from 14 to 21.
-
-**Anisotropy null-space diagnostics:**
-rank(H) = 14; eta nullity = 4
-Primitive null-space basis:
-- +1*eta1[0,1] +1*eta1[0,2] -1*eta1[1,1] = 0
-- +1*eta1[0,0] -1*eta1[2,1] = 0
-- +1*eta1[0,0] -1*eta1[1,0] +1*eta1[2,2] = 0
-- +1*eta2[0,2] +1*eta2[2,1] = 0
-
-**Projection-matrix diagnostics:**
-M shape = [18, 54]; rank(M) = 10; nullity(M) = 44; coefficient alphabet = -1, 1
-Delta-column support range = [0, 4]; eta-row incidence range = [0, 9]
-Coarse unfold ranks: eta-block-vs-rest = 2, reshaped-right = 9
-
-**Pairwise interaction diagnostics:**
-Ordered pairs scanned = 506; max pairwise anisotropy compression = 0; max pairwise nuisance compression = 0
-
-**Standard 27-term baseline:**
-rank(H) = 18; rank(Delta) = 0; rank(Nuisance) = 18; quotient gain = 9
-
-[INTERPRETATION]
-
-The strongest positive statement from this attack route is decomposition-specific: for the public
-AlphaTensor rank-23 decomposition, the full dead-X block Delta already lies inside the anisotropy
-span H = [Eta1|Eta2] at the collection level, and the exact projection matrix is sparse with only
-coefficients +/-1 on its nonzero entries.
-The strongest negative statement is structural: this containment does not lift to a single-term law,
-because every one of the 54 dead coordinates fails the constant-containment test and the sampled
-generic Jacobian ranks jump from rank J_eta = 15 to rank J_(eta,delta) = 17.
-Phase 2 then closes the proposed parity shortcut. The Fourier identities themselves are correct and
-real factors do impose xi_minus = conjugate(xi_plus), but the claimed universal even-rank theorem is
-false: AlphaTensor has eta rank 14 while xi_plus has complex rank 9, and there is a dead-free single-term
-counterexample with eta rank 1. So no parity tightening of the Step 52 nuisance budget is justified from this route.
-Phase 3 sharpens the status of the positive result. Delta subset Eta is exact across the entire 216-element
-compatible symmetry orbit of the public AlphaTensor decomposition, but this run found no exact non-orbit
-rank-23 decompositions in either the perturbation sweep or the cold random search. So the current evidence
-supports orbit-level stability, not decomposition-independent universality.
-Phase 4 then gives a direct negative computational check at R = 22. In this pass there was no exact hit, and
-the best candidate came from a border-style vanishing-tail search but still had quotient gain 0 and full-like
-nuisance behavior rather than the AlphaTensor-style compressed anisotropy profile.
-Phase 5 explains why the AlphaTensor profile is unusual. The H-rank deficiency is enforced by four exact
-anisotropy identities, the projection matrix M has rank 10 and nullity 44 with a rigid +/-1 alphabet, and the
-pairwise scan shows zero two-term compression across all 506 ordered pairs. So the observed compression is
-genuinely collective rather than pairwise or trivially factorizable.
-
-## 61. CURRENT GAPS / OPEN FRONTS
+Phase 17 resolves the logical split behind the conservation law. Part 1 is now proved and
+verified computationally. Part 2 remains open. Delta containment is exact on AlphaTensor and
+on all 23 of its single deletions, but it is not a generic feature of arbitrary rank-23
+collections, and it also fails on the exported Step 75 anticommutator rank-19 fibermode data.
+
+## 55. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
@@ -15194,15 +14617,9 @@ genuinely collective rather than pairwise or trivially factorizable.
 - Nuisance-first architecture: ✓ R=9 is now ruled out by an exact zero-nuisance contradiction, the weaker all-dead-free route is shown to force R>=27 by per-channel reconstruction, and exact nuisance/dead dependency budgets are tabulated for R=18..23
 - Non-rectangular 6-fiber sub-tensor rank attack: ✓ exact substitution bounds and direct P4 constructions are now tabulated, the rectangular six-fiber cases remain ruled out by exact rank 15, and the current numerical CP-rank scan found no rank-13 or rank-14 witness for any nonrectangular six-fiber pattern
 - Reverse engineering + cancellation visualization: ✓ a public exact rank-23 3x3 coefficient table has been recovered from AlphaTensor's public repo, measured directly in the Step 51-52 basis, shown to have nuisance rank 14 = 23-9 exactly, and tested for single/pair gamma-only redundancy with no feasible 22-term or 21-term sub-decomposition found
+- Conservation-law proof status: ✓ Phase 17 proves fiber-mode faithfulness, verifies dim(ker Gamma) = rank([H|Delta]) on the known valid decompositions, and confirms that AlphaTensor plus all 23 single deletions satisfy Delta subset span(H), while random collections and the exported Step 75 anticommutator fibermode do not
 - Small-integer coefficient enumeration: ✓ the exact ternary profile pool has been counted modulo sign and symmetry (96,845,281 raw distinct profiles; 570,521 symmetry orbits), the top usefulness profiles have been ranked, and collapsed/full-tensor greedy diagnostics show that collapsed matching is vacuous while corrected 2x2 full-tensor greedy does not recover Strassen through rank 7
 - Polyomino subtensor-rank + tiling analysis: ✓ the full connected-polyomino rank table is now audited cleanly, the priority L-tromino class is verified at numerical rank 9, all four previously unresolved tetromino classes are verified at numerical rank 12, the corrected best flat exact-cover cost is 26 with no verified flat tiling at cost 24 or below, and the Step 51/52 layer split of the public rank-23 algorithm is exported with nuisance rank 14, 3 dead-X-dominant corrector terms, and no signal-dominant terms
-- Depth-2 circuit dimension census: ✓ exact parameter/constraint tables are now exported for every type assignment with R1 + R2 <= 22, and the requested AA/BB + AA/QQ Jacobian landscape for R_total = 20..22 is measured analytically as a dimension census without claiming any verified R < 23 circuit
-- Depth-2 bilinear theorem: ✓ AA-only and QQ-only second-layer branches are now verified to have zero bilinear projection, so Step 72 positive fibers are interpreted as parameter redundancy rather than new exact bilinear directions; the literature pass records underline(R)(<3,3,3>) >= 15, online exact-rank status 19 <= R <= 23, and no explicit 3x3 border-rank witness harvested in this pass
-- Commutator / anticommutator definitive rank scan: ✓ the old Step 71 split is now rerun with a factor-preserving 2000-restart wide scan plus 5000-restart fine scan, yielding exported exact-rank status commutator = none, anticommutator = none, shared-term count = n/a, and combined nonzero term count = n/a
-- Anticommutator rank-19 extraction + Hamilton split: ✓ 5000-restart rank-19 anticommutator verified exact (max residual 1.4700994605681972e-09), all 19 terms self-symmetric, nuisance_rank = 19, quotient_gain = 0; rank-20 commutator re-verified with 20 unpaired terms; Hamilton split naive combined term count = 39
-- Step 76 quick-test batch: ✓ Pareto accounting now records Standard (27,18), AlphaTensor (23,n/a) under the requested scatter count and (23,n/a) under scheduled accumulation, the best exported 26-multiplication tiling proxy lands at A = n/a, Cayley-Hamilton is ruled out as a bilinear shortcut, the public rank-23 decomposition has no alpha±beta sharing (D = n/a), and the staged GF(9) / division-augmented sweeps report exact-hit status GF(9) = False, Task D = False
-- Border-rank singular-pair witness construction (Step 77): ✓ scanned 59 constant-multiple AlphaTensor pairs; 23 with disjoint gamma support, 1 proportional; no exact border-rank-22 witness found at 50 restarts (best residual 0.6361445827733396)
-- Attack-route Phases 1-5: ✓ the public AlphaTensor rank-23 decomposition passes the collection-level Delta-in-Eta test exactly with rank(H) = 14, rank(Delta) = 10, rank([H|Delta]) = 14; the single-term containment route fails; the proposed parity theorem is false (eta rank = 14, xi_plus complex rank = 9, even-rank theorem = False); Phase 3 proves orbit-level stability across all 216 compatible symmetry transforms while finding no exact non-orbit rank-23 hit; Phase 4 finds no exact rank-22 hit (best residual 0.0012922678297791618); and Phase 5 identifies eta-nullity 4 with collective, not pairwise, nuisance compression
 
 **Remaining open fronts:**
 - Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored
@@ -15224,15 +14641,11 @@ genuinely collective rather than pairwise or trivially factorizable.
   any useful lower-bound model must retain finer-than-orbit-sum equation structure
 - Step 49 now records the exact 729-equation trilinear system and the 8 representative types;
   the remaining open problem is whether the rank-R solution variety is nonempty for sparse or non-group-closed ansatze
-- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining open problem is to prove a decomposition-independent nuisance lower bound rather than only measure it on known examples
+- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance), and Phase 17 now proves the accompanying fiber-mode faithfulness theorem; the remaining open problem is the universal Delta subset span(H) step needed to turn the observed AlphaTensor conservation law R + eta_nullity = 27 into a theorem for all minimum-rank 3x3 decompositions
 - Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity
 - Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit
-- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, Step 70's first concrete depth-2 audit still leaves the recursive padded-Strassen route at 31 leaf multiplications with no pair-ratio evidence of an immediate AlphaTensor term-factor collapse below rank 23, Step 71's five local perturbation/merge/neighborhood shots remain negative on slot replacement and pair merge, Step 72 exports the local depth-2 Jacobian landscape only as a dimension census, Step 73 shows that the AA/QQ second-layer branches themselves do not create new useful bilinear directions, and Step 74 now records definitive exported exact-rank status for the commutator split at commutator = none and anticommutator = none with combined nonzero count n/a. Any remaining escape route now needs either a genuinely different circuit model or an explicit border-rank-plus-correction witness.
+- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, Step 70's first concrete depth-2 audit still leaves the recursive padded-Strassen route at 31 leaf multiplications with no pair-ratio evidence of an immediate AlphaTensor term-factor collapse below rank 23, and Step 71's five local perturbation/merge/neighborhood shots found 0 exact slot replacements in a 5123-profile explicit pool, 0 exact pair merges, no exact commutator or anticommutator witness through rank 20, and no random-neighborhood feasible subset at R<=22 in a 123-term local pool
 - The toroidal extension confirms that L-trominoes can occur in wrapped tilings even though the flat board cannot be tiled by three L-trominoes; the remaining question is whether wrapped shapes or cross-piece sharing can lower the current exported toroidal cost 27
-- Step 75 anticommutator rank-19 extraction is complete; the open problem is whether any sharing between the anticommutator (rank 19, 19 self-symmetric terms) and commutator (rank 20, 20 unpaired terms) supports can reduce the Hamilton split naive combined cost 39 below 39
-- Step 76 leaves one model-theoretic ambiguity explicit: a 'free Frobenius' GF(9) search is semilinear over GF(3), not ordinary tensor rank over GF(9), so any serious follow-up there needs a precise semilinear circuit/tensor formalization before further computation is interpretable
-- Step 77 border-rank witness search found no exact hit across 59 constant-multiple AlphaTensor pairs; the open question is whether a positive witness exists in other term-pair families (non-constant-multiple pairs, or pairs from inequivalent rank-23 decompositions)
-- The attack-route follow-up is now sharper: Delta subset Eta is exact across the full AlphaTensor symmetry orbit, but still unverified beyond that equivalence class because the current perturbation and cold random rank-23 searches found no exact non-orbit decomposition. The current rank-22 search also found no exact hit. The next open step is either a stronger continuation / homotopy route to non-orbit rank-23 decompositions or a more structured border/correction ansatz that can reproduce the collective H-rank collapse seen in AlphaTensor
 - Step 53 shows that support-only representative incidence is also vacuous; any sharper universal
   theorem must use coefficient identities or subspace geometry, not only index-support patterns
 - Step 54 shows that generic low-rank factor models also fail constructively: low nuisance can
