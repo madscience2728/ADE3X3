@@ -8,7 +8,7 @@ import numpy as np
 from scipy.optimize import minimize
 
 from complement_feasibility import feasibility_score
-from construct_matrices import alpha_nullspace_and_complement
+from matrix_core import alpha_nullspace_and_complement, candidate_vector_from_theta
 
 
 OUT_DIR = Path(__file__).resolve().parent
@@ -19,7 +19,7 @@ def load_json(path: Path) -> dict:
 
 
 def normalized_candidate(theta: np.ndarray, complement_basis: np.ndarray) -> np.ndarray:
-    vector = complement_basis @ theta
+    vector = candidate_vector_from_theta(theta, complement_basis)
     norm = np.linalg.norm(vector)
     if norm < 1e-12:
         raise ValueError('Zero candidate direction.')
@@ -37,10 +37,10 @@ def main() -> None:
     _, complement_basis, alpha_q_matrices, anisotropy_mats, _ = alpha_nullspace_and_complement()
     feasibility_summary = load_json(OUT_DIR / 'complement_feasibility_summary.json')
     start_indices = [int(feasibility_summary['rows'][idx]['basis_id']) - 1 for idx in range(min(3, len(feasibility_summary['rows'])))]
-    starts = [np.eye(complement_basis.shape[1])[start_idx] for start_idx in start_indices]
+    starts = [np.eye(complement_basis.shape[0])[start_idx] for start_idx in start_indices]
     starts.extend([
-        np.full(complement_basis.shape[1], 1.0 / np.sqrt(complement_basis.shape[1])),
-        np.linspace(1.0, 2.0, complement_basis.shape[1]),
+        np.full(complement_basis.shape[0], 1.0 / np.sqrt(complement_basis.shape[0])),
+        np.linspace(1.0, 2.0, complement_basis.shape[0]),
     ])
 
     history: list[dict[str, object]] = []

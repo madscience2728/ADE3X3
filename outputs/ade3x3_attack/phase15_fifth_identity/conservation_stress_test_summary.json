@@ -1,0 +1,19 @@
+{
+  "standard_2x2": {
+    "R": 8,
+    "rank_H": 4,
+    "k": 0,
+    "conservation_sum": 8
+  },
+  "strassen_2x2": {
+    "R": 7,
+    "rank_H": 3,
+    "k": 1,
+    "conservation_sum": 8
+  },
+  "notes": [
+    "The standard 2x2 algorithm gives rank(H)=4 and k=0, so R+k=8.",
+    "The Strassen 2x2 algorithm gives rank(H)=3 and k=1, so R+k=8.",
+    "No in-repo 4x4 decomposition table was found, so the N=4 stress test remains unrun."
+  ]
+}

@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 
 from complement_feasibility import feasibility_score, sample_point
-from construct_matrices import alpha_nullspace_and_complement
+from matrix_core import alpha_nullspace_and_complement
 from outputs.ade3x3_attack.phase12_working_optimizer.cp_als import build_cp_tensor_cab, cp_loss_stats, cp_terms_from_factors
 
 

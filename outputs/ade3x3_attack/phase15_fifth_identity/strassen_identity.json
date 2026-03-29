@@ -1,0 +1,79 @@
+{
+  "tensor_shape": [
+    4,
+    4,
+    4
+  ],
+  "strassen_rank": 7,
+  "rank_H2": 3,
+  "nullity_k": 1,
+  "conservation_sum": 8,
+  "conservation_target": 8,
+  "identity_vector": [
+    -1,
+    0,
+    0,
+    -1
+  ],
+  "identity_formula": "-eta[0,0] - eta[1,1] = 0",
+  "identity_values_per_term": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "h_matrix": [
+    [
+      1.0,
+      0.0,
+      0.0,
+      -1.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      -0.0,
+      0.0,
+      -1.0,
+      0.0
+    ],
+    [
+      0.0,
+      -1.0,
+      0.0,
+      0.0
+    ],
+    [
+      -1.0,
+      -1.0,
+      1.0,
+      1.0
+    ],
+    [
+      -1.0,
+      -1.0,
+      1.0,
+      1.0
+    ]
+  ],
+  "verification": {
+    "loss": 0.0,
+    "max_abs": 0.0
+  },
+  "standard_2x2_rank_H2": 4,
+  "standard_2x2_nullity_k": 0,
+  "identity_interpretation": "The single Strassen anisotropy identity is an affine checkerboard relation across the four eta[r,u] coordinates."
+}

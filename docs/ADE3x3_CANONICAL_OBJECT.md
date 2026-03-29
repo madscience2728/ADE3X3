@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-29 08:49:51
+Generated: 2026-03-29 10:32:28
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-29 08:49:51
+**Generated:** 2026-03-29 10:32:28
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
