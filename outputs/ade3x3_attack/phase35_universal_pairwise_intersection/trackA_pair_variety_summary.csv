@@ -1,0 +1,8 @@
+label,pair,ker_gamma_dim,pair_nullity,all_basis_vectors_hit_complementary_pairs,distinct_common_matrix_ranks
+strassen_2x2,01,3,0,True,none
+standard_rank27,01,18,9,True,1
+standard_rank27,02,18,9,True,1
+standard_rank27,12,18,9,True,1
+alphatensor_rank23,01,14,8,True,"1,2,3"
+alphatensor_rank23,02,14,5,True,"2,3"
+alphatensor_rank23,12,14,6,True,"2,3"

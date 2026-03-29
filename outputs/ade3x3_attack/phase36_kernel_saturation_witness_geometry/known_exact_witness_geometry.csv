@@ -1,0 +1,4 @@
+label,family,R,rank_gamma,ker_gamma_dim,rank_H,saturation_defect,witness_dim,common_image_dim,common_rank_set,witness_basis_literal
+strassen_2x2,known_exact,7,4,3,3,0,0,0,none,none
+standard_rank27,known_exact,27,9,18,18,0,0,0,none,none
+alphatensor_rank23,known_exact,23,9,14,14,0,0,0,none,none

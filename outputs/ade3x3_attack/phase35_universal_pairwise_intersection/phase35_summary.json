@@ -1,0 +1,972 @@
+{
+  "trackA": {
+    "summary_rows": [
+      {
+        "label": "strassen_2x2",
+        "pair": "01",
+        "ker_gamma_dim": 3,
+        "pair_nullity": 0,
+        "all_basis_vectors_hit_complementary_pairs": true,
+        "distinct_common_matrix_ranks": "none"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "01",
+        "ker_gamma_dim": 18,
+        "pair_nullity": 9,
+        "all_basis_vectors_hit_complementary_pairs": true,
+        "distinct_common_matrix_ranks": "1"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "02",
+        "ker_gamma_dim": 18,
+        "pair_nullity": 9,
+        "all_basis_vectors_hit_complementary_pairs": true,
+        "distinct_common_matrix_ranks": "1"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "12",
+        "ker_gamma_dim": 18,
+        "pair_nullity": 9,
+        "all_basis_vectors_hit_complementary_pairs": true,
+        "distinct_common_matrix_ranks": "1"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "01",
+        "ker_gamma_dim": 14,
+        "pair_nullity": 8,
+        "all_basis_vectors_hit_complementary_pairs": true,
+        "distinct_common_matrix_ranks": "1,2,3"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "02",
+        "ker_gamma_dim": 14,
+        "pair_nullity": 5,
+        "all_basis_vectors_hit_complementary_pairs": true,
+        "distinct_common_matrix_ranks": "2,3"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "12",
+        "ker_gamma_dim": 14,
+        "pair_nullity": 6,
+        "all_basis_vectors_hit_complementary_pairs": true,
+        "distinct_common_matrix_ranks": "2,3"
+      }
+    ],
+    "basis_rows": [
+      {
+        "label": "standard_rank27",
+        "pair": "01",
+        "basis_vector": "b0",
+        "weight_vector": "{std3_01:1, std3_04:1, std3_07:-2}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[1, 0, 0], [0, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[3], [0], [0], [0], [0], [0], [0], [0], [0]] | 12:[[3], [0], [0], [0], [0], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "01",
+        "basis_vector": "b1",
+        "weight_vector": "{std3_02:1, std3_05:1, std3_08:-2}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 1, 0], [0, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[0], [3], [0], [0], [0], [0], [0], [0], [0]] | 12:[[0], [3], [0], [0], [0], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "01",
+        "basis_vector": "b2",
+        "weight_vector": "{std3_03:1, std3_06:1, std3_09:-2}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 1], [0, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[0], [0], [3], [0], [0], [0], [0], [0], [0]] | 12:[[0], [0], [3], [0], [0], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "01",
+        "basis_vector": "b3",
+        "weight_vector": "{std3_10:1, std3_13:1, std3_16:-2}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [1, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[0], [0], [0], [3], [0], [0], [0], [0], [0]] | 12:[[0], [0], [0], [3], [0], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "01",
+        "basis_vector": "b4",
+        "weight_vector": "{std3_11:1, std3_14:1, std3_17:-2}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 1, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[0], [0], [0], [0], [3], [0], [0], [0], [0]] | 12:[[0], [0], [0], [0], [3], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "01",
+        "basis_vector": "b5",
+        "weight_vector": "{std3_12:1, std3_15:1, std3_18:-2}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 0, 1], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[0], [0], [0], [0], [0], [3], [0], [0], [0]] | 12:[[0], [0], [0], [0], [0], [3], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "01",
+        "basis_vector": "b6",
+        "weight_vector": "{std3_19:1, std3_22:1, std3_25:-2}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 0, 0], [1, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[0], [0], [0], [0], [0], [0], [3], [0], [0]] | 12:[[0], [0], [0], [0], [0], [0], [3], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "01",
+        "basis_vector": "b7",
+        "weight_vector": "{std3_20:1, std3_23:1, std3_26:-2}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 0, 0], [0, 1, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[0], [0], [0], [0], [0], [0], [0], [3], [0]] | 12:[[0], [0], [0], [0], [0], [0], [0], [3], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "01",
+        "basis_vector": "b8",
+        "weight_vector": "{std3_21:1, std3_24:1, std3_27:-2}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 0, 0], [0, 0, 1]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[0], [0], [0], [0], [0], [0], [0], [0], [3]] | 12:[[0], [0], [0], [0], [0], [0], [0], [0], [3]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "02",
+        "basis_vector": "b0",
+        "weight_vector": "{std3_01:1, std3_04:-2, std3_07:1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[1, 0, 0], [0, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[3], [0], [0], [0], [0], [0], [0], [0], [0]] | 12:[[-3], [0], [0], [0], [0], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "02",
+        "basis_vector": "b1",
+        "weight_vector": "{std3_02:1, std3_05:-2, std3_08:1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 1, 0], [0, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [3], [0], [0], [0], [0], [0], [0], [0]] | 12:[[0], [-3], [0], [0], [0], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "02",
+        "basis_vector": "b2",
+        "weight_vector": "{std3_03:1, std3_06:-2, std3_09:1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 1], [0, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [3], [0], [0], [0], [0], [0], [0]] | 12:[[0], [0], [-3], [0], [0], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "02",
+        "basis_vector": "b3",
+        "weight_vector": "{std3_10:1, std3_13:-2, std3_16:1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [1, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [0], [3], [0], [0], [0], [0], [0]] | 12:[[0], [0], [0], [-3], [0], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "02",
+        "basis_vector": "b4",
+        "weight_vector": "{std3_11:1, std3_14:-2, std3_17:1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 1, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [0], [0], [3], [0], [0], [0], [0]] | 12:[[0], [0], [0], [0], [-3], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "02",
+        "basis_vector": "b5",
+        "weight_vector": "{std3_12:1, std3_15:-2, std3_18:1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 0, 1], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [0], [0], [0], [3], [0], [0], [0]] | 12:[[0], [0], [0], [0], [0], [-3], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "02",
+        "basis_vector": "b6",
+        "weight_vector": "{std3_19:1, std3_22:-2, std3_25:1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 0, 0], [1, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [0], [0], [0], [0], [3], [0], [0]] | 12:[[0], [0], [0], [0], [0], [0], [-3], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "02",
+        "basis_vector": "b7",
+        "weight_vector": "{std3_20:1, std3_23:-2, std3_26:1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 0, 0], [0, 1, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [0], [0], [0], [0], [0], [3], [0]] | 12:[[0], [0], [0], [0], [0], [0], [0], [-3], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "02",
+        "basis_vector": "b8",
+        "weight_vector": "{std3_21:1, std3_24:-2, std3_27:1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 0, 0], [0, 0, 1]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [0], [0], [0], [0], [0], [0], [3]] | 12:[[0], [0], [0], [0], [0], [0], [0], [0], [-3]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "12",
+        "basis_vector": "b0",
+        "weight_vector": "{std3_01:2, std3_04:-1, std3_07:-1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[-1, 0, 0], [0, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[3], [0], [0], [0], [0], [0], [0], [0], [0]] | 02:[[3], [0], [0], [0], [0], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "12",
+        "basis_vector": "b1",
+        "weight_vector": "{std3_02:2, std3_05:-1, std3_08:-1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, -1, 0], [0, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [3], [0], [0], [0], [0], [0], [0], [0]] | 02:[[0], [3], [0], [0], [0], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "12",
+        "basis_vector": "b2",
+        "weight_vector": "{std3_03:2, std3_06:-1, std3_09:-1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, -1], [0, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [3], [0], [0], [0], [0], [0], [0]] | 02:[[0], [0], [3], [0], [0], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "12",
+        "basis_vector": "b3",
+        "weight_vector": "{std3_10:2, std3_13:-1, std3_16:-1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [-1, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [0], [3], [0], [0], [0], [0], [0]] | 02:[[0], [0], [0], [3], [0], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "12",
+        "basis_vector": "b4",
+        "weight_vector": "{std3_11:2, std3_14:-1, std3_17:-1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, -1, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [0], [0], [3], [0], [0], [0], [0]] | 02:[[0], [0], [0], [0], [3], [0], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "12",
+        "basis_vector": "b5",
+        "weight_vector": "{std3_12:2, std3_15:-1, std3_18:-1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 0, -1], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [0], [0], [0], [3], [0], [0], [0]] | 02:[[0], [0], [0], [0], [0], [3], [0], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "12",
+        "basis_vector": "b6",
+        "weight_vector": "{std3_19:2, std3_22:-1, std3_25:-1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 0, 0], [-1, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [0], [0], [0], [0], [3], [0], [0]] | 02:[[0], [0], [0], [0], [0], [0], [3], [0], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "12",
+        "basis_vector": "b7",
+        "weight_vector": "{std3_20:2, std3_23:-1, std3_26:-1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 0, 0], [0, -1, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [0], [0], [0], [0], [0], [3], [0]] | 02:[[0], [0], [0], [0], [0], [0], [0], [3], [0]]"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "12",
+        "basis_vector": "b8",
+        "weight_vector": "{std3_21:2, std3_24:-1, std3_27:-1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 0, 0], [0, 0, 0], [0, 0, -1]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[0], [0], [0], [0], [0], [0], [0], [0], [3]] | 02:[[0], [0], [0], [0], [0], [0], [0], [0], [3]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "01",
+        "basis_vector": "b0",
+        "weight_vector": "{t01:1, t03:2, t05:1, t06:1, t08:-1, t09:1, t10:-2, t11:-1}",
+        "shared_channel_rank": 3,
+        "shared_channel_matrix": "[[1, 1, -2], [0, -1, 0], [1, 1, -1]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[1], [2], [-4], [0], [-3], [0], [1], [4], [-3]] | 12:[[1], [2], [-4], [0], [-3], [0], [1], [4], [-3]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "01",
+        "basis_vector": "b1",
+        "weight_vector": "{t04:1, t05:1, t08:-1, t10:-1, t12:-1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, 1, -1], [0, 0, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[-1], [4], [-2], [0], [0], [0], [-1], [2], [-1]] | 12:[[-1], [4], [-2], [0], [0], [0], [-1], [2], [-1]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "01",
+        "basis_vector": "b2",
+        "weight_vector": "{t01:5, t02:1, t03:11, t04:-6, t05:-4, t06:6, t07:1, t08:2, t09:-1, t10:1, t14:1, t15:-1, t16:-1, t17:2}",
+        "shared_channel_rank": 3,
+        "shared_channel_matrix": "[[-1, -9, 4], [-1, -6, 0], [-1, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[-1], [-31], [5], [-3], [-17], [0], [-1], [-5], [2]] | 12:[[-1], [-31], [5], [-3], [-17], [0], [-1], [-5], [2]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "01",
+        "basis_vector": "b3",
+        "weight_vector": "{t01:1, t03:2, t04:-3, t05:-3, t06:1, t07:1, t08:2, t09:-1, t10:1, t13:1, t16:1, t19:-1}",
+        "shared_channel_rank": 2,
+        "shared_channel_matrix": "[[-1, -4, 3], [0, -1, 0], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[-1], [-13], [4], [0], [-3], [0], [1], [-4], [0]] | 12:[[-1], [-13], [4], [0], [-3], [0], [1], [-4], [0]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "01",
+        "basis_vector": "b4",
+        "weight_vector": "{t01:13, t02:5, t03:31, t04:-8, t05:-8, t06:18, t07:1, t08:2, t09:-1, t10:1, t14:1, t15:-1, t16:1, t18:2, t20:2}",
+        "shared_channel_rank": 3,
+        "shared_channel_matrix": "[[-1, -21, 8], [-1, -18, 2], [-1, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[-1], [-69], [9], [-1], [-49], [2], [-1], [-9], [0]] | 12:[[-1], [-69], [9], [-1], [-49], [2], [-1], [-9], [0]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "01",
+        "basis_vector": "b5",
+        "weight_vector": "{t01:7, t02:1, t03:15, t04:-8, t05:-4, t06:8, t07:1, t08:2, t09:-1, t10:1, t14:1, t15:1, t16:-3, t21:-2}",
+        "shared_channel_rank": 3,
+        "shared_channel_matrix": "[[-1, -11, 4], [1, -8, 2], [1, 0, 2]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[-1], [-39], [5], [1], [-23], [2], [1], [-5], [6]] | 12:[[-1], [-39], [5], [1], [-23], [2], [1], [-5], [6]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "01",
+        "basis_vector": "b6",
+        "weight_vector": "{t01:1, t02:1, t03:3, t05:-1, t06:2, t16:1, t18:1, t22:-1}",
+        "shared_channel_rank": 1,
+        "shared_channel_matrix": "[[0, -2, 1], [0, -2, 1], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[0], [-6], [1], [0], [-5], [2], [0], [-1], [-1]] | 12:[[0], [-6], [1], [0], [-5], [2], [0], [-1], [-1]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "01",
+        "basis_vector": "b7",
+        "weight_vector": "{t01:13, t02:1, t03:27, t04:-24, t05:-18, t06:14, t07:5, t08:12, t09:-5, t10:5, t13:2, t14:1, t15:-1, t16:1, t23:2}",
+        "shared_channel_rank": 3,
+        "shared_channel_matrix": "[[-5, -31, 18], [-1, -14, 0], [-3, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "02:[[-5], [-105], [23], [-1], [-41], [0], [-3], [-23], [4]] | 12:[[-5], [-105], [23], [-1], [-41], [0], [-3], [-23], [4]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "02",
+        "basis_vector": "b0",
+        "weight_vector": "{t01:17, t02:4, t03:-21, t04:-30, t05:26, t06:-38, t07:-47, t08:17, t09:-32, t10:-53, t11:-117, t12:32, t13:6, t14:-8, t15:-4, t16:14, t17:-4, t19:-6}",
+        "shared_channel_rank": 3,
+        "shared_channel_matrix": "[[-32, -70, 53], [-4, -21, 0], [-38, -79, 67]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[-196], [-255], [196], [-12], [-59], [0], [-163], [-196], [184]] | 12:[[196], [255], [-196], [12], [59], [0], [163], [196], [-184]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "02",
+        "basis_vector": "b1",
+        "weight_vector": "{t01:12, t02:4, t03:-16, t04:-6, t05:2, t06:-28, t07:-7, t08:1, t09:-4, t10:-9, t11:-17, t12:4, t14:1, t15:-1, t16:2, t17:-1, t18:3, t20:3}",
+        "shared_channel_rank": 3,
+        "shared_channel_matrix": "[[-4, -21, 9], [-1, -16, 0], [-4, -11, 11]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[-28], [-72], [28], [0], [-44], [-3], [-20], [-28], [28]] | 12:[[28], [72], [-28], [0], [44], [3], [20], [28], [-28]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "02",
+        "basis_vector": "b2",
+        "weight_vector": "{t01:1, t03:-1, t04:-6, t05:6, t06:-2, t07:-11, t08:5, t09:-8, t10:-13, t11:-29, t12:8, t16:6, t21:6}",
+        "shared_channel_rank": 3,
+        "shared_channel_matrix": "[[-8, -14, 13], [0, -1, 0], [-8, -19, 19]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[-48], [-51], [48], [6], [-3], [6], [-31], [-48], [54]] | 12:[[48], [51], [-48], [-6], [3], [-6], [31], [48], [-54]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "02",
+        "basis_vector": "b3",
+        "weight_vector": "{t01:2, t02:1, t03:-3, t05:-1, t06:-5, t07:1, t08:-1, t09:1, t10:1, t11:3, t12:-1, t16:-1, t18:-1, t22:1}",
+        "shared_channel_rank": 2,
+        "shared_channel_matrix": "[[1, -1, -1], [0, -3, 1], [1, 2, -2]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[5], [-3], [-5], [0], [-8], [2], [4], [5], [-5]] | 12:[[-5], [3], [5], [0], [8], [-2], [-4], [-5], [5]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "02",
+        "basis_vector": "b4",
+        "weight_vector": "{t01:6, t02:2, t03:-8, t04:-9, t05:7, t06:-14, t07:-14, t08:5, t09:-8, t10:-15, t11:-31, t12:8, t13:3, t14:-1, t15:-2, t16:4, t17:-2, t23:3}",
+        "shared_channel_rank": 3,
+        "shared_channel_matrix": "[[-8, -21, 15], [-2, -8, 0], [-8, -22, 19]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[-53], [-75], [53], [-3], [-22], [0], [-37], [-53], [50]] | 12:[[53], [75], [-53], [3], [22], [0], [37], [53], [-50]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "12",
+        "basis_vector": "b0",
+        "weight_vector": "{t02:1, t04:-1, t08:2, t09:-3, t10:1, t11:-1, t12:-1}",
+        "shared_channel_rank": 2,
+        "shared_channel_matrix": "[[1, 2, -1], [0, 0, 0], [1, 1, -1]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[-4], [-8], [7], [0], [-1], [1], [-4], [-4], [4]] | 02:[[-4], [-8], [7], [0], [-1], [1], [-4], [-4], [4]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "12",
+        "basis_vector": "b1",
+        "weight_vector": "{t01:14, t02:10, t03:7, t04:-8, t05:-2, t06:-7, t07:2, t08:4, t09:-2, t11:-2, t14:2, t15:4, t16:-2, t17:-2}",
+        "shared_channel_rank": 3,
+        "shared_channel_matrix": "[[0, 17, 0], [-2, 7, 0], [0, 2, -2]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[-2], [-47], [16], [6], [-31], [14], [4], [-2], [8]] | 02:[[-2], [-47], [16], [6], [-31], [14], [4], [-2], [8]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "12",
+        "basis_vector": "b2",
+        "weight_vector": "{t01:14, t02:10, t03:7, t04:-8, t05:-2, t06:-7, t07:2, t08:4, t09:-2, t11:-2, t13:-2, t16:-2, t19:2}",
+        "shared_channel_rank": 2,
+        "shared_channel_matrix": "[[0, 17, 0], [0, 7, 0], [2, 2, -2]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[-2], [-47], [16], [0], [-31], [10], [-6], [-2], [2]] | 02:[[-2], [-47], [16], [0], [-31], [10], [-6], [-2], [2]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "12",
+        "basis_vector": "b3",
+        "weight_vector": "{t01:42, t02:22, t03:21, t04:-14, t05:-8, t06:-21, t08:-8, t09:8, t10:-8, t14:2, t15:4, t16:-6, t18:-2, t20:-2, t21:-2}",
+        "shared_channel_rank": 2,
+        "shared_channel_matrix": "[[0, 35, 8], [0, 21, 0], [0, 0, 2]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[8], [-83], [-2], [4], [-85], [28], [14], [8], [-4]] | 02:[[8], [-83], [-2], [4], [-85], [28], [14], [8], [-4]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "12",
+        "basis_vector": "b4",
+        "weight_vector": "{t01:4, t02:3, t03:2, t04:-2, t05:-1, t06:-2, t08:-1, t09:1, t10:-1, t15:2, t16:-1, t18:-1, t20:-2, t22:-1}",
+        "shared_channel_rank": 2,
+        "shared_channel_matrix": "[[0, 4, 1], [0, 2, -1], [0, 0, 0]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[1], [-9], [0], [2], [-9], [8], [3], [1], [1]] | 02:[[1], [-9], [0], [2], [-9], [8], [3], [1], [1]]"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "12",
+        "basis_vector": "b5",
+        "weight_vector": "{t01:4, t03:2, t04:1, t05:-1, t06:-2, t07:-1, t08:-5, t09:3, t10:-2, t11:1, t13:-1, t15:1, t16:-1, t23:-1}",
+        "shared_channel_rank": 2,
+        "shared_channel_matrix": "[[0, 0, 2], [0, 2, 0], [0, -1, 1]]",
+        "all_complementary_images_nonzero": true,
+        "complementary_images": "01:[[3], [4], [-10], [1], [-6], [1], [3], [3], [-2]] | 02:[[3], [4], [-10], [1], [-6], [1], [3], [3], [-2]]"
+      }
+    ]
+  },
+  "trackB": {
+    "theorem_rows": [
+      {
+        "label": "strassen_2x2",
+        "R": 7,
+        "n": 2,
+        "ker_gamma_dim": 3,
+        "rank_H": 3,
+        "H_cols": 4,
+        "eta_nullity": 1,
+        "rowspace_Ht_equals_independent_pair_stack": true,
+        "pairwise_intersection_dim": 0,
+        "formula_dim_ker_minus_rank_H": 0,
+        "formula_matches": true,
+        "pairwise_intersection_equals_eta_nullity": false
+      },
+      {
+        "label": "standard_rank27",
+        "R": 27,
+        "n": 3,
+        "ker_gamma_dim": 18,
+        "rank_H": 18,
+        "H_cols": 18,
+        "eta_nullity": 0,
+        "rowspace_Ht_equals_independent_pair_stack": true,
+        "pairwise_intersection_dim": 0,
+        "formula_dim_ker_minus_rank_H": 0,
+        "formula_matches": true,
+        "pairwise_intersection_equals_eta_nullity": true
+      },
+      {
+        "label": "alphatensor_rank23",
+        "R": 23,
+        "n": 3,
+        "ker_gamma_dim": 14,
+        "rank_H": 14,
+        "H_cols": 18,
+        "eta_nullity": 4,
+        "rowspace_Ht_equals_independent_pair_stack": true,
+        "pairwise_intersection_dim": 0,
+        "formula_dim_ker_minus_rank_H": 0,
+        "formula_matches": true,
+        "pairwise_intersection_equals_eta_nullity": false
+      }
+    ],
+    "combo_rows": [
+      {
+        "label": "standard_rank27",
+        "pair_a": "01",
+        "pair_b": "02",
+        "intersection_dim": 0,
+        "formula_dim_ker_minus_rank_H": 0
+      },
+      {
+        "label": "standard_rank27",
+        "pair_a": "01",
+        "pair_b": "12",
+        "intersection_dim": 0,
+        "formula_dim_ker_minus_rank_H": 0
+      },
+      {
+        "label": "standard_rank27",
+        "pair_a": "02",
+        "pair_b": "12",
+        "intersection_dim": 0,
+        "formula_dim_ker_minus_rank_H": 0
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair_a": "01",
+        "pair_b": "02",
+        "intersection_dim": 0,
+        "formula_dim_ker_minus_rank_H": 0
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair_a": "01",
+        "pair_b": "12",
+        "intersection_dim": 0,
+        "formula_dim_ker_minus_rank_H": 0
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair_a": "02",
+        "pair_b": "12",
+        "intersection_dim": 0,
+        "formula_dim_ker_minus_rank_H": 0
+      }
+    ],
+    "theorem_statement": "For n=3, H^T = [D_01; D_12], so the common kernel of any two pair maps covering all channels equals ker(H^T). Intersected with ker(Gamma), its dimension is dim(ker(Gamma)) - rank(H)."
+  },
+  "trackC": {
+    "rows": [
+      {
+        "label": "strassen_2x2",
+        "pair": "01",
+        "full_rank": 3,
+        "projected_rank": 3,
+        "pair_nullity_on_ker_gamma": 0,
+        "spectrum_exact": "2 x 2; 10 x 1",
+        "spectrum_approx": "2.000000000000 x 2; 10.000000000000 x 1",
+        "min_positive_eigenvalue": "2.000000000000"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "01",
+        "full_rank": 9,
+        "projected_rank": 9,
+        "pair_nullity_on_ker_gamma": 9,
+        "spectrum_exact": "0 x 9; 2 x 9",
+        "spectrum_approx": "0.000000000000 x 9; 2.000000000000 x 9",
+        "min_positive_eigenvalue": "2.000000000000"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "02",
+        "full_rank": 9,
+        "projected_rank": 9,
+        "pair_nullity_on_ker_gamma": 9,
+        "spectrum_exact": "0 x 9; 2 x 9",
+        "spectrum_approx": "0.000000000000 x 9; 2.000000000000 x 9",
+        "min_positive_eigenvalue": "2.000000000000"
+      },
+      {
+        "label": "standard_rank27",
+        "pair": "12",
+        "full_rank": 9,
+        "projected_rank": 9,
+        "pair_nullity_on_ker_gamma": 9,
+        "spectrum_exact": "0 x 9; 2 x 9",
+        "spectrum_approx": "0.000000000000 x 9; 2.000000000000 x 9",
+        "min_positive_eigenvalue": "2.000000000000"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "01",
+        "full_rank": 6,
+        "projected_rank": 6,
+        "pair_nullity_on_ker_gamma": 8,
+        "spectrum_exact": "0 x 8; CRootOf(x**6 - 48*x**5 + 824*x**4 - 6213*x**3 + 20920*x**2 - 29664*x + 13440, 0) x 1; CRootOf(x**6 - 48*x**5 + 824*x**4 - 6213*x**3 + 20920*x**2 - 29664*x + 13440, 1) x 1; CRootOf(x**6 - 48*x**5 + 824*x**4 - 6213*x**3 + 20920*x**2 - 29664*x + 13440, 2) x 1; CRootOf(x**6 - 48*x**5 + 824*x**4 - 6213*x**3 + 20920*x**2 - 29664*x + 13440, 3) x 1; CRootOf(x**6 - 48*x**5 + 824*x**4 - 6213*x**3 + 20920*x**2 - 29664*x + 13440, 4) x 1; CRootOf(x**6 - 48*x**5 + 824*x**4 - 6213*x**3 + 20920*x**2 - 29664*x + 13440, 5) x 1",
+        "spectrum_approx": "0.000000000000 x 8; 0.838536614790 x 1; 2.092959729337 x 1; 3.426263226875 x 1; 8.121039863178 x 1; 14.374142230596 x 1; 19.147058335224 x 1",
+        "min_positive_eigenvalue": "0.838536614790"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "02",
+        "full_rank": 9,
+        "projected_rank": 9,
+        "pair_nullity_on_ker_gamma": 5,
+        "spectrum_exact": "0 x 5; CRootOf(x**9 - 39*x**8 + 584*x**7 - 4433*x**6 + 18860*x**5 - 46989*x**4 + 69312*x**3 - 58906*x**2 + 26319*x - 4727, 0) x 1; CRootOf(x**9 - 39*x**8 + 584*x**7 - 4433*x**6 + 18860*x**5 - 46989*x**4 + 69312*x**3 - 58906*x**2 + 26319*x - 4727, 1) x 1; CRootOf(x**9 - 39*x**8 + 584*x**7 - 4433*x**6 + 18860*x**5 - 46989*x**4 + 69312*x**3 - 58906*x**2 + 26319*x - 4727, 2) x 1; CRootOf(x**9 - 39*x**8 + 584*x**7 - 4433*x**6 + 18860*x**5 - 46989*x**4 + 69312*x**3 - 58906*x**2 + 26319*x - 4727, 3) x 1; CRootOf(x**9 - 39*x**8 + 584*x**7 - 4433*x**6 + 18860*x**5 - 46989*x**4 + 69312*x**3 - 58906*x**2 + 26319*x - 4727, 4) x 1; CRootOf(x**9 - 39*x**8 + 584*x**7 - 4433*x**6 + 18860*x**5 - 46989*x**4 + 69312*x**3 - 58906*x**2 + 26319*x - 4727, 5) x 1; CRootOf(x**9 - 39*x**8 + 584*x**7 - 4433*x**6 + 18860*x**5 - 46989*x**4 + 69312*x**3 - 58906*x**2 + 26319*x - 4727, 6) x 1; CRootOf(x**9 - 39*x**8 + 584*x**7 - 4433*x**6 + 18860*x**5 - 46989*x**4 + 69312*x**3 - 58906*x**2 + 26319*x - 4727, 7) x 1; CRootOf(x**9 - 39*x**8 + 584*x**7 - 4433*x**6 + 18860*x**5 - 46989*x**4 + 69312*x**3 - 58906*x**2 + 26319*x - 4727, 8) x 1",
+        "spectrum_approx": "0.000000000000 x 5; 0.556794545079 x 1; 0.820769896791 x 1; 1.435235759135 x 1; 1.480402758325 x 1; 1.819870272552 x 1; 3.612713239405 x 1; 6.085221711569 x 1; 8.023319364763 x 1; 15.165672452381 x 1",
+        "min_positive_eigenvalue": "0.556794545079"
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair": "12",
+        "full_rank": 8,
+        "projected_rank": 8,
+        "pair_nullity_on_ker_gamma": 6,
+        "spectrum_exact": "0 x 6; CRootOf(x**8 - 37*x**7 + 508*x**6 - 3441*x**5 + 12749*x**4 - 26787*x**3 + 31389*x**2 - 18732*x + 4292, 0) x 1; CRootOf(x**8 - 37*x**7 + 508*x**6 - 3441*x**5 + 12749*x**4 - 26787*x**3 + 31389*x**2 - 18732*x + 4292, 1) x 1; CRootOf(x**8 - 37*x**7 + 508*x**6 - 3441*x**5 + 12749*x**4 - 26787*x**3 + 31389*x**2 - 18732*x + 4292, 2) x 1; CRootOf(x**8 - 37*x**7 + 508*x**6 - 3441*x**5 + 12749*x**4 - 26787*x**3 + 31389*x**2 - 18732*x + 4292, 3) x 1; CRootOf(x**8 - 37*x**7 + 508*x**6 - 3441*x**5 + 12749*x**4 - 26787*x**3 + 31389*x**2 - 18732*x + 4292, 4) x 1; CRootOf(x**8 - 37*x**7 + 508*x**6 - 3441*x**5 + 12749*x**4 - 26787*x**3 + 31389*x**2 - 18732*x + 4292, 5) x 1; CRootOf(x**8 - 37*x**7 + 508*x**6 - 3441*x**5 + 12749*x**4 - 26787*x**3 + 31389*x**2 - 18732*x + 4292, 6) x 1; CRootOf(x**8 - 37*x**7 + 508*x**6 - 3441*x**5 + 12749*x**4 - 26787*x**3 + 31389*x**2 - 18732*x + 4292, 7) x 1",
+        "spectrum_approx": "0.000000000000 x 6; 0.576313144292 x 1; 1.288811053824 x 1; 1.599972577017 x 1; 2.108913126238 x 1; 2.738054588268 x 1; 5.046166261315 x 1; 7.847722223594 x 1; 15.794047025451 x 1",
+        "min_positive_eigenvalue": "0.576313144292"
+      }
+    ],
+    "difference_literals": {
+      "strassen_2x2": {
+        "01": "[[1, 0, 0, 0, 0, -1, -1], [0, 0, 1, 0, -1, -1, -1], [0, 1, 0, -1, 0, 1, 1], [-1, 0, 0, 0, 0, 1, 1]]"
+      },
+      "standard_rank27": {
+        "01": "[[1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0]]",
+        "02": "[[1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1]]",
+        "12": "[[0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1]]"
+      },
+      "alphatensor_rank23": {
+        "01": "[[0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [-1, -2, 0, 0, -1, 1, 0, -1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 1, 0, 0, 1, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0], [-1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, -1, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 2, 1, 0, 0, 0, 0, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, -1, 0, -1, 0, -1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0]]",
+        "02": "[[0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [-1, -1, -1, 1, 1, 0, 0, -1, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0], [-1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, -1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, -1, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 1, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 1, 1, -1, 0, 0, 0, 0, 0, 0, 0]]",
+        "12": "[[0, 0, 0, 0, 0, 0, -1, 0, 0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, -1, 1, 2, -1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0], [0, 0, -1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1, -1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, -1], [0, 0, 0, 0, 1, 0, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0]]"
+      }
+    }
+  },
+  "trackD": {
+    "proof_template": {
+      "standard_3x3_pair_spectrum": "0 x 9; 2 x 9",
+      "standard_3x3_total_spectrum": "3 x 18",
+      "fiber_model_statement": "ker(Gamma) splits into 9 output fibers, each a 2-dimensional zero-sum hyperplane in R^3; on each fiber Q_st has spectrum {0,2} and Q_chan = 3 Id.",
+      "entanglement_rows": [
+        {
+          "label": "standard_rank27",
+          "pair_nullities": "9,9,9",
+          "sum_pair_nullities": 27,
+          "max_fiber_aligned_total": 27,
+          "entanglement_deficit": 0,
+          "nullity_range": 0
+        },
+        {
+          "label": "alphatensor_rank23",
+          "pair_nullities": "8,5,6",
+          "sum_pair_nullities": 19,
+          "max_fiber_aligned_total": 27,
+          "entanglement_deficit": 8,
+          "nullity_range": 3
+        },
+        {
+          "label": "strassen_2x2",
+          "pair_nullities": "0",
+          "sum_pair_nullities": 0,
+          "max_fiber_aligned_total": 4,
+          "entanglement_deficit": 4,
+          "nullity_range": 0
+        }
+      ]
+    }
+  },
+  "trackE": {
+    "summary_rows": [
+      {
+        "case": "random_3x3_R20",
+        "trials": 6,
+        "min_gap": 1.3203603166521747,
+        "median_gap": 1.7547681598709586,
+        "max_gap": 3.3798976429439196,
+        "min_total_nullity": 0,
+        "max_total_nullity": 0
+      },
+      {
+        "case": "random_3x3_R21",
+        "trials": 6,
+        "min_gap": 0.33754655791006255,
+        "median_gap": 1.0802271353046868,
+        "max_gap": 3.4879903983698677,
+        "min_total_nullity": 0,
+        "max_total_nullity": 0
+      },
+      {
+        "case": "random_3x3_R22",
+        "trials": 6,
+        "min_gap": 0.39050121217123374,
+        "median_gap": 1.258679136473332,
+        "max_gap": 2.6029924582619954,
+        "min_total_nullity": 0,
+        "max_total_nullity": 0
+      }
+    ],
+    "trial_rows": [
+      {
+        "label": "random_3x3_R20_seed5440",
+        "R": 20,
+        "seed": 5440,
+        "ker_gamma_dim": 11,
+        "total_gap": 3.3798976429439196,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R20_seed5441",
+        "R": 20,
+        "seed": 5441,
+        "ker_gamma_dim": 11,
+        "total_gap": 1.3203603166521747,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R20_seed5442",
+        "R": 20,
+        "seed": 5442,
+        "ker_gamma_dim": 11,
+        "total_gap": 1.8073433310425653,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R20_seed5443",
+        "R": 20,
+        "seed": 5443,
+        "ker_gamma_dim": 11,
+        "total_gap": 1.7021929886993517,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R20_seed5444",
+        "R": 20,
+        "seed": 5444,
+        "ker_gamma_dim": 11,
+        "total_gap": 2.786313665421754,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R20_seed5445",
+        "R": 20,
+        "seed": 5445,
+        "ker_gamma_dim": 11,
+        "total_gap": 1.5140241942651933,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R21_seed5537",
+        "R": 21,
+        "seed": 5537,
+        "ker_gamma_dim": 12,
+        "total_gap": 3.4090063416917977,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R21_seed5538",
+        "R": 21,
+        "seed": 5538,
+        "ker_gamma_dim": 12,
+        "total_gap": 1.2473964993098965,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R21_seed5539",
+        "R": 21,
+        "seed": 5539,
+        "ker_gamma_dim": 12,
+        "total_gap": 0.9130577712994774,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R21_seed5540",
+        "R": 21,
+        "seed": 5540,
+        "ker_gamma_dim": 12,
+        "total_gap": 0.48135689723376957,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R21_seed5541",
+        "R": 21,
+        "seed": 5541,
+        "ker_gamma_dim": 12,
+        "total_gap": 0.33754655791006255,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R21_seed5542",
+        "R": 21,
+        "seed": 5542,
+        "ker_gamma_dim": 12,
+        "total_gap": 3.4879903983698677,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R22_seed5634",
+        "R": 22,
+        "seed": 5634,
+        "ker_gamma_dim": 13,
+        "total_gap": 0.39050121217123374,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R22_seed5635",
+        "R": 22,
+        "seed": 5635,
+        "ker_gamma_dim": 13,
+        "total_gap": 1.23506584482522,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R22_seed5636",
+        "R": 22,
+        "seed": 5636,
+        "ker_gamma_dim": 13,
+        "total_gap": 0.4655272177604087,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R22_seed5637",
+        "R": 22,
+        "seed": 5637,
+        "ker_gamma_dim": 13,
+        "total_gap": 1.2822924281214443,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R22_seed5638",
+        "R": 22,
+        "seed": 5638,
+        "ker_gamma_dim": 13,
+        "total_gap": 2.6029924582619954,
+        "total_nullity": 0
+      },
+      {
+        "label": "random_3x3_R22_seed5639",
+        "R": 22,
+        "seed": 5639,
+        "ker_gamma_dim": 13,
+        "total_gap": 1.5354089655745438,
+        "total_nullity": 0
+      }
+    ]
+  },
+  "trackF": {
+    "rows": [
+      {
+        "label": "standard_rank27",
+        "pair_a": "01",
+        "pair_b": "02",
+        "rank_a": 9,
+        "rank_b": 9,
+        "joint_rank": 18,
+        "rowspace_overlap": 0
+      },
+      {
+        "label": "standard_rank27",
+        "pair_a": "01",
+        "pair_b": "12",
+        "rank_a": 9,
+        "rank_b": 9,
+        "joint_rank": 18,
+        "rowspace_overlap": 0
+      },
+      {
+        "label": "standard_rank27",
+        "pair_a": "02",
+        "pair_b": "12",
+        "rank_a": 9,
+        "rank_b": 9,
+        "joint_rank": 18,
+        "rowspace_overlap": 0
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair_a": "01",
+        "pair_b": "02",
+        "rank_a": 6,
+        "rank_b": 9,
+        "joint_rank": 14,
+        "rowspace_overlap": 1
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair_a": "01",
+        "pair_b": "12",
+        "rank_a": 6,
+        "rank_b": 8,
+        "joint_rank": 14,
+        "rowspace_overlap": 0
+      },
+      {
+        "label": "alphatensor_rank23",
+        "pair_a": "02",
+        "pair_b": "12",
+        "rank_a": 9,
+        "rank_b": 8,
+        "joint_rank": 14,
+        "rowspace_overlap": 3
+      }
+    ]
+  }
+}

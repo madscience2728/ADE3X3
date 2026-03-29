@@ -1,0 +1,4 @@
+label,R,n,ker_gamma_dim,rank_H,H_cols,eta_nullity,rowspace_Ht_equals_independent_pair_stack,pairwise_intersection_dim,formula_dim_ker_minus_rank_H,formula_matches,pairwise_intersection_equals_eta_nullity
+strassen_2x2,7,2,3,3,4,1,True,0,0,True,False
+standard_rank27,27,3,18,18,18,0,True,0,0,True,True
+alphatensor_rank23,23,3,14,14,18,4,True,0,0,True,False

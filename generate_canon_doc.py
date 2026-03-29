@@ -39,6 +39,7 @@ PHASE32_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase32_bou
 PHASE33_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase33_27_symbol_faithful_encoding"
 PHASE33B_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase33b_27_symbol_live_alphabet"
 PHASE34_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase34_spectral_gap_channel_separation"
+PHASE35_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase35_universal_pairwise_intersection"
 
 def read_csv(filename):
     """Read CSV file from exports directory."""
@@ -140,6 +141,10 @@ def read_phase33b_outputs():
 def read_phase34_outputs():
     """Read Phase 34 spectral-gap outputs."""
     return read_json_path(PHASE34_DIR / "phase34_summary.json")
+
+def read_phase35_outputs():
+    """Read Phase 35 universal pairwise-intersection outputs."""
+    return read_json_path(PHASE35_DIR / "phase35_summary.json")
 
 def read_axxc_signature_layer(rep_config_ids):
     """Read the current AXXC arity-4 signature layer for selected reps.
@@ -593,6 +598,7 @@ def generate():
     w("and 27-symbol live alphabet infrastructure (step 70 / Phase 33b)")
     w("and hand derivation of conservation constant and defect condition (step 71 / Phase 33 hand derivation)")
     w("and spectral gap of channel-separation quadratic form (step 72 / Phase 34)")
+    w("and universal pairwise intersection analysis (step 73 / Phase 35)")
     w()
     w("**IMPORTANT:** This document contains all computed results inline.")
     w("No external files are required. All research findings are here.")
@@ -4600,6 +4606,113 @@ def generate():
     else:
         w("*Run the Phase 34 script to populate this section.*")
 
+    # ── PHASE 35 UNIVERSAL PAIRWISE INTERSECTION ──
+    w()
+    w("## 73. UNIVERSAL PAIRWISE INTERSECTION ANALYSIS")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] / [MEASURED_FROM_CODE] (Phase 35)")
+    w()
+    w("Phase 35 rewrites the three-channel defect question in exact intersection form.")
+    w("For each pair (s,t), let D_st = (P_s - P_t)^T so that D_st w = 0 is exactly the")
+    w("equation W_s = W_t. In the canon notation for n = 3,")
+    w()
+    w("  H = [K_0-K_1 | K_1-K_2] = [P_0-P_1 | P_1-P_2],")
+    w("  hence H^T = [D_01 ; D_12].")
+    w()
+    w("Because D_02 = D_01 + D_12, the common kernel of any two pair equations whose union")
+    w("covers {0,1,2} is exactly ker(H^T). Therefore the exact pairwise-intersection theorem is")
+    w()
+    w("  dim(ker(Gamma) ∩ ker D_st ∩ ker D_s't') = dim(ker(Gamma)) - rank(H),")
+    w()
+    w("for every covering pair choice. So zero pairwise intersection is equivalent to H")
+    w("saturating ker(Gamma), i.e. to Theorem A in intersection form.")
+    w()
+    phase35 = read_phase35_outputs()
+    if phase35:
+        theorem_rows = phase35.get('trackB', {}).get('theorem_rows', [])
+        track_a_rows = phase35.get('trackA', {}).get('summary_rows', [])
+        track_d_rows = phase35.get('trackD', {}).get('proof_template', {}).get('entanglement_rows', [])
+        track_f_rows = phase35.get('trackF', {}).get('rows', [])
+
+        w("### Exact Theorem and Correction")
+        w()
+        w("| decomposition | dim ker(Gamma) | rank(H) | pairwise intersection dim | dim ker(Gamma)-rank(H) | eta_nullity | equals eta_nullity? |")
+        w("|---------------|----------------|---------|---------------------------|-----------------------|-------------|---------------------|")
+        for row in theorem_rows:
+            w(
+                f"| {row.get('label')} | {row.get('ker_gamma_dim')} | {row.get('rank_H')} | "
+                f"{row.get('pairwise_intersection_dim')} | {row.get('formula_dim_ker_minus_rank_H')} | "
+                f"{row.get('eta_nullity')} | {row.get('pairwise_intersection_equals_eta_nullity')} |"
+            )
+        w()
+        w("This corrects the stronger provisional identity suggested at the start of Phase 35:")
+        w("pairwise intersection dimension is not eta_nullity in general. It is the left-nullity")
+        w("of H inside ker(Gamma). AlphaTensor is the key counterexample already available: its")
+        w("pairwise intersection dimension is 0, but eta_nullity is 4.")
+        w()
+
+        w("### Single-Pair Variety Versus Full Three-Channel Defect")
+        w()
+        w("| decomposition | pair | single-pair nullity in ker(Gamma) | every computed basis vector hits complementary pairs? | shared W_s rank set |")
+        w("|---------------|------|-----------------------------------|-----------------------------------------------|-------------------|")
+        for row in track_a_rows:
+            w(
+                f"| {row.get('label')} | {row.get('pair')} | {row.get('pair_nullity')} | "
+                f"{row.get('all_basis_vectors_hit_complementary_pairs')} | {row.get('distinct_common_matrix_ranks')} |"
+            )
+        w()
+        w("So single-pair defect spaces can be large, but on every known exact decomposition every")
+        w("computed basis direction in a single-pair nullspace is expelled by the complementary pair")
+        w("constraints. No measured single-pair defect survives to a genuine three-channel defect.")
+        w()
+
+        if track_d_rows:
+            w("### Fiber-Aligned Versus Entangled Mechanisms")
+            w()
+            w("The standard 3x3 algorithm still supplies the clean template: ker(Gamma) splits into 9")
+            w("independent output fibers, each a 2-dimensional zero-sum plane, each pair form has")
+            w("spectrum {0,2} on a fiber, and the total channel-separation form acts as 3 times the")
+            w("identity. AlphaTensor reaches the same zero-intersection conclusion by a more entangled")
+            w("mechanism with uneven pair-nullities.")
+            w()
+            w("| decomposition | pair nullities | sum pair nullities | fiber-aligned maximum | entanglement deficit | nullity range |")
+            w("|---------------|----------------|--------------------|----------------------|---------------------|---------------|")
+            for row in track_d_rows:
+                w(
+                    f"| {row.get('label')} | {row.get('pair_nullities')} | {row.get('sum_pair_nullities')} | "
+                    f"{row.get('max_fiber_aligned_total')} | {row.get('entanglement_deficit')} | {row.get('nullity_range')} |"
+                )
+            w()
+
+        if track_f_rows:
+            w("### Rank-Overlap Constraint")
+            w()
+            w("Phase 35 also separates row-space overlap from kernel intersection. For projected pair maps")
+            w("A = D_st|ker(Gamma) and B = D_s't'|ker(Gamma), the quantity rank(A)+rank(B)-rank([A;B])")
+            w("measures row-space overlap, not pairwise kernel intersection.")
+            w()
+            w("| decomposition | pair A | pair B | rank A | rank B | joint rank | row-space overlap |")
+            w("|---------------|--------|--------|--------|--------|------------|-------------------|")
+            for row in track_f_rows:
+                w(
+                    f"| {row.get('label')} | {row.get('pair_a')} | {row.get('pair_b')} | {row.get('rank_a')} | "
+                    f"{row.get('rank_b')} | {row.get('joint_rank')} | {row.get('rowspace_overlap')} |"
+                )
+            w()
+            w("AlphaTensor already shows why this distinction matters: some pair combinations have")
+            w("positive row-space overlap even though every covering two-pair kernel intersection is 0.")
+            w()
+
+        w("### Status")
+        w()
+        w("Phase 35 upgrades the spectral target to an exact universal theorem candidate: prove")
+        w("rank(H) = dim(ker(Gamma)) for every admissible minimum-rank decomposition. That theorem")
+        w("is exactly equivalent to the vanishing of all covering pairwise intersections inside")
+        w("ker(Gamma), and it is strictly sharper than the false eta_nullity = 0 formulation.")
+    else:
+        w("*Run the Phase 35 script to populate this section.*")
+
     # ── OPEN FRONTS ──
     w()
     w(f"## {section_num}. CURRENT GAPS / OPEN FRONTS")
@@ -4656,6 +4769,7 @@ def generate():
     w("- Small-integer coefficient enumeration: ✓ the exact ternary profile pool has been counted modulo sign and symmetry (96,845,281 raw distinct profiles; 570,521 symmetry orbits), the top usefulness profiles have been ranked, and collapsed/full-tensor greedy diagnostics show that collapsed matching is vacuous while corrected 2x2 full-tensor greedy does not recover Strassen through rank 7")
     w("- Polyomino subtensor-rank + tiling analysis: ✓ the full connected-polyomino rank table is now audited cleanly, the priority L-tromino class is verified at numerical rank 9, all four previously unresolved tetromino classes are verified at numerical rank 12, the corrected best flat exact-cover cost is 26 with no verified flat tiling at cost 24 or below, and the Step 51/52 layer split of the public rank-23 algorithm is exported with nuisance rank 14, 3 dead-X-dominant corrector terms, and no signal-dominant terms")
     w("- Spectral gap of the channel-separation quadratic form: ✓ Phase 34 converts the exact defect condition into positivity of Q_chan on ker(Gamma), verifies nullity 0 on AlphaTensor rank 23 / standard 3x3 / Strassen 2x2, proves the standard-family pattern pair gap = 2 and total gap = n, and records a positive-definite Strassen certificate via exact leading principal minors")
+    w("- Universal pairwise intersection analysis: ✓ Phase 35 proves the exact covering-pair identity ker(Gamma) ∩ ker D_st ∩ ker D_s't' has dimension dim(ker(Gamma)) - rank(H), shows this is equivalent to kernel saturation rather than eta_nullity = 0, records AlphaTensor as the counterexample to the stronger false claim, and separates row-space overlap from kernel intersection")
     w()
     w("**Remaining open fronts:**")
     w("- Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored")

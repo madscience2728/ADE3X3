@@ -1,0 +1,7 @@
+label,pair_a,pair_b,rank_a,rank_b,joint_rank,rowspace_overlap
+standard_rank27,01,02,9,9,18,0
+standard_rank27,01,12,9,9,18,0
+standard_rank27,02,12,9,9,18,0
+alphatensor_rank23,01,02,6,9,14,1
+alphatensor_rank23,01,12,6,8,14,0
+alphatensor_rank23,02,12,9,8,14,3

@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-29 17:17:38
+Generated: 2026-03-29 17:47:13
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-29 17:17:38
+**Generated:** 2026-03-29 17:47:13
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -45,6 +45,7 @@ and 27-symbol faithful encoding analysis (step 69 / Phase 33)
 and 27-symbol live alphabet infrastructure (step 70 / Phase 33b)
 and hand derivation of conservation constant and defect condition (step 71 / Phase 33 hand derivation)
 and spectral gap of channel-separation quadratic form (step 72 / Phase 34)
+and universal pairwise intersection analysis (step 73 / Phase 35)
 
 **IMPORTANT:** This document contains all computed results inline.
 No external files are required. All research findings are here.
@@ -15281,7 +15282,94 @@ is no longer to guess a per-term identity. It is to prove that the minimum eigen
 of Q_chan|ker(Gamma) stays uniformly positive over the admissible low-rank multiplication
 variety, or else to identify the geometric degeneration where that spectral gap can close.
 
-## 74. CURRENT GAPS / OPEN FRONTS
+## 73. UNIVERSAL PAIRWISE INTERSECTION ANALYSIS
+
+[EXACT_DERIVED] / [MEASURED_FROM_CODE] (Phase 35)
+
+Phase 35 rewrites the three-channel defect question in exact intersection form.
+For each pair (s,t), let D_st = (P_s - P_t)^T so that D_st w = 0 is exactly the
+equation W_s = W_t. In the canon notation for n = 3,
+
+  H = [K_0-K_1 | K_1-K_2] = [P_0-P_1 | P_1-P_2],
+  hence H^T = [D_01 ; D_12].
+
+Because D_02 = D_01 + D_12, the common kernel of any two pair equations whose union
+covers {0,1,2} is exactly ker(H^T). Therefore the exact pairwise-intersection theorem is
+
+  dim(ker(Gamma) ∩ ker D_st ∩ ker D_s't') = dim(ker(Gamma)) - rank(H),
+
+for every covering pair choice. So zero pairwise intersection is equivalent to H
+saturating ker(Gamma), i.e. to Theorem A in intersection form.
+
+### Exact Theorem and Correction
+
+| decomposition | dim ker(Gamma) | rank(H) | pairwise intersection dim | dim ker(Gamma)-rank(H) | eta_nullity | equals eta_nullity? |
+|---------------|----------------|---------|---------------------------|-----------------------|-------------|---------------------|
+| strassen_2x2 | 3 | 3 | 0 | 0 | 1 | False |
+| standard_rank27 | 18 | 18 | 0 | 0 | 0 | True |
+| alphatensor_rank23 | 14 | 14 | 0 | 0 | 4 | False |
+
+This corrects the stronger provisional identity suggested at the start of Phase 35:
+pairwise intersection dimension is not eta_nullity in general. It is the left-nullity
+of H inside ker(Gamma). AlphaTensor is the key counterexample already available: its
+pairwise intersection dimension is 0, but eta_nullity is 4.
+
+### Single-Pair Variety Versus Full Three-Channel Defect
+
+| decomposition | pair | single-pair nullity in ker(Gamma) | every computed basis vector hits complementary pairs? | shared W_s rank set |
+|---------------|------|-----------------------------------|-----------------------------------------------|-------------------|
+| strassen_2x2 | 01 | 0 | True | none |
+| standard_rank27 | 01 | 9 | True | 1 |
+| standard_rank27 | 02 | 9 | True | 1 |
+| standard_rank27 | 12 | 9 | True | 1 |
+| alphatensor_rank23 | 01 | 8 | True | 1,2,3 |
+| alphatensor_rank23 | 02 | 5 | True | 2,3 |
+| alphatensor_rank23 | 12 | 6 | True | 2,3 |
+
+So single-pair defect spaces can be large, but on every known exact decomposition every
+computed basis direction in a single-pair nullspace is expelled by the complementary pair
+constraints. No measured single-pair defect survives to a genuine three-channel defect.
+
+### Fiber-Aligned Versus Entangled Mechanisms
+
+The standard 3x3 algorithm still supplies the clean template: ker(Gamma) splits into 9
+independent output fibers, each a 2-dimensional zero-sum plane, each pair form has
+spectrum {0,2} on a fiber, and the total channel-separation form acts as 3 times the
+identity. AlphaTensor reaches the same zero-intersection conclusion by a more entangled
+mechanism with uneven pair-nullities.
+
+| decomposition | pair nullities | sum pair nullities | fiber-aligned maximum | entanglement deficit | nullity range |
+|---------------|----------------|--------------------|----------------------|---------------------|---------------|
+| standard_rank27 | 9,9,9 | 27 | 27 | 0 | 0 |
+| alphatensor_rank23 | 8,5,6 | 19 | 27 | 8 | 3 |
+| strassen_2x2 | 0 | 0 | 4 | 4 | 0 |
+
+### Rank-Overlap Constraint
+
+Phase 35 also separates row-space overlap from kernel intersection. For projected pair maps
+A = D_st|ker(Gamma) and B = D_s't'|ker(Gamma), the quantity rank(A)+rank(B)-rank([A;B])
+measures row-space overlap, not pairwise kernel intersection.
+
+| decomposition | pair A | pair B | rank A | rank B | joint rank | row-space overlap |
+|---------------|--------|--------|--------|--------|------------|-------------------|
+| standard_rank27 | 01 | 02 | 9 | 9 | 18 | 0 |
+| standard_rank27 | 01 | 12 | 9 | 9 | 18 | 0 |
+| standard_rank27 | 02 | 12 | 9 | 9 | 18 | 0 |
+| alphatensor_rank23 | 01 | 02 | 6 | 9 | 14 | 1 |
+| alphatensor_rank23 | 01 | 12 | 6 | 8 | 14 | 0 |
+| alphatensor_rank23 | 02 | 12 | 9 | 8 | 14 | 3 |
+
+AlphaTensor already shows why this distinction matters: some pair combinations have
+positive row-space overlap even though every covering two-pair kernel intersection is 0.
+
+### Status
+
+Phase 35 upgrades the spectral target to an exact universal theorem candidate: prove
+rank(H) = dim(ker(Gamma)) for every admissible minimum-rank decomposition. That theorem
+is exactly equivalent to the vanishing of all covering pairwise intersections inside
+ker(Gamma), and it is strictly sharper than the false eta_nullity = 0 formulation.
+
+## 75. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
@@ -15334,6 +15422,7 @@ variety, or else to identify the geometric degeneration where that spectral gap 
 - Small-integer coefficient enumeration: ✓ the exact ternary profile pool has been counted modulo sign and symmetry (96,845,281 raw distinct profiles; 570,521 symmetry orbits), the top usefulness profiles have been ranked, and collapsed/full-tensor greedy diagnostics show that collapsed matching is vacuous while corrected 2x2 full-tensor greedy does not recover Strassen through rank 7
 - Polyomino subtensor-rank + tiling analysis: ✓ the full connected-polyomino rank table is now audited cleanly, the priority L-tromino class is verified at numerical rank 9, all four previously unresolved tetromino classes are verified at numerical rank 12, the corrected best flat exact-cover cost is 26 with no verified flat tiling at cost 24 or below, and the Step 51/52 layer split of the public rank-23 algorithm is exported with nuisance rank 14, 3 dead-X-dominant corrector terms, and no signal-dominant terms
 - Spectral gap of the channel-separation quadratic form: ✓ Phase 34 converts the exact defect condition into positivity of Q_chan on ker(Gamma), verifies nullity 0 on AlphaTensor rank 23 / standard 3x3 / Strassen 2x2, proves the standard-family pattern pair gap = 2 and total gap = n, and records a positive-definite Strassen certificate via exact leading principal minors
+- Universal pairwise intersection analysis: ✓ Phase 35 proves the exact covering-pair identity ker(Gamma) ∩ ker D_st ∩ ker D_s't' has dimension dim(ker(Gamma)) - rank(H), shows this is equivalent to kernel saturation rather than eta_nullity = 0, records AlphaTensor as the counterexample to the stronger false claim, and separates row-space overlap from kernel intersection
 
 **Remaining open fronts:**
 - Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored
