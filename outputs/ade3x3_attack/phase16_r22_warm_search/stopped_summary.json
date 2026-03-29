@@ -1,0 +1,33 @@
+{
+  "status": "stopped",
+  "reason": "Phase 16 warm-start routes remain in the AlphaTensor-derived k=4 basin; exact R=22 would require k=5 under R+k=27.",
+  "single_removal": {
+    "completed_runs": 23,
+    "best_removed_term_id": "t20",
+    "best_final_loss": 1.1375932418815112e-05,
+    "best_final_max_abs": 0.0007661152131220143,
+    "success_lt_1e_10": 0,
+    "success_lt_1e_15": 0
+  },
+  "pair_addition": {
+    "completed_runs": 260,
+    "planned_runs": 400,
+    "best_config_label": "mask_011",
+    "best_removed_terms": "t06,t12,t15",
+    "best_trial_idx": 8,
+    "best_final_loss": 5.956340636230645e-05,
+    "best_final_max_abs": 0.0012684318739524152,
+    "success_lt_1e_10": 0,
+    "success_lt_1e_15": 0
+  },
+  "continuation": {
+    "completed_rows": 78,
+    "planned_rows": 299,
+    "best_removed_term_id": "t02",
+    "best_epsilon": 0.01,
+    "best_final_loss": 1.1867749090818628e-05,
+    "best_final_max_abs": 0.00068993094228323,
+    "success_lt_1e_10": 0,
+    "success_lt_1e_15": 0
+  }
+}

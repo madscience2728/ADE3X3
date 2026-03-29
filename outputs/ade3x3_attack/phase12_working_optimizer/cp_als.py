@@ -312,6 +312,57 @@ def run_hybrid_cp(
     )
 
 
+def run_hybrid_from_factors(
+    tensor_cab: np.ndarray,
+    c_init: np.ndarray,
+    a_init: np.ndarray,
+    b_init: np.ndarray,
+    restart_id: int,
+    seed: int,
+    als_iters: int,
+    ls_max_nfev: int,
+    init_mode: str = 'custom',
+) -> CPHybridResult:
+    init = normalize_cp_init([c_init, a_init, b_init])
+    c_als, a_als, b_als, als_iterations, _ = run_tensorly_als(
+        tensor_cab,
+        rank=c_init.shape[1],
+        init=init,
+        seed=seed,
+        n_iter_max=als_iters,
+        tol=1e-18,
+        linesearch=True,
+        orthogonalise=False,
+    )
+    als_loss, als_max_abs = cp_loss_stats(tensor_cab, c_als, a_als, b_als)
+    refined_c, refined_a, refined_b, ls_nfev = refine_with_least_squares(
+        tensor_cab,
+        c_als,
+        a_als,
+        b_als,
+        max_nfev=ls_max_nfev,
+    )
+    final_loss, final_max_abs = cp_loss_stats(tensor_cab, refined_c, refined_a, refined_b)
+    return CPHybridResult(
+        init_mode=init_mode,
+        restart_id=restart_id,
+        seed=seed,
+        als_iterations=als_iterations,
+        als_loss=als_loss,
+        als_max_abs=als_max_abs,
+        ls_nfev=ls_nfev,
+        final_loss=final_loss,
+        final_max_abs=final_max_abs,
+        success_lt_1e_10=bool(final_max_abs < 1e-10),
+        success_lt_1e_15=bool(final_max_abs < 1e-15),
+        cp_model_json={
+            'c_factor': refined_c.tolist(),
+            'a_factor': refined_a.tolist(),
+            'b_factor': refined_b.tolist(),
+        },
+    )
+
+
 def result_to_row(result: CPHybridResult) -> dict[str, object]:
     return {
         'init_mode': result.init_mode,
