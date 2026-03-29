@@ -1,0 +1,1282 @@
+{
+  "track_a": {
+    "algorithms": [
+      {
+        "label": "alphatensor_rank23",
+        "R": 23,
+        "rank_Gamma_exact": 9,
+        "ker_Gamma_dim_exact": 14,
+        "rank_H_exact": 14,
+        "all_cross_sections_in_H_exact": true,
+        "all_cross_sections_in_SigmaH_exact": true
+      },
+      {
+        "label": "standard_rank27",
+        "R": 27,
+        "rank_Gamma_exact": 9,
+        "ker_Gamma_dim_exact": 18,
+        "rank_H_exact": 18,
+        "all_cross_sections_in_H_exact": true,
+        "all_cross_sections_in_SigmaH_exact": true
+      }
+    ],
+    "recovery_rows": [
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_01",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "M_h_rank": 2,
+        "M_h_nonzero": 7,
+        "M_h_density": 0.043209876543209874,
+        "M_h_col_support_min": 0,
+        "M_h_col_support_max": 3,
+        "M_h_unique_coefficients": [
+          "-1",
+          "1"
+        ],
+        "first_block_rank": 2,
+        "second_block_rank": 0
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_02",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "M_h_rank": 3,
+        "M_h_nonzero": 12,
+        "M_h_density": 0.07407407407407407,
+        "M_h_col_support_min": 0,
+        "M_h_col_support_max": 4,
+        "M_h_unique_coefficients": [
+          "-1",
+          "1"
+        ],
+        "first_block_rank": 3,
+        "second_block_rank": 3
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_10",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "M_h_rank": 2,
+        "M_h_nonzero": 8,
+        "M_h_density": 0.04938271604938271,
+        "M_h_col_support_min": 0,
+        "M_h_col_support_max": 2,
+        "M_h_unique_coefficients": [
+          "-1",
+          "1"
+        ],
+        "first_block_rank": 2,
+        "second_block_rank": 0
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_12",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "M_h_rank": 2,
+        "M_h_nonzero": 5,
+        "M_h_density": 0.030864197530864196,
+        "M_h_col_support_min": 0,
+        "M_h_col_support_max": 3,
+        "M_h_unique_coefficients": [
+          "-1",
+          "1"
+        ],
+        "first_block_rank": 1,
+        "second_block_rank": 1
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_20",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "M_h_rank": 1,
+        "M_h_nonzero": 8,
+        "M_h_density": 0.04938271604938271,
+        "M_h_col_support_min": 0,
+        "M_h_col_support_max": 2,
+        "M_h_unique_coefficients": [
+          "-1",
+          "1"
+        ],
+        "first_block_rank": 0,
+        "second_block_rank": 1
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_21",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "M_h_rank": 2,
+        "M_h_nonzero": 6,
+        "M_h_density": 0.037037037037037035,
+        "M_h_col_support_min": 0,
+        "M_h_col_support_max": 1,
+        "M_h_unique_coefficients": [
+          "-1",
+          "1"
+        ],
+        "first_block_rank": 0,
+        "second_block_rank": 2
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_01",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "M_h_rank": 0,
+        "M_h_nonzero": 0,
+        "M_h_density": 0.0,
+        "M_h_col_support_min": 0,
+        "M_h_col_support_max": 0,
+        "M_h_unique_coefficients": [],
+        "first_block_rank": 0,
+        "second_block_rank": 0
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_02",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "M_h_rank": 0,
+        "M_h_nonzero": 0,
+        "M_h_density": 0.0,
+        "M_h_col_support_min": 0,
+        "M_h_col_support_max": 0,
+        "M_h_unique_coefficients": [],
+        "first_block_rank": 0,
+        "second_block_rank": 0
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_10",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "M_h_rank": 0,
+        "M_h_nonzero": 0,
+        "M_h_density": 0.0,
+        "M_h_col_support_min": 0,
+        "M_h_col_support_max": 0,
+        "M_h_unique_coefficients": [],
+        "first_block_rank": 0,
+        "second_block_rank": 0
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_12",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "M_h_rank": 0,
+        "M_h_nonzero": 0,
+        "M_h_density": 0.0,
+        "M_h_col_support_min": 0,
+        "M_h_col_support_max": 0,
+        "M_h_unique_coefficients": [],
+        "first_block_rank": 0,
+        "second_block_rank": 0
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_20",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "M_h_rank": 0,
+        "M_h_nonzero": 0,
+        "M_h_density": 0.0,
+        "M_h_col_support_min": 0,
+        "M_h_col_support_max": 0,
+        "M_h_unique_coefficients": [],
+        "first_block_rank": 0,
+        "second_block_rank": 0
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_21",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "M_h_rank": 0,
+        "M_h_nonzero": 0,
+        "M_h_density": 0.0,
+        "M_h_col_support_min": 0,
+        "M_h_col_support_max": 0,
+        "M_h_unique_coefficients": [],
+        "first_block_rank": 0,
+        "second_block_rank": 0
+      }
+    ]
+  },
+  "track_b": {
+    "algorithms": [
+      {
+        "label": "alphatensor_rank23",
+        "ker_Gamma_dim_exact": 14,
+        "identity_frame_rank_exact": 14,
+        "identity_frame_saturates": true,
+        "all_clone_frames_saturate": true,
+        "random_trials": 32,
+        "random_factorized_count": 0,
+        "factorized_defective_found": false
+      },
+      {
+        "label": "standard_rank27",
+        "ker_Gamma_dim_exact": 18,
+        "identity_frame_rank_exact": 18,
+        "identity_frame_saturates": true,
+        "all_clone_frames_saturate": true,
+        "random_trials": 32,
+        "random_factorized_count": 0,
+        "factorized_defective_found": false
+      }
+    ],
+    "clone_rows": [
+      {
+        "label": "alphatensor_rank23",
+        "perm": "012",
+        "rank_H_perm_exact": 14,
+        "saturates_ker_Gamma": true
+      },
+      {
+        "label": "alphatensor_rank23",
+        "perm": "021",
+        "rank_H_perm_exact": 14,
+        "saturates_ker_Gamma": true
+      },
+      {
+        "label": "alphatensor_rank23",
+        "perm": "102",
+        "rank_H_perm_exact": 14,
+        "saturates_ker_Gamma": true
+      },
+      {
+        "label": "alphatensor_rank23",
+        "perm": "120",
+        "rank_H_perm_exact": 14,
+        "saturates_ker_Gamma": true
+      },
+      {
+        "label": "alphatensor_rank23",
+        "perm": "201",
+        "rank_H_perm_exact": 14,
+        "saturates_ker_Gamma": true
+      },
+      {
+        "label": "alphatensor_rank23",
+        "perm": "210",
+        "rank_H_perm_exact": 14,
+        "saturates_ker_Gamma": true
+      },
+      {
+        "label": "standard_rank27",
+        "perm": "012",
+        "rank_H_perm_exact": 18,
+        "saturates_ker_Gamma": true
+      },
+      {
+        "label": "standard_rank27",
+        "perm": "021",
+        "rank_H_perm_exact": 18,
+        "saturates_ker_Gamma": true
+      },
+      {
+        "label": "standard_rank27",
+        "perm": "102",
+        "rank_H_perm_exact": 18,
+        "saturates_ker_Gamma": true
+      },
+      {
+        "label": "standard_rank27",
+        "perm": "120",
+        "rank_H_perm_exact": 18,
+        "saturates_ker_Gamma": true
+      },
+      {
+        "label": "standard_rank27",
+        "perm": "201",
+        "rank_H_perm_exact": 18,
+        "saturates_ker_Gamma": true
+      },
+      {
+        "label": "standard_rank27",
+        "perm": "210",
+        "rank_H_perm_exact": 18,
+        "saturates_ker_Gamma": true
+      }
+    ],
+    "synthetic_rows": [
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "k0_equals_k1",
+        "case_kind": "named",
+        "rank_H_numeric": 9,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 5,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "all_collinear",
+        "case_kind": "named",
+        "rank_H_numeric": 9,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 5,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "shared_two_plane",
+        "case_kind": "named",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 12,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_01",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_02",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_03",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 11,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_04",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 11,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_05",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_06",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_07",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 11,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_08",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 12,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_09",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 12,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_10",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 11,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_11",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_12",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 12,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_13",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_14",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_15",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_16",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 11,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_17",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_18",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 12,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_19",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 12,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_20",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 12,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_21",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 11,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_22",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 12,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_23",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_24",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_25",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_26",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 11,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_27",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 11,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_28",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_29",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_30",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_31",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 11,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "alphatensor_rank23",
+        "case_name": "wildcard_trial_32",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 14,
+        "defect_numeric": 13,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "k0_equals_k1",
+        "case_kind": "named",
+        "rank_H_numeric": 9,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 9,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "all_collinear",
+        "case_kind": "named",
+        "rank_H_numeric": 9,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 9,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "shared_two_plane",
+        "case_kind": "named",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 16,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_01",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 16,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_02",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 17,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_03",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 15,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_04",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 16,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_05",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 15,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_06",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 16,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_07",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 16,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_08",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 16,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_09",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 17,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_10",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 15,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_11",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 17,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_12",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 15,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_13",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 17,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_14",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 15,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_15",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 17,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_16",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 16,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_17",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 15,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_18",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 17,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_19",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 15,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_20",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 16,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_21",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 16,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_22",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 17,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_23",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 15,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_24",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 15,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_25",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 15,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_26",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 15,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_27",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 16,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_28",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 3,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 15,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_29",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 17,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_30",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 16,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_31",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 1,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 17,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      },
+      {
+        "label": "standard_rank27",
+        "case_name": "wildcard_trial_32",
+        "case_kind": "wildcard",
+        "rank_H_numeric": 2,
+        "ker_gamma_dim_exact": 18,
+        "defect_numeric": 16,
+        "sum_zero_max_abs": 0.0,
+        "factorized_rank1_faces": false
+      }
+    ]
+  },
+  "track_c": {
+    "algorithms": [
+      {
+        "label": "alphatensor_rank23",
+        "combined_observed_gauge_orbit_dim": 28,
+        "tangent_escape_detected": true,
+        "sampled_escape_detected": true
+      },
+      {
+        "label": "standard_rank27",
+        "combined_observed_gauge_orbit_dim": 0,
+        "tangent_escape_detected": false,
+        "sampled_escape_detected": false
+      }
+    ],
+    "block_rows": [
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_01",
+        "active_row_count": 7,
+        "tangent_escape_detected": true,
+        "tangent_escape_row": 0,
+        "sampled_escape_detected": true
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_02",
+        "active_row_count": 8,
+        "tangent_escape_detected": true,
+        "tangent_escape_row": 0,
+        "sampled_escape_detected": true
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_10",
+        "active_row_count": 7,
+        "tangent_escape_detected": true,
+        "tangent_escape_row": 1,
+        "sampled_escape_detected": true
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_12",
+        "active_row_count": 6,
+        "tangent_escape_detected": true,
+        "tangent_escape_row": 1,
+        "sampled_escape_detected": true
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_20",
+        "active_row_count": 4,
+        "tangent_escape_detected": true,
+        "tangent_escape_row": 4,
+        "sampled_escape_detected": true
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_21",
+        "active_row_count": 5,
+        "tangent_escape_detected": true,
+        "tangent_escape_row": 4,
+        "sampled_escape_detected": true
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_01",
+        "active_row_count": 0,
+        "tangent_escape_detected": false,
+        "tangent_escape_row": null,
+        "sampled_escape_detected": false
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_02",
+        "active_row_count": 0,
+        "tangent_escape_detected": false,
+        "tangent_escape_row": null,
+        "sampled_escape_detected": false
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_10",
+        "active_row_count": 0,
+        "tangent_escape_detected": false,
+        "tangent_escape_row": null,
+        "sampled_escape_detected": false
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_12",
+        "active_row_count": 0,
+        "tangent_escape_detected": false,
+        "tangent_escape_row": null,
+        "sampled_escape_detected": false
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_20",
+        "active_row_count": 0,
+        "tangent_escape_detected": false,
+        "tangent_escape_row": null,
+        "sampled_escape_detected": false
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_21",
+        "active_row_count": 0,
+        "tangent_escape_detected": false,
+        "tangent_escape_row": null,
+        "sampled_escape_detected": false
+      }
+    ]
+  },
+  "track_d": {
+    "algorithms": [
+      {
+        "label": "strassen_2x2",
+        "all_cross_sections_in_H_exact": true,
+        "all_cross_sections_in_SigmaH_exact": true
+      },
+      {
+        "label": "alphatensor_rank23",
+        "all_cross_sections_in_H_exact": true,
+        "all_cross_sections_in_SigmaH_exact": true
+      },
+      {
+        "label": "standard_rank27",
+        "all_cross_sections_in_H_exact": true,
+        "all_cross_sections_in_SigmaH_exact": true
+      }
+    ],
+    "rows": [
+      {
+        "label": "strassen_2x2",
+        "block": "D_01",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 1,
+        "SigmaH_unique_coefficients": [
+          "-1",
+          "1"
+        ]
+      },
+      {
+        "label": "strassen_2x2",
+        "block": "D_10",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 1,
+        "SigmaH_unique_coefficients": [
+          "1"
+        ]
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_01",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 2,
+        "SigmaH_unique_coefficients": [
+          "-1",
+          "1"
+        ]
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_02",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 3,
+        "SigmaH_unique_coefficients": [
+          "-1",
+          "1"
+        ]
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_10",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 2,
+        "SigmaH_unique_coefficients": [
+          "-1",
+          "1"
+        ]
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_12",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 2,
+        "SigmaH_unique_coefficients": [
+          "-1",
+          "1"
+        ]
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_20",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 1,
+        "SigmaH_unique_coefficients": [
+          "-1",
+          "1"
+        ]
+      },
+      {
+        "label": "alphatensor_rank23",
+        "block": "D_21",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 2,
+        "SigmaH_unique_coefficients": [
+          "-1",
+          "1"
+        ]
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_01",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 0,
+        "SigmaH_unique_coefficients": []
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_02",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 0,
+        "SigmaH_unique_coefficients": []
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_10",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 0,
+        "SigmaH_unique_coefficients": []
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_12",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 0,
+        "SigmaH_unique_coefficients": []
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_20",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 0,
+        "SigmaH_unique_coefficients": []
+      },
+      {
+        "label": "standard_rank27",
+        "block": "D_21",
+        "in_H_exact": true,
+        "in_SigmaH_exact": true,
+        "SigmaH_rank": 0,
+        "SigmaH_unique_coefficients": []
+      }
+    ]
+  }
+}

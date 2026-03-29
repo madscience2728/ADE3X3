@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-29 14:12:46
+Generated: 2026-03-29 15:31:38
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-29 14:12:46
+**Generated:** 2026-03-29 15:31:38
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -40,7 +40,8 @@ and nuisance-first architecture analysis (step 61),
 plus non-rectangular 6-fiber sub-tensor rank attack (step 62),
 and reverse engineering with cancellation visualization (step 63),
 plus small-integer coefficient enumeration (step 64),
-and polyomino subtensor-rank / tiling analysis (step 65)
+and polyomino subtensor-rank / tiling analysis (step 65),
+and 27-symbol faithful encoding analysis (step 69 / Phase 33)
 
 **IMPORTANT:** This document contains all computed results inline.
 No external files are required. All research findings are here.
@@ -14954,7 +14955,96 @@ the Phase 31 frontier gap was a coarse-grid artifact or a stable feature.
 
 So the feasibility-boundary effect is not weakening under refinement. It sharpens. The empirical separator now looks like a critical smoothness threshold with AlphaTensor and the standard algorithm in different phases.
 
-## 70. CURRENT GAPS / OPEN FRONTS
+## 69. 27-SYMBOL FAITHFUL ENCODING ANALYSIS
+
+[EXACT_DERIVED] (Phase 33)
+
+Phase 33 tests whether the 27-symbol encoding {P_0, P_1, P_2} is faithful:
+whether the 54 dead-X coordinates are algebraically recoverable from the
+27 live coordinates plus the tiling constraint.
+
+### Track A: 27-Symbol Encoding
+
+[EXACT_DERIVED]
+
+For the known 3x3 decompositions, each fixed cross-section block D_st was tested
+against span(H) with H = [K_0-K_1 | K_1-K_2].
+
+| decomposition | R | rank(H) | all D_st in span(H)? | all D_st in span([Sigma|H])? |
+|---------------|---|---------|----------------------|------------------------------|
+| alphatensor_rank23 | 23 | 14 | True | True |
+| standard_rank27 | 27 | 18 | True | True |
+
+| decomposition | block | rank(M_st) | nnz(M_st) | density | coeffs |
+|---------------|-------|------------|-----------|---------|--------|
+| alphatensor_rank23 | D_01 | 2 | 7 | 0.0432 | -1, 1 |
+| alphatensor_rank23 | D_02 | 3 | 12 | 0.0741 | -1, 1 |
+| alphatensor_rank23 | D_10 | 2 | 8 | 0.0494 | -1, 1 |
+| alphatensor_rank23 | D_12 | 2 | 5 | 0.0309 | -1, 1 |
+| alphatensor_rank23 | D_20 | 1 | 8 | 0.0494 | -1, 1 |
+| alphatensor_rank23 | D_21 | 2 | 6 | 0.0370 | -1, 1 |
+| standard_rank27 | D_01 | 0 | 0 | 0.0000 | none |
+| standard_rank27 | D_02 | 0 | 0 | 0.0000 | none |
+| standard_rank27 | D_10 | 0 | 0 | 0.0000 | none |
+| standard_rank27 | D_12 | 0 | 0 | 0.0000 | none |
+| standard_rank27 | D_20 | 0 | 0 | 0.0000 | none |
+| standard_rank27 | D_21 | 0 | 0 | 0.0000 | none |
+
+### Track B: Clone-Frame Saturation
+
+[EXACT_DERIVED] / [WILDCARD]
+
+All six channel-permuted clone frames were tested on the known 3x3 decompositions,
+and synthetic defective triples were then sampled inside ker(Gamma) to see whether
+factorized rank-1 faces can coexist with H-defect.
+
+| decomposition | dim ker(Gamma) | identity rank(H) | all clone frames saturate? | wildcard defective factorized sample found? |
+|---------------|----------------|------------------|-----------------------------|-------------------------------------------|
+| alphatensor_rank23 | 14 | 14 | True | False |
+| standard_rank27 | 18 | 18 | True | False |
+
+### Track C: Gauge Orbit
+
+[EXACT_DERIVED]
+
+The tiling identities Gamma * P_s = I leave the matched faces gauge-invariant, but
+the cross-sections D_st rescale rowwise. Phase 33 therefore tested whether the
+resulting gauge orbits stay inside span(H).
+
+| decomposition | observed gauge-orbit dim | tangent escape from span(H)? | sampled finite escape? |
+|---------------|--------------------------|-------------------------------|------------------------|
+| alphatensor_rank23 | 28 | True | True |
+| standard_rank27 | 0 | False | False |
+
+### Track D: Khatri-Rao Absorption
+
+[EXACT_DERIVED] / [MEASURED_FROM_CODE]
+
+The mandatory Strassen 2x2 sanity check and the two known 3x3 decompositions were
+all tested for recovery from span([Sigma|H]).
+
+| system | all D_st in span(H)? | all D_st in span([Sigma|H])? |
+|--------|----------------------|------------------------------|
+| strassen_2x2 | True | True |
+| alphatensor_rank23 | True | True |
+| standard_rank27 | True | True |
+
+[INTERPRETATION]
+
+The positive result is decomposition-specific but strong: on both known exact 3x3
+decompositions, every individual dead cross-section block D_st is already exactly
+recoverable from H alone. The mandatory Strassen 2x2 sanity check also passes.
+
+The negative result is equally important: the tiling identities by themselves do
+not make the dead cross-sections gauge-rigid inside span(H). Phase 33 detects both
+tangent and finite gauge escapes, so Delta containment does not follow from gauge
+orbit rigidity under Gamma * P_s = I alone.
+
+So Phase 33 strengthens the coding-theory framing on the known decompositions while
+also isolating a concrete obstruction to a universal proof: the missing argument must
+use exact constraints beyond the matched-face tiling identities and their residual gauge freedom.
+
+## 71. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 

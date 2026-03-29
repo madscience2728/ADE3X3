@@ -36,6 +36,7 @@ PHASE29_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase29_smo
 PHASE30_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase30_budget_efficiency_sweep"
 PHASE31_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase31_feasibility_boundary"
 PHASE32_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase32_boundary_sharpening"
+PHASE33_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase33_27_symbol_faithful_encoding"
 
 def read_csv(filename):
     """Read CSV file from exports directory."""
@@ -125,6 +126,10 @@ def read_phase31_outputs():
 def read_phase32_outputs():
     """Read Phase 32 boundary-sharpening outputs."""
     return read_json_path(PHASE32_DIR / "boundary_sharpening_scan.json")
+
+def read_phase33_outputs():
+    """Read Phase 33 27-symbol faithful-encoding outputs."""
+    return read_json_path(PHASE33_DIR / "phase33_summary.json")
 
 def read_axxc_signature_layer(rep_config_ids):
     """Read the current AXXC arity-4 signature layer for selected reps.
@@ -573,7 +578,8 @@ def generate():
     w("plus non-rectangular 6-fiber sub-tensor rank attack (step 62),")
     w("and reverse engineering with cancellation visualization (step 63),")
     w("plus small-integer coefficient enumeration (step 64),")
-    w("and polyomino subtensor-rank / tiling analysis (step 65)")
+    w("and polyomino subtensor-rank / tiling analysis (step 65),")
+    w("and 27-symbol faithful encoding analysis (step 69 / Phase 33)")
     w()
     w("**IMPORTANT:** This document contains all computed results inline.")
     w("No external files are required. All research findings are here.")
@@ -4190,6 +4196,100 @@ def generate():
         w("So the feasibility-boundary effect is not weakening under refinement. It sharpens. The empirical separator now looks like a critical smoothness threshold with AlphaTensor and the standard algorithm in different phases.")
     else:
         w("*Run the Phase 32 scan to populate this section.*")
+
+    # ── PHASE 33 27-SYMBOL FAITHFUL ENCODING ──
+    w()
+    w("## 69. 27-SYMBOL FAITHFUL ENCODING ANALYSIS")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] (Phase 33)")
+    w()
+    w("Phase 33 tests whether the 27-symbol encoding {P_0, P_1, P_2} is faithful:")
+    w("whether the 54 dead-X coordinates are algebraically recoverable from the")
+    w("27 live coordinates plus the tiling constraint.")
+    w()
+    phase33 = read_phase33_outputs()
+    if phase33:
+        track_a = phase33.get('track_a', {})
+        track_b = phase33.get('track_b', {})
+        track_c = phase33.get('track_c', {})
+        track_d = phase33.get('track_d', {})
+        w("### Track A: 27-Symbol Encoding")
+        w()
+        w("[EXACT_DERIVED]")
+        w()
+        w("For the known 3x3 decompositions, each fixed cross-section block D_st was tested")
+        w("against span(H) with H = [K_0-K_1 | K_1-K_2].")
+        w()
+        w("| decomposition | R | rank(H) | all D_st in span(H)? | all D_st in span([Sigma|H])? |")
+        w("|---------------|---|---------|----------------------|------------------------------|")
+        for row in track_a.get('algorithms', []):
+            w(f"| {row.get('label')} | {row.get('R')} | {row.get('rank_H_exact')} | {row.get('all_cross_sections_in_H_exact')} | {row.get('all_cross_sections_in_SigmaH_exact')} |")
+        recovery_rows = track_a.get('recovery_rows', [])
+        if recovery_rows:
+            w()
+            w("| decomposition | block | rank(M_st) | nnz(M_st) | density | coeffs |")
+            w("|---------------|-------|------------|-----------|---------|--------|")
+            for row in recovery_rows:
+                density = row.get('M_h_density')
+                density_text = 'n/a' if density is None else f"{density:.4f}"
+                coeffs = ', '.join(row.get('M_h_unique_coefficients', [])) if row.get('M_h_unique_coefficients') else 'none'
+                w(f"| {row.get('label')} | {row.get('block')} | {row.get('M_h_rank')} | {row.get('M_h_nonzero')} | {density_text} | {coeffs} |")
+        w()
+        w("### Track B: Clone-Frame Saturation")
+        w()
+        w("[EXACT_DERIVED] / [WILDCARD]")
+        w()
+        w("All six channel-permuted clone frames were tested on the known 3x3 decompositions,")
+        w("and synthetic defective triples were then sampled inside ker(Gamma) to see whether")
+        w("factorized rank-1 faces can coexist with H-defect.")
+        w()
+        w("| decomposition | dim ker(Gamma) | identity rank(H) | all clone frames saturate? | wildcard defective factorized sample found? |")
+        w("|---------------|----------------|------------------|-----------------------------|-------------------------------------------|")
+        for row in track_b.get('algorithms', []):
+            w(f"| {row.get('label')} | {row.get('ker_Gamma_dim_exact')} | {row.get('identity_frame_rank_exact')} | {row.get('all_clone_frames_saturate')} | {row.get('factorized_defective_found')} |")
+        w()
+        w("### Track C: Gauge Orbit")
+        w()
+        w("[EXACT_DERIVED]")
+        w()
+        w("The tiling identities Gamma * P_s = I leave the matched faces gauge-invariant, but")
+        w("the cross-sections D_st rescale rowwise. Phase 33 therefore tested whether the")
+        w("resulting gauge orbits stay inside span(H).")
+        w()
+        w("| decomposition | observed gauge-orbit dim | tangent escape from span(H)? | sampled finite escape? |")
+        w("|---------------|--------------------------|-------------------------------|------------------------|")
+        for row in track_c.get('algorithms', []):
+            w(f"| {row.get('label')} | {row.get('combined_observed_gauge_orbit_dim')} | {row.get('tangent_escape_detected')} | {row.get('sampled_escape_detected')} |")
+        w()
+        w("### Track D: Khatri-Rao Absorption")
+        w()
+        w("[EXACT_DERIVED] / [MEASURED_FROM_CODE]")
+        w()
+        w("The mandatory Strassen 2x2 sanity check and the two known 3x3 decompositions were")
+        w("all tested for recovery from span([Sigma|H]).")
+        w()
+        w("| system | all D_st in span(H)? | all D_st in span([Sigma|H])? |")
+        w("|--------|----------------------|------------------------------|")
+        for row in track_d.get('algorithms', []):
+            w(f"| {row.get('label')} | {row.get('all_cross_sections_in_H_exact')} | {row.get('all_cross_sections_in_SigmaH_exact')} |")
+        w()
+        w("[INTERPRETATION]")
+        w()
+        w("The positive result is decomposition-specific but strong: on both known exact 3x3")
+        w("decompositions, every individual dead cross-section block D_st is already exactly")
+        w("recoverable from H alone. The mandatory Strassen 2x2 sanity check also passes.")
+        w()
+        w("The negative result is equally important: the tiling identities by themselves do")
+        w("not make the dead cross-sections gauge-rigid inside span(H). Phase 33 detects both")
+        w("tangent and finite gauge escapes, so Delta containment does not follow from gauge")
+        w("orbit rigidity under Gamma * P_s = I alone.")
+        w()
+        w("So Phase 33 strengthens the coding-theory framing on the known decompositions while")
+        w("also isolating a concrete obstruction to a universal proof: the missing argument must")
+        w("use exact constraints beyond the matched-face tiling identities and their residual gauge freedom.")
+    else:
+        w("*Run the Phase 33 script to populate this section.*")
 
     # ── OPEN FRONTS ──
     w()
