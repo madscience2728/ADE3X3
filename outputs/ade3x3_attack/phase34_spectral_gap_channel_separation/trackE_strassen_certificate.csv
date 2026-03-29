@@ -1,0 +1,2 @@
+basis_gram_literal,leading_principal_minors,spectrum_exact,spectrum_approx,min_positive_eigenvalue_exact,min_positive_eigenvalue_approx
+"[[6, -2, 2], [-2, 6, -2], [2, -2, 26]]","['6', '32', '800']",2 x 2; 10 x 1,2.000000000000 x 2; 10.000000000000 x 1,2,2.000000000000

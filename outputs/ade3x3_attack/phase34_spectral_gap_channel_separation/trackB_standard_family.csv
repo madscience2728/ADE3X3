@@ -1,0 +1,4 @@
+family,pair_representative,pair_spectrum_formula,pair_min_positive_eigenvalue,total_spectrum_formula,total_min_positive_eigenvalue,R,ker_gamma_dim
+standard_2x2,01,2 x 4,2,2 x 4,2,8,4
+standard_3x3,01,0 x 9; 2 x 9,2,3 x 18,3,27,18
+standard_4x4,01,0 x 32; 2 x 16,2,4 x 48,4,64,48

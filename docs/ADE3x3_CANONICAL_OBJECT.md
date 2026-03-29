@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-29 17:04:06
+Generated: 2026-03-29 17:17:38
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-29 17:04:06
+**Generated:** 2026-03-29 17:17:38
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -44,6 +44,7 @@ and polyomino subtensor-rank / tiling analysis (step 65),
 and 27-symbol faithful encoding analysis (step 69 / Phase 33)
 and 27-symbol live alphabet infrastructure (step 70 / Phase 33b)
 and hand derivation of conservation constant and defect condition (step 71 / Phase 33 hand derivation)
+and spectral gap of channel-separation quadratic form (step 72 / Phase 34)
 
 **IMPORTANT:** This document contains all computed results inline.
 No external files are required. All research findings are here.
@@ -15204,7 +15205,83 @@ best formulation is spectral: prove the channel-separation quadratic form on
 ker(Gamma) has a strictly positive minimum on the multiplication variety. That
 is the Phase 34 target.
 
-## 73. CURRENT GAPS / OPEN FRONTS
+## 72. SPECTRAL GAP OF CHANNEL-SEPARATION QUADRATIC FORM
+
+[EXACT_DERIVED] / [MEASURED_FROM_CODE] (Phase 34)
+
+Phase 34 reformulates the defect target as a single quadratic-form question on
+ker(Gamma). Let
+
+  Q_chan(w) = sum_{s<t} ||W_s - W_t||_F^2
+
+where W_s = sum_k w_k (alpha_k[:,s] otimes beta_k[s,:]).
+Then the exact defect condition W_0 = W_1 = ... = W_{n-1} for nonzero w in ker(Gamma)
+is equivalent to Q_chan vanishing on ker(Gamma). So a positive minimum eigenvalue of
+Q_chan|ker(Gamma) is the exact spectral-gap obstruction.
+
+### Total Channel-Separation Spectrum on Known Exact Decompositions
+
+| decomposition | dim ker(Gamma) | nullity of Q_chan on ker(Gamma) | exact gap | numerical gap | exact spectrum type |
+|---------------|----------------|--------------------------------|-----------|---------------|---------------------|
+| alphatensor_rank23 | 14 | 0 | root of lambda**14 - 124*lambda**13 + 6582*lambda**12 - 197458*lambda**11 + 3731176*lambda**10 - 46947434*lambda**9 + 405911585*lambda**8 - 2453232462*lambda**7 + 10430747671*lambda**6 - 31089865444*lambda**5 + 63998400093*lambda**4 - 88241687082*lambda**3 + 76999874076*lambda**2 - 38032056360*lambda + 8023617000 | 0.834405031117 | exact algebraic |
+| standard_rank27 | 18 | 0 | 3 | 3.000000000000 | exact rational |
+| strassen_2x2 | 3 | 0 | 2 | 2.000000000000 | exact rational |
+
+All three known exact decompositions have nullity 0 for Q_chan on ker(Gamma).
+So the exact channel-equality defect is absent on AlphaTensor rank 23, the
+standard 3x3 algorithm, and Strassen 2x2.
+
+For AlphaTensor the exact spectrum is algebraic rather than rational in the
+basis-independent generalized-eigenvalue sense. The smallest positive root is
+approximately 0.834405031117, so the total
+channel-separation form still has a clean positive gap.
+
+### Standard-Family Pattern
+
+For the standard n x n algorithm, ker(Gamma) splits into n^2 independent output-fiber
+hyperplanes. On each such fiber, every pair form Q_st has spectrum {2,0,...,0}, while
+the total form satisfies Q_chan = n * I on the zero-sum hyperplane.
+
+| family | pair spectrum | pair gap | total spectrum | total gap |
+|--------|---------------|----------|----------------|-----------|
+| standard_2x2 | 2 x 4 | 2 | 2 x 4 | 2 |
+| standard_3x3 | 0 x 9; 2 x 9 | 2 | 3 x 18 | 3 |
+| standard_4x4 | 0 x 32; 2 x 16 | 2 | 4 x 48 | 4 |
+
+So the standard family has a completely rigid spectral pattern: pair gaps stay fixed at 2,
+and the total channel-separation gap is exactly n.
+
+### Intersection Structure
+
+AlphaTensor still has large single-pair nullspaces inside ker(Gamma):
+01 gives dimension 8, 02 gives 5, and 12 gives 6. But every pairwise and triple
+intersection is already 0, so no nonzero kernel vector survives all channel-equality
+constraints at once.
+
+The standard 3x3 algorithm shows the same qualitative pattern in a cleaner form:
+each single pair has nullity 9 on ker(Gamma), but every two-pair and three-pair
+intersection is 0. So the obstruction is genuinely collective rather than visible
+from one pair equation alone.
+
+### Strassen 2x2 Certificate
+
+On Strassen there is only one channel pair, so Q_chan = Q_01.
+In the exact kernel basis used by Phase 34, the basis Gram is [[6, -2, 2], [-2, 6, -2], [2, -2, 26]].
+Its leading principal minors are 6, 32, 800,
+all strictly positive. Hence the basis Gram is positive definite, so
+Q_chan(w) > 0 for every nonzero w in ker(Gamma).
+
+The resulting generalized spectrum is 2 x 2; 10 x 1,
+with exact gap 2.
+
+### Status
+
+The channel-separation obstruction is now explicit and exact. The next theorem target
+is no longer to guess a per-term identity. It is to prove that the minimum eigenvalue
+of Q_chan|ker(Gamma) stays uniformly positive over the admissible low-rank multiplication
+variety, or else to identify the geometric degeneration where that spectral gap can close.
+
+## 74. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
@@ -15256,6 +15333,7 @@ is the Phase 34 target.
 - Boundary sharpening: ✓ Phase 32 densifies the cap grid and strengthens the frontier gap: AlphaTensor is already feasible at 2 degrees across the scanned budgets, while the standard algorithm still requires 12 degrees
 - Small-integer coefficient enumeration: ✓ the exact ternary profile pool has been counted modulo sign and symmetry (96,845,281 raw distinct profiles; 570,521 symmetry orbits), the top usefulness profiles have been ranked, and collapsed/full-tensor greedy diagnostics show that collapsed matching is vacuous while corrected 2x2 full-tensor greedy does not recover Strassen through rank 7
 - Polyomino subtensor-rank + tiling analysis: ✓ the full connected-polyomino rank table is now audited cleanly, the priority L-tromino class is verified at numerical rank 9, all four previously unresolved tetromino classes are verified at numerical rank 12, the corrected best flat exact-cover cost is 26 with no verified flat tiling at cost 24 or below, and the Step 51/52 layer split of the public rank-23 algorithm is exported with nuisance rank 14, 3 dead-X-dominant corrector terms, and no signal-dominant terms
+- Spectral gap of the channel-separation quadratic form: ✓ Phase 34 converts the exact defect condition into positivity of Q_chan on ker(Gamma), verifies nullity 0 on AlphaTensor rank 23 / standard 3x3 / Strassen 2x2, proves the standard-family pattern pair gap = 2 and total gap = n, and records a positive-definite Strassen certificate via exact leading principal minors
 
 **Remaining open fronts:**
 - Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored

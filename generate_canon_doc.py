@@ -38,6 +38,7 @@ PHASE31_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase31_fea
 PHASE32_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase32_boundary_sharpening"
 PHASE33_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase33_27_symbol_faithful_encoding"
 PHASE33B_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase33b_27_symbol_live_alphabet"
+PHASE34_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase34_spectral_gap_channel_separation"
 
 def read_csv(filename):
     """Read CSV file from exports directory."""
@@ -135,6 +136,10 @@ def read_phase33_outputs():
 def read_phase33b_outputs():
     """Read Phase 33b 27-symbol live-alphabet outputs."""
     return read_json_path(PHASE33B_DIR / "phase33b_summary.json")
+
+def read_phase34_outputs():
+    """Read Phase 34 spectral-gap outputs."""
+    return read_json_path(PHASE34_DIR / "phase34_summary.json")
 
 def read_axxc_signature_layer(rep_config_ids):
     """Read the current AXXC arity-4 signature layer for selected reps.
@@ -587,6 +592,7 @@ def generate():
     w("and 27-symbol faithful encoding analysis (step 69 / Phase 33)")
     w("and 27-symbol live alphabet infrastructure (step 70 / Phase 33b)")
     w("and hand derivation of conservation constant and defect condition (step 71 / Phase 33 hand derivation)")
+    w("and spectral gap of channel-separation quadratic form (step 72 / Phase 34)")
     w()
     w("**IMPORTANT:** This document contains all computed results inline.")
     w("No external files are required. All research findings are here.")
@@ -4487,6 +4493,113 @@ def generate():
     else:
         w("*Run the Phase 33b script to populate this section.*")
 
+    # ── PHASE 34 SPECTRAL GAP ──
+    w()
+    w("## 72. SPECTRAL GAP OF CHANNEL-SEPARATION QUADRATIC FORM")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] / [MEASURED_FROM_CODE] (Phase 34)")
+    w()
+    w("Phase 34 reformulates the defect target as a single quadratic-form question on")
+    w("ker(Gamma). Let")
+    w()
+    w("  Q_chan(w) = sum_{s<t} ||W_s - W_t||_F^2")
+    w()
+    w("where W_s = sum_k w_k (alpha_k[:,s] otimes beta_k[s,:]).")
+    w("Then the exact defect condition W_0 = W_1 = ... = W_{n-1} for nonzero w in ker(Gamma)")
+    w("is equivalent to Q_chan vanishing on ker(Gamma). So a positive minimum eigenvalue of")
+    w("Q_chan|ker(Gamma) is the exact spectral-gap obstruction.")
+    w()
+    phase34 = read_phase34_outputs()
+    if phase34:
+        total_rows = phase34.get('trackA', {}).get('total_rows', [])
+        standard_rows = phase34.get('trackB', {}).get('standard_family_rows', [])
+        intersection_rows = phase34.get('trackD', {}).get('intersection_rows', [])
+        strassen_cert = phase34.get('trackE', {})
+        total_by_label = {row.get('label'): row for row in total_rows}
+
+        w("### Total Channel-Separation Spectrum on Known Exact Decompositions")
+        w()
+        w("| decomposition | dim ker(Gamma) | nullity of Q_chan on ker(Gamma) | exact gap | numerical gap | exact spectrum type |")
+        w("|---------------|----------------|--------------------------------|-----------|---------------|---------------------|")
+        for label in ('alphatensor_rank23', 'standard_rank27', 'strassen_2x2'):
+            row = total_by_label.get(label, {})
+            spectrum_exact = str(row.get('spectrum_exact', ''))
+            spectrum_type = 'exact algebraic' if spectrum_exact.startswith('roots of ') else 'exact rational'
+            w(
+                f"| {label} | {row.get('ker_gamma_dim')} | {row.get('nullity_on_ker_gamma')} | "
+                f"{row.get('min_positive_eigenvalue_exact')} | {row.get('min_positive_eigenvalue_approx')} | {spectrum_type} |"
+            )
+        w()
+        w("All three known exact decompositions have nullity 0 for Q_chan on ker(Gamma).")
+        w("So the exact channel-equality defect is absent on AlphaTensor rank 23, the")
+        w("standard 3x3 algorithm, and Strassen 2x2.")
+        w()
+        alpha_row = total_by_label.get('alphatensor_rank23', {})
+        if alpha_row:
+            w("For AlphaTensor the exact spectrum is algebraic rather than rational in the")
+            w("basis-independent generalized-eigenvalue sense. The smallest positive root is")
+            w(f"approximately {alpha_row.get('min_positive_eigenvalue_approx')}, so the total")
+            w("channel-separation form still has a clean positive gap.")
+            w()
+
+        w("### Standard-Family Pattern")
+        w()
+        w("For the standard n x n algorithm, ker(Gamma) splits into n^2 independent output-fiber")
+        w("hyperplanes. On each such fiber, every pair form Q_st has spectrum {2,0,...,0}, while")
+        w("the total form satisfies Q_chan = n * I on the zero-sum hyperplane.")
+        w()
+        w("| family | pair spectrum | pair gap | total spectrum | total gap |")
+        w("|--------|---------------|----------|----------------|-----------|")
+        for row in standard_rows:
+            w(
+                f"| {row.get('family')} | {row.get('pair_spectrum_formula')} | "
+                f"{row.get('pair_min_positive_eigenvalue')} | {row.get('total_spectrum_formula')} | "
+                f"{row.get('total_min_positive_eigenvalue')} |"
+            )
+        w()
+        w("So the standard family has a completely rigid spectral pattern: pair gaps stay fixed at 2,")
+        w("and the total channel-separation gap is exactly n.")
+        w()
+
+        w("### Intersection Structure")
+        w()
+        alpha_intersections = [row for row in intersection_rows if row.get('label') == 'alphatensor_rank23']
+        standard_intersections = [row for row in intersection_rows if row.get('label') == 'standard_rank27']
+        if alpha_intersections and standard_intersections:
+            w("AlphaTensor still has large single-pair nullspaces inside ker(Gamma):")
+            w("01 gives dimension 8, 02 gives 5, and 12 gives 6. But every pairwise and triple")
+            w("intersection is already 0, so no nonzero kernel vector survives all channel-equality")
+            w("constraints at once.")
+            w()
+            w("The standard 3x3 algorithm shows the same qualitative pattern in a cleaner form:")
+            w("each single pair has nullity 9 on ker(Gamma), but every two-pair and three-pair")
+            w("intersection is 0. So the obstruction is genuinely collective rather than visible")
+            w("from one pair equation alone.")
+            w()
+
+        w("### Strassen 2x2 Certificate")
+        w()
+        if strassen_cert:
+            w("On Strassen there is only one channel pair, so Q_chan = Q_01.")
+            w(f"In the exact kernel basis used by Phase 34, the basis Gram is {strassen_cert.get('basis_gram_literal')}.")
+            w(f"Its leading principal minors are {', '.join(strassen_cert.get('leading_principal_minors', []))},")
+            w("all strictly positive. Hence the basis Gram is positive definite, so")
+            w("Q_chan(w) > 0 for every nonzero w in ker(Gamma).")
+            w()
+            w(f"The resulting generalized spectrum is {strassen_cert.get('spectrum_exact')},")
+            w(f"with exact gap {strassen_cert.get('min_positive_eigenvalue_exact')}.")
+            w()
+
+        w("### Status")
+        w()
+        w("The channel-separation obstruction is now explicit and exact. The next theorem target")
+        w("is no longer to guess a per-term identity. It is to prove that the minimum eigenvalue")
+        w("of Q_chan|ker(Gamma) stays uniformly positive over the admissible low-rank multiplication")
+        w("variety, or else to identify the geometric degeneration where that spectral gap can close.")
+    else:
+        w("*Run the Phase 34 script to populate this section.*")
+
     # ── OPEN FRONTS ──
     w()
     w(f"## {section_num}. CURRENT GAPS / OPEN FRONTS")
@@ -4542,6 +4655,7 @@ def generate():
     w("- Boundary sharpening: ✓ Phase 32 densifies the cap grid and strengthens the frontier gap: AlphaTensor is already feasible at 2 degrees across the scanned budgets, while the standard algorithm still requires 12 degrees")
     w("- Small-integer coefficient enumeration: ✓ the exact ternary profile pool has been counted modulo sign and symmetry (96,845,281 raw distinct profiles; 570,521 symmetry orbits), the top usefulness profiles have been ranked, and collapsed/full-tensor greedy diagnostics show that collapsed matching is vacuous while corrected 2x2 full-tensor greedy does not recover Strassen through rank 7")
     w("- Polyomino subtensor-rank + tiling analysis: ✓ the full connected-polyomino rank table is now audited cleanly, the priority L-tromino class is verified at numerical rank 9, all four previously unresolved tetromino classes are verified at numerical rank 12, the corrected best flat exact-cover cost is 26 with no verified flat tiling at cost 24 or below, and the Step 51/52 layer split of the public rank-23 algorithm is exported with nuisance rank 14, 3 dead-X-dominant corrector terms, and no signal-dominant terms")
+    w("- Spectral gap of the channel-separation quadratic form: ✓ Phase 34 converts the exact defect condition into positivity of Q_chan on ker(Gamma), verifies nullity 0 on AlphaTensor rank 23 / standard 3x3 / Strassen 2x2, proves the standard-family pattern pair gap = 2 and total gap = n, and records a positive-definite Strassen certificate via exact leading principal minors")
     w()
     w("**Remaining open fronts:**")
     w("- Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored")

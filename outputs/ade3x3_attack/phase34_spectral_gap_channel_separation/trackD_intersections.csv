@@ -1,0 +1,16 @@
+label,pair_subset,intersection_dim
+alphatensor_rank23,01,8
+alphatensor_rank23,02,5
+alphatensor_rank23,12,6
+alphatensor_rank23,"01,02",0
+alphatensor_rank23,"01,12",0
+alphatensor_rank23,"02,12",0
+alphatensor_rank23,"01,02,12",0
+standard_rank27,01,9
+standard_rank27,02,9
+standard_rank27,12,9
+standard_rank27,"01,02",0
+standard_rank27,"01,12",0
+standard_rank27,"02,12",0
+standard_rank27,"01,02,12",0
+strassen_2x2,01,0
