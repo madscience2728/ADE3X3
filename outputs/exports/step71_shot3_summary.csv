@@ -1,0 +1,6 @@
+summary_name,summary_value,provenance,note
+shot3_commutator_flattening_lb,8,EXACT_DERIVED,Flattening lower bound for the 3x3 commutator tensor.
+shot3_anticommutator_flattening_lb,9,EXACT_DERIVED,Flattening lower bound for the 3x3 anticommutator tensor.
+shot3_commutator_first_exact_rank_in_scan,none,MEASURED_FROM_CODE,"First exact rank hit, if any, in the requested numeric scan."
+shot3_anticommutator_first_exact_rank_in_scan,none,MEASURED_FROM_CODE,"First exact rank hit, if any, in the requested numeric scan."
+shot3_shared_term_status,not_triggered,MEASURED_FROM_CODE,Whether the shared-term follow-up was triggered.

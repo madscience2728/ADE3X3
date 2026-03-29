@@ -533,8 +533,8 @@ def build_commutator_tensors() -> tuple[np.ndarray, np.ndarray]:
 
 def best_exact_rank(rows: list[dict]) -> str:
     for row in rows:
-        if float(row['best_loss_overall']) <= EXACT_TOL:
-            return str(row['rank'])
+        if float(row['best_verified_loss']) <= EXACT_TOL:
+            return str(row['rank_tested'])
     return 'none'
 
 

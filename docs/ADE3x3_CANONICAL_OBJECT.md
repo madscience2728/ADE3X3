@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-28 19:40:17
+Generated: 2026-03-28 20:02:58
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-28 19:40:17
+**Generated:** 2026-03-28 20:02:58
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -14518,6 +14518,14 @@ The AlphaTensor pair-ratio scan also does not reveal an obvious depth-2 collapse
 term pairs, 191 are support-disjoint, 59 are merely constant multiples on their common support, and only 3 have nonconstant overlap; the largest constant-overlap support size is 10 entries.
 For the obvious 2x2 Strassen split, the retained-vs-missing pair scan records 7 structured overlaps, but these are only local common-support coincidences, not a certified 6-multiplication depth-2 replacement for Strassen.
 The literature pass recovers Pan's asymptotic trilinear-aggregation line but not a ready-to-instantiate small 3x3 circuit: Fetched public summaries confirm Pan's 1978 aggregating/uniting/canceling line and his 1982 practical subcubic algorithm, but they did not provide an explicit small-3x3 depth-2 circuit or concrete multiplication count that could be instantiated directly in ADE3x3.
+Step 71 then took five local shots at the public rank-23 wall: slotwise replacement, exact pair
+merging, commutator/anticommutator decomposition, the three Step 70 nonconstant-overlap pairs,
+and a random neighborhood search around the AlphaTensor term set.
+The replacement shot stayed negative on the explicit in-repo pool: with 5123 candidates (the 23 AlphaTensor profiles, the Step 64 top-100 shortlist, and 5000 random ternary profiles), there were 0 exact replacements across 0/23 removal slots. The requested full Step 64 orbit-wide scan could not be run literally because the repository exports the exact 570,521 orbit count but not a materialized representative table.
+The pair-merge shot also stayed negative: exact mergeable pairs = 0. The sharpest near-hit is t03,t06: its combined 9x81 flattening has rank 1 with zero tail error, but the induced 9x9 bilinear profile still has rank 2, so it is not a genuine single-term merge.
+The commutator shot remains suggestive but unresolved numerically. The flattening lower bounds stay at (8, 9) for commutator and anticommutator, but the requested 200-restart scans found no exact witness through rank 20 for either tensor, so no shared-term follow-up was triggered; the first exact ranks in scan are (none, none).
+The three nonconstant-overlap pairs from Step 70 also stayed negative under direct inspection: all 3 were analyzed, and near-merge pairs below 1e-6 = 0.
+The local-neighborhood shot was equally negative. In a 123-term pool built from all 23 AlphaTensor terms plus 100 random ternary additions, 10,000 random subsets were tested at each of R=20,21,22; none were feasible, the best quotient gain observed was 2, and the full-729 greedy trace stalled at rank 22 with residual norm^2 4.592750829698e+00. So Step 71 produces no verified route below 23; random-neighborhood R<23 feasible subset = False.
 This remains structurally informative but must not be overinterpreted: it is only a
 polyomino-subtensor upper bound assembled from separate restricted problems. It does not yet
 certify any global rank-26 or better matrix multiplication algorithm, because the
@@ -14583,7 +14591,7 @@ piecewise decompositions are not forced to coexist without cross-piece interfere
 - Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining open problem is to prove a decomposition-independent nuisance lower bound rather than only measure it on known examples
 - Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity
 - Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit
-- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, and Step 70's first concrete depth-2 audit still leaves the recursive padded-Strassen route at 31 leaf multiplications with no pair-ratio evidence of an immediate AlphaTensor term-factor collapse below rank 23
+- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, Step 70's first concrete depth-2 audit still leaves the recursive padded-Strassen route at 31 leaf multiplications with no pair-ratio evidence of an immediate AlphaTensor term-factor collapse below rank 23, and Step 71's five local perturbation/merge/neighborhood shots found 0 exact slot replacements in a 5123-profile explicit pool, 0 exact pair merges, no exact commutator or anticommutator witness through rank 20, and no random-neighborhood feasible subset at R<=22 in a 123-term local pool
 - The toroidal extension confirms that L-trominoes can occur in wrapped tilings even though the flat board cannot be tiled by three L-trominoes; the remaining question is whether wrapped shapes or cross-piece sharing can lower the current exported toroidal cost 27
 - Step 53 shows that support-only representative incidence is also vacuous; any sharper universal
   theorem must use coefficient identities or subspace geometry, not only index-support patterns

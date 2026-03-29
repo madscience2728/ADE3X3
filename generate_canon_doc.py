@@ -371,6 +371,14 @@ def read_step70_outputs():
     literature_rows = read_csv("step70_literature_status.csv")
     return summary_rows, outer_rows, alpha_pair_rows, strassen_pair_rows, literature_rows
 
+def read_step71_outputs():
+    """Read Step 71 five-shot exports, if present."""
+    summary_rows = read_csv("step71_summary.csv")
+    shot2_rows = read_csv("step71_shot2_pair_merge_scan.csv")
+    shot4_rows = read_csv("step71_shot4_overlap_pairs.csv")
+    shot5_rows = read_csv("step71_shot5_random_subset_scan.csv")
+    return summary_rows, shot2_rows, shot4_rows, shot5_rows
+
 def generate_x_atoms():
     """Generate all 81 X atoms with live/dead status and target."""
     # Try to read from export first
@@ -3148,10 +3156,17 @@ def generate():
         step70_strassen_pair_rows,
         step70_literature_rows,
     ) = read_step70_outputs()
+    (
+        step71_summary_rows,
+        step71_shot2_rows,
+        step71_shot4_rows,
+        step71_shot5_rows,
+    ) = read_step71_outputs()
     step67_summary = {row['summary_name']: row for row in step67_summary_rows}
     step68_fourier_summary = {row['summary_name']: row for row in step68_fourier_summary_rows}
     step69_summary = {row['summary_name']: row for row in step69_summary_rows}
     step70_summary = {row['summary_name']: row for row in step70_summary_rows}
+    step71_summary = {row['summary_name']: row for row in step71_summary_rows}
     if sum65_rows:
         sum65 = {row['summary_name']: row for row in sum65_rows}
         l65_rows = [row for row in rank65_rows if row['family'] == 'L_tromino']
@@ -3336,6 +3351,32 @@ def generate():
             w(f"term pairs, {alpha_disjoint} are support-disjoint, {alpha_constant} are merely constant multiples on their common support, and only {alpha_unstructured} have nonconstant overlap; the largest constant-overlap support size is {big_overlap} entries.")
             w(f"For the obvious 2x2 Strassen split, the retained-vs-missing pair scan records {strassen_structured} structured overlaps, but these are only local common-support coincidences, not a certified 6-multiplication depth-2 replacement for Strassen.")
             w(f"The literature pass recovers Pan's asymptotic trilinear-aggregation line but not a ready-to-instantiate small 3x3 circuit: {lit_detail}")
+        if step71_summary_rows:
+            shot1_pool = step71_summary['shot1_pool_size']['summary_value']
+            shot1_replacements = step71_summary['shot1_total_valid_replacements']['summary_value']
+            shot1_slots = step71_summary['shot1_slots_with_any_replacement']['summary_value']
+            shot2_merges = step71_summary['shot2_exact_mergeable_pair_count']['summary_value']
+            shot2_best_pair = step71_summary['shot2_best_near_merge_pair']['summary_value']
+            shot3_comm = step71_summary['shot3_commutator_first_exact_rank_in_scan']['summary_value']
+            shot3_anti = step71_summary['shot3_anticommutator_first_exact_rank_in_scan']['summary_value']
+            shot3_comm_lb = step71_summary['shot3_commutator_flattening_lb']['summary_value']
+            shot3_anti_lb = step71_summary['shot3_anticommutator_flattening_lb']['summary_value']
+            shot4_near = step71_summary['shot4_near_merge_pairs_below_1e-6']['summary_value']
+            shot5_found = step71_summary['shot5_found_feasible_subset_below_23']['summary_value']
+            shot5_best_gain = max((int(row['best_quotient_gain']) for row in step71_shot5_rows), default=0)
+            shot5_greedy_residual = step71_summary['shot5_greedy_final_residual_norm_squared']['summary_value']
+            shot2_t03_t06 = next((row for row in step71_shot2_rows if row['term_i'] == 't03' and row['term_j'] == 't06'), None)
+            bilinear_rank_note = ''
+            if shot2_t03_t06:
+                bilinear_rank_note = f" The sharpest near-hit is {shot2_best_pair}: its combined 9x81 flattening has rank 1 with zero tail error, but the induced 9x9 bilinear profile still has rank {shot2_t03_t06['best_profile_bilinear_rank']}, so it is not a genuine single-term merge."
+            w("Step 71 then took five local shots at the public rank-23 wall: slotwise replacement, exact pair")
+            w("merging, commutator/anticommutator decomposition, the three Step 70 nonconstant-overlap pairs,")
+            w("and a random neighborhood search around the AlphaTensor term set.")
+            w(f"The replacement shot stayed negative on the explicit in-repo pool: with {shot1_pool} candidates (the 23 AlphaTensor profiles, the Step 64 top-100 shortlist, and 5000 random ternary profiles), there were {shot1_replacements} exact replacements across {shot1_slots}/23 removal slots. The requested full Step 64 orbit-wide scan could not be run literally because the repository exports the exact 570,521 orbit count but not a materialized representative table.")
+            w(f"The pair-merge shot also stayed negative: exact mergeable pairs = {shot2_merges}.{bilinear_rank_note}")
+            w(f"The commutator shot remains suggestive but unresolved numerically. The flattening lower bounds stay at ({shot3_comm_lb}, {shot3_anti_lb}) for commutator and anticommutator, but the requested 200-restart scans found no exact witness through rank 20 for either tensor, so no shared-term follow-up was triggered; the first exact ranks in scan are ({shot3_comm}, {shot3_anti}).")
+            w(f"The three nonconstant-overlap pairs from Step 70 also stayed negative under direct inspection: all 3 were analyzed, and near-merge pairs below 1e-6 = {shot4_near}.")
+            w(f"The local-neighborhood shot was equally negative. In a 123-term pool built from all 23 AlphaTensor terms plus 100 random ternary additions, 10,000 random subsets were tested at each of R=20,21,22; none were feasible, the best quotient gain observed was {shot5_best_gain}, and the full-729 greedy trace stalled at rank 22 with residual norm^2 {shot5_greedy_residual}. So Step 71 produces no verified route below 23; random-neighborhood R<23 feasible subset = {shot5_found}.")
     elif step66_audits:
         w("Step 66 changes the tetromino story materially. Fresh independent parallel rescans show that the")
         w("audited S/Z and L tetromino classes used in the former candidate low-cost tilings are both rank 12,")
@@ -3415,7 +3456,7 @@ def generate():
     w("- Step 52 gives a per-algorithm quotient-rank bound R >= 9 + rank(Nuisance); the remaining open problem is to prove a decomposition-independent nuisance lower bound rather than only measure it on known examples")
     w("- Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity")
     w("- Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit")
-    w("- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, and Step 70's first concrete depth-2 audit still leaves the recursive padded-Strassen route at 31 leaf multiplications with no pair-ratio evidence of an immediate AlphaTensor term-factor collapse below rank 23")
+    w("- Step 65's polyomino optimum is only a restricted-subtensor tiling upper bound, not a verified global algorithm; after the completed Step 67 audit the formerly claimed 21-cost tetromino route is dead, Step 68's first Fourier-encoded correction-layer steering attempt leaves the canonical and phase-j=1 dead residuals on three exact-rank-9 modes with component-sum upper bound 27, Step 69 sharpens the AlphaTensor interlocking picture to three rank-8 dead-mode subspaces with 6-dimensional triple overlap and union dimension 10 in term space, Step 70's first concrete depth-2 audit still leaves the recursive padded-Strassen route at 31 leaf multiplications with no pair-ratio evidence of an immediate AlphaTensor term-factor collapse below rank 23, and Step 71's five local perturbation/merge/neighborhood shots found 0 exact slot replacements in a 5123-profile explicit pool, 0 exact pair merges, no exact commutator or anticommutator witness through rank 20, and no random-neighborhood feasible subset at R<=22 in a 123-term local pool")
     w("- The toroidal extension confirms that L-trominoes can occur in wrapped tilings even though the flat board cannot be tiled by three L-trominoes; the remaining question is whether wrapped shapes or cross-piece sharing can lower the current exported toroidal cost 27")
     w("- Step 53 shows that support-only representative incidence is also vacuous; any sharper universal")
     w("  theorem must use coefficient identities or subspace geometry, not only index-support patterns")

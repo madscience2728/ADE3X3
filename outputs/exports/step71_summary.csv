@@ -1,0 +1,21 @@
+summary_name,summary_value,provenance,note
+shot1_pool_size,5123,MEASURED_FROM_CODE,Explicit local replacement pool size used for Step 71 Shot 1.
+shot1_total_valid_replacements,0,MEASURED_FROM_CODE,Total exact slot replacements found across all 23 removal slots.
+shot1_slots_with_any_replacement,0,MEASURED_FROM_CODE,How many of the 23 removal slots admit at least one exact replacement in the scanned pool.
+shot1_orbit_scan_status,full_step64_orbit_table_not_materialized_in_repo,EXACT_DERIVED,Step 64 exports the exact symmetry-orbit count but not a materialized 570521-orbit representative table. Shot 1 scanned the explicit AlphaTensor+Step64-top100 pool plus 5000 unique random ternary profiles instead of the unattached full orbit table.
+shot2_exact_mergeable_pair_count,0,MEASURED_FROM_CODE,Exact term pairs whose combined contribution is a single rank-1 tensor and verifies a 22-term algorithm.
+shot2_best_near_merge_pair,"t03,t06",MEASURED_FROM_CODE,Pair with smallest rank-1 approximation error in the output-vs-profile flattening.
+shot2_best_near_merge_error_squared,0.000000000000e+00,MEASURED_FROM_CODE,Best Frobenius squared tail after the leading singular value.
+shot3_commutator_flattening_lb,8,EXACT_DERIVED,Flattening lower bound for the 3x3 commutator tensor.
+shot3_anticommutator_flattening_lb,9,EXACT_DERIVED,Flattening lower bound for the 3x3 anticommutator tensor.
+shot3_commutator_first_exact_rank_in_scan,none,MEASURED_FROM_CODE,"First exact rank hit, if any, in the requested numeric scan."
+shot3_anticommutator_first_exact_rank_in_scan,none,MEASURED_FROM_CODE,"First exact rank hit, if any, in the requested numeric scan."
+shot3_shared_term_status,not_triggered,MEASURED_FROM_CODE,Whether the shared-term follow-up was triggered.
+shot4_nonconstant_overlap_pair_count,3,EXACT_DERIVED,Count inherited from the Step 70 pair-ratio table.
+shot4_near_merge_pairs_below_1e-6,0,MEASURED_FROM_CODE,Pairs whose Shot 2 merge error falls below 1e-6.
+shot5_pool_size,123,MEASURED_FROM_CODE,Pool size for the random-neighborhood subset and greedy search.
+shot5_found_feasible_subset_below_23,False,MEASURED_FROM_CODE,"Whether random subset search found a feasible R=20,21, or 22 subset."
+shot5_greedy_final_rank,22,MEASURED_FROM_CODE,Final rank reached by the full-729 greedy on the local pool.
+shot5_greedy_final_residual_norm_squared,4.592750829698e+00,MEASURED_FROM_CODE,Best residual achieved by the greedy trace.
+step71_major_result_flag,False,MEASURED_FROM_CODE,Immediate stop flag requested by the user if any verified R < 23 witness appears.
+step71_runtime_seconds,360.000,MEASURED_FROM_CODE,Recovered from the completed Step 71 terminal run log.

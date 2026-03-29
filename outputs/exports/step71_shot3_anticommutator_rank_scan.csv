@@ -1,0 +1,14 @@
+piece_id,rank_tested,restarts,best_verified_loss,best_max_abs_residual,exact_hit_count,verified_exact,exact_rank_upper_bound,provenance
+step71_anticommutator_3x3,8,200,2.8170000000000002e+01,,0,False,,MEASURED_FROM_CODE
+step71_anticommutator_3x3,9,200,2.3850000000000001e+01,,0,False,,MEASURED_FROM_CODE
+step71_anticommutator_3x3,10,200,1.9270000000000000e+01,,0,False,,MEASURED_FROM_CODE
+step71_anticommutator_3x3,11,200,1.6270000000000000e+01,,0,False,,MEASURED_FROM_CODE
+step71_anticommutator_3x3,12,200,1.3960000000000001e+01,,0,False,,MEASURED_FROM_CODE
+step71_anticommutator_3x3,13,200,1.1090000000000000e+01,,0,False,,MEASURED_FROM_CODE
+step71_anticommutator_3x3,14,200,8.1419999999999995e+00,,0,False,,MEASURED_FROM_CODE
+step71_anticommutator_3x3,15,200,6.0529999999999999e+00,,0,False,,MEASURED_FROM_CODE
+step71_anticommutator_3x3,16,200,3.0699999999999998e+00,,0,False,,MEASURED_FROM_CODE
+step71_anticommutator_3x3,17,200,1.4449999999999999e-01,,0,False,,MEASURED_FROM_CODE
+step71_anticommutator_3x3,18,200,4.8439999999999997e-02,,0,False,,MEASURED_FROM_CODE
+step71_anticommutator_3x3,19,200,1.5440000000000001e-07,,0,False,,MEASURED_FROM_CODE
+step71_anticommutator_3x3,20,200,2.0970000000000001e-07,,0,False,,MEASURED_FROM_CODE
