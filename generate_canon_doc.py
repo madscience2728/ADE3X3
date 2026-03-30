@@ -15,7 +15,7 @@ import csv
 import json
 from datetime import datetime
 from pathlib import Path
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 # Paths
 EXPORTS_DIR = Path(__file__).parent / "outputs" / "exports"
@@ -168,6 +168,22 @@ def read_step79_outputs():
     summary_rows = read_csv("step79_basis_rotated_summary.csv")
     result_rows = read_csv("step79_basis_rotated_results.csv")
     return summary_rows, result_rows
+
+def read_step83b_outputs():
+    """Read Step 83b support-expansion and sparse meta-analysis exports."""
+    summary = read_json_path(EXPORTS_DIR / "step83b_summary.json")
+    meta = read_json_path(EXPORTS_DIR / "step83b_meta_analysis.json")
+    track1_configs = read_csv("step83b_track1_configs.csv")
+    track1_results = read_csv("step83b_track1_results.csv")
+    track2_tracked = read_csv("step83b_track2_tracked.csv")
+    return summary, meta, track1_configs, track1_results, track2_tracked
+
+def read_step84_outputs():
+    """Read Step 84 metaheuristic rank-19 search exports."""
+    summary = read_json_path(EXPORTS_DIR / "step84_summary.json")
+    best = read_json_path(EXPORTS_DIR / "step84_best_individual.json")
+    log_rows = read_csv("step84_evolution_log.csv")
+    return summary, best, log_rows
 
 def read_axxc_signature_layer(rep_config_ids):
     """Read the current AXXC arity-4 signature layer for selected reps.
@@ -5067,6 +5083,186 @@ def generate():
     else:
         w("*Run ade3x3_step79_basis_rotated_pilot.py to populate this section.*")
 
+    # ── STEP 83B SUPPORT EXPANSION + HEURISTIC SPARSE CAMPAIGN ──
+    w()
+    w(f"## {section_num}. SUPPORT EXPANSION AND HEURISTIC SPARSE CAMPAIGN")
+    section_num += 1
+    w()
+    w("[MEASURED_FROM_CODE] (Step 83b)")
+    w()
+    w("Step 83b follows the Step 83 result that singleton-drop rank-19 charts inherited directly")
+    w("from AlphaTensor fail quickly for structural reasons rather than because of terrible chart")
+    w("conditioning. It therefore runs two parallelized sparse-support campaigns:")
+    w()
+    w("- Track 1: expand the best Step 83 singleton-drop charts by adding one or two new nonzero")
+    w("  coordinates per factor while keeping the inherited sparse support skeleton")
+    w("- Track 2: screen a large random sparse-support ensemble for rank-19 charts and use the")
+    w("  conditioning landscape itself as a heuristic guide to where tractable support regimes live")
+    w()
+    step83b_summary, step83b_meta, step83b_track1_configs, step83b_track1_results, step83b_track2_tracked = read_step83b_outputs()
+    if step83b_summary:
+        track1_status_counts = Counter(row['status'] for row in step83b_track1_results)
+        track2_status_counts = Counter(row['status'] for row in step83b_track2_tracked)
+
+        w("### Campaign Summary")
+        w()
+        w(f"- Track 1 support-expansion cases configured: {step83b_summary.get('track1_cases')}")
+        w(f"- Track 1 completed Julia runs: {step83b_summary.get('track1_completed')}")
+        w(f"- Track 1 real endpoints: {step83b_summary.get('track1_real_endpoints')}")
+        w(f"- Track 2 random sparse screens: {step83b_summary.get('track2_screened')}")
+        w(f"- Track 2 viable under the 200-variable cap: {step83b_summary.get('track2_viable')}")
+        w(f"- Track 2 tracked Julia cases: {step83b_summary.get('track2_tracked')}")
+        w(f"- Track 2 real endpoints: {step83b_summary.get('track2_real_endpoints')}")
+        w(f"- Any exact hit: {step83b_summary.get('any_exact_hit')}")
+        w()
+
+        w("### Track 1: Support Expansion From AlphaTensor")
+        w()
+        w("The inherited Step 83 drop sets remain numerically tractable after small support expansion:")
+        w("all 12 configured cases stayed under the 200-variable cap, landing between about 130 and 170")
+        w("reduced variables. But the Julia phase remained negative.")
+        w()
+        w(f"- Track 1 timeouts: {track1_status_counts.get('timeout', 0)}")
+        w(f"- Track 1 fast no-solution exits: {track1_status_counts.get('no_solution_returned', 0)}")
+        w()
+        if step83b_track1_configs:
+            w("| case | family | dropped terms | reduced vars | condition number | start max-abs residual |")
+            w("|------|--------|---------------|--------------|------------------|------------------------|")
+            for row in step83b_track1_configs[:12]:
+                w(
+                    f"| {row['case_id']} | {row['case_family']} | {row['drop_terms']} | {row['reduced_variable_count']} | "
+                    f"{row['square_jacobian_condition_number']} | {row['start_full_tensor_max_abs_residual']} |"
+                )
+            w()
+        w("The strongest targeted expansion case reached condition number about 8.82e2, while the rest of")
+        w("the family sat roughly in the 1e3 to 1e4 range. So Track 1 is much healthier than the dense Step 82")
+        w("chart, but still substantially rougher than the best sparse random charts from Track 2.")
+        w()
+
+        w("### Track 2: Heuristic Sparse Meta-Analysis")
+        w()
+        w("Track 2 screened 1000 random rank-19 sparse support patterns before any Julia calls. Every one")
+        w("of the screened patterns stayed under the 200-variable cap and the configured conditioning cap, so")
+        w("the sparse-support tractability region is broad rather than fragile.")
+        w()
+        w(f"- Median condition number across viable screens: {step83b_summary.get('track2_median_condition')}")
+        w(f"- Best condition number across viable screens: {step83b_summary.get('track2_best_condition')}")
+        w(f"- Empirically optimal support signature: {step83b_summary.get('track2_optimal_nnz')}")
+        w()
+        signature_stats = step83b_meta.get('signature_stats', {}) if step83b_meta else {}
+        if signature_stats:
+            w("| support signature | screened | viable fraction | median condition | best condition | median reduced vars | tracked |")
+            w("|-------------------|---------:|----------------:|-----------------:|---------------:|--------------------:|--------:|")
+            for signature, stats in sorted(
+                signature_stats.items(),
+                key=lambda item: float('inf') if item[1].get('median_condition') is None else float(item[1]['median_condition'])
+            ):
+                median_condition = stats.get('median_condition')
+                best_condition = stats.get('best_condition')
+                median_vars = stats.get('median_reduced_variable_count')
+                w(
+                    f"| {signature} | {stats.get('screened_count')} | {stats.get('viable_fraction')} | "
+                    f"{'' if median_condition is None else f'{median_condition:.6f}'} | "
+                    f"{'' if best_condition is None else f'{best_condition:.6f}'} | "
+                    f"{'' if median_vars is None else f'{median_vars:.1f}'} | {stats.get('tracked_count')} |"
+                )
+            w()
+        w("Two empirical facts stand out. First, conditioning worsens substantially as the reduced variable")
+        w("count rises: the measured correlation between reduced variable count and log10(condition) is about")
+        w(f"{step83b_meta.get('correlation_reduced_vars_vs_log10_condition')} if that meta field is present. Second,")
+        w("gamma-union size itself is almost irrelevant in this regime, so the main tractability lever is again")
+        w("the alpha/beta side of the support pattern rather than gamma coverage.")
+        w()
+
+        w("### Julia Outcomes On The Best Sparse Random Charts")
+        w()
+        w(f"- Track 2 timeouts: {track2_status_counts.get('timeout', 0)}")
+        w(f"- Track 2 fast no-solution exits: {track2_status_counts.get('no_solution_returned', 0)}")
+        w()
+        w("The best random sparse charts were markedly cleaner than the support-expansion family, with best")
+        w("condition number about 4.18e1 and many tracked cases at exactly 133 reduced variables. But even")
+        w("those better charts still produced either zero returned solutions or 120-second timeouts, with no")
+        w("real endpoints and no exact hits.")
+        w()
+
+        w("### Status")
+        w()
+        w("Step 83b is therefore informative even though it is still negative computationally. It shows that")
+        w("the tractable sparse-support region is real and wide, and that ultra-sparse random charts around")
+        w("(3,3,3) are systematically better conditioned than denser 4-nonzero regimes. But neither mild")
+        w("AlphaTensor support expansion nor the first large random sparse sweep produced a rank-19 real")
+        w("endpoint. The next campaign should therefore stay sparse, target the empirically strong (3,3,3)")
+        w("to (4,4,2) regime, and improve the start families or continuation schedule rather than simply")
+        w("adding more density.")
+    else:
+        w("*Run ade3x3_step83b_support_expansion_sparse_meta_analysis.py to populate this section.*")
+
+    # ── STEP 84 METAHEURISTIC RANK-19 SEARCH ──
+    w()
+    w(f"## {section_num}. METAHEURISTIC RANK-19 SEARCH")
+    section_num += 1
+    w()
+    w("[MEASURED_FROM_CODE] (Step 84)")
+    w()
+    w("Step 84 drops continuation entirely and treats sparse rank-19 search as a mixed")
+    w("combinatorial/continuous optimization problem. A 4-island evolutionary algorithm")
+    w("mutates sparse supports directly, while local least-squares refinement improves")
+    w("coefficients on fixed supports in Lamarckian fashion.")
+    w()
+    step84_summary, step84_best, step84_log_rows = read_step84_outputs()
+    if step84_summary:
+        w("### Campaign Summary")
+        w()
+        w(f"- Generations completed: {step84_summary.get('total_generations')}")
+        w(f"- Total evaluations: {step84_summary.get('total_evaluations')}")
+        w(f"- Total wall seconds: {step84_summary.get('total_wall_seconds')}")
+        w(f"- Best fitness ever (max-abs residual): {step84_summary.get('best_fitness_ever')}")
+        w(f"- Best generation: {step84_summary.get('best_fitness_generation')}")
+        w(f"- Best support signature: {step84_summary.get('best_support_signature')}")
+        w(f"- Best variable count: {step84_summary.get('best_variable_count')}")
+        w(f"- Any exact hit below 1e-8: {step84_summary.get('any_exact_hit')}")
+        w(f"- Stop reason: {step84_summary.get('stop_reason')}")
+        w()
+
+        history = step84_summary.get('fitness_improvement_history', [])
+        if history:
+            first_gen, first_fit = history[0]
+            last_gen, last_fit = history[-1]
+            w("The run recorded a best-so-far incumbent trace across generations rather than a single")
+            w("isolated event. The first recorded incumbent appeared at generation")
+            w(f"{first_gen} with residual {first_fit}, and the final incumbent appeared at generation {last_gen} with residual {last_fit}.")
+            w()
+
+        if step84_best:
+            w("### Best Individual")
+            w()
+            w(f"- Origin: {step84_best.get('origin')}")
+            w(f"- Best max-abs residual: {step84_best.get('fitness')}")
+            w(f"- Best Frobenius residual: {step84_best.get('fro_residual')}")
+            w(f"- Support histogram: {step84_best.get('support_histogram')}")
+            w(f"- Local nonlinear polish used: {step84_best.get('newton_polished')}")
+            w()
+
+        if step84_log_rows:
+            final_rows = [row for row in step84_log_rows if row.get('generation') == str(step84_summary.get('total_generations'))]
+            if final_rows:
+                best_island_row = min(final_rows, key=lambda row: float(row['best_fitness']))
+                w("### Final-Island Snapshot")
+                w()
+                w(f"- Strongest island at the final logged generation: {best_island_row.get('island')}")
+                w(f"- Final-island best residual: {best_island_row.get('best_fitness')}")
+                w(f"- Final-island mean residual: {best_island_row.get('mean_fitness')}")
+                w()
+
+        w("### Status")
+        w()
+        w("Step 84 turns the Step 83b support landscape into a reusable search engine. Even when")
+        w("the run does not close to an exact rank-19 decomposition, it now records which sparse")
+        w("support families survive evolutionary pressure, how fast the best residual improves, and")
+        w("what the best near-miss support structure looks like for longer reruns.")
+    else:
+        w("*Run ade3x3_step84_metaheuristic_rank19_search.py to populate this section.*")
+
     # ── OPEN FRONTS ──
     w()
     w(f"## {section_num}. CURRENT GAPS / OPEN FRONTS")
@@ -5128,6 +5324,9 @@ def generate():
     w("- Pure-sigma common-matrix obstruction: ✓ Phase 37 compresses the witness problem to the sigma-silent sector Z = ker(H^T) ∩ ker(Delta^T) and the induced exact 9x9 operator Omega; on the known exact decompositions, Omega is symmetric positive definite (Omega = I for the standard algorithm, and AlphaTensor has exact determinant 77875/19683 with positive leading minors), so the common-matrix equation Omega vec(C) = 0 forces C = 0 inside the Delta-contained regime")
     w("- Hamilton term-sharing audit: ✓ Step 78 reconstructs the exact rank-20 commutator witness alongside the Step 75 rank-19 anticommutator witness, finds 0 shared normalized rank-1 terms, union span rank 39 with span intersection dimension 0, and therefore closes the easy linear-sharing route from T=({A,B}+[A,B])/2")
     w("- Basis-rotated pilot search: ✓ Step 79 verifies GL(9)^3 transport of the public rank-23 witness exactly on a small structured/random pilot, but the rotated cold CP scans at ranks 19..22 are cleanly negative and do not improve on the existing rank-19 frontier")
+    w("- Support expansion + heuristic sparse campaign: ✓ Step 83b ran 12 AlphaTensor-derived support-expansion cases plus a 1000-pattern random sparse-screening campaign under the 200-variable cap; all random screens were viable, the best conditioning sweet spot was the ultra-sparse (3,3,3) regime, but neither the 12 expanded charts nor the top 24 random sparse charts produced a real rank-19 endpoint")
+    if step84_summary:
+        w(f"- Metaheuristic rank-19 search: ✓ Step 84 built the sparse-support evolutionary search engine with 4 islands, Lamarckian coefficient refinement, migration, logging, and checkpoints; the current best run reached max-abs residual {step84_summary.get('best_fitness_ever')} at generation {step84_summary.get('best_fitness_generation')} with support signature {step84_summary.get('best_support_signature')}")
     w()
     w("**Remaining open fronts:**")
     w("- Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored")
@@ -5152,6 +5351,7 @@ def generate():
     w("- Threshold localization: determine whether AlphaTensor's true critical cap lies below 2 degrees and whether the standard threshold is exactly 12 degrees or just above 11.5 degrees")
     w("- Hamilton recompression beyond linear sharing: Step 78 rules out direct shared terms and trivial span overlap, but a genuinely nonlinear recompression of the 39-term Hamilton union has not been excluded")
     w("- Basis-rotated search beyond the cold pilot: Step 79 rules out the tiny cold-start version, but a transported warm-start or continuation-based GL(9)^3 search has not yet been tested")
+    w("- Sparse-support metaheuristics beyond Step 84: the search infrastructure now operates directly in the empirically strong (3,3,3) to (4,4,2) regime and records best-so-far support structures, but longer campaigns and operator retuning are still needed to determine whether the best near-miss supports can actually close to an exact rank-19 decomposition")
     w("- Step 48 shows that the 8 XC-orbit linearization is exact but vacuous for rank lower bounds;")
     w("  any useful lower-bound model must retain finer-than-orbit-sum equation structure")
     w("- Step 49 now records the exact 729-equation trilinear system and the 8 representative types;")

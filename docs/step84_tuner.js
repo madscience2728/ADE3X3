@@ -1,0 +1,933 @@
+const STORAGE_KEY = "ade3x3-step84-tuner";
+const POLL_INTERVAL_MS = 2000;
+let pollHandle = null;
+let fitnessScaleMode = "log";
+let shadowScaleMode = "linear";
+
+const defaults = {
+    topologyMode: "explicit",
+    islandPopulations: "32,24,16,12,8,8,6,6",
+    islandMinExp: 2,
+    islandMaxExp: 8,
+    islandCopies: 2,
+    workers: 24,
+    timeoutSeconds: 120,
+    generations: 1000000,
+    seed: 8401001,
+    offspringMultiplier: 1,
+    warmSeeds: 12,
+    migrationInterval: 25,
+    migrationSize: 1,
+    checkpointInterval: 100,
+    tournamentSize: 3,
+    executorKind: "thread",
+    resumeCheckpoint: "",
+    signature333Fraction: 0.15,
+    shadowSurvivorFraction: 0.30,
+    shadowParentRate: 0.40,
+    shadowVariableBucket: 16,
+    shadowMetricsInterval: 20,
+    hitThreshold: 1e-8,
+    crossoverRate: 0.70,
+    factorCrossoverRate: 0.20,
+    mutationSupportRate: 0.30,
+    mutationCoeffRate: 0.50,
+    mutationReplaceRate: 0.05,
+    alsSweeps: 1,
+    newtonThreshold: 0.25,
+    polishMaxNfev: 20,
+    polishVariableCap: 260,
+    activeValueFloor: 1e-4,
+    supportMin: 2,
+    supportMax: 7,
+    initSupportMin: 2,
+    initSupportMax: 6,
+    supportAddProb: 0.50,
+    supportDropProb: 0.50,
+    supportAddLow: 0.01,
+    supportAddHigh: 0.10,
+    coeffSigmaMin: 0.01,
+    coeffSigmaMax: 0.35,
+    coeffInitLow: 1.0,
+    coeffInitHigh: 2.0,
+    bestExportIncludeDense: false
+};
+
+const presetMap = {
+    balanced: {
+        topologyMode: "explicit",
+        islandPopulations: "32,24,16,12,8,8,6,6",
+        offspringMultiplier: 1,
+        workers: 24,
+        timeoutSeconds: 120,
+        executorKind: "thread"
+    },
+    moderate: {
+        topologyMode: "power",
+        islandMinExp: 2,
+        islandMaxExp: 8,
+        islandCopies: 2,
+        offspringMultiplier: 1,
+        workers: 24,
+        timeoutSeconds: 120,
+        executorKind: "thread"
+    },
+    wide: {
+        topologyMode: "power",
+        islandMinExp: 2,
+        islandMaxExp: 9,
+        islandCopies: 2,
+        offspringMultiplier: 1,
+        workers: 24,
+        timeoutSeconds: 120,
+        executorKind: "thread"
+    }
+};
+
+const fieldMap = {
+    islandPopulations: "island-populations",
+    islandMinExp: "island-min-exp",
+    islandMaxExp: "island-max-exp",
+    islandCopies: "island-copies",
+    workers: "workers",
+    timeoutSeconds: "timeout-seconds",
+    generations: "generations",
+    seed: "seed",
+    offspringMultiplier: "offspring-multiplier",
+    warmSeeds: "warm-seeds",
+    migrationInterval: "migration-interval",
+    migrationSize: "migration-size",
+    checkpointInterval: "checkpoint-interval",
+    tournamentSize: "tournament-size",
+    executorKind: "executor-kind",
+    resumeCheckpoint: "resume-checkpoint",
+    signature333Fraction: "signature333-fraction",
+    shadowSurvivorFraction: "shadow-survivor-fraction",
+    shadowParentRate: "shadow-parent-rate",
+    shadowVariableBucket: "shadow-variable-bucket",
+    shadowMetricsInterval: "shadow-metrics-interval",
+    hitThreshold: "hit-threshold",
+    crossoverRate: "crossover-rate",
+    factorCrossoverRate: "factor-crossover-rate",
+    mutationSupportRate: "mutation-support-rate",
+    mutationCoeffRate: "mutation-coeff-rate",
+    mutationReplaceRate: "mutation-replace-rate",
+    alsSweeps: "als-sweeps",
+    newtonThreshold: "newton-threshold",
+    polishMaxNfev: "polish-max-nfev",
+    polishVariableCap: "polish-variable-cap",
+    activeValueFloor: "active-value-floor",
+    supportMin: "support-min",
+    supportMax: "support-max",
+    initSupportMin: "init-support-min",
+    initSupportMax: "init-support-max",
+    supportAddProb: "support-add-prob",
+    supportDropProb: "support-drop-prob",
+    supportAddLow: "support-add-low",
+    supportAddHigh: "support-add-high",
+    coeffSigmaMin: "coeff-sigma-min",
+    coeffSigmaMax: "coeff-sigma-max",
+    coeffInitLow: "coeff-init-low",
+    coeffInitHigh: "coeff-init-high",
+    bestExportIncludeDense: "best-export-include-dense"
+};
+
+const settingHelp = {
+    topologyMode: "Choose how island sizes are specified. Explicit mode is better when you already know the exact schedule you want. Power mode is better for broad scaling experiments. Reasonable usage: explicit for careful hand tuning, power for exploratory sweeps like 2^2..2^8 or 2^2..2^9.",
+    islandPopulations: "Comma-separated island population sizes used directly when topology mode is explicit. This controls both diversity and RAM pressure. Reasonable values are usually between 4 and 64 per island. Small islands 4..12 keep niche churn high; medium 16..32 are balanced; large 48..96 are expensive and should be used sparingly.",
+    islandMinExp: "Smallest exponent included when generating a power-of-two island schedule. Generated sizes are 2^max down to 2^min. Reasonable range: 2..5, meaning island sizes from 4 to 32 at the low end. Keep this less than or equal to the max exponent.",
+    islandMaxExp: "Largest exponent included when generating a power-of-two island schedule. Higher values create large islands quickly and can dominate RAM and evaluation time. Reasonable range: 6..9, meaning largest islands from 64 to 512. On this repo, 8 or 9 is already heavy.",
+    islandCopies: "Number of copies to create for each power-of-two island size. More copies increase niche replication and total population linearly. Reasonable range: 1..4 for manual tuning, 6..8 only if you intentionally want a huge ensemble and can afford the memory cost.",
+    workers: "Maximum concurrent evaluation workers used by Step 84. On Windows with thread mode, reasonable values are usually 8..32. Match this to actual useful parallelism, not just core count. Too high can increase contention without improving evaluations per second.",
+    timeoutSeconds: "Wall-clock time budget before the run exits with time_limit. For tuning, 60..180 seconds is a good range. For real search, use 300+ seconds once you know the schedule is stable.",
+    generations: "Upper bound on generations if the time limit does not stop the run first. In practice the timeout usually fires first. Reasonable values: 10000 for short experiments, 1000000 as a safe effectively-unbounded cap.",
+    seed: "Random seed for initialization and stochastic operators. Change this when you want a new stochastic trajectory under the same hyperparameters. Any integer is fine; keeping a log of seeds is more important than the magnitude.",
+    offspringMultiplier: "Children produced per island relative to island population size. Larger values increase exploration and evaluation load per generation. Reasonable range: 1..3. Use 1 for steady-state efficiency, 2 for stronger search pressure, 3 only if CPU is underused and RAM is stable.",
+    warmSeeds: "Number of warm-start individuals loaded from Step 83b style seeds. More warm seeds bias the run harder toward prior structure. Reasonable range: 4..16. Too low wastes prior information; too high can reduce diversity.",
+    migrationInterval: "How often cross-island migration runs, measured in generations. Lower means more frequent mixing. Reasonable range: 10..50. Use smaller values when islands diverge too hard, larger values when you want islands to stay independent longer.",
+    migrationSize: "How many migrants are exchanged during each migration event. Reasonable range: 0..3. Zero disables migration pressure; one is conservative; two or three are enough for most experiments.",
+    checkpointInterval: "How many generations between checkpoint writes. Lower values are safer but create more disk traffic. Reasonable range: 50..250. If artifacts are getting large, move this upward.",
+    tournamentSize: "Tournament size used for parent and survivor selection. Higher values increase selection pressure. Reasonable range: 2..5. Two is gentle, three is balanced, four or five can collapse diversity faster.",
+    executorKind: "Execution backend. Thread is usually the right choice on Windows because it avoids heavy process spawn and duplicated memory. Process mode is only worth trying if thread mode clearly fails to saturate useful work.",
+    resumeCheckpoint: "Optional checkpoint path to resume instead of starting fresh. Leave blank for a new run. Use this only with compatible settings; changing topology or mutation behavior too much relative to the checkpoint can make comparisons messy.",
+    signature333Fraction: "Reserved survivor fraction kept for exact (3,3,3) signatures. This is a guardrail for the Step 83b prior. Reasonable range: 0.10..0.25. Below 0.05 the reservation may become too weak; above 0.30 it can crowd out broader exploration.",
+    shadowSurvivorFraction: "Fraction of survivor slots allocated through selection shadow niches. Higher values preserve more niche families. Reasonable range: 0.20..0.45. Too low recreates collapse into easy basins; too high can slow improvement.",
+    shadowParentRate: "Probability of selecting parents from the shadow pool instead of the main elite pool. Reasonable range: 0.25..0.60. Lower values emphasize exploitation; higher values increase structural diversity.",
+    shadowVariableBucket: "Bucket size used when grouping variable counts inside the shadow key. Smaller buckets preserve finer distinctions. Reasonable range: 8..32. Sixteen is a balanced default.",
+    shadowMetricsInterval: "How often shadow occupancy metrics are recomputed and logged. Lower values give more visibility but add overhead. Reasonable range: 10..50. Use larger values if you only care about throughput.",
+    hitThreshold: "Residual threshold treated as an exact hit. This should stay very small. Reasonable range: 1e-10 to 1e-6 depending on how strict you want the success criterion. The default 1e-8 is already strict.",
+    crossoverRate: "Probability of term crossover during offspring generation. Reasonable range: 0.50..0.85. Lower values reduce recombination; higher values make search more dependent on inherited structure.",
+    factorCrossoverRate: "Probability of factor-level crossover instead of term-level crossover. Reasonable range: 0.10..0.35. Keep this lower than the main crossover rate so term-level exchange stays dominant.",
+    mutationSupportRate: "Probability of mutating factor supports. This is a major structural exploration knob. Reasonable range: 0.20..0.45. Higher values broaden search but can erase useful patterns quickly.",
+    mutationCoeffRate: "Probability of perturbing coefficient values. Reasonable range: 0.30..0.70. This can usually be higher than support mutation because coefficient perturbations are cheaper and less disruptive structurally.",
+    mutationReplaceRate: "Probability of replacing a whole term with a fresh random term. Reasonable range: 0.01..0.10. Keep this low; it is a high-disruption operator.",
+    alsSweeps: "Number of alternating least-squares sweeps run during local improvement. More sweeps improve local polish but increase evaluation cost. Reasonable range: 0..3. One is the usual tuning default; two or three only if local refinement is clearly paying off.",
+    newtonThreshold: "Residual threshold below which support-fixed nonlinear polish is attempted. Larger values trigger polish more often. Reasonable range: 0.05..0.30. If polish is expensive or unstable, lower this. If promising individuals are being missed, raise it modestly.",
+    polishMaxNfev: "Maximum function evaluations allowed for nonlinear polish. Reasonable range: 10..50. Lower values cap runaway polish cost; higher values are only useful if polish is consistently productive.",
+    polishVariableCap: "Skip nonlinear polish when the reduced variable count exceeds this cap. This is a runtime safety knob. Reasonable range: 180..300. Lower caps are safer; higher caps allow more ambitious but heavier polish attempts.",
+    activeValueFloor: "Absolute value floor used to decide whether a coefficient is considered active. Reasonable range: 1e-5 to 1e-3. Lower values keep more nearly-zero terms alive; higher values prune aggressively.",
+    supportMin: "Minimum nonzeros allowed per factor support after mutation. This should stay less than or equal to support max. Reasonable range: 2..3. Keeping this low preserves sparse structure.",
+    supportMax: "Maximum nonzeros allowed per factor support after mutation. This should stay greater than or equal to support min. Reasonable range: 5..7. Higher values can reach denser regimes but drift away from the sparse Step 83b prior.",
+    initSupportMin: "Minimum nonzeros used when creating random initial supports. This should stay less than or equal to init support max. Reasonable range: 2..3.",
+    initSupportMax: "Maximum nonzeros used when creating random initial supports. This should stay greater than or equal to init support min. Reasonable range: 4..6. Usually keep this a bit tighter than the post-mutation support max so initialization starts in a cleaner sparse basin.",
+    supportAddProb: "Probability that a support mutation attempts an add move. Together with drop probability this shapes sparsity drift. Reasonable range: 0.30..0.70. If supports are shrinking too much, raise this.",
+    supportDropProb: "Probability that a support mutation attempts a drop move. Reasonable range: 0.30..0.70. If supports are getting too dense, raise this. The balance with add probability matters more than either value alone.",
+    supportAddLow: "Minimum coefficient magnitude used when adding a new active support entry. This should stay less than or equal to support add high. Reasonable range: 0.001..0.05. Lower values seed gentler additions.",
+    supportAddHigh: "Maximum coefficient magnitude used when adding a new active support entry. This should stay greater than or equal to support add low. Reasonable range: 0.05..0.20. If new entries are too disruptive, lower this upper bound.",
+    coeffSigmaMin: "Lower bound for Gaussian coefficient perturbation strength. This should stay less than or equal to coeff sigma max. Reasonable range: 0.005..0.05. Small values support fine local adjustment.",
+    coeffSigmaMax: "Upper bound for Gaussian coefficient perturbation strength. This should stay greater than or equal to coeff sigma min. Reasonable range: 0.15..0.50. Larger values increase jumpiness and can help escape flat basins.",
+    coeffInitLow: "Lower bound for random initial coefficient magnitudes. This should stay less than or equal to coeff init high. Reasonable range: 0.5..1.5.",
+    coeffInitHigh: "Upper bound for random initial coefficient magnitudes. This should stay greater than or equal to coeff init low. Reasonable range: 1.5..3.0. Wider spreads increase diversity but can make ALS stabilization harder.",
+    bestExportIncludeDense: "Include dense matrices and arrays in the best-individual export. This is mainly for forensic debugging. Leave this off for normal runs because artifact size can balloon quickly. Recommended setting: 0 except for short diagnostic runs."
+};
+
+const numericFields = new Set([
+    "islandMinExp", "islandMaxExp", "islandCopies", "workers", "timeoutSeconds", "generations", "seed",
+    "offspringMultiplier", "warmSeeds", "migrationInterval", "migrationSize", "checkpointInterval",
+    "tournamentSize", "signature333Fraction", "shadowSurvivorFraction", "shadowParentRate",
+    "shadowVariableBucket", "shadowMetricsInterval", "hitThreshold", "crossoverRate", "factorCrossoverRate",
+    "mutationSupportRate", "mutationCoeffRate", "mutationReplaceRate", "alsSweeps", "newtonThreshold",
+    "polishMaxNfev", "polishVariableCap", "activeValueFloor", "supportMin", "supportMax", "initSupportMin",
+    "initSupportMax", "supportAddProb", "supportDropProb", "supportAddLow", "supportAddHigh", "coeffSigmaMin",
+    "coeffSigmaMax", "coeffInitLow", "coeffInitHigh"
+]);
+
+const checkboxFields = new Set(["bestExportIncludeDense"]);
+
+function cloneDefaults() {
+    return JSON.parse(JSON.stringify(defaults));
+}
+
+function getHelpText(key) {
+    const description = settingHelp[key] || "";
+    if (!(key in defaults)) {
+        return description;
+    }
+    return `${description} Default: ${formatValue(defaults[key])}.`;
+}
+
+function getSavedState() {
+    try {
+        const raw = window.localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+            return cloneDefaults();
+        }
+        return { ...cloneDefaults(), ...JSON.parse(raw) };
+    } catch (_error) {
+        return cloneDefaults();
+    }
+}
+
+function parsePopulationList(text) {
+    return text
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .map((item) => Number.parseInt(item, 10))
+        .filter((value) => Number.isFinite(value) && value > 0);
+}
+
+function buildPowerSchedule(minExp, maxExp, copies) {
+    const values = [];
+    for (let exponent = maxExp; exponent >= minExp; exponent -= 1) {
+        for (let count = 0; count < copies; count += 1) {
+            values.push(2 ** exponent);
+        }
+    }
+    return values;
+}
+
+function getState() {
+    const state = cloneDefaults();
+    state.topologyMode = document.querySelector(".segmented__item.is-active")?.dataset.mode || "explicit";
+
+    Object.entries(fieldMap).forEach(([key, id]) => {
+        const element = document.getElementById(id);
+        if (!element) {
+            return;
+        }
+        if (checkboxFields.has(key)) {
+            state[key] = element.checked;
+            return;
+        }
+        if (numericFields.has(key)) {
+            state[key] = Number(element.value);
+            return;
+        }
+        state[key] = element.value;
+    });
+
+    return state;
+}
+
+function applyState(state) {
+    Object.entries(fieldMap).forEach(([key, id]) => {
+        const element = document.getElementById(id);
+        if (!element || !(key in state)) {
+            return;
+        }
+        if (checkboxFields.has(key)) {
+            element.checked = Boolean(state[key]);
+            return;
+        }
+        element.value = state[key];
+    });
+
+    setTopologyMode(state.topologyMode || "explicit");
+    render();
+}
+
+function setElementValue(key, value) {
+    if (key === "topologyMode") {
+        setTopologyMode(value);
+        return;
+    }
+    const element = document.getElementById(fieldMap[key]);
+    if (!element) {
+        return;
+    }
+    if (checkboxFields.has(key)) {
+        element.checked = Boolean(value);
+        return;
+    }
+    element.value = value;
+}
+
+function setTopologyMode(mode) {
+    document.querySelectorAll(".segmented__item").forEach((button) => {
+        button.classList.toggle("is-active", button.dataset.mode === mode);
+    });
+    document.getElementById("explicit-fields").classList.toggle("is-hidden", mode !== "explicit");
+    document.getElementById("power-fields").classList.toggle("is-hidden", mode !== "power");
+}
+
+function getDerived(state) {
+    const populations = state.topologyMode === "power"
+        ? buildPowerSchedule(state.islandMinExp, state.islandMaxExp, state.islandCopies)
+        : parsePopulationList(state.islandPopulations);
+    const totalPopulation = populations.reduce((sum, value) => sum + value, 0);
+    const offspring = populations.map((value) => value * state.offspringMultiplier);
+    const totalOffspring = offspring.reduce((sum, value) => sum + value, 0);
+    return {
+        populations,
+        totalPopulation,
+        totalOffspring,
+        islandCount: populations.length
+    };
+}
+
+function formatValue(value) {
+    if (typeof value === "boolean") {
+        return value ? "1" : "0";
+    }
+    if (typeof value === "number") {
+        return Number.isInteger(value) ? String(value) : String(value);
+    }
+    return String(value || "");
+}
+
+function normalizeValue(key, value) {
+    if (checkboxFields.has(key)) {
+        return Boolean(value);
+    }
+    if (numericFields.has(key)) {
+        return Number(value);
+    }
+    return String(value ?? "");
+}
+
+function isDefaultValue(key, state) {
+    return normalizeValue(key, state[key]) === normalizeValue(key, defaults[key]);
+}
+
+function resetSetting(key) {
+    const state = getState();
+    state[key] = defaults[key];
+    applyState(state);
+}
+
+function buildEnvEntries(state) {
+    const entries = [
+        ["STEP84_GENERATIONS", state.generations],
+        ["STEP84_WORKERS", state.workers],
+        ["STEP84_TIMEOUT_SECONDS", state.timeoutSeconds],
+        ["STEP84_CHECKPOINT_INTERVAL", state.checkpointInterval],
+        ["STEP84_ALS_SWEEPS", state.alsSweeps],
+        ["STEP84_SIGNATURE333_SURVIVOR_FRACTION", state.signature333Fraction],
+        ["STEP84_SHADOW_SURVIVOR_FRACTION", state.shadowSurvivorFraction],
+        ["STEP84_SHADOW_PARENT_RATE", state.shadowParentRate],
+        ["STEP84_SHADOW_VARIABLE_BUCKET", state.shadowVariableBucket],
+        ["STEP84_SHADOW_METRICS_INTERVAL", state.shadowMetricsInterval],
+        ["STEP84_EXECUTOR_KIND", state.executorKind],
+        ["STEP84_OFFSPRING_MULTIPLIER", state.offspringMultiplier],
+        ["STEP84_WARM_SEEDS", state.warmSeeds],
+        ["STEP84_MIGRATION_INTERVAL", state.migrationInterval],
+        ["STEP84_MIGRATION_SIZE", state.migrationSize],
+        ["STEP84_SEED", state.seed],
+        ["STEP84_TOURNAMENT_SIZE", state.tournamentSize],
+        ["STEP84_CROSSOVER_RATE", state.crossoverRate],
+        ["STEP84_FACTOR_CROSSOVER_RATE", state.factorCrossoverRate],
+        ["STEP84_MUTATION_SUPPORT_RATE", state.mutationSupportRate],
+        ["STEP84_MUTATION_COEFF_RATE", state.mutationCoeffRate],
+        ["STEP84_MUTATION_REPLACE_RATE", state.mutationReplaceRate],
+        ["STEP84_SUPPORT_MIN", state.supportMin],
+        ["STEP84_SUPPORT_MAX", state.supportMax],
+        ["STEP84_INIT_SUPPORT_MIN", state.initSupportMin],
+        ["STEP84_INIT_SUPPORT_MAX", state.initSupportMax],
+        ["STEP84_SUPPORT_ADD_PROB", state.supportAddProb],
+        ["STEP84_SUPPORT_DROP_PROB", state.supportDropProb],
+        ["STEP84_NEWTON_THRESHOLD", state.newtonThreshold],
+        ["STEP84_POLISH_MAX_NFEV", state.polishMaxNfev],
+        ["STEP84_POLISH_VARIABLE_CAP", state.polishVariableCap],
+        ["STEP84_HIT_THRESHOLD", state.hitThreshold],
+        ["STEP84_ACTIVE_VALUE_FLOOR", state.activeValueFloor],
+        ["STEP84_BEST_EXPORT_INCLUDE_DENSE", state.bestExportIncludeDense],
+        ["STEP84_COEFF_SIGMA_MIN", state.coeffSigmaMin],
+        ["STEP84_COEFF_SIGMA_MAX", state.coeffSigmaMax],
+        ["STEP84_COEFF_INIT_LOW", state.coeffInitLow],
+        ["STEP84_COEFF_INIT_HIGH", state.coeffInitHigh],
+        ["STEP84_SUPPORT_ADD_LOW", state.supportAddLow],
+        ["STEP84_SUPPORT_ADD_HIGH", state.supportAddHigh]
+    ];
+
+    if (state.topologyMode === "explicit") {
+        entries.push(["STEP84_ISLAND_POPULATIONS", state.islandPopulations]);
+    } else {
+        entries.push(["STEP84_ISLAND_MIN_EXP", state.islandMinExp]);
+        entries.push(["STEP84_ISLAND_MAX_EXP", state.islandMaxExp]);
+        entries.push(["STEP84_ISLAND_COPIES", state.islandCopies]);
+    }
+
+    if (String(state.resumeCheckpoint || "").trim()) {
+        entries.push(["STEP84_RESUME_CHECKPOINT", state.resumeCheckpoint.trim()]);
+    }
+
+    return entries;
+}
+
+function buildRunCommand(state) {
+    const envLines = buildEnvEntries(state)
+        .map(([key, value]) => `$env:${key}='${formatValue(value).replace(/'/g, "''")}'`);
+    return [
+        "Set-Location \"C:\\Users\\madsc\\Desktop\\Github\\ADE3X3\"",
+        "$env:OMP_NUM_THREADS='1'",
+        "$env:OPENBLAS_NUM_THREADS='1'",
+        "$env:MKL_NUM_THREADS='1'",
+        "$env:NUMEXPR_NUM_THREADS='1'",
+        ...envLines,
+        ".\\.venv\\Scripts\\python.exe .\\src\\ade3x3\\steps\\ade3x3_step84_metaheuristic_rank19_search.py"
+    ].join("; \n");
+}
+
+function buildEnvObject(state) {
+    return Object.fromEntries(buildEnvEntries(state).map(([key, value]) => [key, formatValue(value)]));
+}
+
+function buildProfileCommand(state) {
+    const envLines = buildEnvEntries(state)
+        .map(([key, value]) => `$env:${key}='${formatValue(value).replace(/'/g, "''")}'`)
+        .join("; ");
+    return [
+        "$profileName = 'manual_profile'",
+        "$outDir = '.\\outputs\\exports\\step84_resource_profiles\\' + $profileName",
+        "New-Item -ItemType Directory -Force -Path $outDir | Out-Null",
+        "$env:OMP_NUM_THREADS='1'; $env:OPENBLAS_NUM_THREADS='1'; $env:MKL_NUM_THREADS='1'; $env:NUMEXPR_NUM_THREADS='1'",
+        envLines,
+        "$shim = Start-Process -FilePath '.\\.venv\\Scripts\\python.exe' -ArgumentList '.\\src\\ade3x3\\steps\\ade3x3_step84_metaheuristic_rank19_search.py' -WorkingDirectory (Get-Location).Path -RedirectStandardOutput \"$outDir\\stdout.log\" -RedirectStandardError \"$outDir\\stderr.log\" -PassThru",
+        "$sw = [System.Diagnostics.Stopwatch]::StartNew()",
+        "$real = $null",
+        "while (($null -eq $real) -and (-not $shim.HasExited)) { Start-Sleep -Milliseconds 250; $real = Get-CimInstance Win32_Process | Where-Object { $_.ParentProcessId -eq $shim.Id -and $_.Name -like 'python*' } | Select-Object -First 1 }",
+        "if ($null -eq $real) { throw 'Failed to locate child python process for Step 84.' }",
+        "$cores = [int](Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors",
+        "$rows = New-Object System.Collections.Generic.List[object]",
+        "$prevCpu = $null; $prevTime = Get-Date",
+        "while (-not $shim.HasExited) { Start-Sleep -Seconds 1; $proc = Get-Process -Id $real.ProcessId -ErrorAction SilentlyContinue; if ($null -eq $proc) { break }; $now = Get-Date; $cpuPct = $null; if ($null -ne $prevCpu) { $dt = ($now - $prevTime).TotalSeconds; if ($dt -gt 0) { $cpuPct = 100.0 * (($proc.CPU - $prevCpu) / ($dt * $cores)) } }; $rows.Add([pscustomobject]@{ second = [math]::Round($sw.Elapsed.TotalSeconds, 3); cpu_percent = if ($null -eq $cpuPct) { $null } else { [math]::Round($cpuPct, 3) }; working_set_mb = [math]::Round($proc.WorkingSet64 / 1MB, 3); private_memory_mb = [math]::Round($proc.PrivateMemorySize64 / 1MB, 3); threads = $proc.Threads.Count; handles = $proc.Handles }) | Out-Null; $prevCpu = $proc.CPU; $prevTime = $now }",
+        "$shim.WaitForExit()",
+        "$rows | Export-Csv -NoTypeInformation -Encoding UTF8 -Path \"$outDir\\samples.csv\"",
+        "$rows | Select-Object -Last 8"
+    ].join("; \n");
+}
+
+function downloadJson(state) {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "step84_tuner_config.json";
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
+async function copyText(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+    } catch (_error) {
+        window.alert("Clipboard access failed. Select and copy the command manually.");
+    }
+}
+
+function saveState(state) {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    const saved = document.getElementById("saved-status");
+    if (saved) {
+        saved.textContent = `Autosaved locally at ${new Date().toLocaleTimeString()}.`;
+    }
+}
+
+function createTooltipNode(key) {
+    const tooltip = document.createElement("span");
+    tooltip.className = "setting-tooltip";
+    tooltip.textContent = "?";
+    tooltip.title = getHelpText(key);
+    tooltip.setAttribute("aria-label", getHelpText(key));
+    return tooltip;
+}
+
+function createResetNode(key) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "setting-reset";
+    button.textContent = "Reset";
+    button.dataset.settingReset = key;
+    button.addEventListener("click", () => resetSetting(key));
+    return button;
+}
+
+function decorateStandardSetting(key, element) {
+    const wrapper = element.parentElement;
+    if (!wrapper || wrapper.querySelector("[data-setting-reset]")) {
+        return;
+    }
+    const label = wrapper.querySelector(`label[for="${element.id}"]`);
+    if (!label) {
+        return;
+    }
+    wrapper.classList.add("setting-control");
+    const toolbar = document.createElement("div");
+    toolbar.className = "setting-toolbar";
+    const labelBox = document.createElement("div");
+    labelBox.className = "setting-toolbar__label";
+    const actions = document.createElement("div");
+    actions.className = "setting-toolbar__actions";
+    label.parentNode.insertBefore(toolbar, label);
+    toolbar.appendChild(labelBox);
+    toolbar.appendChild(actions);
+    labelBox.appendChild(label);
+    label.title = getHelpText(key);
+    actions.appendChild(createTooltipNode(key));
+    actions.appendChild(createResetNode(key));
+}
+
+function decorateToggleSetting(key, element) {
+    const toggleLabel = element.closest(".toggle-card");
+    if (!toggleLabel || toggleLabel.parentElement?.classList.contains("setting-control--toggle")) {
+        return;
+    }
+    const outer = document.createElement("div");
+    outer.className = "setting-control setting-control--toggle";
+    const toolbar = document.createElement("div");
+    toolbar.className = "setting-toolbar";
+    const labelBox = document.createElement("div");
+    labelBox.className = "setting-toolbar__label";
+    const name = document.createElement("span");
+    name.className = "setting-name";
+    name.textContent = "STEP84_BEST_EXPORT_INCLUDE_DENSE";
+    name.title = getHelpText(key);
+    const actions = document.createElement("div");
+    actions.className = "setting-toolbar__actions";
+    labelBox.appendChild(name);
+    actions.appendChild(createTooltipNode(key));
+    actions.appendChild(createResetNode(key));
+    toolbar.appendChild(labelBox);
+    toolbar.appendChild(actions);
+    toggleLabel.parentElement.insertBefore(outer, toggleLabel);
+    outer.appendChild(toolbar);
+    outer.appendChild(toggleLabel);
+    const textSpan = toggleLabel.querySelector("span");
+    if (textSpan) {
+        textSpan.title = getHelpText(key);
+    }
+}
+
+function decorateTopologyMode() {
+    const segmented = document.querySelector(".segmented");
+    if (!segmented || document.getElementById("topology-mode-toolbar")) {
+        return;
+    }
+    const toolbar = document.createElement("div");
+    toolbar.className = "setting-toolbar setting-toolbar--standalone";
+    toolbar.id = "topology-mode-toolbar";
+    const labelBox = document.createElement("div");
+    labelBox.className = "setting-toolbar__label";
+    const name = document.createElement("span");
+    name.className = "setting-name";
+    name.textContent = "Topology mode";
+    name.title = getHelpText("topologyMode");
+    const actions = document.createElement("div");
+    actions.className = "setting-toolbar__actions";
+    labelBox.appendChild(name);
+    actions.appendChild(createTooltipNode("topologyMode"));
+    actions.appendChild(createResetNode("topologyMode"));
+    toolbar.appendChild(labelBox);
+    toolbar.appendChild(actions);
+    segmented.parentNode.insertBefore(toolbar, segmented);
+    document.querySelectorAll(".segmented__item").forEach((button) => {
+        const mode = button.dataset.mode;
+        button.title = mode === "explicit"
+            ? "Explicit populations: you type the exact island sizes yourself, for example 32,24,16,12,8,8,6,6. Best for deliberate hand tuning."
+            : "Power schedule: generate island sizes from min exponent, max exponent, and copies, for example 2^2..2^8 with 2 copies each. Best for broad sweeps.";
+    });
+}
+
+function decorateControls() {
+    decorateTopologyMode();
+    Object.entries(fieldMap).forEach(([key, id]) => {
+        const element = document.getElementById(id);
+        if (!element) {
+            return;
+        }
+        if (checkboxFields.has(key)) {
+            decorateToggleSetting(key, element);
+        } else {
+            decorateStandardSetting(key, element);
+        }
+    });
+}
+
+function updateResetButtons(state) {
+    document.querySelectorAll("[data-setting-reset]").forEach((button) => {
+        const key = button.dataset.settingReset;
+        const atDefault = isDefaultValue(key, state);
+        button.disabled = atDefault;
+        button.title = atDefault ? "Already at default." : `Reset to default (${formatValue(defaults[key])}).`;
+    });
+}
+
+async function apiRequest(path, options = {}) {
+    const response = await fetch(path, {
+        headers: {
+            "Content-Type": "application/json"
+        },
+        ...options
+    });
+    if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || `Request failed: ${response.status}`);
+    }
+    return response.json();
+}
+
+function setRunStatus(message) {
+    document.getElementById("run-status").textContent = message;
+}
+
+function formatMetric(value, digits = 6) {
+    if (value === null || value === undefined || Number.isNaN(value)) {
+        return "-";
+    }
+    return Number(value).toFixed(digits);
+}
+
+function formatAxisValue(value, mode) {
+    if (mode === "log") {
+        return value.toExponential(2);
+    }
+    if (Math.abs(value) >= 1000 || (Math.abs(value) > 0 && Math.abs(value) < 0.01)) {
+        return value.toExponential(2);
+    }
+    return value.toFixed(2);
+}
+
+function updateLiveMetrics(payload) {
+    const latest = payload.latest || payload.summary || null;
+    document.getElementById("live-generation").textContent = latest && latest.generation !== undefined ? String(latest.generation) : "-";
+    document.getElementById("live-best").textContent = latest && latest.best_fitness !== undefined ? formatMetric(latest.best_fitness, 9) : payload.summary?.best_fitness_ever ? formatMetric(payload.summary.best_fitness_ever, 9) : "-";
+    document.getElementById("live-wall").textContent = latest && latest.wall_seconds_cumulative !== undefined ? formatMetric(latest.wall_seconds_cumulative, 2) : payload.summary?.total_wall_seconds ? formatMetric(payload.summary.total_wall_seconds, 2) : "-";
+    document.getElementById("live-333").textContent = latest && latest.signature_333_count !== undefined ? String(latest.signature_333_count) : "-";
+}
+
+function drawChart(canvasId, seriesList, xAccessor, title, yMode = "linear") {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext("2d");
+    const width = canvas.width;
+    const height = canvas.height;
+    const pad = { top: 24, right: 24, bottom: 34, left: 54 };
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "#fff9f1";
+    ctx.fillRect(0, 0, width, height);
+
+    const points = seriesList.flatMap((series) => series.data.filter((row) => row.y !== null && row.y !== undefined));
+    if (!points.length) {
+        ctx.fillStyle = "#5f655f";
+        ctx.font = "16px Aptos, sans-serif";
+        ctx.fillText(`No data yet for ${title}.`, 28, 42);
+        return;
+    }
+
+    const xValues = points.map((point) => point.x);
+    const positivePoints = yMode === "log" ? points.filter((point) => point.y > 0) : points;
+    if (yMode === "log" && !positivePoints.length) {
+        ctx.fillStyle = "#5f655f";
+        ctx.font = "16px Aptos, sans-serif";
+        ctx.fillText(`No positive data for log-scaled ${title}.`, 28, 42);
+        return;
+    }
+    const yValues = positivePoints.map((point) => point.y);
+    const minX = Math.min(...xValues);
+    const maxX = Math.max(...xValues);
+    let minY = Math.min(...yValues);
+    let maxY = Math.max(...yValues);
+    if (yMode === "log") {
+        minY = Math.max(minY, 1e-12);
+        if (minY === maxY) {
+            minY /= 10;
+            maxY *= 10;
+        }
+    } else if (minY === maxY) {
+        minY -= 1;
+        maxY += 1;
+    }
+
+    const plotWidth = width - pad.left - pad.right;
+    const plotHeight = height - pad.top - pad.bottom;
+    const xScale = (value) => pad.left + ((value - minX) / Math.max(1e-12, maxX - minX || 1)) * plotWidth;
+    const yScale = yMode === "log"
+        ? (value) => {
+            const safeValue = Math.max(value, 1e-12);
+            const logMin = Math.log10(minY);
+            const logMax = Math.log10(maxY);
+            const logValue = Math.log10(safeValue);
+            return pad.top + (1 - (logValue - logMin) / Math.max(1e-12, logMax - logMin || 1)) * plotHeight;
+        }
+        : (value) => pad.top + (1 - (value - minY) / (maxY - minY)) * plotHeight;
+
+    ctx.strokeStyle = "rgba(31, 36, 48, 0.15)";
+    ctx.lineWidth = 1;
+    for (let tick = 0; tick <= 4; tick += 1) {
+        const y = pad.top + (plotHeight * tick) / 4;
+        ctx.beginPath();
+        ctx.moveTo(pad.left, y);
+        ctx.lineTo(width - pad.right, y);
+        ctx.stroke();
+    }
+
+    ctx.strokeStyle = "rgba(31, 36, 48, 0.35)";
+    ctx.beginPath();
+    ctx.moveTo(pad.left, pad.top);
+    ctx.lineTo(pad.left, height - pad.bottom);
+    ctx.lineTo(width - pad.right, height - pad.bottom);
+    ctx.stroke();
+
+    ctx.fillStyle = "#5f655f";
+    ctx.font = "12px Cascadia Code, monospace";
+    ctx.fillText(String(minX), pad.left, height - 10);
+    ctx.fillText(String(maxX), width - pad.right - 20, height - 10);
+    ctx.fillText(formatAxisValue(minY, yMode), 6, height - pad.bottom + 4);
+    ctx.fillText(formatAxisValue(maxY, yMode), 6, pad.top + 4);
+
+    seriesList.forEach((series) => {
+        const valid = series.data.filter((row) => row.y !== null && row.y !== undefined && (yMode !== "log" || row.y > 0));
+        if (!valid.length) {
+            return;
+        }
+        ctx.strokeStyle = series.color;
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        valid.forEach((row, index) => {
+            const x = xScale(xAccessor(row));
+            const y = yScale(row.y);
+            if (index === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
+        });
+        ctx.stroke();
+    });
+}
+
+function updateScaleButtons() {
+    const fitnessButton = document.getElementById("fitness-scale-toggle");
+    const shadowButton = document.getElementById("shadow-scale-toggle");
+    if (fitnessButton) {
+        fitnessButton.textContent = fitnessScaleMode === "log" ? "Log Y" : "Linear Y";
+        fitnessButton.title = fitnessScaleMode === "log"
+            ? "Residual chart is using a log-scaled Y axis. Click to switch to linear."
+            : "Residual chart is using a linear Y axis. Click to switch to log.";
+    }
+    if (shadowButton) {
+        shadowButton.textContent = shadowScaleMode === "log" ? "Log Y" : "Linear Y";
+        shadowButton.title = shadowScaleMode === "log"
+            ? "Shadow chart is using a log-scaled Y axis. Click to switch to linear."
+            : "Shadow chart is using a linear Y axis. Click to switch to log.";
+    }
+}
+
+function updateCharts(payload) {
+    const history = payload.history || [];
+    drawChart(
+        "fitness-chart",
+        [
+            { color: "#bf5c36", data: history.map((row) => ({ x: row.generation, y: row.best_fitness })) },
+            { color: "#1e5e63", data: history.map((row) => ({ x: row.generation, y: row.mean_fitness })) },
+            { color: "#8b3418", data: history.map((row) => ({ x: row.generation, y: row.worst_fitness })) }
+        ],
+        (row) => row.x,
+        "fitness",
+        fitnessScaleMode
+    );
+    drawChart(
+        "shadow-chart",
+        [
+            { color: "#1e5e63", data: history.map((row) => ({ x: row.generation, y: row.shadow_pool_size })) },
+            { color: "#bf5c36", data: history.map((row) => ({ x: row.generation, y: row.signature_333_count })) }
+        ],
+        (row) => row.x,
+        "shadow",
+        shadowScaleMode
+    );
+    updateScaleButtons();
+}
+
+function updateLogs(payload) {
+    document.getElementById("stdout-tail").value = (payload.stdout_tail || []).join("\n");
+    document.getElementById("stderr-tail").value = (payload.stderr_tail || []).join("\n");
+}
+
+function applyServerState(payload) {
+    updateLiveMetrics(payload);
+    updateCharts(payload);
+    updateLogs(payload);
+    if (payload.running) {
+        setRunStatus(`Running Step 84. PID ${payload.pid}. Polling live outputs.`);
+    } else if (payload.exit_code !== null && payload.exit_code !== undefined) {
+        setRunStatus(`Last run finished with exit code ${payload.exit_code}.`);
+    } else {
+        setRunStatus("Backend reachable. No active Step 84 run.");
+    }
+}
+
+async function refreshServerState() {
+    try {
+        const payload = await apiRequest("/api/state", { method: "GET", headers: {} });
+        applyServerState(payload);
+    } catch (_error) {
+        setRunStatus("Backend not reachable. Start the local server to enable run control and live graphs.");
+    }
+}
+
+async function startRun() {
+    try {
+        const state = getState();
+        saveState(state);
+        const payload = await apiRequest("/api/run/start", {
+            method: "POST",
+            body: JSON.stringify({ env: buildEnvObject(state) })
+        });
+        applyServerState(payload.state);
+    } catch (error) {
+        setRunStatus(error.message);
+    }
+}
+
+async function stopRun() {
+    try {
+        const payload = await apiRequest("/api/run/stop", { method: "POST", body: "{}" });
+        applyServerState(payload.state);
+    } catch (error) {
+        setRunStatus(error.message);
+    }
+}
+
+function render() {
+    const state = getState();
+    const derived = getDerived(state);
+
+    document.getElementById("topology-label").textContent = state.topologyMode === "explicit" ? "Explicit list" : "Power schedule";
+    document.getElementById("population-total").textContent = derived.totalPopulation.toLocaleString();
+    document.getElementById("offspring-total").textContent = derived.totalOffspring.toLocaleString();
+    document.getElementById("island-count").textContent = derived.islandCount.toLocaleString();
+    document.getElementById("derived-summary").textContent = derived.populations.length
+        ? `Schedule: [${derived.populations.join(", ")}]. Total population ${derived.totalPopulation}, total offspring ${derived.totalOffspring}.`
+        : "Schedule is empty. Add at least one positive island population.";
+    document.getElementById("step84-command").value = buildRunCommand(state);
+    document.getElementById("profile-command").value = buildProfileCommand(state);
+    updateResetButtons(state);
+    saveState(state);
+}
+
+function wirePresets() {
+    document.querySelectorAll("[data-preset]").forEach((button) => {
+        button.addEventListener("click", () => {
+            const current = getState();
+            applyState({ ...current, ...presetMap[button.dataset.preset] });
+        });
+    });
+}
+
+function wireModeToggle() {
+    document.querySelectorAll(".segmented__item").forEach((button) => {
+        button.addEventListener("click", () => {
+            setTopologyMode(button.dataset.mode);
+            render();
+        });
+    });
+}
+
+function wireFieldUpdates() {
+    Object.values(fieldMap).forEach((id) => {
+        const element = document.getElementById(id);
+        if (!element) {
+            return;
+        }
+        element.addEventListener("input", render);
+        element.addEventListener("change", render);
+    });
+}
+
+function wireActions() {
+    document.getElementById("save-config").addEventListener("click", () => saveState(getState()));
+    document.getElementById("reset-config").addEventListener("click", () => applyState(cloneDefaults()));
+    document.getElementById("copy-run-command").addEventListener("click", () => copyText(document.getElementById("step84-command").value));
+    document.getElementById("copy-profile-command").addEventListener("click", () => copyText(document.getElementById("profile-command").value));
+    document.getElementById("download-config").addEventListener("click", () => downloadJson(getState()));
+    document.getElementById("start-run").addEventListener("click", startRun);
+    document.getElementById("stop-run").addEventListener("click", stopRun);
+    document.getElementById("refresh-state").addEventListener("click", refreshServerState);
+    document.getElementById("fitness-scale-toggle").addEventListener("click", () => {
+        fitnessScaleMode = fitnessScaleMode === "log" ? "linear" : "log";
+        refreshServerState();
+    });
+    document.getElementById("shadow-scale-toggle").addEventListener("click", () => {
+        shadowScaleMode = shadowScaleMode === "log" ? "linear" : "log";
+        refreshServerState();
+    });
+    document.getElementById("import-config").addEventListener("change", async (event) => {
+        const [file] = event.target.files || [];
+        if (!file) {
+            return;
+        }
+        const text = await file.text();
+        try {
+            applyState({ ...cloneDefaults(), ...JSON.parse(text) });
+        } catch (_error) {
+            window.alert("Invalid JSON config.");
+        }
+        event.target.value = "";
+    });
+    window.addEventListener("beforeunload", () => saveState(getState()));
+}
+
+function init() {
+    decorateControls();
+    wirePresets();
+    wireModeToggle();
+    wireFieldUpdates();
+    wireActions();
+    applyState(getSavedState());
+    refreshServerState();
+    pollHandle = window.setInterval(refreshServerState, POLL_INTERVAL_MS);
+}
+
+init();

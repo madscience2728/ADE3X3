@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-29 20:45:13
+Generated: 2026-03-30 00:22:58
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-29 20:45:13
+**Generated:** 2026-03-30 00:22:58
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -15635,7 +15635,150 @@ Step 79 does not rule out all basis-rotated search. It only rules out the simple
 cold CP search after a basis change. Any future revisit of this route should therefore use transported
 warm starts or continuation from the exact rank-23 witness, not another tiny cold pilot.
 
-## 79. CURRENT GAPS / OPEN FRONTS
+## 79. SUPPORT EXPANSION AND HEURISTIC SPARSE CAMPAIGN
+
+[MEASURED_FROM_CODE] (Step 83b)
+
+Step 83b follows the Step 83 result that singleton-drop rank-19 charts inherited directly
+from AlphaTensor fail quickly for structural reasons rather than because of terrible chart
+conditioning. It therefore runs two parallelized sparse-support campaigns:
+
+- Track 1: expand the best Step 83 singleton-drop charts by adding one or two new nonzero
+  coordinates per factor while keeping the inherited sparse support skeleton
+- Track 2: screen a large random sparse-support ensemble for rank-19 charts and use the
+  conditioning landscape itself as a heuristic guide to where tractable support regimes live
+
+### Campaign Summary
+
+- Track 1 support-expansion cases configured: 12
+- Track 1 completed Julia runs: 12
+- Track 1 real endpoints: 0
+- Track 2 random sparse screens: 1000
+- Track 2 viable under the 200-variable cap: 1000
+- Track 2 tracked Julia cases: 24
+- Track 2 real endpoints: 0
+- Any exact hit: False
+
+### Track 1: Support Expansion From AlphaTensor
+
+The inherited Step 83 drop sets remain numerically tractable after small support expansion:
+all 12 configured cases stayed under the 200-variable cap, landing between about 130 and 170
+reduced variables. But the Julia phase remained negative.
+
+- Track 1 timeouts: 11
+- Track 1 fast no-solution exits: 1
+
+| case | family | dropped terms | reduced vars | condition number | start max-abs residual |
+|------|--------|---------------|--------------|------------------|------------------------|
+| step83b_track1_case_01 | uniform_expand_ab_1 | t10;t11;t15;t17 | 131 | 1.4143757350416329e+03 | 1.0754067483776888e+00 |
+| step83b_track1_case_02 | uniform_expand_ab_1 | t10;t11;t15;t22 | 132 | 2.3819459357613305e+03 | 1.0896339415063547e+00 |
+| step83b_track1_case_03 | uniform_expand_ab_1 | t03;t11;t12;t15 | 131 | 1.2063867885967875e+03 | 1.0888219708923568e+00 |
+| step83b_track1_case_04 | uniform_expand_ab_1 | t06;t10;t12;t15 | 130 | 2.0747720478322235e+03 | 1.0922386795659960e+00 |
+| step83b_track1_case_05 | uniform_expand_ab_2 | t10;t11;t15;t17 | 169 | 4.0772207702644164e+03 | 1.0986387367030195e+00 |
+| step83b_track1_case_06 | uniform_expand_ab_2 | t10;t11;t15;t22 | 170 | 6.8049660790339794e+03 | 1.0828126429680103e+00 |
+| step83b_track1_case_07 | uniform_expand_ab_2 | t03;t11;t12;t15 | 169 | 4.5285215220660320e+03 | 1.1375393096357962e+00 |
+| step83b_track1_case_08 | uniform_expand_ab_2 | t06;t10;t12;t15 | 168 | 5.3551067616506261e+03 | 1.1241096439227867e+00 |
+| step83b_track1_case_09 | uniform_expand_abg_1 | t10;t11;t15;t17 | 150 | 2.6887804617421370e+03 | 1.0959637602895944e+00 |
+| step83b_track1_case_10 | uniform_expand_abg_1 | t10;t11;t15;t22 | 151 | 1.1936945248650261e+03 | 1.0973562952530178e+00 |
+| step83b_track1_case_11 | targeted_expand_ab_1 | t10;t11;t15;t17 | 131 | 3.5529035810568662e+03 | 1.0666751401150170e+00 |
+| step83b_track1_case_12 | targeted_expand_ab_1 | t10;t11;t15;t22 | 132 | 8.8218519861415393e+02 | 1.0959258089044439e+00 |
+
+The strongest targeted expansion case reached condition number about 8.82e2, while the rest of
+the family sat roughly in the 1e3 to 1e4 range. So Track 1 is much healthier than the dense Step 82
+chart, but still substantially rougher than the best sparse random charts from Track 2.
+
+### Track 2: Heuristic Sparse Meta-Analysis
+
+Track 2 screened 1000 random rank-19 sparse support patterns before any Julia calls. Every one
+of the screened patterns stayed under the 200-variable cap and the configured conditioning cap, so
+the sparse-support tractability region is broad rather than fragile.
+
+- Median condition number across viable screens: 108.79286785985471
+- Best condition number across viable screens: 41.81113611295842
+- Empirically optimal support signature: (3,3,3)
+
+| support signature | screened | viable fraction | median condition | best condition | median reduced vars | tracked |
+|-------------------|---------:|----------------:|-----------------:|---------------:|--------------------:|--------:|
+| (3,3,3) | 167 | 1.0 | 74.352228 | 41.811136 | 133.0 | 18 |
+| (4,4,2) | 166 | 1.0 | 97.045691 | 45.573487 | 152.0 | 3 |
+| (3,4,3) | 167 | 1.0 | 103.004564 | 52.817275 | 152.0 | 2 |
+| (4,3,3) | 167 | 1.0 | 106.708144 | 42.344450 | 152.0 | 1 |
+| (4,4,3) | 167 | 1.0 | 128.770084 | 66.504807 | 171.0 | 0 |
+| (4,4,4) | 166 | 1.0 | 157.019558 | 73.255763 | 190.0 | 0 |
+
+Two empirical facts stand out. First, conditioning worsens substantially as the reduced variable
+count rises: the measured correlation between reduced variable count and log10(condition) is about
+0.6011143257532825 if that meta field is present. Second,
+gamma-union size itself is almost irrelevant in this regime, so the main tractability lever is again
+the alpha/beta side of the support pattern rather than gamma coverage.
+
+### Julia Outcomes On The Best Sparse Random Charts
+
+- Track 2 timeouts: 18
+- Track 2 fast no-solution exits: 6
+
+The best random sparse charts were markedly cleaner than the support-expansion family, with best
+condition number about 4.18e1 and many tracked cases at exactly 133 reduced variables. But even
+those better charts still produced either zero returned solutions or 120-second timeouts, with no
+real endpoints and no exact hits.
+
+### Status
+
+Step 83b is therefore informative even though it is still negative computationally. It shows that
+the tractable sparse-support region is real and wide, and that ultra-sparse random charts around
+(3,3,3) are systematically better conditioned than denser 4-nonzero regimes. But neither mild
+AlphaTensor support expansion nor the first large random sparse sweep produced a rank-19 real
+endpoint. The next campaign should therefore stay sparse, target the empirically strong (3,3,3)
+to (4,4,2) regime, and improve the start families or continuation schedule rather than simply
+adding more density.
+
+## 80. METAHEURISTIC RANK-19 SEARCH
+
+[MEASURED_FROM_CODE] (Step 84)
+
+Step 84 drops continuation entirely and treats sparse rank-19 search as a mixed
+combinatorial/continuous optimization problem. A 4-island evolutionary algorithm
+mutates sparse supports directly, while local least-squares refinement improves
+coefficients on fixed supports in Lamarckian fashion.
+
+### Campaign Summary
+
+- Generations completed: 1
+- Total evaluations: 96
+- Total wall seconds: 2.581674098968506
+- Best fitness ever (max-abs residual): 1.0
+- Best generation: 1
+- Best support signature: (4,4,4)
+- Best variable count: 198
+- Any exact hit below 1e-8: False
+- Stop reason: generation_limit
+
+The run recorded a best-so-far incumbent trace across generations rather than a single
+isolated event. The first recorded incumbent appeared at generation
+0 with residual 1.0, and the final incumbent appeared at generation 1 with residual 1.0.
+
+### Best Individual
+
+- Origin: term_crossover:random:10|random:38
+- Best max-abs residual: 1.0
+- Best Frobenius residual: 3.067720675494955
+- Support histogram: {'(3,4,4)': 1, '(3,4,5)': 2, '(3,5,3)': 1, '(3,5,4)': 1, '(4,3,4)': 2, '(4,3,5)': 2, '(4,4,4)': 1, '(4,4,5)': 1, '(4,5,3)': 1, '(4,5,4)': 1, '(4,5,5)': 2, '(5,3,4)': 1, '(5,4,4)': 1, '(5,5,4)': 1, '(5,5,5)': 1}
+- Local nonlinear polish used: False
+
+### Final-Island Snapshot
+
+- Strongest island at the final logged generation: 0
+- Final-island best residual: 1.0000000000000000e+00
+- Final-island mean residual: 1.0000000000000000e+00
+
+### Status
+
+Step 84 turns the Step 83b support landscape into a reusable search engine. Even when
+the run does not close to an exact rank-19 decomposition, it now records which sparse
+support families survive evolutionary pressure, how fast the best residual improves, and
+what the best near-miss support structure looks like for longer reruns.
+
+## 81. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
@@ -15693,6 +15836,8 @@ warm starts or continuation from the exact rank-23 witness, not another tiny col
 - Pure-sigma common-matrix obstruction: ✓ Phase 37 compresses the witness problem to the sigma-silent sector Z = ker(H^T) ∩ ker(Delta^T) and the induced exact 9x9 operator Omega; on the known exact decompositions, Omega is symmetric positive definite (Omega = I for the standard algorithm, and AlphaTensor has exact determinant 77875/19683 with positive leading minors), so the common-matrix equation Omega vec(C) = 0 forces C = 0 inside the Delta-contained regime
 - Hamilton term-sharing audit: ✓ Step 78 reconstructs the exact rank-20 commutator witness alongside the Step 75 rank-19 anticommutator witness, finds 0 shared normalized rank-1 terms, union span rank 39 with span intersection dimension 0, and therefore closes the easy linear-sharing route from T=({A,B}+[A,B])/2
 - Basis-rotated pilot search: ✓ Step 79 verifies GL(9)^3 transport of the public rank-23 witness exactly on a small structured/random pilot, but the rotated cold CP scans at ranks 19..22 are cleanly negative and do not improve on the existing rank-19 frontier
+- Support expansion + heuristic sparse campaign: ✓ Step 83b ran 12 AlphaTensor-derived support-expansion cases plus a 1000-pattern random sparse-screening campaign under the 200-variable cap; all random screens were viable, the best conditioning sweet spot was the ultra-sparse (3,3,3) regime, but neither the 12 expanded charts nor the top 24 random sparse charts produced a real rank-19 endpoint
+- Metaheuristic rank-19 search: ✓ Step 84 built the sparse-support evolutionary search engine with 4 islands, Lamarckian coefficient refinement, migration, logging, and checkpoints; the current best run reached max-abs residual 1.0 at generation 1 with support signature (4,4,4)
 
 **Remaining open fronts:**
 - Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored
@@ -15717,6 +15862,7 @@ warm starts or continuation from the exact rank-23 witness, not another tiny col
 - Threshold localization: determine whether AlphaTensor's true critical cap lies below 2 degrees and whether the standard threshold is exactly 12 degrees or just above 11.5 degrees
 - Hamilton recompression beyond linear sharing: Step 78 rules out direct shared terms and trivial span overlap, but a genuinely nonlinear recompression of the 39-term Hamilton union has not been excluded
 - Basis-rotated search beyond the cold pilot: Step 79 rules out the tiny cold-start version, but a transported warm-start or continuation-based GL(9)^3 search has not yet been tested
+- Sparse-support metaheuristics beyond Step 84: the search infrastructure now operates directly in the empirically strong (3,3,3) to (4,4,2) regime and records best-so-far support structures, but longer campaigns and operator retuning are still needed to determine whether the best near-miss supports can actually close to an exact rank-19 decomposition
 - Step 48 shows that the 8 XC-orbit linearization is exact but vacuous for rank lower bounds;
   any useful lower-bound model must retain finer-than-orbit-sum equation structure
 - Step 49 now records the exact 729-equation trilinear system and the 8 representative types;

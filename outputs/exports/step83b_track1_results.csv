@@ -1,0 +1,13 @@
+case_id,track,status,initial_variable_count,reduced_variable_count,selected_equation_count,square_jacobian_condition_number,start_full_tensor_max_abs_residual,num_solutions_returned,endpoint_max_imag,endpoint_selected_residual_max_abs,endpoint_full_tensor_max_abs_residual,endpoint_to_start_chart_max_abs,exact_hit,julia_return_code,stdout_path,runtime_seconds,provenance
+step83b_track1_case_04,track1,no_solution_returned,130,130,130,2.0747720478322235e+03,1.0922386795659960e+00,0,0.0000000000000000e+00,,,,,0,outputs\exports\step83b_track1_case_04_stdout.txt,1.0714444518089294e+02,MEASURED_FROM_CODE
+step83b_track1_case_01,track1,timeout,131,131,131,1.4143757350416329e+03,1.0754067483776888e+00,,,,,,,,outputs\exports\step83b_track1_case_01_stdout.txt,1.2022882866859436e+02,MEASURED_FROM_CODE
+step83b_track1_case_05,track1,timeout,169,169,169,4.0772207702644164e+03,1.0986387367030195e+00,,,,,,,,outputs\exports\step83b_track1_case_05_stdout.txt,1.2022473645210266e+02,MEASURED_FROM_CODE
+step83b_track1_case_03,track1,timeout,131,131,131,1.2063867885967875e+03,1.0888219708923568e+00,,,,,,,,outputs\exports\step83b_track1_case_03_stdout.txt,1.2026326751708984e+02,MEASURED_FROM_CODE
+step83b_track1_case_06,track1,timeout,170,170,170,6.8049660790339794e+03,1.0828126429680103e+00,,,,,,,,outputs\exports\step83b_track1_case_06_stdout.txt,1.2030065131187439e+02,MEASURED_FROM_CODE
+step83b_track1_case_02,track1,timeout,132,132,132,2.3819459357613305e+03,1.0896339415063547e+00,,,,,,,,outputs\exports\step83b_track1_case_02_stdout.txt,1.2034322261810303e+02,MEASURED_FROM_CODE
+step83b_track1_case_09,track1,timeout,150,150,150,2.6887804617421370e+03,1.0959637602895944e+00,,,,,,,,outputs\exports\step83b_track1_case_09_stdout.txt,1.2034773802757263e+02,MEASURED_FROM_CODE
+step83b_track1_case_07,track1,timeout,169,169,169,4.5285215220660320e+03,1.1375393096357962e+00,,,,,,,,outputs\exports\step83b_track1_case_07_stdout.txt,1.2035924911499023e+02,MEASURED_FROM_CODE
+step83b_track1_case_10,track1,timeout,151,151,151,1.1936945248650261e+03,1.0973562952530178e+00,,,,,,,,outputs\exports\step83b_track1_case_10_stdout.txt,1.2035173511505127e+02,MEASURED_FROM_CODE
+step83b_track1_case_11,track1,timeout,131,131,131,3.5529035810568662e+03,1.0666751401150170e+00,,,,,,,,outputs\exports\step83b_track1_case_11_stdout.txt,1.2034923505783081e+02,MEASURED_FROM_CODE
+step83b_track1_case_12,track1,timeout,132,132,132,8.8218519861415393e+02,1.0959258089044439e+00,,,,,,,,outputs\exports\step83b_track1_case_12_stdout.txt,1.2034573149681091e+02,MEASURED_FROM_CODE
+step83b_track1_case_08,track1,timeout,168,168,168,5.3551067616506261e+03,1.1241096439227867e+00,,,,,,,,outputs\exports\step83b_track1_case_08_stdout.txt,1.2037378191947937e+02,MEASURED_FROM_CODE

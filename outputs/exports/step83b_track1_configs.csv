@@ -1,0 +1,13 @@
+case_id,case_family,drop_terms,expand_alpha,expand_beta,expand_gamma,targeted,seed,status,initial_variable_count,reduced_variable_count,selected_equation_count,square_jacobian_condition_number,start_full_tensor_max_abs_residual,start_full_tensor_fro_residual,error,provenance
+step83b_track1_case_01,uniform_expand_ab_1,t10;t11;t15;t17,1,1,0,False,8301001,screened_ok,131,131,131,1.4143757350416329e+03,1.0754067483776888e+00,6.0662811242164194e+00,,MEASURED_FROM_CODE
+step83b_track1_case_02,uniform_expand_ab_1,t10;t11;t15;t22,1,1,0,False,8301002,screened_ok,132,132,132,2.3819459357613305e+03,1.0896339415063547e+00,6.1418444109195915e+00,,MEASURED_FROM_CODE
+step83b_track1_case_03,uniform_expand_ab_1,t03;t11;t12;t15,1,1,0,False,8301003,screened_ok,131,131,131,1.2063867885967875e+03,1.0888219708923568e+00,6.0782060677016565e+00,,MEASURED_FROM_CODE
+step83b_track1_case_04,uniform_expand_ab_1,t06;t10;t12;t15,1,1,0,False,8301004,screened_ok,130,130,130,2.0747720478322235e+03,1.0922386795659960e+00,6.0801557737391176e+00,,MEASURED_FROM_CODE
+step83b_track1_case_05,uniform_expand_ab_2,t10;t11;t15;t17,2,2,0,False,8301005,screened_ok,169,169,169,4.0772207702644164e+03,1.0986387367030195e+00,6.1183669388320725e+00,,MEASURED_FROM_CODE
+step83b_track1_case_06,uniform_expand_ab_2,t10;t11;t15;t22,2,2,0,False,8301006,screened_ok,170,170,170,6.8049660790339794e+03,1.0828126429680103e+00,6.1137674865527911e+00,,MEASURED_FROM_CODE
+step83b_track1_case_07,uniform_expand_ab_2,t03;t11;t12;t15,2,2,0,False,8301007,screened_ok,169,169,169,4.5285215220660320e+03,1.1375393096357962e+00,6.1222401944780129e+00,,MEASURED_FROM_CODE
+step83b_track1_case_08,uniform_expand_ab_2,t06;t10;t12;t15,2,2,0,False,8301008,screened_ok,168,168,168,5.3551067616506261e+03,1.1241096439227867e+00,6.0916330514960588e+00,,MEASURED_FROM_CODE
+step83b_track1_case_09,uniform_expand_abg_1,t10;t11;t15;t17,1,1,1,False,8301009,screened_ok,150,150,150,2.6887804617421370e+03,1.0959637602895944e+00,6.1318216892205717e+00,,MEASURED_FROM_CODE
+step83b_track1_case_10,uniform_expand_abg_1,t10;t11;t15;t22,1,1,1,False,8301010,screened_ok,151,151,151,1.1936945248650261e+03,1.0973562952530178e+00,6.1594177752071495e+00,,MEASURED_FROM_CODE
+step83b_track1_case_11,targeted_expand_ab_1,t10;t11;t15;t17,1,1,0,True,8301011,screened_ok,131,131,131,3.5529035810568662e+03,1.0666751401150170e+00,6.0141045062339886e+00,,MEASURED_FROM_CODE
+step83b_track1_case_12,targeted_expand_ab_1,t10;t11;t15;t22,1,1,0,True,8301012,screened_ok,132,132,132,8.8218519861415393e+02,1.0959258089044439e+00,6.2340586396906099e+00,,MEASURED_FROM_CODE

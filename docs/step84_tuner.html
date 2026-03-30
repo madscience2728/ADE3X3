@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Step 84 Tuner</title>
+    <link rel="stylesheet" href="step84_tuner.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="hero">
+            <div class="hero__copy">
+                <p class="eyebrow">ADE3X3 / Step 84</p>
+                <h1>Metaheuristic Rank-19 Tuner</h1>
+                <p class="hero__lede">Local control panel for assembling Step 84 environment settings, exploring island schedules, and generating runnable PowerShell commands.</p>
+            </div>
+            <div class="hero__metrics">
+                <div class="metric-card">
+                    <span class="metric-card__label">Mode</span>
+                    <strong id="topology-label">Explicit list</strong>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-card__label">Total population</span>
+                    <strong id="population-total">0</strong>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-card__label">Total offspring</span>
+                    <strong id="offspring-total">0</strong>
+                </div>
+                <div class="metric-card metric-card--accent">
+                    <span class="metric-card__label">Islands</span>
+                    <strong id="island-count">0</strong>
+                </div>
+            </div>
+        </header>
+
+        <main class="layout-grid">
+            <section class="panel panel--controls">
+                <div class="panel__header">
+                    <h2>Topology</h2>
+                    <div class="button-row">
+                        <button type="button" class="ghost-button" data-preset="balanced">Balanced</button>
+                        <button type="button" class="ghost-button" data-preset="moderate">Moderate</button>
+                        <button type="button" class="ghost-button" data-preset="wide">Wide</button>
+                    </div>
+                </div>
+
+                <div class="segmented" role="tablist" aria-label="Topology mode">
+                    <button type="button" class="segmented__item is-active" data-mode="explicit">Explicit populations</button>
+                    <button type="button" class="segmented__item" data-mode="power">Power schedule</button>
+                </div>
+
+                <div class="fieldset" id="explicit-fields">
+                    <label for="island-populations">STEP84_ISLAND_POPULATIONS</label>
+                    <textarea id="island-populations" rows="4" spellcheck="false">32,24,16,12,8,8,6,6</textarea>
+                    <p class="field-help">Comma-separated island populations. The UI derives total population and offspring from this list.</p>
+                </div>
+
+                <div class="fieldset is-hidden" id="power-fields">
+                    <div class="triple-grid">
+                        <div>
+                            <label for="island-min-exp">STEP84_ISLAND_MIN_EXP</label>
+                            <input id="island-min-exp" type="number" min="1" step="1" value="2">
+                        </div>
+                        <div>
+                            <label for="island-max-exp">STEP84_ISLAND_MAX_EXP</label>
+                            <input id="island-max-exp" type="number" min="1" step="1" value="8">
+                        </div>
+                        <div>
+                            <label for="island-copies">STEP84_ISLAND_COPIES</label>
+                            <input id="island-copies" type="number" min="1" step="1" value="2">
+                        </div>
+                    </div>
+                    <p class="field-help">Builds islands as repeated powers of two from max down to min.</p>
+                </div>
+
+                <div class="panel__header panel__header--spaced">
+                    <h2>Runtime</h2>
+                </div>
+                <div class="control-grid">
+                    <div>
+                        <label for="workers">STEP84_WORKERS</label>
+                        <input id="workers" type="number" min="1" step="1" value="24">
+                    </div>
+                    <div>
+                        <label for="timeout-seconds">STEP84_TIMEOUT_SECONDS</label>
+                        <input id="timeout-seconds" type="number" min="1" step="1" value="120">
+                    </div>
+                    <div>
+                        <label for="generations">STEP84_GENERATIONS</label>
+                        <input id="generations" type="number" min="1" step="1" value="1000000">
+                    </div>
+                    <div>
+                        <label for="seed">STEP84_SEED</label>
+                        <input id="seed" type="number" step="1" value="8401001">
+                    </div>
+                    <div>
+                        <label for="offspring-multiplier">STEP84_OFFSPRING_MULTIPLIER</label>
+                        <input id="offspring-multiplier" type="number" min="1" step="1" value="1">
+                    </div>
+                    <div>
+                        <label for="warm-seeds">STEP84_WARM_SEEDS</label>
+                        <input id="warm-seeds" type="number" min="0" step="1" value="12">
+                    </div>
+                    <div>
+                        <label for="migration-interval">STEP84_MIGRATION_INTERVAL</label>
+                        <input id="migration-interval" type="number" min="1" step="1" value="25">
+                    </div>
+                    <div>
+                        <label for="migration-size">STEP84_MIGRATION_SIZE</label>
+                        <input id="migration-size" type="number" min="0" step="1" value="1">
+                    </div>
+                    <div>
+                        <label for="checkpoint-interval">STEP84_CHECKPOINT_INTERVAL</label>
+                        <input id="checkpoint-interval" type="number" min="1" step="1" value="100">
+                    </div>
+                    <div>
+                        <label for="tournament-size">STEP84_TOURNAMENT_SIZE</label>
+                        <input id="tournament-size" type="number" min="1" step="1" value="3">
+                    </div>
+                    <div>
+                        <label for="executor-kind">STEP84_EXECUTOR_KIND</label>
+                        <select id="executor-kind">
+                            <option value="thread" selected>thread</option>
+                            <option value="process">process</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="resume-checkpoint">STEP84_RESUME_CHECKPOINT</label>
+                        <input id="resume-checkpoint" type="text" value="">
+                    </div>
+                </div>
+
+                <div class="panel__header panel__header--spaced">
+                    <h2>Selection + Search</h2>
+                </div>
+                <div class="control-grid">
+                    <div>
+                        <label for="signature333-fraction">STEP84_SIGNATURE333_SURVIVOR_FRACTION</label>
+                        <input id="signature333-fraction" type="number" min="0" max="1" step="0.01" value="0.15">
+                    </div>
+                    <div>
+                        <label for="shadow-survivor-fraction">STEP84_SHADOW_SURVIVOR_FRACTION</label>
+                        <input id="shadow-survivor-fraction" type="number" min="0" max="1" step="0.01" value="0.30">
+                    </div>
+                    <div>
+                        <label for="shadow-parent-rate">STEP84_SHADOW_PARENT_RATE</label>
+                        <input id="shadow-parent-rate" type="number" min="0" max="1" step="0.01" value="0.40">
+                    </div>
+                    <div>
+                        <label for="shadow-variable-bucket">STEP84_SHADOW_VARIABLE_BUCKET</label>
+                        <input id="shadow-variable-bucket" type="number" min="1" step="1" value="16">
+                    </div>
+                    <div>
+                        <label for="shadow-metrics-interval">STEP84_SHADOW_METRICS_INTERVAL</label>
+                        <input id="shadow-metrics-interval" type="number" min="1" step="1" value="20">
+                    </div>
+                    <div>
+                        <label for="hit-threshold">STEP84_HIT_THRESHOLD</label>
+                        <input id="hit-threshold" type="number" step="0.00000001" value="0.00000001">
+                    </div>
+                </div>
+
+                <div class="panel__header panel__header--spaced">
+                    <h2>Operators + Local Search</h2>
+                </div>
+                <div class="control-grid">
+                    <div>
+                        <label for="crossover-rate">STEP84_CROSSOVER_RATE</label>
+                        <input id="crossover-rate" type="number" min="0" max="1" step="0.01" value="0.70">
+                    </div>
+                    <div>
+                        <label for="factor-crossover-rate">STEP84_FACTOR_CROSSOVER_RATE</label>
+                        <input id="factor-crossover-rate" type="number" min="0" max="1" step="0.01" value="0.20">
+                    </div>
+                    <div>
+                        <label for="mutation-support-rate">STEP84_MUTATION_SUPPORT_RATE</label>
+                        <input id="mutation-support-rate" type="number" min="0" max="1" step="0.01" value="0.30">
+                    </div>
+                    <div>
+                        <label for="mutation-coeff-rate">STEP84_MUTATION_COEFF_RATE</label>
+                        <input id="mutation-coeff-rate" type="number" min="0" max="1" step="0.01" value="0.50">
+                    </div>
+                    <div>
+                        <label for="mutation-replace-rate">STEP84_MUTATION_REPLACE_RATE</label>
+                        <input id="mutation-replace-rate" type="number" min="0" max="1" step="0.01" value="0.05">
+                    </div>
+                    <div>
+                        <label for="als-sweeps">STEP84_ALS_SWEEPS</label>
+                        <input id="als-sweeps" type="number" min="0" step="1" value="1">
+                    </div>
+                    <div>
+                        <label for="newton-threshold">STEP84_NEWTON_THRESHOLD</label>
+                        <input id="newton-threshold" type="number" min="0" step="0.01" value="0.25">
+                    </div>
+                    <div>
+                        <label for="polish-max-nfev">STEP84_POLISH_MAX_NFEV</label>
+                        <input id="polish-max-nfev" type="number" min="0" step="1" value="20">
+                    </div>
+                    <div>
+                        <label for="polish-variable-cap">STEP84_POLISH_VARIABLE_CAP</label>
+                        <input id="polish-variable-cap" type="number" min="1" step="1" value="260">
+                    </div>
+                    <div>
+                        <label for="active-value-floor">STEP84_ACTIVE_VALUE_FLOOR</label>
+                        <input id="active-value-floor" type="number" min="0" step="0.0001" value="0.0001">
+                    </div>
+                </div>
+
+                <div class="panel__header panel__header--spaced">
+                    <h2>Support + Coefficients</h2>
+                </div>
+                <div class="control-grid">
+                    <div>
+                        <label for="support-min">STEP84_SUPPORT_MIN</label>
+                        <input id="support-min" type="number" min="1" step="1" value="2">
+                    </div>
+                    <div>
+                        <label for="support-max">STEP84_SUPPORT_MAX</label>
+                        <input id="support-max" type="number" min="1" step="1" value="7">
+                    </div>
+                    <div>
+                        <label for="init-support-min">STEP84_INIT_SUPPORT_MIN</label>
+                        <input id="init-support-min" type="number" min="1" step="1" value="2">
+                    </div>
+                    <div>
+                        <label for="init-support-max">STEP84_INIT_SUPPORT_MAX</label>
+                        <input id="init-support-max" type="number" min="1" step="1" value="6">
+                    </div>
+                    <div>
+                        <label for="support-add-prob">STEP84_SUPPORT_ADD_PROB</label>
+                        <input id="support-add-prob" type="number" min="0" max="1" step="0.01" value="0.50">
+                    </div>
+                    <div>
+                        <label for="support-drop-prob">STEP84_SUPPORT_DROP_PROB</label>
+                        <input id="support-drop-prob" type="number" min="0" max="1" step="0.01" value="0.50">
+                    </div>
+                    <div>
+                        <label for="support-add-low">STEP84_SUPPORT_ADD_LOW</label>
+                        <input id="support-add-low" type="number" min="0" step="0.001" value="0.01">
+                    </div>
+                    <div>
+                        <label for="support-add-high">STEP84_SUPPORT_ADD_HIGH</label>
+                        <input id="support-add-high" type="number" min="0" step="0.001" value="0.10">
+                    </div>
+                    <div>
+                        <label for="coeff-sigma-min">STEP84_COEFF_SIGMA_MIN</label>
+                        <input id="coeff-sigma-min" type="number" min="0" step="0.001" value="0.01">
+                    </div>
+                    <div>
+                        <label for="coeff-sigma-max">STEP84_COEFF_SIGMA_MAX</label>
+                        <input id="coeff-sigma-max" type="number" min="0" step="0.001" value="0.35">
+                    </div>
+                    <div>
+                        <label for="coeff-init-low">STEP84_COEFF_INIT_LOW</label>
+                        <input id="coeff-init-low" type="number" min="0" step="0.1" value="1.0">
+                    </div>
+                    <div>
+                        <label for="coeff-init-high">STEP84_COEFF_INIT_HIGH</label>
+                        <input id="coeff-init-high" type="number" min="0" step="0.1" value="2.0">
+                    </div>
+                </div>
+
+                <div class="panel__header panel__header--spaced">
+                    <h2>Artifacts</h2>
+                </div>
+                <div class="control-grid control-grid--compact">
+                    <label class="toggle-card">
+                        <input id="best-export-include-dense" type="checkbox">
+                        <span>STEP84_BEST_EXPORT_INCLUDE_DENSE</span>
+                    </label>
+                </div>
+            </section>
+
+            <aside class="panel panel--output">
+                <div class="panel__header">
+                    <h2>Command Builder</h2>
+                    <div class="button-row">
+                        <button type="button" id="start-run" class="solid-button">Start run</button>
+                        <button type="button" id="stop-run" class="ghost-button">Stop</button>
+                        <button type="button" id="save-config" class="ghost-button">Save local</button>
+                        <button type="button" id="reset-config" class="ghost-button">Reset</button>
+                    </div>
+                </div>
+
+                <div class="output-stack">
+                    <div class="status-band status-band--live" id="run-status">Backend idle. Start the local server to enable run control.</div>
+                    <div class="status-band status-band--saved" id="saved-status">Autosave ready.</div>
+                    <div class="status-band" id="derived-summary"></div>
+
+                    <div class="output-block">
+                        <h3>Live Metrics</h3>
+                        <div class="live-metrics" id="live-metrics">
+                            <div class="live-metric">
+                                <span>Generation</span>
+                                <strong id="live-generation">-</strong>
+                            </div>
+                            <div class="live-metric">
+                                <span>Best residual</span>
+                                <strong id="live-best">-</strong>
+                            </div>
+                            <div class="live-metric">
+                                <span>Wall seconds</span>
+                                <strong id="live-wall">-</strong>
+                            </div>
+                            <div class="live-metric">
+                                <span>Signature (3,3,3)</span>
+                                <strong id="live-333">-</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="output-block">
+                        <label for="step84-command">Step 84 run command</label>
+                        <textarea id="step84-command" rows="18" readonly spellcheck="false"></textarea>
+                        <div class="button-row button-row--split">
+                            <button type="button" id="copy-run-command" class="solid-button">Copy run command</button>
+                            <button type="button" id="download-config" class="ghost-button">Export JSON</button>
+                        </div>
+                    </div>
+
+                    <div class="output-block">
+                        <label for="profile-command">Profile wrapper command</label>
+                        <textarea id="profile-command" rows="18" readonly spellcheck="false"></textarea>
+                        <div class="button-row button-row--split">
+                            <button type="button" id="copy-profile-command" class="solid-button solid-button--alt">Copy profile command</button>
+                            <label class="upload-button">
+                                <input id="import-config" type="file" accept="application/json">
+                                <span>Import JSON</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="output-block output-block--notes">
+                        <h3>Notes</h3>
+                        <p>For live run control, start the local server with <span class="inline-chip">.\.venv\Scripts\python.exe .\scripts\step84_tuner_server.py</span> and then open this page through http://127.0.0.1:8765/step84_tuner.html.</p>
+                        <p>The UI stores your last settings in localStorage only. The local server simply starts Step 84, tails stdout and stderr, and polls the existing export files for graph data.</p>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <section class="panel panel--charts">
+            <div class="panel__header">
+                <h2>Live Graphs</h2>
+                <div class="button-row">
+                    <button type="button" id="refresh-state" class="ghost-button">Refresh now</button>
+                </div>
+            </div>
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <div class="chart-card__header">
+                        <h3>Residual by Generation</h3>
+                        <div class="button-row">
+                            <button type="button" id="fitness-scale-toggle" class="ghost-button ghost-button--small">Log Y</button>
+                        </div>
+                    </div>
+                    <canvas id="fitness-chart" width="920" height="320"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-card__header">
+                        <h3>Shadow / (3,3,3) Presence</h3>
+                        <div class="button-row">
+                            <button type="button" id="shadow-scale-toggle" class="ghost-button ghost-button--small">Linear Y</button>
+                        </div>
+                    </div>
+                    <canvas id="shadow-chart" width="920" height="320"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Stdout Tail</h3>
+                    <textarea id="stdout-tail" rows="12" readonly spellcheck="false"></textarea>
+                </div>
+                <div class="chart-card">
+                    <h3>Stderr Tail</h3>
+                    <textarea id="stderr-tail" rows="12" readonly spellcheck="false"></textarea>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="step84_tuner.js"></script>
+</body>
+</html>

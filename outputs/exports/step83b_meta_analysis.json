@@ -1,0 +1,72 @@
+{
+  "screened_count": 1000,
+  "viable_count": 1000,
+  "median_condition": 108.79286785985471,
+  "best_condition": 41.81113611295842,
+  "median_reduced_variable_count": 152.0,
+  "optimal_support_signature": "(3,3,3)",
+  "signature_stats": {
+    "(3,3,3)": {
+      "screened_count": 167,
+      "viable_count": 167,
+      "viable_fraction": 1.0,
+      "median_condition": 74.35222842560935,
+      "best_condition": 41.81113611295842,
+      "median_reduced_variable_count": 133.0,
+      "tracked_count": 18,
+      "real_endpoint_count": 0
+    },
+    "(3,4,3)": {
+      "screened_count": 167,
+      "viable_count": 167,
+      "viable_fraction": 1.0,
+      "median_condition": 103.00456384124463,
+      "best_condition": 52.817275010596305,
+      "median_reduced_variable_count": 152.0,
+      "tracked_count": 2,
+      "real_endpoint_count": 0
+    },
+    "(4,3,3)": {
+      "screened_count": 167,
+      "viable_count": 167,
+      "viable_fraction": 1.0,
+      "median_condition": 106.7081437933328,
+      "best_condition": 42.34445002036153,
+      "median_reduced_variable_count": 152.0,
+      "tracked_count": 1,
+      "real_endpoint_count": 0
+    },
+    "(4,4,2)": {
+      "screened_count": 166,
+      "viable_count": 166,
+      "viable_fraction": 1.0,
+      "median_condition": 97.04569059179477,
+      "best_condition": 45.573487147484485,
+      "median_reduced_variable_count": 152.0,
+      "tracked_count": 3,
+      "real_endpoint_count": 0
+    },
+    "(4,4,3)": {
+      "screened_count": 167,
+      "viable_count": 167,
+      "viable_fraction": 1.0,
+      "median_condition": 128.77008407014,
+      "best_condition": 66.50480723895707,
+      "median_reduced_variable_count": 171.0,
+      "tracked_count": 0,
+      "real_endpoint_count": 0
+    },
+    "(4,4,4)": {
+      "screened_count": 166,
+      "viable_count": 166,
+      "viable_fraction": 1.0,
+      "median_condition": 157.01955832678902,
+      "best_condition": 73.25576340849821,
+      "median_reduced_variable_count": 190.0,
+      "tracked_count": 0,
+      "real_endpoint_count": 0
+    }
+  },
+  "correlation_reduced_vars_vs_log10_condition": 0.6011143257532825,
+  "correlation_gamma_union_vs_log10_condition": 0.006849581215410803
+}

@@ -1,0 +1,22 @@
+{
+  "track1_cases": 12,
+  "track1_completed": 12,
+  "track1_real_endpoints": 0,
+  "track1_best_residual": null,
+  "track2_screened": 1000,
+  "track2_viable": 1000,
+  "track2_tracked": 24,
+  "track2_real_endpoints": 0,
+  "track2_best_residual": null,
+  "track2_median_condition": 108.79286785985471,
+  "track2_best_condition": 41.81113611295842,
+  "track2_optimal_nnz": "(3,3,3)",
+  "any_exact_hit": false,
+  "step83b_orientation": "transpose",
+  "step83b_public_reconstruction_max_abs": 0,
+  "screen_workers": 36,
+  "track_workers": 36,
+  "variable_cap": 200,
+  "runtime_seconds": 129.02398586273193,
+  "provenance": "MEASURED_FROM_CODE"
+}

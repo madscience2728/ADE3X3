@@ -133,6 +133,15 @@ Polynomial homotopy avoids gradient local minima by tracking all solution paths 
 - Longer retry on the single best chart with a 300 second timeout also timed out
 - Interpretation: direct rank-19 continuation is the right target, but the current dense chart is numerically too stiff; the next gain has to come from a better rank-19 chart or regularization, not just more wall-clock time on the same 475x475 subsystem
 
+**Route 3 sparse-chart verdict (Step 83):** the low-variable redesign is operational and far healthier numerically, but the first sparse rank-19 charts still return no continuation endpoints.
+
+- Step 83 switches from the dense Step 75 rank-19 witness to sparse rank-19 chart templates inherited from the public exact rank-23 witness
+- Candidate family: drop 4 of the 9 singleton-gamma AlphaTensor terms, keep the remaining 19 sparse terms live, and continue from the retained-term partial tensor to the full tensor on that 19-term support chart
+- All **126** singleton-drop cases screened successfully with the Step 81 reduction logic; the best 24 case configs had reduced square subsystems in the **89-98** variable range
+- Best screened charts had square-Jacobian condition numbers around **5.33e1-5.80e1**, versus about **4.10e11** on the best dense Step 82 chart
+- Smoke run on the top 4 best-conditioned sparse cases completed without timeouts or Julia errors, but each case returned **0 solutions** from HomotopyContinuation rather than a real endpoint
+- Interpretation: the bottleneck has shifted again. The backend and chart conditioning both look healthy; the current failure mode is now structural infeasibility of these first singleton-drop sparse charts, not numerical stiffness
+
 ---
 
 ## 4. SAT / Finite-Field Exhaustive Search
