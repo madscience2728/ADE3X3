@@ -160,6 +160,10 @@ def aggregate_history(log_paths: list[Path], limit: int = 600) -> list[dict]:
     return history[-limit:]
 
 
+def history_for_log(log_path: Path, limit: int = 300) -> list[dict]:
+    return aggregate_history([log_path], limit=limit)
+
+
 def load_summary(summary_path: Path) -> dict | None:
     if not summary_path.exists():
         return None
@@ -325,6 +329,8 @@ class RunManager:
         for copy in copies:
             log_paths.append(copy.log_path)
             summary = load_summary(copy.summary_path)
+            copy_history = history_for_log(copy.log_path)
+            latest_copy = copy_history[-1] if copy_history else None
             if summary is not None:
                 summaries.append({**summary, "copy_index": copy.index, "seed": copy.seed, "export_dir": str(copy.export_dir)})
             stdout.extend(tail_list(copy.stdout_lines, 8))
@@ -337,9 +343,12 @@ class RunManager:
                     "exit_code": copy.exit_code,
                     "seed": copy.seed,
                     "export_dir": str(copy.export_dir),
+                    "history": copy_history,
+                    "latest": latest_copy,
                     "best_fitness_ever": summary.get("best_fitness_ever") if summary else None,
                     "best_support_signature": summary.get("best_support_signature") if summary else None,
                     "total_generations": summary.get("total_generations") if summary else None,
+                    "total_wall_seconds": summary.get("total_wall_seconds") if summary else None,
                 }
             )
 

@@ -449,7 +449,7 @@ textarea:focus {
 
 .live-metrics {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
     margin-top: 14px;
 }
@@ -473,6 +473,76 @@ textarea:focus {
     display: block;
     margin-top: 7px;
     font-size: 1.28rem;
+}
+
+.copy-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.copy-card {
+    padding: 14px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(250, 242, 230, 0.72));
+    border: 1px solid var(--line);
+}
+
+.copy-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.copy-card__title {
+    font-family: var(--font-head);
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.copy-card__status {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: rgba(31, 36, 48, 0.08);
+    color: var(--muted);
+}
+
+.copy-card__status.is-running {
+    background: rgba(30, 94, 99, 0.16);
+    color: var(--accent-cool);
+}
+
+.copy-card__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.copy-card__metric {
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(31, 36, 48, 0.08);
+}
+
+.copy-card__metric span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.copy-card__metric strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 1rem;
 }
 
 .panel--charts {
@@ -500,13 +570,14 @@ textarea:focus {
     margin-bottom: 10px;
 }
 
-.chart-card canvas {
+.plot-surface {
     width: 100%;
-    height: auto;
+    min-height: 360px;
     display: block;
     border-radius: 18px;
     background: linear-gradient(180deg, rgba(255, 251, 245, 0.9), rgba(250, 242, 230, 0.92));
     border: 1px solid rgba(31, 36, 48, 0.08);
+    overflow: hidden;
 }
 
 .upload-button input {
@@ -540,7 +611,9 @@ textarea:focus {
     .control-grid,
     .triple-grid,
     .chart-grid,
-    .live-metrics {
+    .live-metrics,
+    .copy-metrics,
+    .copy-card__grid {
         grid-template-columns: 1fr;
     }
 

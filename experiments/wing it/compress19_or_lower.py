@@ -102,6 +102,12 @@ def term_id_map(rank: int) -> list[str]:
     return [f't{idx + 1:02d}' for idx in range(rank)]
 
 
+def factor_residual_stats(alpha: np.ndarray, beta: np.ndarray, gamma: np.ndarray) -> tuple[float, float]:
+    approx = np.einsum('ra,rb,rc->abc', alpha, beta, gamma, optimize=True)
+    residual = approx - TARGET_TENSOR
+    return float(np.max(np.abs(residual))), float(np.sum(residual * residual))
+
+
 def structured_removal_specs(base_alpha: np.ndarray, base_beta: np.ndarray, base_gamma: np.ndarray) -> list[tuple[str, np.ndarray, np.ndarray, np.ndarray, int]]:
     ids = term_id_map(base_alpha.shape[0])
     id_to_idx = {term_id: idx for idx, term_id in enumerate(ids)}
@@ -230,6 +236,11 @@ def run_border23_to_19(base_alpha: np.ndarray, base_beta: np.ndarray, base_gamma
             truncated_alpha = alpha_batch[local_idx][:-4]
             truncated_beta = beta_batch[local_idx][:-4]
             truncated_gamma = gamma_batch[local_idx][:-4]
+            truncated_max_abs, truncated_loss = factor_residual_stats(
+                truncated_alpha,
+                truncated_beta,
+                truncated_gamma,
+            )
             search_id = f'wing19_border_{start + local_idx:04d}'
             row = candidate_row(
                 search_id,
@@ -240,8 +251,8 @@ def run_border23_to_19(base_alpha: np.ndarray, base_beta: np.ndarray, base_gamma
                 truncated_alpha,
                 truncated_beta,
                 truncated_gamma,
-                float(residuals[local_idx]),
-                float(losses[local_idx]),
+                truncated_max_abs,
+                truncated_loss,
                 float(tail_norms[local_idx]),
             )
             rows.append(row)

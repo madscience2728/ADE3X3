@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Step 84 Tuner</title>
     <link rel="stylesheet" href="step84_tuner.css">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 </head>
 <body>
     <div class="page-shell">
@@ -53,7 +54,7 @@
                 <div class="fieldset" id="explicit-fields">
                     <label for="island-populations">STEP84_ISLAND_POPULATIONS</label>
                     <textarea id="island-populations" rows="4" spellcheck="false">32,24,16,12,8,8,6,6</textarea>
-                    <p class="field-help">Comma-separated island populations. The UI derives total population and offspring from this list.</p>
+                    <p class="field-help">Island populations separated by commas, semicolons, spaces, or newlines. The UI derives total population and offspring from this list.</p>
                 </div>
 
                 <div class="fieldset is-hidden" id="power-fields">
@@ -300,22 +301,27 @@
                                 <strong id="live-copies">-</strong>
                             </div>
                             <div class="live-metric">
-                                <span>Generation</span>
-                                <strong id="live-generation">-</strong>
+                                <span>Running</span>
+                                <strong id="live-running">-</strong>
+                            </div>
+                            <div class="live-metric">
+                                <span>Best copy</span>
+                                <strong id="live-best-copy">-</strong>
                             </div>
                             <div class="live-metric">
                                 <span>Best residual</span>
                                 <strong id="live-best">-</strong>
                             </div>
                             <div class="live-metric">
-                                <span>Wall seconds</span>
-                                <strong id="live-wall">-</strong>
+                                <span>Best generation</span>
+                                <strong id="live-generation">-</strong>
                             </div>
                             <div class="live-metric">
-                                <span>Signature (3,3,3)</span>
-                                <strong id="live-333">-</strong>
+                                <span>Best wall seconds</span>
+                                <strong id="live-wall">-</strong>
                             </div>
                         </div>
+                        <div class="copy-metrics" id="copy-metrics"></div>
                     </div>
 
                     <div class="output-block">
@@ -358,21 +364,21 @@
             <div class="chart-grid">
                 <div class="chart-card">
                     <div class="chart-card__header">
-                        <h3>Residual by Generation</h3>
+                        <h3>Residual by Copy</h3>
                         <div class="button-row">
                             <button type="button" id="fitness-scale-toggle" class="ghost-button ghost-button--small">Log Y</button>
                         </div>
                     </div>
-                    <canvas id="fitness-chart" width="920" height="320"></canvas>
+                    <div id="fitness-chart" class="plot-surface"></div>
                 </div>
                 <div class="chart-card">
                     <div class="chart-card__header">
-                        <h3>Shadow / (3,3,3) Presence</h3>
+                        <h3>Shadow / (3,3,3) by Copy</h3>
                         <div class="button-row">
                             <button type="button" id="shadow-scale-toggle" class="ghost-button ghost-button--small">Linear Y</button>
                         </div>
                     </div>
-                    <canvas id="shadow-chart" width="920" height="320"></canvas>
+                    <div id="shadow-chart" class="plot-surface"></div>
                 </div>
                 <div class="chart-card">
                     <h3>Stdout Tail</h3>

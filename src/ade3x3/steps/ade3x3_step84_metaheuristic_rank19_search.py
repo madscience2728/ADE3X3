@@ -33,6 +33,7 @@ import json
 import math
 import os
 import platform
+import re
 import sys
 import time
 from collections import defaultdict
@@ -97,7 +98,7 @@ def env_int_list(name: str, default: list[int]) -> list[int]:
     raw = os.environ.get(name)
     if raw is None or not raw.strip():
         return list(default)
-    values = [int(part.strip()) for part in raw.split(",") if part.strip()]
+    values = [int(part.strip()) for part in re.split(r"[;,\s]+", raw) if part.strip()]
     if not values:
         raise ValueError(f"{name} must contain at least one integer")
     return values

@@ -1,5 +1,41 @@
 const STORAGE_KEY = "ade3x3-step84-tuner";
 const POLL_INTERVAL_MS = 2000;
+const PLOTLY_LAYOUT_BASE = {
+    paper_bgcolor: "rgba(0,0,0,0)",
+    plot_bgcolor: "rgba(255,251,245,0.92)",
+    margin: { l: 72, r: 28, t: 24, b: 56 },
+    font: { family: 'Aptos, "Segoe UI Variable Text", "Segoe UI", sans-serif', color: "#1f2430", size: 12 },
+    hovermode: "closest",
+    legend: { orientation: "h", y: -0.22, x: 0, bgcolor: "rgba(0,0,0,0)" },
+    xaxis: {
+        title: "Generation",
+        gridcolor: "rgba(31, 36, 48, 0.08)",
+        linecolor: "rgba(31, 36, 48, 0.12)",
+        zeroline: false,
+        automargin: true
+    },
+    yaxis: {
+        gridcolor: "rgba(31, 36, 48, 0.08)",
+        linecolor: "rgba(31, 36, 48, 0.12)",
+        zeroline: false,
+        automargin: true
+    }
+};
+const PLOTLY_CONFIG = {
+    displayModeBar: false,
+    responsive: true,
+    scrollZoom: true
+};
+const COPY_COLORS = [
+    "#bf5c36",
+    "#1e5e63",
+    "#8b3418",
+    "#597a33",
+    "#92598f",
+    "#2b6cb0",
+    "#c05621",
+    "#00695c"
+];
 let pollHandle = null;
 let fitnessScaleMode = "log";
 let shadowScaleMode = "linear";
@@ -139,7 +175,7 @@ const fieldMap = {
 
 const settingHelp = {
     topologyMode: "Choose how island sizes are specified. Explicit mode is better when you already know the exact schedule you want. Power mode is better for broad scaling experiments. Reasonable usage: explicit for careful hand tuning, power for exploratory sweeps like 2^2..2^8 or 2^2..2^9.",
-    islandPopulations: "Comma-separated island population sizes used directly when topology mode is explicit. This controls both diversity and RAM pressure. Reasonable values are usually between 4 and 64 per island. Small islands 4..12 keep niche churn high; medium 16..32 are balanced; large 48..96 are expensive and should be used sparingly.",
+    islandPopulations: "Island population sizes used directly when topology mode is explicit. Commas, semicolons, spaces, and newlines are all accepted. This controls both diversity and RAM pressure. Reasonable values are usually between 4 and 64 per island. Small islands 4..12 keep niche churn high; medium 16..32 are balanced; large 48..96 are expensive and should be used sparingly.",
     islandMinExp: "Smallest exponent included when generating a power-of-two island schedule. Generated sizes are 2^max down to 2^min. Reasonable range: 2..5, meaning island sizes from 4 to 32 at the low end. Keep this less than or equal to the max exponent.",
     islandMaxExp: "Largest exponent included when generating a power-of-two island schedule. Higher values create large islands quickly and can dominate RAM and evaluation time. Reasonable range: 6..9, meaning largest islands from 64 to 512. On this repo, 8 or 9 is already heavy.",
     islandCopies: "Number of copies to create for each power-of-two island size. More copies increase niche replication and total population linearly. Reasonable range: 1..4 for manual tuning, 6..8 only if you intentionally want a huge ensemble and can afford the memory cost.",
@@ -226,7 +262,7 @@ function getSavedState() {
 
 function parsePopulationList(text) {
     return text
-        .split(",")
+    .split(/[;,\s]+/)
         .map((item) => item.trim())
         .filter(Boolean)
         .map((item) => Number.parseInt(item, 10))
@@ -634,6 +670,38 @@ function formatMetric(value, digits = 6) {
     return Number(value).toFixed(digits);
 }
 
+function formatCompactNumber(value, digits = 6) {
+    if (value === null || value === undefined || Number.isNaN(value)) {
+        return "-";
+    }
+    const numeric = Number(value);
+    if (numeric === 0) {
+        return "0";
+    }
+    if (Math.abs(numeric) >= 1000 || Math.abs(numeric) < 0.001) {
+        return numeric.toExponential(3);
+    }
+    return numeric.toFixed(digits).replace(/0+$/, "").replace(/\.$/, "");
+}
+
+function getCopyBestResidual(copy) {
+    if (copy?.best_fitness_ever !== null && copy?.best_fitness_ever !== undefined && !Number.isNaN(Number(copy.best_fitness_ever))) {
+        return Number(copy.best_fitness_ever);
+    }
+    if (copy?.latest?.best_fitness !== null && copy?.latest?.best_fitness !== undefined && !Number.isNaN(Number(copy.latest.best_fitness))) {
+        return Number(copy.latest.best_fitness);
+    }
+    return null;
+}
+
+function getBestCopy(payload) {
+    const copies = (payload.copies || []).filter((copy) => getCopyBestResidual(copy) !== null);
+    if (!copies.length) {
+        return null;
+    }
+    return copies.reduce((best, copy) => (getCopyBestResidual(copy) < getCopyBestResidual(best) ? copy : best));
+}
+
 function formatAxisValue(value, mode) {
     if (mode === "log") {
         return value.toExponential(2);
@@ -645,113 +713,100 @@ function formatAxisValue(value, mode) {
 }
 
 function updateLiveMetrics(payload) {
-    const latest = payload.latest || payload.summary || null;
+    const bestCopy = getBestCopy(payload);
+    const bestLatest = bestCopy?.latest || null;
     document.getElementById("live-copies").textContent = payload.copy_count !== undefined ? String(payload.copy_count) : "-";
-    document.getElementById("live-generation").textContent = latest && latest.generation !== undefined ? String(latest.generation) : "-";
-    document.getElementById("live-best").textContent = latest && latest.best_fitness !== undefined ? formatMetric(latest.best_fitness, 9) : payload.summary?.best_fitness_ever ? formatMetric(payload.summary.best_fitness_ever, 9) : "-";
-    document.getElementById("live-wall").textContent = latest && latest.wall_seconds_cumulative !== undefined ? formatMetric(latest.wall_seconds_cumulative, 2) : payload.summary?.total_wall_seconds ? formatMetric(payload.summary.total_wall_seconds, 2) : "-";
-    document.getElementById("live-333").textContent = latest && latest.signature_333_count !== undefined ? String(latest.signature_333_count) : "-";
+    document.getElementById("live-running").textContent = payload.running_count !== undefined ? String(payload.running_count) : "-";
+    document.getElementById("live-best-copy").textContent = bestCopy ? `Copy ${bestCopy.index}` : "-";
+    document.getElementById("live-best").textContent = getCopyBestResidual(bestCopy) !== null
+        ? formatCompactNumber(getCopyBestResidual(bestCopy), 9)
+        : payload.summary?.best_fitness_ever
+            ? formatCompactNumber(payload.summary.best_fitness_ever, 9)
+            : "-";
+    document.getElementById("live-generation").textContent = bestLatest && bestLatest.generation !== undefined
+        ? String(bestLatest.generation)
+        : bestCopy?.total_generations !== undefined && bestCopy?.total_generations !== null
+            ? String(bestCopy.total_generations)
+            : "-";
+    document.getElementById("live-wall").textContent = bestLatest && bestLatest.wall_seconds_cumulative !== undefined
+        ? formatCompactNumber(bestLatest.wall_seconds_cumulative, 2)
+        : bestCopy?.total_wall_seconds !== undefined && bestCopy?.total_wall_seconds !== null
+            ? formatCompactNumber(bestCopy.total_wall_seconds, 2)
+            : "-";
 }
 
-function drawChart(canvasId, seriesList, xAccessor, title, yMode = "linear") {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext("2d");
-    const width = canvas.width;
-    const height = canvas.height;
-    const pad = { top: 24, right: 24, bottom: 34, left: 54 };
-
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = "#fff9f1";
-    ctx.fillRect(0, 0, width, height);
-
-    const points = seriesList.flatMap((series) => series.data.filter((row) => row.y !== null && row.y !== undefined));
-    if (!points.length) {
-        ctx.fillStyle = "#5f655f";
-        ctx.font = "16px Aptos, sans-serif";
-        ctx.fillText(`No data yet for ${title}.`, 28, 42);
+function renderCopyMetrics(payload) {
+    const container = document.getElementById("copy-metrics");
+    container.innerHTML = "";
+    const copies = payload.copies || [];
+    if (!copies.length) {
+        container.innerHTML = '<div class="copy-card"><div class="copy-card__header"><div class="copy-card__title">No copy data</div></div><div class="copy-card__metric"><span>Status</span><strong>Start a run to populate per-copy metrics.</strong></div></div>';
         return;
     }
 
-    const xValues = points.map((point) => point.x);
-    const positivePoints = yMode === "log" ? points.filter((point) => point.y > 0) : points;
-    if (yMode === "log" && !positivePoints.length) {
-        ctx.fillStyle = "#5f655f";
-        ctx.font = "16px Aptos, sans-serif";
-        ctx.fillText(`No positive data for log-scaled ${title}.`, 28, 42);
-        return;
-    }
-    const yValues = positivePoints.map((point) => point.y);
-    const minX = Math.min(...xValues);
-    const maxX = Math.max(...xValues);
-    let minY = Math.min(...yValues);
-    let maxY = Math.max(...yValues);
-    if (yMode === "log") {
-        minY = Math.max(minY, 1e-12);
-        if (minY === maxY) {
-            minY /= 10;
-            maxY *= 10;
-        }
-    } else if (minY === maxY) {
-        minY -= 1;
-        maxY += 1;
-    }
-
-    const plotWidth = width - pad.left - pad.right;
-    const plotHeight = height - pad.top - pad.bottom;
-    const xScale = (value) => pad.left + ((value - minX) / Math.max(1e-12, maxX - minX || 1)) * plotWidth;
-    const yScale = yMode === "log"
-        ? (value) => {
-            const safeValue = Math.max(value, 1e-12);
-            const logMin = Math.log10(minY);
-            const logMax = Math.log10(maxY);
-            const logValue = Math.log10(safeValue);
-            return pad.top + (1 - (logValue - logMin) / Math.max(1e-12, logMax - logMin || 1)) * plotHeight;
-        }
-        : (value) => pad.top + (1 - (value - minY) / (maxY - minY)) * plotHeight;
-
-    ctx.strokeStyle = "rgba(31, 36, 48, 0.15)";
-    ctx.lineWidth = 1;
-    for (let tick = 0; tick <= 4; tick += 1) {
-        const y = pad.top + (plotHeight * tick) / 4;
-        ctx.beginPath();
-        ctx.moveTo(pad.left, y);
-        ctx.lineTo(width - pad.right, y);
-        ctx.stroke();
-    }
-
-    ctx.strokeStyle = "rgba(31, 36, 48, 0.35)";
-    ctx.beginPath();
-    ctx.moveTo(pad.left, pad.top);
-    ctx.lineTo(pad.left, height - pad.bottom);
-    ctx.lineTo(width - pad.right, height - pad.bottom);
-    ctx.stroke();
-
-    ctx.fillStyle = "#5f655f";
-    ctx.font = "12px Cascadia Code, monospace";
-    ctx.fillText(String(minX), pad.left, height - 10);
-    ctx.fillText(String(maxX), width - pad.right - 20, height - 10);
-    ctx.fillText(formatAxisValue(minY, yMode), 6, height - pad.bottom + 4);
-    ctx.fillText(formatAxisValue(maxY, yMode), 6, pad.top + 4);
-
-    seriesList.forEach((series) => {
-        const valid = series.data.filter((row) => row.y !== null && row.y !== undefined && (yMode !== "log" || row.y > 0));
-        if (!valid.length) {
-            return;
-        }
-        ctx.strokeStyle = series.color;
-        ctx.lineWidth = 2.2;
-        ctx.beginPath();
-        valid.forEach((row, index) => {
-            const x = xScale(xAccessor(row));
-            const y = yScale(row.y);
-            if (index === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-            }
-        });
-        ctx.stroke();
+    copies.forEach((copy) => {
+        const latest = copy.latest || {};
+        const card = document.createElement("div");
+        card.className = "copy-card";
+        card.innerHTML = `
+            <div class="copy-card__header">
+                <div class="copy-card__title">Copy ${copy.index}</div>
+                <div class="copy-card__status${copy.running ? " is-running" : ""}">${copy.running ? "running" : (copy.exit_code === 0 ? "done" : (copy.exit_code === null ? "idle" : `exit ${copy.exit_code}`))}</div>
+            </div>
+            <div class="copy-card__grid">
+                <div class="copy-card__metric"><span>Seed</span><strong>${copy.seed ?? "-"}</strong></div>
+                <div class="copy-card__metric"><span>Generation</span><strong>${latest.generation ?? copy.total_generations ?? "-"}</strong></div>
+                <div class="copy-card__metric"><span>Best residual</span><strong>${formatCompactNumber(getCopyBestResidual(copy), 9)}</strong></div>
+                <div class="copy-card__metric"><span>Wall seconds</span><strong>${formatCompactNumber(latest.wall_seconds_cumulative ?? copy.total_wall_seconds, 2)}</strong></div>
+                <div class="copy-card__metric"><span>Signature (3,3,3)</span><strong>${latest.signature_333_count ?? "-"}</strong></div>
+                <div class="copy-card__metric"><span>Shadow pool</span><strong>${latest.shadow_pool_size ?? "-"}</strong></div>
+            </div>
+        `;
+        container.appendChild(card);
     });
+}
+
+function buildCopyTrace(copy, valueKey, color, name, yAxis = "y", visible = true) {
+    const history = (copy.history || []).filter((row) => row[valueKey] !== null && row[valueKey] !== undefined && (valueKey !== "best_fitness" || row[valueKey] > 0));
+    return {
+        type: "scatter",
+        mode: "lines+markers",
+        name,
+        x: history.map((row) => row.generation),
+        y: history.map((row) => row[valueKey]),
+        line: { color, width: 2, shape: "linear", simplify: false },
+        marker: { color, size: 4, symbol: "circle" },
+        hovertemplate: `Copy ${copy.index}<br>Generation %{x}<br>${name}: %{y:.6g}<extra></extra>`,
+        connectgaps: false,
+        yaxis: yAxis,
+        visible: visible ? true : "legendonly"
+    };
+}
+
+function renderPlot(targetId, traces, layout) {
+    const target = document.getElementById(targetId);
+    if (!window.Plotly) {
+        target.textContent = "Plotly failed to load. Refresh the page after reconnecting network access.";
+        return;
+    }
+    const nonEmpty = traces.filter((trace) => Array.isArray(trace.x) && trace.x.length);
+    if (!nonEmpty.length) {
+        window.Plotly.react(target, [], {
+            ...PLOTLY_LAYOUT_BASE,
+            ...layout,
+            annotations: [{
+                text: "No data yet.",
+                x: 0.5,
+                y: 0.5,
+                xref: "paper",
+                yref: "paper",
+                showarrow: false,
+                font: { size: 16, color: "#5f655f" }
+            }]
+        }, PLOTLY_CONFIG);
+        return;
+    }
+    window.Plotly.react(target, nonEmpty, { ...PLOTLY_LAYOUT_BASE, ...layout }, PLOTLY_CONFIG);
 }
 
 function updateScaleButtons() {
@@ -772,28 +827,47 @@ function updateScaleButtons() {
 }
 
 function updateCharts(payload) {
-    const history = payload.history || [];
-    drawChart(
-        "fitness-chart",
-        [
-            { color: "#bf5c36", data: history.map((row) => ({ x: row.generation, y: row.best_fitness })) },
-            { color: "#1e5e63", data: history.map((row) => ({ x: row.generation, y: row.mean_fitness })) },
-            { color: "#8b3418", data: history.map((row) => ({ x: row.generation, y: row.worst_fitness })) }
-        ],
-        (row) => row.x,
-        "fitness",
-        fitnessScaleMode
-    );
-    drawChart(
-        "shadow-chart",
-        [
-            { color: "#1e5e63", data: history.map((row) => ({ x: row.generation, y: row.shadow_pool_size })) },
-            { color: "#bf5c36", data: history.map((row) => ({ x: row.generation, y: row.signature_333_count })) }
-        ],
-        (row) => row.x,
-        "shadow",
-        shadowScaleMode
-    );
+    const copies = payload.copies || [];
+    const fitnessTraces = [];
+    const shadowTraces = [];
+
+    copies.forEach((copy, index) => {
+        const color = COPY_COLORS[index % COPY_COLORS.length];
+        fitnessTraces.push(buildCopyTrace(copy, "best_fitness", color, `copy ${copy.index} best`));
+        fitnessTraces.push(buildCopyTrace(copy, "mean_fitness", color, `copy ${copy.index} mean`, "y", false));
+
+        shadowTraces.push(buildCopyTrace(copy, "shadow_pool_size", color, `copy ${copy.index} shadow`, "y"));
+        shadowTraces.push(buildCopyTrace(copy, "signature_333_count", color, `copy ${copy.index} (3,3,3)`, "y2", false));
+    });
+
+    renderPlot("fitness-chart", fitnessTraces, {
+        title: { text: "", font: { size: 14 } },
+        yaxis: {
+            ...PLOTLY_LAYOUT_BASE.yaxis,
+            title: "Residual",
+            type: fitnessScaleMode === "log" ? "log" : "linear"
+        },
+        uirevision: `fitness-${fitnessScaleMode}`
+    });
+
+    renderPlot("shadow-chart", shadowTraces, {
+        title: { text: "", font: { size: 14 } },
+        yaxis: {
+            ...PLOTLY_LAYOUT_BASE.yaxis,
+            title: "Shadow pool size",
+            type: shadowScaleMode === "log" ? "log" : "linear"
+        },
+        yaxis2: {
+            title: "(3,3,3) count",
+            overlaying: "y",
+            side: "right",
+            gridcolor: "rgba(0,0,0,0)",
+            linecolor: "rgba(31, 36, 48, 0.12)",
+            zeroline: false,
+            automargin: true
+        },
+        uirevision: `shadow-${shadowScaleMode}`
+    });
     updateScaleButtons();
 }
 
@@ -804,6 +878,7 @@ function updateLogs(payload) {
 
 function applyServerState(payload) {
     updateLiveMetrics(payload);
+    renderCopyMetrics(payload);
     updateCharts(payload);
     updateLogs(payload);
     if (payload.running) {
