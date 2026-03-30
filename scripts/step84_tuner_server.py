@@ -169,6 +169,13 @@ def load_summary(summary_path: Path) -> dict | None:
         return None
 
 
+def latest_checkpoint(export_dir: Path) -> Path | None:
+    candidates = sorted(export_dir.glob("step84_checkpoint_gen*.json"))
+    if not candidates:
+        return None
+    return candidates[-1]
+
+
 @dataclass
 class RunCopy:
     index: int
@@ -192,6 +199,8 @@ class RunManager:
     finished_at: float | None = None
     env: dict[str, str] = field(default_factory=dict)
     batch_dir: Path | None = None
+    continued_from_previous: bool = False
+    resumed_copy_count: int = 0
 
     def _reader(self, stream, buffer: deque[str], prefix: str) -> None:
         for line in iter(stream.readline, ""):
@@ -204,12 +213,16 @@ class RunManager:
     def is_running(self) -> bool:
         return any(copy.process.poll() is None for copy in self.copies)
 
-    def start(self, env_overrides: dict[str, str], copies: int = 1) -> None:
+    def start(self, env_overrides: dict[str, str], copies: int = 1, fresh_start: bool = False) -> None:
         with self.lock:
             if self.is_running():
                 raise RuntimeError("Step 84 is already running")
             if copies <= 0:
                 raise RuntimeError("Copy count must be positive")
+
+            previous_copies = list(self.copies)
+            previous_batch_dir = self.batch_dir
+            explicit_resume = bool(str(env_overrides.get("STEP84_RESUME_CHECKPOINT", "")).strip()) and not fresh_start
 
             env = os.environ.copy()
             env.setdefault("OMP_NUM_THREADS", "1")
@@ -222,10 +235,20 @@ class RunManager:
             self.finished_at = None
             self.env = dict(env_overrides)
             self.copies = []
+            self.continued_from_previous = False
+            self.resumed_copy_count = 0
 
             BATCH_EXPORTS.mkdir(parents=True, exist_ok=True)
-            batch_stamp = time.strftime("%Y%m%d_%H%M%S")
-            self.batch_dir = BATCH_EXPORTS / f"run_{batch_stamp}_{int(self.started_at * 1000) % 1000:03d}"
+            auto_continue = previous_copies and not explicit_resume and not fresh_start
+            if auto_continue and previous_batch_dir is not None:
+                self.batch_dir = previous_batch_dir
+                self.continued_from_previous = True
+            else:
+                batch_stamp = time.strftime("%Y%m%d_%H%M%S")
+                self.batch_dir = BATCH_EXPORTS / f"run_{batch_stamp}_{int(self.started_at * 1000) % 1000:03d}"
+                self.batch_dir.mkdir(parents=True, exist_ok=True)
+
+            assert self.batch_dir is not None
             self.batch_dir.mkdir(parents=True, exist_ok=True)
 
             base_seed_raw = env_overrides.get("STEP84_SEED")
@@ -237,6 +260,13 @@ class RunManager:
                 copy_env = env.copy()
                 copy_env["STEP84_EXPORTS_DIR"] = str(export_dir)
                 copy_env["STEP84_SEED"] = str(base_seed + index)
+                if explicit_resume:
+                    copy_env["STEP84_RESUME_CHECKPOINT"] = str(env_overrides["STEP84_RESUME_CHECKPOINT"])
+                elif auto_continue and index < len(previous_copies):
+                    checkpoint_path = latest_checkpoint(previous_copies[index].export_dir)
+                    if checkpoint_path is not None:
+                        copy_env["STEP84_RESUME_CHECKPOINT"] = str(checkpoint_path)
+                        self.resumed_copy_count += 1
                 process = subprocess.Popen(
                     [str(PYTHON_EXE), str(STEP84_SCRIPT)],
                     cwd=str(REPO_ROOT),
@@ -333,6 +363,8 @@ class RunManager:
             "finished_at": finished_at,
             "env": env,
             "batch_dir": batch_dir,
+            "continued_from_previous": self.continued_from_previous,
+            "resumed_copy_count": self.resumed_copy_count,
             "copy_count": len(copy_payloads),
             "running_count": sum(1 for copy in copy_payloads if copy["running"]),
             "copies": copy_payloads,
@@ -400,7 +432,8 @@ class Step84TunerHandler(BaseHTTPRequestHandler):
                 payload = self._read_json_body()
                 env = {str(key): str(value) for key, value in payload.get("env", {}).items()}
                 copies = int(payload.get("copies", 1))
-                RUN_MANAGER.start(env, copies=copies)
+                fresh_start = bool(payload.get("fresh_start", False))
+                RUN_MANAGER.start(env, copies=copies, fresh_start=fresh_start)
             except RuntimeError as error:
                 self._send_json({"ok": False, "error": str(error)}, HTTPStatus.CONFLICT)
                 return

@@ -155,7 +155,7 @@ const settingHelp = {
     checkpointInterval: "How many generations between checkpoint writes. Lower values are safer but create more disk traffic. Reasonable range: 50..250. If artifacts are getting large, move this upward.",
     tournamentSize: "Tournament size used for parent and survivor selection. Higher values increase selection pressure. Reasonable range: 2..5. Two is gentle, three is balanced, four or five can collapse diversity faster.",
     executorKind: "Execution backend. Thread is usually the right choice on Windows because it avoids heavy process spawn and duplicated memory. Process mode is only worth trying if thread mode clearly fails to saturate useful work.",
-    resumeCheckpoint: "Optional checkpoint path to resume instead of starting fresh. Leave blank for a new run. Use this only with compatible settings; changing topology or mutation behavior too much relative to the checkpoint can make comparisons messy.",
+    resumeCheckpoint: "Optional explicit checkpoint path. If left blank, the tuner backend will automatically continue from each copy's latest checkpoint when you restart after a finished batch in the same session. Use the Start fresh run button to ignore both auto-continue and any explicit resume path.",
     signature333Fraction: "Reserved survivor fraction kept for exact (3,3,3) signatures. This is a guardrail for the Step 83b prior. Reasonable range: 0.10..0.25. Below 0.05 the reservation may become too weak; above 0.30 it can crowd out broader exploration.",
     shadowSurvivorFraction: "Fraction of survivor slots allocated through selection shadow niches. Higher values preserve more niche families. Reasonable range: 0.20..0.45. Too low recreates collapse into easy basins; too high can slow improvement.",
     shadowParentRate: "Probability of selecting parents from the shadow pool instead of the main elite pool. Reasonable range: 0.25..0.60. Lower values emphasize exploitation; higher values increase structural diversity.",
@@ -807,9 +807,17 @@ function applyServerState(payload) {
     updateCharts(payload);
     updateLogs(payload);
     if (payload.running) {
-        setRunStatus(`Running ${payload.running_count}/${payload.copy_count} Step 84 copies. Batch output: ${payload.batch_dir || "-"}.`);
+        if (payload.continued_from_previous) {
+            setRunStatus(`Continuing ${payload.running_count}/${payload.copy_count} copies from the current population. Resumed copies: ${payload.resumed_copy_count}. Batch output: ${payload.batch_dir || "-"}.`);
+        } else {
+            setRunStatus(`Running ${payload.running_count}/${payload.copy_count} Step 84 copies. Batch output: ${payload.batch_dir || "-"}.`);
+        }
     } else if (payload.copy_count) {
-        setRunStatus(`Last batch finished. Copies: ${payload.copy_count}. Batch output: ${payload.batch_dir || "-"}.`);
+        if (payload.continued_from_previous) {
+            setRunStatus(`Last continuation finished. Copies: ${payload.copy_count}. Resumed copies: ${payload.resumed_copy_count}. Batch output: ${payload.batch_dir || "-"}.`);
+        } else {
+            setRunStatus(`Last batch finished. Copies: ${payload.copy_count}. Batch output: ${payload.batch_dir || "-"}.`);
+        }
     } else {
         setRunStatus("Backend reachable. No active Step 84 run.");
     }
@@ -824,13 +832,13 @@ async function refreshServerState() {
     }
 }
 
-async function startRun() {
+async function startRun(freshStart = false) {
     try {
         const state = getState();
         saveState(state);
         const payload = await apiRequest("/api/run/start", {
             method: "POST",
-            body: JSON.stringify({ env: buildEnvObject(state), copies: state.batchCopies })
+            body: JSON.stringify({ env: buildEnvObject(state), copies: state.batchCopies, fresh_start: freshStart })
         });
         applyServerState(payload.state);
     } catch (error) {
@@ -895,11 +903,11 @@ function wireFieldUpdates() {
 
 function wireActions() {
     document.getElementById("save-config").addEventListener("click", () => saveState(getState()));
-    document.getElementById("reset-config").addEventListener("click", () => applyState(cloneDefaults()));
     document.getElementById("copy-run-command").addEventListener("click", () => copyText(document.getElementById("step84-command").value));
     document.getElementById("copy-profile-command").addEventListener("click", () => copyText(document.getElementById("profile-command").value));
     document.getElementById("download-config").addEventListener("click", () => downloadJson(getState()));
-    document.getElementById("start-run").addEventListener("click", startRun);
+    document.getElementById("start-run").addEventListener("click", () => startRun(false));
+    document.getElementById("start-fresh-run").addEventListener("click", () => startRun(true));
     document.getElementById("stop-run").addEventListener("click", stopRun);
     document.getElementById("refresh-state").addEventListener("click", refreshServerState);
     document.getElementById("fitness-scale-toggle").addEventListener("click", () => {
