@@ -124,6 +124,15 @@ Polynomial homotopy avoids gradient local minima by tracking all solution paths 
 - Endpoint matched the exact witness to machine precision with zero imaginary drift
 - Interpretation: route 3 is no longer a tooling gamble; the next substantive task is to design an analogous square chart / start family for a nontrivial rank-19 or low-rank deformation problem
 
+**Route 3 direct rank-19 verdict (Step 82):** direct `{A,B} -> T` continuation is live but currently too stiff in the naive dense chart.
+
+- Step 82 reconstructs the exact Step 75 anticommutator rank-19 witness from recorded seed `9491818` and uses the homotopy `T(t) = (1-t) T_anti + t T`
+- The exact rank-19 witness is dense, so after the standard `2R` gauge fix the screened charts still have **475** free coordinates and **475** selected equations; there is no automatic drop to a small 95-variable support chart
+- Stronger charting helps but only modestly: balancing each term and gauge-fixing the largest-magnitude alpha/beta entries reduced the best square-Jacobian condition number from about **8.07e11** on the balanced base chart to about **4.10e11** on the best screened chart
+- Small screened batch: 13/13 viable charts, best 2 tracked for 120 seconds each, both timed out with no returned endpoint
+- Longer retry on the single best chart with a 300 second timeout also timed out
+- Interpretation: direct rank-19 continuation is the right target, but the current dense chart is numerically too stiff; the next gain has to come from a better rank-19 chart or regularization, not just more wall-clock time on the same 475x475 subsystem
+
 ---
 
 ## 4. SAT / Finite-Field Exhaustive Search

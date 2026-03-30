@@ -1,0 +1,2 @@
+chart_id,status,initial_variable_count,reduced_variable_count,selected_equation_count,square_jacobian_condition_number,num_solutions_returned,endpoint_max_imag,endpoint_selected_residual_max_abs,endpoint_full_tensor_max_abs_residual,endpoint_to_start_chart_max_abs,julia_return_code,stdout_path,runtime_seconds,provenance
+chart_09,timeout,475,475,475,4.0997880870426276e+11,,,,,,,outputs\exports\step82_chart_09_stdout.txt,3.0009083461761475e+02,MEASURED_FROM_CODE

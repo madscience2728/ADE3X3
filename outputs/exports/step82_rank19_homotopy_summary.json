@@ -1,0 +1,18 @@
+{
+  "step82_best_seed": 9491818,
+  "step82_exact_start_max_abs_residual": "1.4700994605681972e-09",
+  "step82_chart_candidates_requested": 12,
+  "step82_screened_ok_count": 13,
+  "step82_screen_failed_count": 0,
+  "step82_tracked_case_count": 1,
+  "step82_real_endpoint_count": 0,
+  "step82_timeout_count": 1,
+  "step82_no_solution_count": 0,
+  "step82_complex_endpoint_count": 0,
+  "step82_julia_error_count": 0,
+  "step82_best_full_tensor_max_abs_residual": "",
+  "step82_best_selected_residual_max_abs": "",
+  "step82_best_chart_id": "",
+  "step82_runtime_seconds": "3.0453262448310852e+02",
+  "provenance": "MEASURED_FROM_CODE"
+}
