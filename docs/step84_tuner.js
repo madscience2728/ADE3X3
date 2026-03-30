@@ -11,6 +11,7 @@ const defaults = {
     islandMaxExp: 8,
     islandCopies: 2,
     workers: 24,
+    batchCopies: 1,
     timeoutSeconds: 120,
     generations: 1000000,
     seed: 8401001,
@@ -59,6 +60,7 @@ const presetMap = {
         islandPopulations: "32,24,16,12,8,8,6,6",
         offspringMultiplier: 1,
         workers: 24,
+        batchCopies: 1,
         timeoutSeconds: 120,
         executorKind: "thread"
     },
@@ -69,6 +71,7 @@ const presetMap = {
         islandCopies: 2,
         offspringMultiplier: 1,
         workers: 24,
+        batchCopies: 1,
         timeoutSeconds: 120,
         executorKind: "thread"
     },
@@ -79,6 +82,7 @@ const presetMap = {
         islandCopies: 2,
         offspringMultiplier: 1,
         workers: 24,
+        batchCopies: 1,
         timeoutSeconds: 120,
         executorKind: "thread"
     }
@@ -90,6 +94,7 @@ const fieldMap = {
     islandMaxExp: "island-max-exp",
     islandCopies: "island-copies",
     workers: "workers",
+    batchCopies: "batch-copies",
     timeoutSeconds: "timeout-seconds",
     generations: "generations",
     seed: "seed",
@@ -139,6 +144,7 @@ const settingHelp = {
     islandMaxExp: "Largest exponent included when generating a power-of-two island schedule. Higher values create large islands quickly and can dominate RAM and evaluation time. Reasonable range: 6..9, meaning largest islands from 64 to 512. On this repo, 8 or 9 is already heavy.",
     islandCopies: "Number of copies to create for each power-of-two island size. More copies increase niche replication and total population linearly. Reasonable range: 1..4 for manual tuning, 6..8 only if you intentionally want a huge ensemble and can afford the memory cost.",
     workers: "Maximum concurrent evaluation workers used by Step 84. On Windows with thread mode, reasonable values are usually 8..32. Match this to actual useful parallelism, not just core count. Too high can increase contention without improving evaluations per second.",
+    batchCopies: "Number of independent Step 84 runs launched in parallel by the tuner backend. Each copy gets its own seed and export directory. Reasonable range: 1..8 for normal use. Fifty is a brute-force last resort and usually only makes sense if you also lower workers and keep dense exports off.",
     timeoutSeconds: "Wall-clock time budget before the run exits with time_limit. For tuning, 60..180 seconds is a good range. For real search, use 300+ seconds once you know the schedule is stable.",
     generations: "Upper bound on generations if the time limit does not stop the run first. In practice the timeout usually fires first. Reasonable values: 10000 for short experiments, 1000000 as a safe effectively-unbounded cap.",
     seed: "Random seed for initialization and stochastic operators. Change this when you want a new stochastic trajectory under the same hyperparameters. Any integer is fine; keeping a log of seeds is more important than the magnitude.",
@@ -182,7 +188,7 @@ const settingHelp = {
 };
 
 const numericFields = new Set([
-    "islandMinExp", "islandMaxExp", "islandCopies", "workers", "timeoutSeconds", "generations", "seed",
+    "islandMinExp", "islandMaxExp", "islandCopies", "workers", "batchCopies", "timeoutSeconds", "generations", "seed",
     "offspringMultiplier", "warmSeeds", "migrationInterval", "migrationSize", "checkpointInterval",
     "tournamentSize", "signature333Fraction", "shadowSurvivorFraction", "shadowParentRate",
     "shadowVariableBucket", "shadowMetricsInterval", "hitThreshold", "crossoverRate", "factorCrossoverRate",
@@ -640,6 +646,7 @@ function formatAxisValue(value, mode) {
 
 function updateLiveMetrics(payload) {
     const latest = payload.latest || payload.summary || null;
+    document.getElementById("live-copies").textContent = payload.copy_count !== undefined ? String(payload.copy_count) : "-";
     document.getElementById("live-generation").textContent = latest && latest.generation !== undefined ? String(latest.generation) : "-";
     document.getElementById("live-best").textContent = latest && latest.best_fitness !== undefined ? formatMetric(latest.best_fitness, 9) : payload.summary?.best_fitness_ever ? formatMetric(payload.summary.best_fitness_ever, 9) : "-";
     document.getElementById("live-wall").textContent = latest && latest.wall_seconds_cumulative !== undefined ? formatMetric(latest.wall_seconds_cumulative, 2) : payload.summary?.total_wall_seconds ? formatMetric(payload.summary.total_wall_seconds, 2) : "-";
@@ -800,9 +807,9 @@ function applyServerState(payload) {
     updateCharts(payload);
     updateLogs(payload);
     if (payload.running) {
-        setRunStatus(`Running Step 84. PID ${payload.pid}. Polling live outputs.`);
-    } else if (payload.exit_code !== null && payload.exit_code !== undefined) {
-        setRunStatus(`Last run finished with exit code ${payload.exit_code}.`);
+        setRunStatus(`Running ${payload.running_count}/${payload.copy_count} Step 84 copies. Batch output: ${payload.batch_dir || "-"}.`);
+    } else if (payload.copy_count) {
+        setRunStatus(`Last batch finished. Copies: ${payload.copy_count}. Batch output: ${payload.batch_dir || "-"}.`);
     } else {
         setRunStatus("Backend reachable. No active Step 84 run.");
     }
@@ -823,7 +830,7 @@ async function startRun() {
         saveState(state);
         const payload = await apiRequest("/api/run/start", {
             method: "POST",
-            body: JSON.stringify({ env: buildEnvObject(state) })
+            body: JSON.stringify({ env: buildEnvObject(state), copies: state.batchCopies })
         });
         applyServerState(payload.state);
     } catch (error) {

@@ -83,6 +83,10 @@
                         <input id="workers" type="number" min="1" step="1" value="24">
                     </div>
                     <div>
+                        <label for="batch-copies">UI_PARALLEL_COPIES</label>
+                        <input id="batch-copies" type="number" min="1" step="1" value="1">
+                    </div>
+                    <div>
                         <label for="timeout-seconds">STEP84_TIMEOUT_SECONDS</label>
                         <input id="timeout-seconds" type="number" min="1" step="1" value="120">
                     </div>
@@ -291,6 +295,10 @@
                     <div class="output-block">
                         <h3>Live Metrics</h3>
                         <div class="live-metrics" id="live-metrics">
+                            <div class="live-metric">
+                                <span>Copies</span>
+                                <strong id="live-copies">-</strong>
+                            </div>
                             <div class="live-metric">
                                 <span>Generation</span>
                                 <strong id="live-generation">-</strong>

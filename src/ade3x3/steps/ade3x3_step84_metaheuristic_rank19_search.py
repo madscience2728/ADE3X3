@@ -69,12 +69,13 @@ from src.ade3x3.steps.ade3x3_step83b_support_expansion_sparse_meta_analysis impo
 )
 
 
-EXPORTS = Path("outputs/exports")
+BASE_EXPORTS = Path("outputs/exports")
+EXPORTS = Path((os.environ.get("STEP84_EXPORTS_DIR") or str(BASE_EXPORTS)).strip())
 LOG_PATH = EXPORTS / "step84_evolution_log.csv"
 BEST_PATH = EXPORTS / "step84_best_individual.json"
 FINAL_POP_PATH = EXPORTS / "step84_final_population.json"
 SUMMARY_PATH = EXPORTS / "step84_summary.json"
-TRACK2_SCREENING_PATH = EXPORTS / "step83b_track2_screening.csv"
+TRACK2_SCREENING_PATH = BASE_EXPORTS / "step83b_track2_screening.csv"
 
 
 def env_int(name: str, default: int) -> int:

@@ -20,8 +20,10 @@ DOCS_DIR = REPO_ROOT / "docs"
 HOST = "127.0.0.1"
 PORT = 8765
 STEP84_SCRIPT = REPO_ROOT / "src" / "ade3x3" / "steps" / "ade3x3_step84_metaheuristic_rank19_search.py"
-LOG_PATH = REPO_ROOT / "outputs" / "exports" / "step84_evolution_log.csv"
-SUMMARY_PATH = REPO_ROOT / "outputs" / "exports" / "step84_summary.json"
+DEFAULT_EXPORTS = REPO_ROOT / "outputs" / "exports"
+BATCH_EXPORTS = DEFAULT_EXPORTS / "step84_batches"
+LOG_PATH = DEFAULT_EXPORTS / "step84_evolution_log.csv"
+SUMMARY_PATH = DEFAULT_EXPORTS / "step84_summary.json"
 PYTHON_EXE = REPO_ROOT / ".venv" / "Scripts" / "python.exe"
 
 
@@ -47,9 +49,9 @@ def parse_int(value: str | None) -> int | None:
         return None
 
 
-def aggregate_history(log_path: Path, limit: int = 600) -> list[dict]:
+def history_rows(log_path: Path) -> dict[int, dict]:
     if not log_path.exists():
-        return []
+        return {}
 
     per_generation: dict[int, dict] = {}
     with log_path.open("r", encoding="utf-8", newline="") as handle:
@@ -100,9 +102,47 @@ def aggregate_history(log_path: Path, limit: int = 600) -> list[dict]:
             if shadow_pool_size is not None:
                 slot["shadow_pool_size"] += shadow_pool_size
 
+    return per_generation
+
+
+def aggregate_history(log_paths: list[Path], limit: int = 600) -> list[dict]:
+    combined: dict[int, dict] = {}
+    for log_path in log_paths:
+        for generation, row in history_rows(log_path).items():
+            slot = combined.setdefault(
+                generation,
+                {
+                    "generation": generation,
+                    "best_fitness": None,
+                    "mean_fitness_sum": 0.0,
+                    "mean_fitness_count": 0,
+                    "worst_fitness": None,
+                    "wall_seconds_cumulative": None,
+                    "signature_333_count": 0,
+                    "shadow_pool_size": 0,
+                },
+            )
+            best_fitness = row.get("best_fitness")
+            if best_fitness is not None:
+                current_best = slot["best_fitness"]
+                slot["best_fitness"] = best_fitness if current_best is None else min(current_best, best_fitness)
+            if row.get("mean_fitness_count"):
+                slot["mean_fitness_sum"] += row["mean_fitness_sum"]
+                slot["mean_fitness_count"] += row["mean_fitness_count"]
+            worst_fitness = row.get("worst_fitness")
+            if worst_fitness is not None:
+                current_worst = slot["worst_fitness"]
+                slot["worst_fitness"] = worst_fitness if current_worst is None else max(current_worst, worst_fitness)
+            wall_seconds = row.get("wall_seconds_cumulative")
+            if wall_seconds is not None:
+                current_wall = slot["wall_seconds_cumulative"]
+                slot["wall_seconds_cumulative"] = wall_seconds if current_wall is None else max(current_wall, wall_seconds)
+            slot["signature_333_count"] += row.get("signature_333_count", 0)
+            slot["shadow_pool_size"] += row.get("shadow_pool_size", 0)
+
     history = []
-    for generation in sorted(per_generation):
-        slot = per_generation[generation]
+    for generation in sorted(combined):
+        slot = combined[generation]
         mean_fitness = None
         if slot["mean_fitness_count"]:
             mean_fitness = slot["mean_fitness_sum"] / slot["mean_fitness_count"]
@@ -130,31 +170,46 @@ def load_summary(summary_path: Path) -> dict | None:
 
 
 @dataclass
-class RunManager:
-    process: subprocess.Popen | None = None
-    stdout_lines: deque[str] = field(default_factory=lambda: deque(maxlen=600))
-    stderr_lines: deque[str] = field(default_factory=lambda: deque(maxlen=300))
-    lock: threading.Lock = field(default_factory=threading.Lock)
+class RunCopy:
+    index: int
+    export_dir: Path
+    log_path: Path
+    summary_path: Path
+    process: subprocess.Popen
+    seed: int
+    stdout_lines: deque[str] = field(default_factory=lambda: deque(maxlen=180))
+    stderr_lines: deque[str] = field(default_factory=lambda: deque(maxlen=120))
     started_at: float | None = None
     finished_at: float | None = None
     exit_code: int | None = None
-    env: dict[str, str] = field(default_factory=dict)
 
-    def _reader(self, stream, buffer: deque[str]) -> None:
+
+@dataclass
+class RunManager:
+    copies: list[RunCopy] = field(default_factory=list)
+    lock: threading.Lock = field(default_factory=threading.Lock)
+    started_at: float | None = None
+    finished_at: float | None = None
+    env: dict[str, str] = field(default_factory=dict)
+    batch_dir: Path | None = None
+
+    def _reader(self, stream, buffer: deque[str], prefix: str) -> None:
         for line in iter(stream.readline, ""):
             text = line.rstrip("\r\n")
             if text:
                 with self.lock:
-                    buffer.append(text)
+                    buffer.append(f"{prefix}{text}")
         stream.close()
 
     def is_running(self) -> bool:
-        return self.process is not None and self.process.poll() is None
+        return any(copy.process.poll() is None for copy in self.copies)
 
-    def start(self, env_overrides: dict[str, str]) -> None:
+    def start(self, env_overrides: dict[str, str], copies: int = 1) -> None:
         with self.lock:
             if self.is_running():
                 raise RuntimeError("Step 84 is already running")
+            if copies <= 0:
+                raise RuntimeError("Copy count must be positive")
 
             env = os.environ.copy()
             env.setdefault("OMP_NUM_THREADS", "1")
@@ -163,73 +218,129 @@ class RunManager:
             env.setdefault("NUMEXPR_NUM_THREADS", "1")
             env.update(env_overrides)
 
-            self.stdout_lines.clear()
-            self.stderr_lines.clear()
             self.started_at = time.time()
             self.finished_at = None
-            self.exit_code = None
             self.env = dict(env_overrides)
+            self.copies = []
 
-            self.process = subprocess.Popen(
-                [str(PYTHON_EXE), str(STEP84_SCRIPT)],
-                cwd=str(REPO_ROOT),
-                env=env,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                bufsize=1,
-            )
+            BATCH_EXPORTS.mkdir(parents=True, exist_ok=True)
+            batch_stamp = time.strftime("%Y%m%d_%H%M%S")
+            self.batch_dir = BATCH_EXPORTS / f"run_{batch_stamp}_{int(self.started_at * 1000) % 1000:03d}"
+            self.batch_dir.mkdir(parents=True, exist_ok=True)
 
-            assert self.process.stdout is not None
-            assert self.process.stderr is not None
-            threading.Thread(target=self._reader, args=(self.process.stdout, self.stdout_lines), daemon=True).start()
-            threading.Thread(target=self._reader, args=(self.process.stderr, self.stderr_lines), daemon=True).start()
-            threading.Thread(target=self._watcher, daemon=True).start()
+            base_seed_raw = env_overrides.get("STEP84_SEED")
+            base_seed = int(base_seed_raw) if base_seed_raw is not None and str(base_seed_raw).strip() else 8401001
 
-    def _watcher(self) -> None:
-        process = self.process
-        if process is None:
-            return
-        code = process.wait()
+            for index in range(copies):
+                export_dir = self.batch_dir / f"copy_{index + 1:03d}"
+                export_dir.mkdir(parents=True, exist_ok=True)
+                copy_env = env.copy()
+                copy_env["STEP84_EXPORTS_DIR"] = str(export_dir)
+                copy_env["STEP84_SEED"] = str(base_seed + index)
+                process = subprocess.Popen(
+                    [str(PYTHON_EXE), str(STEP84_SCRIPT)],
+                    cwd=str(REPO_ROOT),
+                    env=copy_env,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    bufsize=1,
+                )
+                copy = RunCopy(
+                    index=index + 1,
+                    export_dir=export_dir,
+                    log_path=export_dir / "step84_evolution_log.csv",
+                    summary_path=export_dir / "step84_summary.json",
+                    process=process,
+                    seed=base_seed + index,
+                    started_at=time.time(),
+                )
+                self.copies.append(copy)
+
+                assert process.stdout is not None
+                assert process.stderr is not None
+                prefix = f"[copy {index + 1:02d}] "
+                threading.Thread(target=self._reader, args=(process.stdout, copy.stdout_lines, prefix), daemon=True).start()
+                threading.Thread(target=self._reader, args=(process.stderr, copy.stderr_lines, prefix), daemon=True).start()
+                threading.Thread(target=self._watcher, args=(copy,), daemon=True).start()
+
+    def _watcher(self, copy: RunCopy) -> None:
+        code = copy.process.wait()
         with self.lock:
-            self.exit_code = code
-            self.finished_at = time.time()
+            copy.exit_code = code
+            copy.finished_at = time.time()
+            if not self.is_running():
+                self.finished_at = time.time()
 
     def stop(self) -> None:
         with self.lock:
-            if not self.is_running():
-                return
-            assert self.process is not None
-            self.process.terminate()
+            for copy in self.copies:
+                if copy.process.poll() is None:
+                    copy.process.terminate()
 
     def payload(self) -> dict:
         with self.lock:
             running = self.is_running()
-            process = self.process
-            pid = process.pid if process else None
+            env = dict(self.env)
+            batch_dir = str(self.batch_dir) if self.batch_dir else None
             started_at = self.started_at
             finished_at = self.finished_at
-            exit_code = self.exit_code
-            env = dict(self.env)
-            stdout = tail_list(self.stdout_lines)
-            stderr = tail_list(self.stderr_lines)
+            copies = list(self.copies)
 
-        history = aggregate_history(LOG_PATH)
-        summary = load_summary(SUMMARY_PATH)
+        log_paths: list[Path] = []
+        summaries: list[dict] = []
+        stdout: list[str] = []
+        stderr: list[str] = []
+        copy_payloads: list[dict] = []
+        for copy in copies:
+            log_paths.append(copy.log_path)
+            summary = load_summary(copy.summary_path)
+            if summary is not None:
+                summaries.append({**summary, "copy_index": copy.index, "seed": copy.seed, "export_dir": str(copy.export_dir)})
+            stdout.extend(tail_list(copy.stdout_lines, 8))
+            stderr.extend(tail_list(copy.stderr_lines, 6))
+            copy_payloads.append(
+                {
+                    "index": copy.index,
+                    "pid": copy.process.pid,
+                    "running": copy.process.poll() is None,
+                    "exit_code": copy.exit_code,
+                    "seed": copy.seed,
+                    "export_dir": str(copy.export_dir),
+                    "best_fitness_ever": summary.get("best_fitness_ever") if summary else None,
+                    "best_support_signature": summary.get("best_support_signature") if summary else None,
+                    "total_generations": summary.get("total_generations") if summary else None,
+                }
+            )
 
+        history = aggregate_history(log_paths if log_paths else [LOG_PATH])
         latest = history[-1] if history else None
+        best_summary = None
+        if summaries:
+            best_summary = min(
+                summaries,
+                key=lambda item: (
+                    item.get("best_fitness_ever") if item.get("best_fitness_ever") is not None else float("inf"),
+                    item.get("total_wall_seconds") if item.get("total_wall_seconds") is not None else float("inf"),
+                ),
+            )
+        elif not copies:
+            best_summary = load_summary(SUMMARY_PATH)
+
         return {
             "running": running,
-            "pid": pid,
             "started_at": started_at,
             "finished_at": finished_at,
-            "exit_code": exit_code,
             "env": env,
-            "stdout_tail": stdout,
-            "stderr_tail": stderr,
+            "batch_dir": batch_dir,
+            "copy_count": len(copy_payloads),
+            "running_count": sum(1 for copy in copy_payloads if copy["running"]),
+            "copies": copy_payloads,
+            "stdout_tail": stdout[-120:],
+            "stderr_tail": stderr[-80:],
             "history": history,
             "latest": latest,
-            "summary": summary,
+            "summary": best_summary,
         }
 
 
@@ -288,11 +399,12 @@ class Step84TunerHandler(BaseHTTPRequestHandler):
             try:
                 payload = self._read_json_body()
                 env = {str(key): str(value) for key, value in payload.get("env", {}).items()}
-                RUN_MANAGER.start(env)
+                copies = int(payload.get("copies", 1))
+                RUN_MANAGER.start(env, copies=copies)
             except RuntimeError as error:
                 self._send_json({"ok": False, "error": str(error)}, HTTPStatus.CONFLICT)
                 return
-            except Exception as error:  # pragma: no cover - defensive path for UI use
+            except Exception as error:  # pragma: no cover
                 self._send_json({"ok": False, "error": str(error)}, HTTPStatus.BAD_REQUEST)
                 return
             self._send_json({"ok": True, "state": RUN_MANAGER.payload()})
