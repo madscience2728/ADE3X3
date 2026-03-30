@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-29 17:47:13
+Generated: 2026-03-29 20:45:13
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-29 17:47:13
+**Generated:** 2026-03-29 20:45:13
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -46,6 +46,8 @@ and 27-symbol live alphabet infrastructure (step 70 / Phase 33b)
 and hand derivation of conservation constant and defect condition (step 71 / Phase 33 hand derivation)
 and spectral gap of channel-separation quadratic form (step 72 / Phase 34)
 and universal pairwise intersection analysis (step 73 / Phase 35)
+and kernel-saturation witness geometry (Phase 36)
+and pure-sigma common-matrix obstruction analysis (Phase 37)
 
 **IMPORTANT:** This document contains all computed results inline.
 No external files are required. All research findings are here.
@@ -15369,7 +15371,271 @@ rank(H) = dim(ker(Gamma)) for every admissible minimum-rank decomposition. That 
 is exactly equivalent to the vanishing of all covering pairwise intersections inside
 ker(Gamma), and it is strictly sharper than the false eta_nullity = 0 formulation.
 
-## 75. CURRENT GAPS / OPEN FRONTS
+## 74. KERNEL-SATURATION WITNESS GEOMETRY
+
+[EXACT_DERIVED] / [MEASURED_FROM_CODE] (Phase 36)
+
+Phase 36 recasts nonsaturation as an exact witness problem. For a right-inverse triple
+P_0, P_1, P_2 with Gamma * P_s = I_9 and H = [P_0-P_1 | P_1-P_2],
+
+  ker(Gamma) ∩ ker(H^T) = { w : Gamma w = 0 and P_0^T w = P_1^T w = P_2^T w }.
+
+So failure of saturation is equivalent to the existence of a nonzero witness whose three
+channel images collapse to one common matrix C(w).
+
+### Known Exact Decompositions
+
+| case | dim ker(Gamma) | rank(H) | saturation defect | witness dim | common-image dim | common-matrix rank set |
+|------|----------------|---------|-------------------|-------------|------------------|------------------------|
+| strassen_2x2 | 3 | 3 | 0 | 0 | 0 | none |
+| standard_rank27 | 18 | 18 | 0 | 0 | 0 | none |
+| alphatensor_rank23 | 14 | 14 | 0 | 0 | 0 | none |
+
+All known exact decompositions currently in hand have witness dimension 0.
+So the theorem target becomes structural: characterize what a common witness matrix
+would have to look like, then rule that structure out on the multiplication variety.
+
+### Structured Right-Inverse Defect Families
+
+| case | dim ker(Gamma) | rank(H) | saturation defect | witness dim | common-image dim | common-matrix rank set |
+|------|----------------|---------|-------------------|-------------|------------------|------------------------|
+| standard_rank27_all_equal | 18 | 0 | 18 | 18 | 9 | 3 |
+| standard_rank27_k0_equals_k1 | 18 | 9 | 9 | 9 | 9 | 3 |
+| standard_rank27_all_collinear | 18 | 1 | 17 | 17 | 9 | 0,1,2 |
+| standard_rank27_two_mode_split | 18 | 6 | 12 | 12 | 9 | 3 |
+| alphatensor_rank23_all_equal | 14 | 0 | 14 | 14 | 9 | 3 |
+| alphatensor_rank23_k0_equals_k1 | 14 | 9 | 5 | 5 | 5 | 3 |
+| alphatensor_rank23_all_collinear | 14 | 1 | 13 | 13 | 9 | 1,2,3 |
+| alphatensor_rank23_two_mode_split | 14 | 6 | 8 | 8 | 8 | 3 |
+
+These synthetic defect families keep Gamma * P_s = I_9 exactly but force special relations
+among the kernel lifts. In every measured case, the witness dimension matches the
+saturation defect exactly, and the common-image dimension records how many shared
+matrices survive the three-channel collapse.
+
+### Sample Common Witness Matrices
+
+Representative Phase 36 witness matrices from the structured defect families:
+
+| case | basis vector | common rank | common matrix |
+|------|--------------|-------------|---------------|
+| standard_rank27_all_equal | b0 | 3 | [[3, -2, -1], [1, -2, -2], [-1, 0, 2]] |
+| standard_rank27_all_equal | b1 | 3 | [[8, -7, -4], [4, -8, -8], [-4, 0, 8]] |
+| standard_rank27_all_equal | b2 | 3 | [[-8, 8, 5], [-4, 8, 8], [4, 0, -8]] |
+| standard_rank27_all_equal | b3 | 3 | [[-1, 2, 1], [-1, 2, 2], [1, 0, -2]] |
+| standard_rank27_all_equal | b4 | 3 | [[10, -9, -5], [5, -10, -10], [-5, 0, 10]] |
+| standard_rank27_all_equal | b5 | 3 | [[-4, 4, 3], [-2, 4, 4], [2, 0, -4]] |
+| standard_rank27_all_equal | b6 | 3 | [[-2, 2, 1], [0, 2, 2], [1, 0, -2]] |
+| standard_rank27_all_equal | b7 | 3 | [[-6, 6, 3], [-3, 7, 6], [3, 0, -6]] |
+| standard_rank27_all_equal | b8 | 3 | [[4, -4, -2], [2, -4, -3], [-2, 0, 4]] |
+| standard_rank27_all_equal | b9 | 3 | [[2, -2, -1], [2, -2, -2], [-1, 0, 2]] |
+| standard_rank27_all_equal | b10 | 3 | [[-6, 6, 3], [-3, 7, 6], [3, 0, -6]] |
+| standard_rank27_all_equal | b11 | 3 | [[-4, 4, 2], [-2, 4, 5], [2, 0, -4]] |
+
+The synthetic witnesses usually produce low-rank or visibly patterned common matrices.
+That is not yet a theorem, but it isolates the next exact question: what matrices C(w)
+can actually occur when w lies in ker(Gamma) for a valid minimum-rank decomposition?
+
+### Wildcard Random Right-Inverse Scan
+
+| gamma family | trials | saturated trials | deficient trials | max witness dim seen |
+|--------------|--------|-----------------|-----------------|----------------------|
+| standard_rank27 | 18 | 18 | 0 | 0 |
+| alphatensor_rank23 | 18 | 18 | 0 | 0 |
+
+The wildcard branch shows generic saturation in the sampled affine right-inverse model.
+Deficient triples appear as special coincidence loci rather than as typical behavior.
+
+### Status
+
+Phase 36 does not yet prove a universal obstruction, but it makes the geometric target
+concrete: nonsaturation is exactly the existence of a nonzero common witness matrix C(w).
+The next step is therefore to derive exact restrictions on that common matrix rather than
+to continue with generic spectral diagnostics.
+
+## 76. PURE-SIGMA COMMON-MATRIX OBSTRUCTION
+
+[EXACT_DERIVED] / [MEASURED_FROM_CODE] (Phase 37)
+
+Phase 37 compresses the witness-matrix problem to a smaller exact operator.
+In the Step 51 fiber-mode basis with nuisance block [H | Delta], define the sigma-silent sector
+
+  Z = ker(H^T) ∩ ker(Delta^T).
+
+When dim(Z) = 9 and Sigma_Z := Sigma^T|_Z is invertible, define
+
+  Omega = (Gamma|_Z) * Sigma_Z^(-1).
+
+Then every z in Z satisfies Gamma z = Omega (Sigma^T z). Under Delta subset span(H),
+every Phase 36 witness lies in Z and its common matrix C obeys
+
+  Omega vec(C) = 0.
+
+So invertibility of Omega is an exact common-matrix obstruction inside the Delta-contained regime.
+
+### Exact 9x9 Obstruction Operator On Known Decompositions
+
+| case | rank(H) | rank(Delta) | rank([H|Delta]) | dim Z | rank Sigma_Z | det Sigma_Z | det Omega | min eig(Omega) | max eig(Omega) | symmetric? | positive definite? |
+|------|---------|-------------|------------------|-------|--------------|------------|-----------|----------------|----------------|------------|--------------------|
+| alphatensor_rank23 | 14 | 10 | 14 | 9 | 9 | 19683 | 77875/19683 | 0.189392234833 | 4.447777472960 | True | True |
+| standard_rank27 | 18 | 0 | 18 | 9 | 9 | 19683 | 1 | 1.000000000000 | 1.000000000000 | True | True |
+
+This gives a finite exact certificate on the known exact decompositions.
+For the standard algorithm, Omega is exactly the identity. For AlphaTensor, Omega is an
+exact symmetric positive-definite rational 9x9 matrix, so in both known exact cases
+the common-matrix equation Omega vec(C) = 0 forces C = 0.
+
+AlphaTensor exact characteristic polynomial for Omega:
+
+  (19683*x**9 - 314928*x**8 + 2053593*x**7 - 7109208*x**6 + 14304924*x**5 - 17208855*x**4 + 12251790*x**3 - 4925403*x**2 + 1004694*x - 77875)/19683
+
+### Structured Factorized Defect Branches
+
+| base | family | dim Z | rank Sigma_Z | operator defined? | min eig(Omega) | tensor max residual |
+|------|--------|-------|--------------|-------------------|----------------|---------------------|
+| alphatensor_rank23 | pair_equal_01 | 5 | 0 | False | n/a | 0.500000000000 |
+| alphatensor_rank23 | pair_equal_12 | 4 | 0 | False | n/a | 0.500000000000 |
+| alphatensor_rank23 | all_equal | 14 | 0 | False | n/a | 0.666666666667 |
+| alphatensor_rank23 | collinear | 3 | 3 | False | n/a | 0.758861599108 |
+| standard_rank27 | pair_equal_01 | 9 | 0 | False | n/a | 0.500000000000 |
+| standard_rank27 | pair_equal_12 | 9 | 0 | False | n/a | 0.500000000000 |
+| standard_rank27 | all_equal | 18 | 0 | False | n/a | 0.666666666667 |
+| standard_rank27 | collinear | 9 | 9 | True | 1.000000000000 | 0.000000000000 |
+
+The clean 9x9 operator disappears on the rigid defect loci already isolated in Phase 19:
+pair-equality and all-equal projections collapse rank(Sigma_Z), while the standard collinear
+branch keeps Omega = I and stays exact. So Phase 37 distinguishes the harmless standard
+collinear geometry from genuinely obstructive collapse patterns.
+
+### Wildcard Channel-Rescaling Branch
+
+| base | trials | operator-defined trials | dim Z range | rank Sigma_Z range | tensor residual range |
+|------|--------|------------------------|-------------|--------------------|-----------------------|
+| alphatensor_rank23 | 12 | 0 | 1..1 | 1..1 | 0.479073506549..0.779925965050 |
+| standard_rank27 | 12 | 12 | 9..9 | 9..9 | 0.000000000000..0.000000000000 |
+
+The wildcard branch splits sharply by family: standard-derived channel rescalings preserve
+the clean sigma-only sector and Omega = I in every sampled trial, while AlphaTensor-derived
+rescalings collapse immediately to a lower-dimensional silent sector with visible residual.
+
+### Status
+
+Phase 37 does not yet prove the universal theorem, because it still uses the Delta-contained
+regime rather than deriving it universally. But it sharpens the obstruction target from an
+R-dimensional witness problem to a 9x9 exact operator certificate on the sigma-only sector.
+The next theorem step is to show that every valid minimum-rank decomposition has the same
+clean 9-dimensional sigma-silent sector and invertible Omega.
+
+## 77. HAMILTON TERM-SHARING AUDIT
+
+[EXACT_DERIVED] / [MEASURED_FROM_CODE] (Step 78)
+
+Step 78 closes the deferred Hamilton-split follow-up from Step 75.
+Using the exported exact rank-19 anticommutator decomposition and the recorded rank-20
+commutator seed, it reconstructs both factor lists and checks whether
+
+  T = ({A,B} + [A,B]) / 2
+
+admits any immediate linear compression by shared rank-1 terms or shared term-span geometry.
+
+### Direct Overlap Verdict
+
+- Anticommutator term count: 19
+- Commutator term count: 20
+- Direct shared normalized rank-1 terms: 0
+- Union span rank: 39
+- Span intersection dimension: 0
+- Best single-term projection residual into opposite span: 9.4798261730875311e-01
+- Exact cross-span membership count: 0
+- Naive Hamilton combined term count: 39
+- Combined explicit Hamilton residual: 1.1637770334083086e-06
+
+So the easy linear-sharing route is negative: the commutator and anticommutator term families
+meet trivially in ambient term space, and the naive Hamilton split remains a 39-term expression.
+
+### Residual Rank Diagnostics
+
+- T - 0.5*T_anti = 0.5*T_comm has flattening lower bound 8 with mode ranks [8,8,8]
+- T - 0.5*T_comm = 0.5*T_anti has flattening lower bound 9 with mode ranks [9,9,9]
+
+This confirms that subtracting one exact half from T simply leaves the other half with its own
+expected flattening barrier: 8 for the commutator side and 9 for the anticommutator side.
+
+### Principal-Angle Overlap Between The Two Term Spans
+
+| index | principal cosine | principal angle (radians) |
+|-------|------------------|---------------------------|
+| 1 | 4.0516664456189633e-01 | 1.1536352275006521e+00 |
+| 2 | 3.8599579338552309e-01 | 1.1745092975060156e+00 |
+| 3 | 2.7313152046657918e-01 | 1.2941494949623267e+00 |
+| 4 | 2.3621653088829478e-01 | 1.3323259880054710e+00 |
+| 5 | 1.9903372084694523e-01 | 1.3704245114496905e+00 |
+
+The leading principal cosine is only about 0.405, so even the closest directions between the
+two spans are far from collinear.
+
+### Closest Pairwise Term Comparisons
+
+| commutator term | anticommutator term | normalized dot product | max abs difference after normalization |
+|-----------------|---------------------|------------------------|--------------------------------------|
+| c07 | s19 | 2.6952627799423395e-01 | 2.4840501373589643e-01 |
+| c18 | s12 | -1.8987566600638095e-01 | 3.1246959638255561e-01 |
+| c07 | s05 | -1.8223449265482286e-01 | 5.2642807460946972e-01 |
+| c18 | s13 | 1.7800342360298529e-01 | 3.1030784369604175e-01 |
+| c03 | s12 | 1.7376168854601159e-01 | 2.1755678296783365e-01 |
+
+No pair reaches the exact shared-term tolerance, and even the closest comparisons remain visibly
+separated after normalization.
+
+### Status
+
+Step 78 does not prove that Hamilton-style recombination is impossible in a nonlinear sense, but
+it does close the most obvious branch: there is no direct rank-1 sharing and no immediate linear-span
+compression between the exported exact commutator and anticommutator witnesses.
+
+## 78. BASIS-ROTATED PILOT SEARCH
+
+[MEASURED_FROM_CODE] (Step 79)
+
+Step 79 tests the next checklist route after the Hamilton split closes: apply explicit
+GL(9)^3 basis changes to the full 9x9x9 tensor and ask whether cold CP search becomes
+numerically easier in the rotated coordinates.
+
+The pilot is intentionally small. It first verifies that the transported public rank-23
+AlphaTensor witness still reconstructs the rotated target exactly, then runs a low-budget
+cold scan at ranks 19, 20, 21, 22 on a handful of structured and random well-conditioned
+basis changes.
+
+### Pilot Summary
+
+| rotation | family | max condition | public rank-23 calibration residual | best rank tested | best max-abs residual | exact hit found |
+|----------|--------|---------------|-----------------------------------|------------------|-----------------------|----------------|
+| rot_dct_shared | structured_dct | 1.0000000000000009e+00 | 5.8501826826030809e-16 | 21 | 2.2409030586294140e-01 | False |
+| rot_gl_01 | random_well_conditioned_gl | 7.1916668094319602e+00 | 1.0547118733938987e-15 | 22 | 8.2256755045949648e-02 | False |
+| rot_gl_02 | random_well_conditioned_gl | 7.6989108310201706e+00 | 1.1102230246251565e-15 | 22 | 7.1539078472176998e-02 | False |
+| rot_gl_03 | random_well_conditioned_gl | 6.3239518007001001e+00 | 1.6653345369377348e-15 | 22 | 9.7613521019061483e-02 | False |
+
+The calibration residual stays at about 1e-15 on every tested rotation, so the basis-transport
+machinery is correct. The negative result is therefore about the search landscape, not about
+a broken coordinate transform.
+
+### Pilot Verdict
+
+- Best rotated rank-19 residual: 1.1501702298019892e-01
+- Best rotated residual overall: 7.1539078472176998e-02 at rank 22 on rot_gl_02
+- Current in-repo rank-19 baseline for comparison: 5.2684239970850189e-04
+
+This is a clean negative pilot for cold starts. None of the tested rotations produced an exact hit,
+and none even approached the current rank-19 frontier. The best rotated rank-19 trial remains in
+the 1e-1 regime, while the existing border-style rank-19 best is already in the 5e-4 regime.
+
+### Status
+
+Step 79 does not rule out all basis-rotated search. It only rules out the simplest version: small-budget
+cold CP search after a basis change. Any future revisit of this route should therefore use transported
+warm starts or continuation from the exact rank-23 witness, not another tiny cold pilot.
+
+## 79. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
@@ -15423,6 +15689,10 @@ ker(Gamma), and it is strictly sharper than the false eta_nullity = 0 formulatio
 - Polyomino subtensor-rank + tiling analysis: ✓ the full connected-polyomino rank table is now audited cleanly, the priority L-tromino class is verified at numerical rank 9, all four previously unresolved tetromino classes are verified at numerical rank 12, the corrected best flat exact-cover cost is 26 with no verified flat tiling at cost 24 or below, and the Step 51/52 layer split of the public rank-23 algorithm is exported with nuisance rank 14, 3 dead-X-dominant corrector terms, and no signal-dominant terms
 - Spectral gap of the channel-separation quadratic form: ✓ Phase 34 converts the exact defect condition into positivity of Q_chan on ker(Gamma), verifies nullity 0 on AlphaTensor rank 23 / standard 3x3 / Strassen 2x2, proves the standard-family pattern pair gap = 2 and total gap = n, and records a positive-definite Strassen certificate via exact leading principal minors
 - Universal pairwise intersection analysis: ✓ Phase 35 proves the exact covering-pair identity ker(Gamma) ∩ ker D_st ∩ ker D_s't' has dimension dim(ker(Gamma)) - rank(H), shows this is equivalent to kernel saturation rather than eta_nullity = 0, records AlphaTensor as the counterexample to the stronger false claim, and separates row-space overlap from kernel intersection
+- Kernel-saturation witness geometry: ✓ Phase 36 identifies nonsaturation exactly with the existence of a nonzero witness w in ker(Gamma) whose three channel images collapse to one common matrix C(w), verifies witness dimension 0 on Strassen / standard / AlphaTensor, exhibits structured defect families where witness dimension matches the saturation defect, and shows generic saturation in the sampled affine right-inverse wildcard branch
+- Pure-sigma common-matrix obstruction: ✓ Phase 37 compresses the witness problem to the sigma-silent sector Z = ker(H^T) ∩ ker(Delta^T) and the induced exact 9x9 operator Omega; on the known exact decompositions, Omega is symmetric positive definite (Omega = I for the standard algorithm, and AlphaTensor has exact determinant 77875/19683 with positive leading minors), so the common-matrix equation Omega vec(C) = 0 forces C = 0 inside the Delta-contained regime
+- Hamilton term-sharing audit: ✓ Step 78 reconstructs the exact rank-20 commutator witness alongside the Step 75 rank-19 anticommutator witness, finds 0 shared normalized rank-1 terms, union span rank 39 with span intersection dimension 0, and therefore closes the easy linear-sharing route from T=({A,B}+[A,B])/2
+- Basis-rotated pilot search: ✓ Step 79 verifies GL(9)^3 transport of the public rank-23 witness exactly on a small structured/random pilot, but the rotated cold CP scans at ranks 19..22 are cleanly negative and do not improve on the existing rank-19 frontier
 
 **Remaining open fronts:**
 - Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored
@@ -15445,6 +15715,8 @@ ker(Gamma), and it is strictly sharper than the false eta_nullity = 0 formulatio
 - Feasibility boundary: determine the smallest rotation cap and cost budget under which each family still admits any regular descent; this now looks more promising than a single gain-per-budget score
 - Boundary sharpening: densify the cap grid near 4 and 12 degrees and test whether the frontier gap persists under finer resolution and larger continuation budgets
 - Threshold localization: determine whether AlphaTensor's true critical cap lies below 2 degrees and whether the standard threshold is exactly 12 degrees or just above 11.5 degrees
+- Hamilton recompression beyond linear sharing: Step 78 rules out direct shared terms and trivial span overlap, but a genuinely nonlinear recompression of the 39-term Hamilton union has not been excluded
+- Basis-rotated search beyond the cold pilot: Step 79 rules out the tiny cold-start version, but a transported warm-start or continuation-based GL(9)^3 search has not yet been tested
 - Step 48 shows that the 8 XC-orbit linearization is exact but vacuous for rank lower bounds;
   any useful lower-bound model must retain finer-than-orbit-sum equation structure
 - Step 49 now records the exact 729-equation trilinear system and the 8 representative types;
@@ -15459,6 +15731,8 @@ ker(Gamma), and it is strictly sharper than the false eta_nullity = 0 formulatio
 - Phase 25 completes the first version of that target and refines it further: kappa_ker(x) is the right honest quantity to track, but it is not yet a universal separator by itself because some highly symmetric standard continuations can also push it low; the next open problem is to exclude singular endpoint collapse and other nonregular escape mechanisms while testing smooth exact continuation toward kappa_ker = 0
 - Phase 26 shows that forbidding endpoint collapse is necessary but still not sufficient: it removes the standard softest-path loophole but not all high-symmetry standard escape routes
 - Phase 27 shows that even the honest coupled first-order continuation equations are too weak as a final criterion, because both families admit near-perfect linearized cancellation while finite probes only reduce the honest defect modestly; the remaining obstruction problem is therefore nonlinear and regularized at once
+- Phase 36 turns the kernel-saturation problem into a common-matrix witness problem, but not yet an obstruction theorem: the remaining task is to derive exact structural restrictions on admissible common witness matrices C(w) inside valid minimum-rank decompositions
+- Phase 37 sharpens that task further inside the Delta-contained regime: the remaining theorem target is to prove universally that valid minimum-rank decompositions have a clean 9-dimensional sigma-silent sector Z = ker(H^T) ∩ ker(Delta^T) with invertible Omega, or equivalently to show that no valid decomposition can realize a singular pure-sigma common-matrix operator
 - The old depth-2 route should now be treated as structurally closed for exact division-free circuits by Step 73; any remaining use of layering is as a staged diagnostic inside bilinear factor space, and Phase 23 shows that this diagnostic sharply separates AlphaTensor-like low-rank geometry from the standard algorithm
 - Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity
 - Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit

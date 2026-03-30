@@ -1,0 +1,3 @@
+label,family,R,rank_gamma,rank_H,rank_delta,rank_HDelta,delta_in_eta_exact,z_dim,sigma_z_rank,gamma_z_rank,sigma_z_det,omega_det,omega_symmetric,omega_min_eigenvalue_approx,omega_max_eigenvalue_approx,omega_positive_definite,omega_charpoly
+alphatensor_rank23,known_exact,23,9,14,10,14,True,9,9,9,19683,77875/19683,True,0.189392234833,4.447777472960,True,(19683*x**9 - 314928*x**8 + 2053593*x**7 - 7109208*x**6 + 14304924*x**5 - 17208855*x**4 + 12251790*x**3 - 4925403*x**2 + 1004694*x - 77875)/19683
+standard_rank27,known_exact,27,9,18,0,18,True,9,9,9,19683,1,True,1.000000000000,1.000000000000,True,(x - 1)**9

@@ -40,6 +40,8 @@ PHASE33_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase33_27_
 PHASE33B_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase33b_27_symbol_live_alphabet"
 PHASE34_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase34_spectral_gap_channel_separation"
 PHASE35_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase35_universal_pairwise_intersection"
+PHASE36_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase36_kernel_saturation_witness_geometry"
+PHASE37_DIR = Path(__file__).parent / "outputs" / "ade3x3_attack" / "phase37_pure_sigma_common_matrix_obstruction"
 
 def read_csv(filename):
     """Read CSV file from exports directory."""
@@ -145,6 +147,27 @@ def read_phase34_outputs():
 def read_phase35_outputs():
     """Read Phase 35 universal pairwise-intersection outputs."""
     return read_json_path(PHASE35_DIR / "phase35_summary.json")
+
+def read_phase36_outputs():
+    """Read Phase 36 kernel-saturation witness-geometry outputs."""
+    return read_json_path(PHASE36_DIR / "phase36_summary.json")
+
+def read_phase37_outputs():
+    """Read Phase 37 pure-sigma common-matrix obstruction outputs."""
+    return read_json_path(PHASE37_DIR / "phase37_summary.json")
+
+def read_step78_outputs():
+    """Read Step 78 Hamilton term-sharing audit exports."""
+    summary_rows = read_csv("step78_summary.csv")
+    top_overlap_rows = read_csv("step78_hamilton_top_pairwise_overlap.csv")
+    principal_rows = read_csv("step78_hamilton_principal_angles.csv")
+    return summary_rows, top_overlap_rows, principal_rows
+
+def read_step79_outputs():
+    """Read Step 79 basis-rotated pilot search exports."""
+    summary_rows = read_csv("step79_basis_rotated_summary.csv")
+    result_rows = read_csv("step79_basis_rotated_results.csv")
+    return summary_rows, result_rows
 
 def read_axxc_signature_layer(rep_config_ids):
     """Read the current AXXC arity-4 signature layer for selected reps.
@@ -599,6 +622,8 @@ def generate():
     w("and hand derivation of conservation constant and defect condition (step 71 / Phase 33 hand derivation)")
     w("and spectral gap of channel-separation quadratic form (step 72 / Phase 34)")
     w("and universal pairwise intersection analysis (step 73 / Phase 35)")
+    w("and kernel-saturation witness geometry (Phase 36)")
+    w("and pure-sigma common-matrix obstruction analysis (Phase 37)")
     w()
     w("**IMPORTANT:** This document contains all computed results inline.")
     w("No external files are required. All research findings are here.")
@@ -4713,6 +4738,335 @@ def generate():
     else:
         w("*Run the Phase 35 script to populate this section.*")
 
+    # ── PHASE 36 KERNEL-SATURATION WITNESS GEOMETRY ──
+    w()
+    w("## 74. KERNEL-SATURATION WITNESS GEOMETRY")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] / [MEASURED_FROM_CODE] (Phase 36)")
+    w()
+    w("Phase 36 recasts nonsaturation as an exact witness problem. For a right-inverse triple")
+    w("P_0, P_1, P_2 with Gamma * P_s = I_9 and H = [P_0-P_1 | P_1-P_2],")
+    w()
+    w("  ker(Gamma) ∩ ker(H^T) = { w : Gamma w = 0 and P_0^T w = P_1^T w = P_2^T w }.")
+    w()
+    w("So failure of saturation is equivalent to the existence of a nonzero witness whose three")
+    w("channel images collapse to one common matrix C(w).")
+    w()
+    phase36 = read_phase36_outputs()
+    if phase36:
+        known_rows = phase36.get('known_rows', [])
+        structured_rows = phase36.get('structured_rows', [])
+        basis_rows = phase36.get('basis_rows', [])
+        wildcard_summary = phase36.get('wildcard_summary', [])
+
+        w("### Known Exact Decompositions")
+        w()
+        w("| case | dim ker(Gamma) | rank(H) | saturation defect | witness dim | common-image dim | common-matrix rank set |")
+        w("|------|----------------|---------|-------------------|-------------|------------------|------------------------|")
+        for row in known_rows:
+            w(
+                f"| {row.get('label')} | {row.get('ker_gamma_dim')} | {row.get('rank_H')} | "
+                f"{row.get('saturation_defect')} | {row.get('witness_dim')} | {row.get('common_image_dim')} | "
+                f"{row.get('common_rank_set')} |"
+            )
+        w()
+        w("All known exact decompositions currently in hand have witness dimension 0.")
+        w("So the theorem target becomes structural: characterize what a common witness matrix")
+        w("would have to look like, then rule that structure out on the multiplication variety.")
+        w()
+
+        w("### Structured Right-Inverse Defect Families")
+        w()
+        w("| case | dim ker(Gamma) | rank(H) | saturation defect | witness dim | common-image dim | common-matrix rank set |")
+        w("|------|----------------|---------|-------------------|-------------|------------------|------------------------|")
+        for row in structured_rows:
+            w(
+                f"| {row.get('label')} | {row.get('ker_gamma_dim')} | {row.get('rank_H')} | "
+                f"{row.get('saturation_defect')} | {row.get('witness_dim')} | {row.get('common_image_dim')} | "
+                f"{row.get('common_rank_set')} |"
+            )
+        w()
+        w("These synthetic defect families keep Gamma * P_s = I_9 exactly but force special relations")
+        w("among the kernel lifts. In every measured case, the witness dimension matches the")
+        w("saturation defect exactly, and the common-image dimension records how many shared")
+        w("matrices survive the three-channel collapse.")
+        w()
+
+        if basis_rows:
+            w("### Sample Common Witness Matrices")
+            w()
+            w("Representative Phase 36 witness matrices from the structured defect families:")
+            w()
+            w("| case | basis vector | common rank | common matrix |")
+            w("|------|--------------|-------------|---------------|")
+            for row in basis_rows[:12]:
+                w(
+                    f"| {row.get('label')} | {row.get('basis_vector')} | {row.get('common_matrix_rank')} | "
+                    f"{row.get('common_matrix')} |"
+                )
+            w()
+            w("The synthetic witnesses usually produce low-rank or visibly patterned common matrices.")
+            w("That is not yet a theorem, but it isolates the next exact question: what matrices C(w)")
+            w("can actually occur when w lies in ker(Gamma) for a valid minimum-rank decomposition?")
+            w()
+
+        if wildcard_summary:
+            w("### Wildcard Random Right-Inverse Scan")
+            w()
+            w("| gamma family | trials | saturated trials | deficient trials | max witness dim seen |")
+            w("|--------------|--------|-----------------|-----------------|----------------------|")
+            for row in wildcard_summary:
+                w(
+                    f"| {row.get('gamma_family')} | {row.get('trials')} | {row.get('saturated_trials')} | "
+                    f"{row.get('deficient_trials')} | {row.get('max_witness_dim_seen')} |"
+                )
+            w()
+            w("The wildcard branch shows generic saturation in the sampled affine right-inverse model.")
+            w("Deficient triples appear as special coincidence loci rather than as typical behavior.")
+            w()
+
+        w("### Status")
+        w()
+        w("Phase 36 does not yet prove a universal obstruction, but it makes the geometric target")
+        w("concrete: nonsaturation is exactly the existence of a nonzero common witness matrix C(w).")
+        w("The next step is therefore to derive exact restrictions on that common matrix rather than")
+        w("to continue with generic spectral diagnostics.")
+    else:
+        w("*Run the Phase 36 script to populate this section.*")
+
+    # ── PHASE 37 PURE-SIGMA COMMON-MATRIX OBSTRUCTION ──
+    w()
+    w(f"## {section_num}. PURE-SIGMA COMMON-MATRIX OBSTRUCTION")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] / [MEASURED_FROM_CODE] (Phase 37)")
+    w()
+    w("Phase 37 compresses the witness-matrix problem to a smaller exact operator.")
+    w("In the Step 51 fiber-mode basis with nuisance block [H | Delta], define the sigma-silent sector")
+    w()
+    w("  Z = ker(H^T) ∩ ker(Delta^T).")
+    w()
+    w("When dim(Z) = 9 and Sigma_Z := Sigma^T|_Z is invertible, define")
+    w()
+    w("  Omega = (Gamma|_Z) * Sigma_Z^(-1).")
+    w()
+    w("Then every z in Z satisfies Gamma z = Omega (Sigma^T z). Under Delta subset span(H),")
+    w("every Phase 36 witness lies in Z and its common matrix C obeys")
+    w()
+    w("  Omega vec(C) = 0.")
+    w()
+    w("So invertibility of Omega is an exact common-matrix obstruction inside the Delta-contained regime.")
+    w()
+    phase37 = read_phase37_outputs()
+    if phase37:
+        exact_rows = phase37.get('exact_rows', [])
+        structured_rows = phase37.get('structured_rows', [])
+        wildcard_summary = phase37.get('wildcard_summary', [])
+        operator_certificates = phase37.get('operator_certificates', {})
+
+        w("### Exact 9x9 Obstruction Operator On Known Decompositions")
+        w()
+        w("| case | rank(H) | rank(Delta) | rank([H|Delta]) | dim Z | rank Sigma_Z | det Sigma_Z | det Omega | min eig(Omega) | max eig(Omega) | symmetric? | positive definite? |")
+        w("|------|---------|-------------|------------------|-------|--------------|------------|-----------|----------------|----------------|------------|--------------------|")
+        for row in exact_rows:
+            w(
+                f"| {row.get('label')} | {row.get('rank_H')} | {row.get('rank_delta')} | {row.get('rank_HDelta')} | "
+                f"{row.get('z_dim')} | {row.get('sigma_z_rank')} | {row.get('sigma_z_det')} | {row.get('omega_det')} | "
+                f"{row.get('omega_min_eigenvalue_approx')} | {row.get('omega_max_eigenvalue_approx')} | "
+                f"{row.get('omega_symmetric')} | {row.get('omega_positive_definite')} |"
+            )
+        w()
+        w("This gives a finite exact certificate on the known exact decompositions.")
+        w("For the standard algorithm, Omega is exactly the identity. For AlphaTensor, Omega is an")
+        w("exact symmetric positive-definite rational 9x9 matrix, so in both known exact cases")
+        w("the common-matrix equation Omega vec(C) = 0 forces C = 0.")
+        w()
+
+        alpha_cert = operator_certificates.get('alphatensor_rank23', {})
+        if alpha_cert:
+            w("AlphaTensor exact characteristic polynomial for Omega:")
+            w()
+            w(f"  {alpha_cert.get('charpoly')}")
+            w()
+
+        if structured_rows:
+            w("### Structured Factorized Defect Branches")
+            w()
+            w("| base | family | dim Z | rank Sigma_Z | operator defined? | min eig(Omega) | tensor max residual |")
+            w("|------|--------|-------|--------------|-------------------|----------------|---------------------|")
+            for row in structured_rows:
+                min_eig = row.get('operator_min_eigenvalue_approx') or 'n/a'
+                w(
+                    f"| {row.get('base_label')} | {row.get('family')} | {row.get('z_dim')} | {row.get('sigma_z_rank')} | "
+                    f"{row.get('operator_defined')} | {min_eig} | {row.get('tensor_max_abs_residual')} |"
+                )
+            w()
+            w("The clean 9x9 operator disappears on the rigid defect loci already isolated in Phase 19:")
+            w("pair-equality and all-equal projections collapse rank(Sigma_Z), while the standard collinear")
+            w("branch keeps Omega = I and stays exact. So Phase 37 distinguishes the harmless standard")
+            w("collinear geometry from genuinely obstructive collapse patterns.")
+            w()
+
+        if wildcard_summary:
+            w("### Wildcard Channel-Rescaling Branch")
+            w()
+            w("| base | trials | operator-defined trials | dim Z range | rank Sigma_Z range | tensor residual range |")
+            w("|------|--------|------------------------|-------------|--------------------|-----------------------|")
+            for row in wildcard_summary:
+                w(
+                    f"| {row.get('base_label')} | {row.get('trials')} | {row.get('operator_defined_trials')} | "
+                    f"{row.get('z_dim_min')}..{row.get('z_dim_max')} | {row.get('sigma_z_rank_min')}..{row.get('sigma_z_rank_max')} | "
+                    f"{row.get('min_tensor_residual'):.12f}..{row.get('max_tensor_residual'):.12f} |"
+                )
+            w()
+            w("The wildcard branch splits sharply by family: standard-derived channel rescalings preserve")
+            w("the clean sigma-only sector and Omega = I in every sampled trial, while AlphaTensor-derived")
+            w("rescalings collapse immediately to a lower-dimensional silent sector with visible residual.")
+            w()
+
+        w("### Status")
+        w()
+        w("Phase 37 does not yet prove the universal theorem, because it still uses the Delta-contained")
+        w("regime rather than deriving it universally. But it sharpens the obstruction target from an")
+        w("R-dimensional witness problem to a 9x9 exact operator certificate on the sigma-only sector.")
+        w("The next theorem step is to show that every valid minimum-rank decomposition has the same")
+        w("clean 9-dimensional sigma-silent sector and invertible Omega.")
+    else:
+        w("*Run the Phase 37 script to populate this section.*")
+
+    # ── STEP 78 HAMILTON TERM-SHARING AUDIT ──
+    w()
+    w(f"## {section_num}. HAMILTON TERM-SHARING AUDIT")
+    section_num += 1
+    w()
+    w("[EXACT_DERIVED] / [MEASURED_FROM_CODE] (Step 78)")
+    w()
+    w("Step 78 closes the deferred Hamilton-split follow-up from Step 75.")
+    w("Using the exported exact rank-19 anticommutator decomposition and the recorded rank-20")
+    w("commutator seed, it reconstructs both factor lists and checks whether")
+    w()
+    w("  T = ({A,B} + [A,B]) / 2")
+    w()
+    w("admits any immediate linear compression by shared rank-1 terms or shared term-span geometry.")
+    w()
+    step78_summary_rows, step78_top_overlap_rows, step78_principal_rows = read_step78_outputs()
+    if step78_summary_rows:
+        step78_summary = {row['summary_name']: row for row in step78_summary_rows}
+        w("### Direct Overlap Verdict")
+        w()
+        w(f"- Anticommutator term count: {step78_summary['step78_anticommutator_term_count']['summary_value']}")
+        w(f"- Commutator term count: {step78_summary['step78_commutator_term_count']['summary_value']}")
+        w(f"- Direct shared normalized rank-1 terms: {step78_summary['step78_direct_shared_rank1_term_count']['summary_value']}")
+        w(f"- Union span rank: {step78_summary['step78_union_span_rank']['summary_value']}")
+        w(f"- Span intersection dimension: {step78_summary['step78_span_intersection_dimension']['summary_value']}")
+        w(f"- Best single-term projection residual into opposite span: {step78_summary['step78_best_cross_span_membership_residual']['summary_value']}")
+        w(f"- Exact cross-span membership count: {step78_summary['step78_exact_cross_span_membership_count']['summary_value']}")
+        w(f"- Naive Hamilton combined term count: {step78_summary['step78_combined_hamilton_term_count']['summary_value']}")
+        w(f"- Combined explicit Hamilton residual: {step78_summary['step78_combined_hamilton_max_abs_residual']['summary_value']}")
+        w()
+        w("So the easy linear-sharing route is negative: the commutator and anticommutator term families")
+        w("meet trivially in ambient term space, and the naive Hamilton split remains a 39-term expression.")
+        w()
+
+        w("### Residual Rank Diagnostics")
+        w()
+        w(f"- T - 0.5*T_anti = 0.5*T_comm has flattening lower bound {step78_summary['step78_residual_after_half_anti_flattening_lb']['summary_value']} with mode ranks {step78_summary['step78_residual_after_half_anti_flattening_ranks']['summary_value']}")
+        w(f"- T - 0.5*T_comm = 0.5*T_anti has flattening lower bound {step78_summary['step78_residual_after_half_comm_flattening_lb']['summary_value']} with mode ranks {step78_summary['step78_residual_after_half_comm_flattening_ranks']['summary_value']}")
+        w()
+        w("This confirms that subtracting one exact half from T simply leaves the other half with its own")
+        w("expected flattening barrier: 8 for the commutator side and 9 for the anticommutator side.")
+        w()
+
+        if step78_principal_rows:
+            w("### Principal-Angle Overlap Between The Two Term Spans")
+            w()
+            w("| index | principal cosine | principal angle (radians) |")
+            w("|-------|------------------|---------------------------|")
+            for row in step78_principal_rows[:5]:
+                w(f"| {row['index']} | {row['principal_cosine']} | {row['principal_angle_radians']} |")
+            w()
+            w("The leading principal cosine is only about 0.405, so even the closest directions between the")
+            w("two spans are far from collinear.")
+            w()
+
+        if step78_top_overlap_rows:
+            w("### Closest Pairwise Term Comparisons")
+            w()
+            w("| commutator term | anticommutator term | normalized dot product | max abs difference after normalization |")
+            w("|-----------------|---------------------|------------------------|--------------------------------------|")
+            for row in step78_top_overlap_rows[:5]:
+                w(f"| {row['comm_term']} | {row['anti_term']} | {row['normalized_dot_product']} | {row['max_abs_difference_after_normalization']} |")
+            w()
+            w("No pair reaches the exact shared-term tolerance, and even the closest comparisons remain visibly")
+            w("separated after normalization.")
+            w()
+
+        w("### Status")
+        w()
+        w("Step 78 does not prove that Hamilton-style recombination is impossible in a nonlinear sense, but")
+        w("it does close the most obvious branch: there is no direct rank-1 sharing and no immediate linear-span")
+        w("compression between the exported exact commutator and anticommutator witnesses.")
+    else:
+        w("*Run ade3x3_step78_hamilton_term_sharing_audit.py to populate this section.*")
+
+    # ── STEP 79 BASIS-ROTATED PILOT SEARCH ──
+    w()
+    w(f"## {section_num}. BASIS-ROTATED PILOT SEARCH")
+    section_num += 1
+    w()
+    w("[MEASURED_FROM_CODE] (Step 79)")
+    w()
+    w("Step 79 tests the next checklist route after the Hamilton split closes: apply explicit")
+    w("GL(9)^3 basis changes to the full 9x9x9 tensor and ask whether cold CP search becomes")
+    w("numerically easier in the rotated coordinates.")
+    w()
+    w("The pilot is intentionally small. It first verifies that the transported public rank-23")
+    w("AlphaTensor witness still reconstructs the rotated target exactly, then runs a low-budget")
+    w("cold scan at ranks 19, 20, 21, 22 on a handful of structured and random well-conditioned")
+    w("basis changes.")
+    w()
+    step79_summary_rows, step79_result_rows = read_step79_outputs()
+    if step79_summary_rows:
+        best79 = min(step79_summary_rows, key=lambda row: float(row['pilot_best_max_abs_residual']))
+        best79_r19 = [row for row in step79_result_rows if row['rank_tested'] == '19']
+        best79_r19_row = min(best79_r19, key=lambda row: float(row['best_max_abs_residual'])) if best79_r19 else None
+
+        w("### Pilot Summary")
+        w()
+        w("| rotation | family | max condition | public rank-23 calibration residual | best rank tested | best max-abs residual | exact hit found |")
+        w("|----------|--------|---------------|-----------------------------------|------------------|-----------------------|----------------|")
+        for row in step79_summary_rows:
+            w(
+                f"| {row['rotation_id']} | {row['family']} | {row['max_condition_number']} | "
+                f"{row['public_rank23_calibration_residual']} | {row['pilot_best_rank']} | "
+                f"{row['pilot_best_max_abs_residual']} | {row['pilot_any_exact_hit']} |"
+            )
+        w()
+        w("The calibration residual stays at about 1e-15 on every tested rotation, so the basis-transport")
+        w("machinery is correct. The negative result is therefore about the search landscape, not about")
+        w("a broken coordinate transform.")
+        w()
+
+        w("### Pilot Verdict")
+        w()
+        if best79_r19_row:
+            w(f"- Best rotated rank-19 residual: {best79_r19_row['best_max_abs_residual']}")
+        w(f"- Best rotated residual overall: {best79['pilot_best_max_abs_residual']} at rank {best79['pilot_best_rank']} on {best79['rotation_id']}")
+        w(f"- Current in-repo rank-19 baseline for comparison: {best79.get('known_best_rank19_max_abs', '')}")
+        w()
+        w("This is a clean negative pilot for cold starts. None of the tested rotations produced an exact hit,")
+        w("and none even approached the current rank-19 frontier. The best rotated rank-19 trial remains in")
+        w("the 1e-1 regime, while the existing border-style rank-19 best is already in the 5e-4 regime.")
+        w()
+        w("### Status")
+        w()
+        w("Step 79 does not rule out all basis-rotated search. It only rules out the simplest version: small-budget")
+        w("cold CP search after a basis change. Any future revisit of this route should therefore use transported")
+        w("warm starts or continuation from the exact rank-23 witness, not another tiny cold pilot.")
+    else:
+        w("*Run ade3x3_step79_basis_rotated_pilot.py to populate this section.*")
+
     # ── OPEN FRONTS ──
     w()
     w(f"## {section_num}. CURRENT GAPS / OPEN FRONTS")
@@ -4770,6 +5124,10 @@ def generate():
     w("- Polyomino subtensor-rank + tiling analysis: ✓ the full connected-polyomino rank table is now audited cleanly, the priority L-tromino class is verified at numerical rank 9, all four previously unresolved tetromino classes are verified at numerical rank 12, the corrected best flat exact-cover cost is 26 with no verified flat tiling at cost 24 or below, and the Step 51/52 layer split of the public rank-23 algorithm is exported with nuisance rank 14, 3 dead-X-dominant corrector terms, and no signal-dominant terms")
     w("- Spectral gap of the channel-separation quadratic form: ✓ Phase 34 converts the exact defect condition into positivity of Q_chan on ker(Gamma), verifies nullity 0 on AlphaTensor rank 23 / standard 3x3 / Strassen 2x2, proves the standard-family pattern pair gap = 2 and total gap = n, and records a positive-definite Strassen certificate via exact leading principal minors")
     w("- Universal pairwise intersection analysis: ✓ Phase 35 proves the exact covering-pair identity ker(Gamma) ∩ ker D_st ∩ ker D_s't' has dimension dim(ker(Gamma)) - rank(H), shows this is equivalent to kernel saturation rather than eta_nullity = 0, records AlphaTensor as the counterexample to the stronger false claim, and separates row-space overlap from kernel intersection")
+    w("- Kernel-saturation witness geometry: ✓ Phase 36 identifies nonsaturation exactly with the existence of a nonzero witness w in ker(Gamma) whose three channel images collapse to one common matrix C(w), verifies witness dimension 0 on Strassen / standard / AlphaTensor, exhibits structured defect families where witness dimension matches the saturation defect, and shows generic saturation in the sampled affine right-inverse wildcard branch")
+    w("- Pure-sigma common-matrix obstruction: ✓ Phase 37 compresses the witness problem to the sigma-silent sector Z = ker(H^T) ∩ ker(Delta^T) and the induced exact 9x9 operator Omega; on the known exact decompositions, Omega is symmetric positive definite (Omega = I for the standard algorithm, and AlphaTensor has exact determinant 77875/19683 with positive leading minors), so the common-matrix equation Omega vec(C) = 0 forces C = 0 inside the Delta-contained regime")
+    w("- Hamilton term-sharing audit: ✓ Step 78 reconstructs the exact rank-20 commutator witness alongside the Step 75 rank-19 anticommutator witness, finds 0 shared normalized rank-1 terms, union span rank 39 with span intersection dimension 0, and therefore closes the easy linear-sharing route from T=({A,B}+[A,B])/2")
+    w("- Basis-rotated pilot search: ✓ Step 79 verifies GL(9)^3 transport of the public rank-23 witness exactly on a small structured/random pilot, but the rotated cold CP scans at ranks 19..22 are cleanly negative and do not improve on the existing rank-19 frontier")
     w()
     w("**Remaining open fronts:**")
     w("- Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored")
@@ -4792,6 +5150,8 @@ def generate():
     w("- Feasibility boundary: determine the smallest rotation cap and cost budget under which each family still admits any regular descent; this now looks more promising than a single gain-per-budget score")
     w("- Boundary sharpening: densify the cap grid near 4 and 12 degrees and test whether the frontier gap persists under finer resolution and larger continuation budgets")
     w("- Threshold localization: determine whether AlphaTensor's true critical cap lies below 2 degrees and whether the standard threshold is exactly 12 degrees or just above 11.5 degrees")
+    w("- Hamilton recompression beyond linear sharing: Step 78 rules out direct shared terms and trivial span overlap, but a genuinely nonlinear recompression of the 39-term Hamilton union has not been excluded")
+    w("- Basis-rotated search beyond the cold pilot: Step 79 rules out the tiny cold-start version, but a transported warm-start or continuation-based GL(9)^3 search has not yet been tested")
     w("- Step 48 shows that the 8 XC-orbit linearization is exact but vacuous for rank lower bounds;")
     w("  any useful lower-bound model must retain finer-than-orbit-sum equation structure")
     w("- Step 49 now records the exact 729-equation trilinear system and the 8 representative types;")
@@ -4806,6 +5166,8 @@ def generate():
     w("- Phase 25 completes the first version of that target and refines it further: kappa_ker(x) is the right honest quantity to track, but it is not yet a universal separator by itself because some highly symmetric standard continuations can also push it low; the next open problem is to exclude singular endpoint collapse and other nonregular escape mechanisms while testing smooth exact continuation toward kappa_ker = 0")
     w("- Phase 26 shows that forbidding endpoint collapse is necessary but still not sufficient: it removes the standard softest-path loophole but not all high-symmetry standard escape routes")
     w("- Phase 27 shows that even the honest coupled first-order continuation equations are too weak as a final criterion, because both families admit near-perfect linearized cancellation while finite probes only reduce the honest defect modestly; the remaining obstruction problem is therefore nonlinear and regularized at once")
+    w("- Phase 36 turns the kernel-saturation problem into a common-matrix witness problem, but not yet an obstruction theorem: the remaining task is to derive exact structural restrictions on admissible common witness matrices C(w) inside valid minimum-rank decompositions")
+    w("- Phase 37 sharpens that task further inside the Delta-contained regime: the remaining theorem target is to prove universally that valid minimum-rank decompositions have a clean 9-dimensional sigma-silent sector Z = ker(H^T) ∩ ker(Delta^T) with invertible Omega, or equivalently to show that no valid decomposition can realize a singular pure-sigma common-matrix operator")
     w("- The old depth-2 route should now be treated as structurally closed for exact division-free circuits by Step 73; any remaining use of layering is as a staged diagnostic inside bilinear factor space, and Phase 23 shows that this diagnostic sharply separates AlphaTensor-like low-rank geometry from the standard algorithm")
     w("- Step 63 measures one public rank-23 algorithm exactly and shows it is gamma-only rigid under single and pair deletion; what remains open is whether other nonequivalent rank-23 algorithms exhibit the same nuisance saturation and removal rigidity")
     w("- Step 64 shows that finite ternary-profile greedy search is not enough: the collapsed model is trivially exact while the corrected full-tensor 2x2 greedy misses Strassen entirely, so any serious finite-pool search must keep the gamma layer explicit and use something stronger than greedy matching pursuit")

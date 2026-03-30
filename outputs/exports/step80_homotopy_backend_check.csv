@@ -1,0 +1,4 @@
+tool_name,available,path,provenance
+julia,True,C:\Users\madsc\AppData\Local\Programs\Julia-1.12.5\bin\julia.exe,MEASURED_FROM_CODE
+phc,False,,MEASURED_FROM_CODE
+bertini,False,,MEASURED_FROM_CODE

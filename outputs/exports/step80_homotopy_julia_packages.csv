@@ -1,0 +1,2 @@
+package_name,available,julia_path,package_path,error,provenance
+HomotopyContinuation,True,C:\Users\madsc\AppData\Local\Programs\Julia-1.12.5\bin\julia.exe,C:\Users\madsc\.julia\packages\HomotopyContinuation\3ppvs\src\HomotopyContinuation.jl,,MEASURED_FROM_CODE

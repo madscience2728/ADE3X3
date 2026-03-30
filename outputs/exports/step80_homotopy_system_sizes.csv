@@ -1,0 +1,6 @@
+rank_value,tensor_entry_count,raw_unknown_count,scaling_gauge_dimension,effective_unknown_count,equation_minus_effective_unknowns,expected_projective_secant_dimension,expected_affine_secant_dimension,ambient_codimension_at_expected_secant,square_after_gauge_fixing,overdetermined_after_gauge_fixing,provenance
+19,729,513,38,475,254,474,475,254,False,True,EXACT_DERIVED
+20,729,540,40,500,229,499,500,229,False,True,EXACT_DERIVED
+21,729,567,42,525,204,524,525,204,False,True,EXACT_DERIVED
+22,729,594,44,550,179,549,550,179,False,True,EXACT_DERIVED
+23,729,621,46,575,154,574,575,154,False,True,EXACT_DERIVED

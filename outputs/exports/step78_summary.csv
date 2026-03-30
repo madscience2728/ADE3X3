@@ -1,0 +1,18 @@
+summary_name,summary_value,provenance,note
+step78_anticommutator_term_count,19,EXACT_DERIVED,Exact anticommutator term count imported from Step 75.
+step78_commutator_term_count,20,EXACT_DERIVED,Exact commutator term count reconstructed from the recorded Step 75 seed.
+step78_direct_shared_rank1_term_count,0,EXACT_DERIVED,Count of directly shared normalized rank-1 terms across the commutator and anticommutator decompositions.
+step78_anticommutator_span_rank,19,EXACT_DERIVED,Linear span dimension of the 19 anticommutator term tensors in ambient dimension 729.
+step78_commutator_span_rank,20,EXACT_DERIVED,Linear span dimension of the 20 commutator term tensors in ambient dimension 729.
+step78_union_span_rank,39,EXACT_DERIVED,Linear span dimension of the full 39-term Hamilton union.
+step78_span_intersection_dimension,0,EXACT_DERIVED,dim(span(commutator_terms) ∩ span(anticommutator_terms)).
+step78_best_cross_span_membership_residual,9.4798261730875311e-01,EXACT_DERIVED,Best relative residual for a single term projected into the opposite family span.
+step78_exact_cross_span_membership_count,0,EXACT_DERIVED,Number of individual terms that lie in the opposite family span at tolerance 1e-8.
+step78_top5_principal_cosines,"[0.4051666445618963,0.3859957933855231,0.2731315204665792,0.23621653088829478,0.19903372084694523]",EXACT_DERIVED,Largest principal cosines between the commutator and anticommutator term spans.
+step78_combined_hamilton_term_count,39,EXACT_DERIVED,Naive term count for T = 0.5*T_anti + 0.5*T_comm with no nonlinear recompression.
+step78_combined_hamilton_max_abs_residual,1.1637770334083086e-06,EXACT_DERIVED,Verification residual for the explicit 39-term Hamilton split.
+step78_residual_after_half_anti_flattening_lb,8,EXACT_DERIVED,Flattening lower bound for T - 0.5*T_anti = 0.5*T_comm.
+step78_residual_after_half_anti_flattening_ranks,"[8,8,8]",EXACT_DERIVED,Mode flattening ranks for T - 0.5*T_anti.
+step78_residual_after_half_comm_flattening_lb,9,EXACT_DERIVED,Flattening lower bound for T - 0.5*T_comm = 0.5*T_anti.
+step78_residual_after_half_comm_flattening_ranks,"[9,9,9]",EXACT_DERIVED,Mode flattening ranks for T - 0.5*T_comm.
+step78_runtime_seconds,1.630276,MEASURED_FROM_CODE,Wall-clock runtime for the Hamilton-sharing audit.

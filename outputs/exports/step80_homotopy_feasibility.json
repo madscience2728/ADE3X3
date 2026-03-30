@@ -1,0 +1,149 @@
+{
+  "summary": {
+    "step80_backend_ready": true,
+    "step80_preferred_backend": "julia",
+    "step80_julia_available": true,
+    "step80_julia_executable_path": "C:\\Users\\madsc\\AppData\\Local\\Programs\\Julia-1.12.5\\bin\\julia.exe",
+    "step80_homotopycontinuation_available": true,
+    "step80_phc_available": false,
+    "step80_bertini_available": false,
+    "step80_phcpy_available": false,
+    "step80_rank19_effective_unknown_count": 475,
+    "step80_rank19_equation_minus_effective_unknowns": 254,
+    "step80_rank23_effective_unknown_count": 575,
+    "step80_runtime_seconds": "4.0340108871459961e+00"
+  },
+  "notes": {
+    "verdict": "backend_available",
+    "interpretation": "A homotopy backend is present and loadable locally, so the next step can move from precheck to actual system export and pilot path tracking.",
+    "system_size_note": "After quotienting the 2R scaling gauge, the raw rank-19 CP model still has 475 effective unknowns against 729 polynomial equations; the route is heavily overdetermined in affine coordinates and needs a careful square subsystem or parameter homotopy design."
+  },
+  "executables": [
+    {
+      "tool_name": "julia",
+      "available": true,
+      "path": "C:\\Users\\madsc\\AppData\\Local\\Programs\\Julia-1.12.5\\bin\\julia.exe",
+      "provenance": "MEASURED_FROM_CODE"
+    },
+    {
+      "tool_name": "phc",
+      "available": false,
+      "path": "",
+      "provenance": "MEASURED_FROM_CODE"
+    },
+    {
+      "tool_name": "bertini",
+      "available": false,
+      "path": "",
+      "provenance": "MEASURED_FROM_CODE"
+    }
+  ],
+  "python_modules": [
+    {
+      "module_name": "phcpy",
+      "available": false,
+      "origin": "",
+      "provenance": "MEASURED_FROM_CODE"
+    },
+    {
+      "module_name": "sympy",
+      "available": true,
+      "origin": "C:\\Users\\madsc\\Desktop\\Github\\ADE3X3\\.venv\\Lib\\site-packages\\sympy\\__init__.py",
+      "provenance": "MEASURED_FROM_CODE"
+    },
+    {
+      "module_name": "numpy",
+      "available": true,
+      "origin": "C:\\Users\\madsc\\Desktop\\Github\\ADE3X3\\.venv\\Lib\\site-packages\\numpy\\__init__.py",
+      "provenance": "MEASURED_FROM_CODE"
+    },
+    {
+      "module_name": "scipy",
+      "available": true,
+      "origin": "C:\\Users\\madsc\\Desktop\\Github\\ADE3X3\\.venv\\Lib\\site-packages\\scipy\\__init__.py",
+      "provenance": "MEASURED_FROM_CODE"
+    }
+  ],
+  "julia_packages": [
+    {
+      "package_name": "HomotopyContinuation",
+      "available": true,
+      "julia_path": "C:\\Users\\madsc\\AppData\\Local\\Programs\\Julia-1.12.5\\bin\\julia.exe",
+      "package_path": "C:\\Users\\madsc\\.julia\\packages\\HomotopyContinuation\\3ppvs\\src\\HomotopyContinuation.jl",
+      "error": "",
+      "provenance": "MEASURED_FROM_CODE"
+    }
+  ],
+  "system_sizes": [
+    {
+      "rank_value": 19,
+      "tensor_entry_count": 729,
+      "raw_unknown_count": 513,
+      "scaling_gauge_dimension": 38,
+      "effective_unknown_count": 475,
+      "equation_minus_effective_unknowns": 254,
+      "expected_projective_secant_dimension": 474,
+      "expected_affine_secant_dimension": 475,
+      "ambient_codimension_at_expected_secant": 254,
+      "square_after_gauge_fixing": "False",
+      "overdetermined_after_gauge_fixing": "True",
+      "provenance": "EXACT_DERIVED"
+    },
+    {
+      "rank_value": 20,
+      "tensor_entry_count": 729,
+      "raw_unknown_count": 540,
+      "scaling_gauge_dimension": 40,
+      "effective_unknown_count": 500,
+      "equation_minus_effective_unknowns": 229,
+      "expected_projective_secant_dimension": 499,
+      "expected_affine_secant_dimension": 500,
+      "ambient_codimension_at_expected_secant": 229,
+      "square_after_gauge_fixing": "False",
+      "overdetermined_after_gauge_fixing": "True",
+      "provenance": "EXACT_DERIVED"
+    },
+    {
+      "rank_value": 21,
+      "tensor_entry_count": 729,
+      "raw_unknown_count": 567,
+      "scaling_gauge_dimension": 42,
+      "effective_unknown_count": 525,
+      "equation_minus_effective_unknowns": 204,
+      "expected_projective_secant_dimension": 524,
+      "expected_affine_secant_dimension": 525,
+      "ambient_codimension_at_expected_secant": 204,
+      "square_after_gauge_fixing": "False",
+      "overdetermined_after_gauge_fixing": "True",
+      "provenance": "EXACT_DERIVED"
+    },
+    {
+      "rank_value": 22,
+      "tensor_entry_count": 729,
+      "raw_unknown_count": 594,
+      "scaling_gauge_dimension": 44,
+      "effective_unknown_count": 550,
+      "equation_minus_effective_unknowns": 179,
+      "expected_projective_secant_dimension": 549,
+      "expected_affine_secant_dimension": 550,
+      "ambient_codimension_at_expected_secant": 179,
+      "square_after_gauge_fixing": "False",
+      "overdetermined_after_gauge_fixing": "True",
+      "provenance": "EXACT_DERIVED"
+    },
+    {
+      "rank_value": 23,
+      "tensor_entry_count": 729,
+      "raw_unknown_count": 621,
+      "scaling_gauge_dimension": 46,
+      "effective_unknown_count": 575,
+      "equation_minus_effective_unknowns": 154,
+      "expected_projective_secant_dimension": 574,
+      "expected_affine_secant_dimension": 575,
+      "ambient_codimension_at_expected_secant": 154,
+      "square_after_gauge_fixing": "False",
+      "overdetermined_after_gauge_fixing": "True",
+      "provenance": "EXACT_DERIVED"
+    }
+  ]
+}
