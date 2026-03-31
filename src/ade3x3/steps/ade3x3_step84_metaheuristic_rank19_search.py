@@ -1161,7 +1161,7 @@ def steady_state_generation(offspring_evaluations_completed: int) -> int:
 
 
 def adaptive_sigma(best_fitness: float) -> float:
-    scale = 0.01 + 0.05 * math.sqrt(max(best_fitness, 1e-12))
+    scale = 0.01 + 0.5 * math.sqrt(max(best_fitness, 1e-12))
     return max(COEFF_SIGMA_MIN, min(COEFF_SIGMA_MAX, scale))
 
 
