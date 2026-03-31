@@ -168,14 +168,15 @@ SUPPORT_ADD_PROB = env_float("STEP84_SUPPORT_ADD_PROB", 0.5)
 SUPPORT_DROP_PROB = env_float("STEP84_SUPPORT_DROP_PROB", 0.5)
 
 SUPPORT_MIN = env_int("STEP84_SUPPORT_MIN", 2)
-SUPPORT_MAX = env_int("STEP84_SUPPORT_MAX", 7)
+SUPPORT_MAX = env_int("STEP84_SUPPORT_MAX", 3)
 INIT_SUPPORT_MIN = env_int("STEP84_INIT_SUPPORT_MIN", 2)
-INIT_SUPPORT_MAX = env_int("STEP84_INIT_SUPPORT_MAX", 6)
+INIT_SUPPORT_MAX = env_int("STEP84_INIT_SUPPORT_MAX", 3)
 ALS_SWEEPS = env_int("STEP84_ALS_SWEEPS", 1)
 NEWTON_THRESHOLD = env_float("STEP84_NEWTON_THRESHOLD", 0.25)
 POLISH_MAX_NFEV = env_int("STEP84_POLISH_MAX_NFEV", 20)
 POLISH_VARIABLE_CAP = env_int("STEP84_POLISH_VARIABLE_CAP", 260)
 CHECKPOINT_INTERVAL = env_int("STEP84_CHECKPOINT_INTERVAL", 50)
+CHECKPOINT_KEEP_LAST = env_int("STEP84_CHECKPOINT_KEEP_LAST", 3)
 HIT_THRESHOLD = env_float("STEP84_HIT_THRESHOLD", 1e-8)
 ACTIVE_VALUE_FLOOR = env_float("STEP84_ACTIVE_VALUE_FLOOR", 1e-4)
 BEST_EXPORT_INCLUDE_DENSE = bool(env_int("STEP84_BEST_EXPORT_INCLUDE_DENSE", 0))
@@ -207,6 +208,83 @@ LOG_FIELDNAMES = [
     "newton_polished_count",
     "wall_seconds_cumulative",
 ]
+
+PROFILE_PATH = EXPORTS / "step84_profile.json"
+_PROFILE_WRITE_INTERVAL = max(1, env_int("STEP84_PROFILE_INTERVAL", 1))
+
+
+class _ProfileAccumulator:
+    """Lightweight per-phase timing accumulator for profiling."""
+
+    __slots__ = (
+        "eval_count", "phase_sums", "phase_maxes",
+        "window_count", "window_sums",
+        "mainloop_sums", "gen_timings",
+        "_gen_start", "_gen_evals",
+    )
+
+    def __init__(self) -> None:
+        self.eval_count: int = 0
+        self.phase_sums: dict[str, float] = {}
+        self.phase_maxes: dict[str, float] = {}
+        self.window_count: int = 0
+        self.window_sums: dict[str, float] = {}
+        self.mainloop_sums: dict[str, float] = {}
+        self.gen_timings: list[list] = []
+        self._gen_start: float = time.perf_counter()
+        self._gen_evals: int = 0
+
+    def record_eval(self, timing: dict | None) -> None:
+        if not timing:
+            return
+        self.eval_count += 1
+        self.window_count += 1
+        self._gen_evals += 1
+        for key, value in timing.items():
+            fv = float(value)
+            self.phase_sums[key] = self.phase_sums.get(key, 0.0) + fv
+            cur_max = self.phase_maxes.get(key, 0.0)
+            if fv > cur_max:
+                self.phase_maxes[key] = fv
+            self.window_sums[key] = self.window_sums.get(key, 0.0) + fv
+
+    def record_generation(self, gen: int) -> None:
+        now = time.perf_counter()
+        wall = now - self._gen_start
+        evals = self._gen_evals
+        self.gen_timings.append([gen, round(wall, 4), evals, round(evals / max(wall, 1e-9), 2)])
+        if len(self.gen_timings) > 500:
+            self.gen_timings = self.gen_timings[-400:]
+        self._gen_start = now
+        self._gen_evals = 0
+        self.window_sums.clear()
+        self.window_count = 0
+
+    def record_mainloop(self, phase: str, ms: float) -> None:
+        self.mainloop_sums[phase] = self.mainloop_sums.get(phase, 0.0) + ms
+
+    def to_dict(self, generation: int) -> dict:
+        mean_ms: dict[str, float] = {}
+        max_ms: dict[str, float] = {}
+        if self.eval_count > 0:
+            for key in self.phase_sums:
+                mean_ms[key] = round(self.phase_sums[key] / self.eval_count, 3)
+                max_ms[key] = round(self.phase_maxes.get(key, 0.0), 3)
+        window_mean: dict[str, float] = {}
+        if self.window_count > 0:
+            for key in self.window_sums:
+                window_mean[key] = round(self.window_sums[key] / self.window_count, 3)
+        return {
+            "updated_at": time.time(),
+            "generation": generation,
+            "eval_count": self.eval_count,
+            "eval_phases_mean_ms": mean_ms,
+            "eval_phases_max_ms": max_ms,
+            "recent_window_eval_count": self.window_count,
+            "recent_window_mean_ms": window_mean,
+            "mainloop_cumulative_ms": {k: round(v, 1) for k, v in self.mainloop_sums.items()},
+            "generation_timings": self.gen_timings[-300:],
+        }
 
 
 def ensure_exports_dir() -> None:
@@ -871,13 +949,23 @@ def support_fixed_polish(
 
 def evaluate_individual_worker(payload: dict) -> dict:
     set_single_thread_blas_env()
+    _pt = {}
+    _t0 = time.perf_counter()
     eval_seed = int(payload["eval_seed"])
     individual = Individual.from_dict(payload["individual"])
     rng = np.random.default_rng(eval_seed)
+    _t1 = time.perf_counter()
+    _pt["deser_ms"] = (_t1 - _t0) * 1000
     try:
         individual = finalize_individual_structure(individual, rng)
+        _t2 = time.perf_counter()
+        _pt["finalize_ms"] = (_t2 - _t1) * 1000
         individual = alternating_least_squares(individual, eval_seed)
+        _t3 = time.perf_counter()
+        _pt["als_ms"] = (_t3 - _t2) * 1000
         fitness, fro_residual = residual_metrics(individual)
+        _t4 = time.perf_counter()
+        _pt["residual_ms"] = (_t4 - _t3) * 1000
         polished = False
         variable_count = None
         if math.isfinite(fitness) and fitness < NEWTON_THRESHOLD:
@@ -886,10 +974,14 @@ def evaluate_individual_worker(payload: dict) -> dict:
                 individual = polished_candidate
                 fitness = polished_fitness
                 fro_residual = polished_fro
+        _t5 = time.perf_counter()
+        _pt["polish_ms"] = (_t5 - _t4) * 1000
         # Soft dead-leakage penalty: nudge search toward fiber-respecting solutions
         if math.isfinite(fitness):
             alpha_m, beta_m, _gamma_m = dense_factor_arrays(individual)
             fitness += structural_penalty(alpha_m, beta_m, _gamma_m)
+        _t6 = time.perf_counter()
+        _pt["penalty_ms"] = (_t6 - _t5) * 1000
         individual.fitness = float(fitness)
         individual.fro_residual = float(fro_residual)
         individual.newton_polished = bool(polished)
@@ -897,6 +989,9 @@ def evaluate_individual_worker(payload: dict) -> dict:
         individual.support_hash = canonical_support_hash([
             (t.alpha_support, t.beta_support, t.gamma_support) for t in individual.terms
         ])
+        _t7 = time.perf_counter()
+        _pt["hash_ms"] = (_t7 - _t6) * 1000
+        _pt["total_ms"] = (_t7 - _t0) * 1000
         return {
             "status": "ok",
             "individual": individual.to_dict(),
@@ -906,6 +1001,7 @@ def evaluate_individual_worker(payload: dict) -> dict:
             "support_signature": individual.support_signature,
             "support_hash": individual.support_hash,
             "variable_count": variable_count,
+            "timing": _pt,
         }
     except Exception as exc:
         fallback = Individual.from_dict(payload["individual"])
@@ -968,12 +1064,13 @@ def evaluate_batches(
 def evaluate_initial_populations_async(
     executor: ProcessPoolExecutor,
     populations: list[list[Individual]],
-) -> tuple[list[list[Individual]], dict[int, int], int, bool]:
+) -> tuple[list[list[Individual]], dict[int, int], int, bool, list[dict]]:
     pending = {}
     evaluated = [[None for _ in island] for island in populations]
     polished_counts = {index: 0 for index in range(len(populations))}
     exact_hit_found = False
     evaluated_count = 0
+    timings: list[dict] = []
 
     for island_index, population in enumerate(populations):
         for individual_index, individual in enumerate(population):
@@ -997,12 +1094,15 @@ def evaluate_initial_populations_async(
             individual.support_hash = str(result.get("support_hash", support_pattern_hash(individual)))
             evaluated[island_index][individual_index] = individual
             evaluated_count += 1
+            timing = result.get("timing")
+            if timing:
+                timings.append(timing)
             if individual.newton_polished:
                 polished_counts[island_index] += 1
             if math.isfinite(individual.fitness) and individual.fitness < HIT_THRESHOLD:
                 exact_hit_found = True
 
-    return evaluated, polished_counts, evaluated_count, exact_hit_found
+    return evaluated, polished_counts, evaluated_count, exact_hit_found, timings
 
 
 def build_single_offspring(
@@ -1478,6 +1578,20 @@ def write_checkpoint(
         steady_state_completed,
     )
     write_json(checkpoint_path, json_safe(payload))
+    _purge_old_checkpoints()
+
+
+def _purge_old_checkpoints() -> None:
+    if CHECKPOINT_KEEP_LAST <= 0:
+        return
+    candidates = sorted(EXPORTS.glob("step84_checkpoint_gen*.json"))
+    if len(candidates) <= CHECKPOINT_KEEP_LAST:
+        return
+    for stale in candidates[: len(candidates) - CHECKPOINT_KEEP_LAST]:
+        try:
+            stale.unlink()
+        except OSError:
+            pass
 
 
 def load_checkpoint(path: Path) -> tuple[list[list[Individual]], list[np.random.Generator], dict]:
@@ -1591,7 +1705,7 @@ def summary_payload(
         "total_generations": completed_generation,
         "total_evaluations": total_evaluations,
         "total_wall_seconds": total_wall_seconds,
-        "best_fitness_ever": None if global_best is None else float(global_best.fitness),
+        "best_fitness_ever": None if global_best is None else finite_or_none(global_best.fitness),
         "best_fitness_generation": best_generation,
         "best_support_signature": None if global_best is None else global_best.support_signature,
         "best_variable_count": best_variable_count,
@@ -1622,6 +1736,7 @@ def main() -> None:
     set_single_thread_blas_env()
     run_start = time.time()
     variable_count_cache: dict[str, int] = {}
+    profiler = _ProfileAccumulator()
 
     resume_state = maybe_resume()
     if resume_state is None:
@@ -1659,8 +1774,12 @@ def main() -> None:
 
     with executor_factory(WORKERS) as executor:
         if current_generation == 0 and (global_best is None or not math.isfinite(global_best.fitness)):
-            populations, polished_counts, evaluated_count, exact_hit = evaluate_initial_populations_async(executor, populations)
+            populations, polished_counts, evaluated_count, exact_hit, init_timings = evaluate_initial_populations_async(executor, populations)
             total_evaluations += evaluated_count
+            for _it in init_timings:
+                profiler.record_eval(_it)
+            profiler.record_generation(0)
+            write_json(PROFILE_PATH, json_safe(profiler.to_dict(0)))
             current_best = generation_best(populations)
             if is_better(current_best, global_best):
                 global_best = current_best.copy()
@@ -1740,13 +1859,19 @@ def main() -> None:
                 individual.support_signature = str(result.get("support_signature", support_signature_string(individual)))
                 individual.support_hash = str(result.get("support_hash", support_pattern_hash(individual)))
 
+                profiler.record_eval(result.get("timing"))
+
                 # Buffer offspring; flush when batch is full
                 offspring_buffers[island_index].append(individual)
                 if len(offspring_buffers[island_index]) >= _INTEGRATION_BATCH_SIZE:
+                    _mf0 = time.perf_counter()
                     flush_island(island_index)
+                    _mf1 = time.perf_counter()
+                    profiler.record_mainloop("flush_ms", (_mf1 - _mf0) * 1000)
                     shadow_rebuild_counters[island_index] += 1
                     if shadow_rebuild_counters[island_index] >= _SHADOW_REBUILD_BATCH:
                         shadow_pools[island_index] = build_shadow_pool(populations[island_index])
+                        profiler.record_mainloop("shadow_rebuild_ms", (time.perf_counter() - _mf1) * 1000)
                         shadow_rebuild_counters[island_index] = 0
 
                 total_evaluations += 1
@@ -1762,7 +1887,9 @@ def main() -> None:
             next_generation = steady_state_generation(steady_state_completed)
             # Flush all buffers on generation transition so generation_best sees all evaluated offspring
             if next_generation > current_generation:
+                _mfa0 = time.perf_counter()
                 flush_all_islands()
+                profiler.record_mainloop("flush_all_ms", (time.perf_counter() - _mfa0) * 1000)
             current_best = generation_best(populations)
             if is_better(current_best, global_best):
                 should_print_improvement = is_meaningful_numeric_improvement(current_best, global_best)
@@ -1777,10 +1904,13 @@ def main() -> None:
                     )
 
             if next_generation > current_generation:
+                profiler.record_generation(current_generation)
                 current_generation = next_generation
                 elapsed_now = elapsed_base + (time.time() - run_start)
                 if current_generation > last_logged_generation:
+                    _ml0 = time.perf_counter()
                     log_generation(populations, current_generation, polished_counts, elapsed_now, variable_count_cache)
+                    profiler.record_mainloop("log_ms", (time.perf_counter() - _ml0) * 1000)
                     last_logged_generation = current_generation
                     polished_counts = {index: 0 for index in range(NUM_ISLANDS)}
                 if current_generation % 10 == 0 or current_generation == NUM_GENERATIONS:
@@ -1789,10 +1919,13 @@ def main() -> None:
                         flush=True,
                     )
                 if MIGRATION_INTERVAL > 0 and current_generation % MIGRATION_INTERVAL == 0:
+                    _mm0 = time.perf_counter()
                     migrate(populations, island_rngs)
                     shadow_pools = [build_shadow_pool(population) for population in populations]
                     shadow_rebuild_counters = [0] * NUM_ISLANDS
+                    profiler.record_mainloop("migrate_ms", (time.perf_counter() - _mm0) * 1000)
                 if current_generation % CHECKPOINT_INTERVAL == 0 and current_generation != last_checkpoint_generation:
+                    _mc0 = time.perf_counter()
                     write_checkpoint(
                         populations,
                         current_generation,
@@ -1805,13 +1938,18 @@ def main() -> None:
                         warm_seed_count,
                         steady_state_completed,
                     )
+                    profiler.record_mainloop("checkpoint_ms", (time.perf_counter() - _mc0) * 1000)
                     last_checkpoint_generation = current_generation
+                if current_generation % _PROFILE_WRITE_INTERVAL == 0:
+                    write_json(PROFILE_PATH, json_safe(profiler.to_dict(current_generation)))
 
             if exact_hit or (global_best is not None and global_best.fitness < HIT_THRESHOLD):
                 stop_reason = "exact_hit"
                 break
 
     total_wall_seconds = elapsed_base + (time.time() - run_start)
+    profiler.record_generation(current_generation)
+    write_json(PROFILE_PATH, json_safe(profiler.to_dict(current_generation)))
     if global_best is not None:
         write_best_individual(global_best, best_generation, variable_count_cache, potential_exact_hit=global_best.fitness < HIT_THRESHOLD)
     write_final_population(populations, current_generation, total_evaluations, total_wall_seconds)

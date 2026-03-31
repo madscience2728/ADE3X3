@@ -1102,6 +1102,10 @@ function renderCopyMetrics(payload) {
         const latest = copy.latest || {};
         const card = document.createElement("div");
         card.className = "copy-card";
+        const stderrLines = copy.stderr_tail || [];
+        const stderrHtml = (!copy.running && copy.exit_code !== null && copy.exit_code !== 0 && stderrLines.length)
+            ? `<div class="copy-card__stderr"><pre>${stderrLines.map((l) => l.replace(/</g, "&lt;")).join("\n")}</pre></div>`
+            : "";
         card.innerHTML = `
             <div class="copy-card__header">
                 <div class="copy-card__title">Copy ${copy.index}</div>
@@ -1115,13 +1119,17 @@ function renderCopyMetrics(payload) {
                 <div class="copy-card__metric"><span>Signature (3,3,3)</span><strong>${latest.signature_333_count ?? "-"}</strong></div>
                 <div class="copy-card__metric"><span>Shadow pool</span><strong>${latest.shadow_pool_size ?? "-"}</strong></div>
             </div>
+            ${stderrHtml}
         `;
         container.appendChild(card);
     });
 }
 
 function buildCopyTrace(copy, valueKey, color, name, yAxis = "y", visible = true) {
-    const history = (copy.history || []).filter((row) => row[valueKey] !== null && row[valueKey] !== undefined && (valueKey !== "best_fitness" || row[valueKey] > 0));
+    const history = (copy.history || []).filter((row) => {
+        const v = row[valueKey];
+        return v !== null && v !== undefined && Number.isFinite(v) && v > 0;
+    });
     return {
         type: "scatter",
         mode: "lines+markers",
@@ -1141,7 +1149,7 @@ const SQRT27 = Math.sqrt(27);
 
 function buildRelativeCopyTrace(copy, color, name) {
     const history = (copy.history || []).filter(
-        (row) => row.best_fitness !== null && row.best_fitness !== undefined && row.best_fitness > 0
+        (row) => row.best_fitness !== null && row.best_fitness !== undefined && Number.isFinite(row.best_fitness) && row.best_fitness > 0
     );
     return {
         type: "scatter",
@@ -1158,30 +1166,58 @@ function buildRelativeCopyTrace(copy, color, name) {
     };
 }
 
+function sanitizeTraces(traces) {
+    return traces.map((trace) => {
+        if (!Array.isArray(trace.x) || !Array.isArray(trace.y)) return trace;
+        const cleanX = [];
+        const cleanY = [];
+        for (let i = 0; i < trace.x.length; i++) {
+            const xv = trace.x[i];
+            const yv = trace.y[i];
+            if (typeof xv === "number" && Number.isFinite(xv) &&
+                typeof yv === "number" && Number.isFinite(yv)) {
+                cleanX.push(xv);
+                cleanY.push(yv);
+            }
+        }
+        return { ...trace, x: cleanX, y: cleanY };
+    });
+}
+
 function renderPlot(targetId, traces, layout) {
     const target = document.getElementById(targetId);
     if (!window.Plotly) {
         target.textContent = "Plotly failed to load. Refresh the page after reconnecting network access.";
         return;
     }
-    const nonEmpty = traces.filter((trace) => Array.isArray(trace.x) && trace.x.length);
+    const sanitized = sanitizeTraces(traces);
+    const nonEmpty = sanitized.filter((trace) => Array.isArray(trace.x) && trace.x.length);
     if (!nonEmpty.length) {
-        window.Plotly.react(target, [], {
-            ...PLOTLY_LAYOUT_BASE,
-            ...layout,
-            annotations: [{
-                text: "No data yet.",
-                x: 0.5,
-                y: 0.5,
-                xref: "paper",
-                yref: "paper",
-                showarrow: false,
-                font: { size: 16, color: "#5f655f" }
-            }]
-        }, PLOTLY_CONFIG);
+        try {
+            window.Plotly.react(target, [], {
+                ...PLOTLY_LAYOUT_BASE,
+                ...layout,
+                annotations: [{
+                    text: "No data yet.",
+                    x: 0.5,
+                    y: 0.5,
+                    xref: "paper",
+                    yref: "paper",
+                    showarrow: false,
+                    font: { size: 16, color: "#5f655f" }
+                }]
+            }, PLOTLY_CONFIG);
+        } catch (err) {
+            console.error("Plotly render error (empty):", err);
+        }
         return;
     }
-    window.Plotly.react(target, nonEmpty, { ...PLOTLY_LAYOUT_BASE, ...layout }, PLOTLY_CONFIG);
+    try {
+        window.Plotly.react(target, nonEmpty, { ...PLOTLY_LAYOUT_BASE, ...layout }, PLOTLY_CONFIG);
+    } catch (err) {
+        console.error("Plotly render error:", err);
+        target.textContent = "Chart render failed: " + err.message;
+    }
 }
 
 function updateScaleButtons() {
@@ -1275,12 +1311,15 @@ function applyServerState(payload) {
     updateLiveMetrics(payload);
     renderCopyMetrics(payload);
     updateCharts(payload);
+    updateProfileCharts(payload);
     updateLogs(payload);
     if (payload.running) {
+        const deadCopies = (payload.copies || []).filter((c) => !c.running && c.exit_code !== null && c.exit_code !== 0);
+        const deadWarning = deadCopies.length ? ` ⚠ ${deadCopies.length} dead (${deadCopies.map((c) => `copy ${c.index}: exit ${c.exit_code}`).join(", ")}).` : "";
         if (payload.continued_from_previous) {
-            setRunStatus(`Continuing ${payload.running_count}/${payload.copy_count} copies from the current population. Resumed copies: ${payload.resumed_copy_count}. Batch output: ${payload.batch_dir || "-"}.`);
+            setRunStatus(`Continuing ${payload.running_count}/${payload.copy_count} copies from the current population. Resumed copies: ${payload.resumed_copy_count}. Batch output: ${payload.batch_dir || "-"}.${deadWarning}`);
         } else {
-            setRunStatus(`Running ${payload.running_count}/${payload.copy_count} Step 84 copies. Batch output: ${payload.batch_dir || "-"}.`);
+            setRunStatus(`Running ${payload.running_count}/${payload.copy_count} Step 84 copies. Batch output: ${payload.batch_dir || "-"}.${deadWarning}`);
         }
     } else if (payload.copy_count) {
         if (payload.continued_from_previous) {
@@ -1455,6 +1494,144 @@ function wireActions() {
             });
         }
     });
+}
+
+const PHASE_LABELS = {
+    deser_ms: "Deserialize",
+    finalize_ms: "Finalize",
+    als_ms: "ALS",
+    residual_ms: "Residual",
+    polish_ms: "Polish",
+    penalty_ms: "Penalty",
+    hash_ms: "Canon Hash",
+};
+const PHASE_COLORS = {
+    deser_ms: "#a0a0a0",
+    finalize_ms: "#597a33",
+    als_ms: "#2b6cb0",
+    residual_ms: "#c05621",
+    polish_ms: "#92598f",
+    penalty_ms: "#8b3418",
+    hash_ms: "#bf5c36",
+};
+const PHASE_ORDER = ["deser_ms", "finalize_ms", "als_ms", "residual_ms", "polish_ms", "penalty_ms", "hash_ms"];
+
+function updateProfileCharts(payload) {
+    const profiles = payload.profiles || [];
+    if (!profiles.length) {
+        return;
+    }
+
+    // Phase breakdown bar chart — use first profile (or best copy)
+    const profile = profiles[0];
+    const recentMean = profile.recent_window_mean_ms || profile.eval_phases_mean_ms || {};
+    const allMean = profile.eval_phases_mean_ms || {};
+    const allMax = profile.eval_phases_max_ms || {};
+
+    const phaseKeys = PHASE_ORDER.filter((k) => {
+        const rv = recentMean[k], av = allMean[k];
+        return (rv !== undefined && rv !== null && Number.isFinite(rv)) ||
+               (av !== undefined && av !== null && Number.isFinite(av));
+    });
+    if (phaseKeys.length) {
+        const traces = [
+            {
+                type: "bar",
+                name: "Recent mean",
+                y: phaseKeys.map((k) => PHASE_LABELS[k] || k),
+                x: phaseKeys.map((k) => Number.isFinite(recentMean[k]) ? recentMean[k] : 0),
+                orientation: "h",
+                marker: { color: phaseKeys.map((k) => PHASE_COLORS[k] || "#999") },
+                hovertemplate: "%{y}: %{x:.2f} ms<extra>recent</extra>"
+            },
+            {
+                type: "bar",
+                name: "All-time mean",
+                y: phaseKeys.map((k) => PHASE_LABELS[k] || k),
+                x: phaseKeys.map((k) => Number.isFinite(allMean[k]) ? allMean[k] : 0),
+                orientation: "h",
+                marker: { color: phaseKeys.map((k) => PHASE_COLORS[k] || "#999"), opacity: 0.4 },
+                hovertemplate: "%{y}: %{x:.2f} ms<extra>all-time</extra>"
+            },
+        ];
+        renderPlot("profile-phase-chart", traces, {
+            barmode: "group",
+            yaxis: { ...PLOTLY_LAYOUT_BASE.yaxis, title: "", automargin: true },
+            xaxis: { ...PLOTLY_LAYOUT_BASE.xaxis, title: "ms per eval" },
+            uirevision: "profile-phase"
+        });
+    }
+
+    // Throughput chart — evals/sec over generations
+    const genTimings = (profile.generation_timings || []).filter(
+        (row) => Array.isArray(row) && row.length >= 4 &&
+                 Number.isFinite(row[0]) && Number.isFinite(row[1]) &&
+                 Number.isFinite(row[3]) && row[3] > 0
+    );
+    if (genTimings.length >= 2) {
+        const gens = genTimings.map((row) => row[0]);
+        const evalsPerSec = genTimings.map((row) => row[3]);
+        const wallPerGen = genTimings.map((row) => row[1]);
+
+        renderPlot("profile-throughput-chart", [
+            {
+                type: "scatter",
+                mode: "lines+markers",
+                name: "evals/sec",
+                x: gens,
+                y: evalsPerSec,
+                line: { color: "#2b6cb0", width: 2 },
+                marker: { color: "#2b6cb0", size: 3 },
+                hovertemplate: "Gen %{x}<br>%{y:.1f} evals/sec<extra></extra>"
+            }
+        ], {
+            yaxis: { ...PLOTLY_LAYOUT_BASE.yaxis, title: "Evaluations / second" },
+            xaxis: { ...PLOTLY_LAYOUT_BASE.xaxis, title: "Generation" },
+            uirevision: "profile-throughput"
+        });
+
+        renderPlot("profile-walltime-chart", [
+            {
+                type: "scatter",
+                mode: "lines+markers",
+                name: "wall sec/gen",
+                x: gens,
+                y: wallPerGen,
+                line: { color: "#bf5c36", width: 2 },
+                marker: { color: "#bf5c36", size: 3 },
+                hovertemplate: "Gen %{x}<br>%{y:.3f} sec<extra></extra>"
+            }
+        ], {
+            yaxis: { ...PLOTLY_LAYOUT_BASE.yaxis, title: "Seconds per generation" },
+            xaxis: { ...PLOTLY_LAYOUT_BASE.xaxis, title: "Generation" },
+            uirevision: "profile-walltime"
+        });
+    }
+
+    // Summary metrics
+    const summaryEl = document.getElementById("profile-summary");
+    if (summaryEl) {
+        const ec = profile.eval_count || 0;
+        const totalMs = allMean.total_ms ?? 0;
+        const alsMs = allMean.als_ms ?? 0;
+        const hashMs = allMean.hash_ms ?? 0;
+        const polishMs = allMean.polish_ms ?? 0;
+        const recentTotal = recentMean.total_ms ?? 0;
+        const recentHash = recentMean.hash_ms ?? 0;
+        const ml = profile.mainloop_cumulative_ms || {};
+        summaryEl.innerHTML = `
+            <div class="live-metric"><span>Total evals</span><strong>${ec.toLocaleString()}</strong></div>
+            <div class="live-metric"><span>Mean eval (all)</span><strong>${totalMs.toFixed(1)} ms</strong></div>
+            <div class="live-metric"><span>Mean eval (recent)</span><strong>${recentTotal.toFixed(1)} ms</strong></div>
+            <div class="live-metric"><span>ALS mean</span><strong>${alsMs.toFixed(1)} ms</strong></div>
+            <div class="live-metric"><span>Canon hash mean</span><strong>${hashMs.toFixed(1)} ms</strong></div>
+            <div class="live-metric"><span>Canon hash (recent)</span><strong>${recentHash.toFixed(1)} ms</strong></div>
+            <div class="live-metric"><span>Polish mean</span><strong>${polishMs.toFixed(1)} ms</strong></div>
+            <div class="live-metric"><span>Flush total</span><strong>${((ml.flush_ms || 0) + (ml.flush_all_ms || 0)).toFixed(0)} ms</strong></div>
+            <div class="live-metric"><span>Migrate total</span><strong>${(ml.migrate_ms || 0).toFixed(0)} ms</strong></div>
+            <div class="live-metric"><span>Checkpoint total</span><strong>${(ml.checkpoint_ms || 0).toFixed(0)} ms</strong></div>
+        `;
+    }
 }
 
 function init() {

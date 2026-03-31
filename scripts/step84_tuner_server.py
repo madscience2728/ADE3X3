@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 import mimetypes
 import os
+import shutil
 import subprocess
 import threading
 import time
@@ -22,6 +24,7 @@ PORT = 8765
 STEP84_SCRIPT = REPO_ROOT / "src" / "ade3x3" / "steps" / "ade3x3_step84_metaheuristic_rank19_search.py"
 DEFAULT_EXPORTS = REPO_ROOT / "outputs" / "exports"
 BATCH_EXPORTS = DEFAULT_EXPORTS / "step84_batches"
+BATCH_KEEP_LAST = int(os.environ.get("STEP84_BATCH_KEEP_LAST", "3"))
 LOG_PATH = DEFAULT_EXPORTS / "step84_evolution_log.csv"
 SUMMARY_PATH = DEFAULT_EXPORTS / "step84_summary.json"
 PYTHON_EXE = REPO_ROOT / ".venv" / "Scripts" / "python.exe"
@@ -35,7 +38,8 @@ def parse_float(value: str | None) -> float | None:
     if value is None or value == "":
         return None
     try:
-        return float(value)
+        result = float(value)
+        return result if math.isfinite(result) else None
     except ValueError:
         return None
 
@@ -173,11 +177,38 @@ def load_summary(summary_path: Path) -> dict | None:
         return None
 
 
+def load_profile(profile_path: Path) -> dict | None:
+    if not profile_path.exists():
+        return None
+    try:
+        return json.loads(profile_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
 def latest_checkpoint(export_dir: Path) -> Path | None:
     candidates = sorted(export_dir.glob("step84_checkpoint_gen*.json"))
     if not candidates:
         return None
     return candidates[-1]
+
+
+def _purge_old_batches(current_batch: Path | None = None) -> None:
+    if BATCH_KEEP_LAST <= 0 or not BATCH_EXPORTS.exists():
+        return
+    dirs = sorted(
+        (d for d in BATCH_EXPORTS.iterdir() if d.is_dir() and d.name.startswith("run_")),
+        key=lambda d: d.name,
+    )
+    protected = {current_batch} if current_batch else set()
+    removable = [d for d in dirs if d not in protected]
+    if len(removable) <= BATCH_KEEP_LAST:
+        return
+    for stale in removable[: len(removable) - BATCH_KEEP_LAST]:
+        try:
+            shutil.rmtree(stale)
+        except OSError as exc:
+            print(f"[tuner] failed to purge {stale}: {exc}")
 
 
 @dataclass
@@ -254,6 +285,7 @@ class RunManager:
 
             assert self.batch_dir is not None
             self.batch_dir.mkdir(parents=True, exist_ok=True)
+            _purge_old_batches(self.batch_dir)
 
             base_seed_raw = env_overrides.get("STEP84_SEED")
             base_seed = int(base_seed_raw) if base_seed_raw is not None and str(base_seed_raw).strip() else 8401001
@@ -326,6 +358,7 @@ class RunManager:
         stdout: list[str] = []
         stderr: list[str] = []
         copy_payloads: list[dict] = []
+        profiles: list[dict] = []
         for copy in copies:
             log_paths.append(copy.log_path)
             summary = load_summary(copy.summary_path)
@@ -333,6 +366,9 @@ class RunManager:
             latest_copy = copy_history[-1] if copy_history else None
             if summary is not None:
                 summaries.append({**summary, "copy_index": copy.index, "seed": copy.seed, "export_dir": str(copy.export_dir)})
+            profile = load_profile(copy.export_dir / "step84_profile.json")
+            if profile is not None:
+                profiles.append({**profile, "copy_index": copy.index})
             stdout.extend(tail_list(copy.stdout_lines, 8))
             stderr.extend(tail_list(copy.stderr_lines, 6))
             copy_payloads.append(
@@ -349,6 +385,7 @@ class RunManager:
                     "best_support_signature": summary.get("best_support_signature") if summary else None,
                     "total_generations": summary.get("total_generations") if summary else None,
                     "total_wall_seconds": summary.get("total_wall_seconds") if summary else None,
+                    "stderr_tail": tail_list(copy.stderr_lines, 6),
                 }
             )
 
@@ -359,8 +396,8 @@ class RunManager:
             best_summary = min(
                 summaries,
                 key=lambda item: (
-                    item.get("best_fitness_ever") if item.get("best_fitness_ever") is not None else float("inf"),
-                    item.get("total_wall_seconds") if item.get("total_wall_seconds") is not None else float("inf"),
+                    item.get("best_fitness_ever") if item.get("best_fitness_ever") is not None else 1e300,
+                    item.get("total_wall_seconds") if item.get("total_wall_seconds") is not None else 1e300,
                 ),
             )
         elif not copies:
@@ -382,17 +419,38 @@ class RunManager:
             "history": history,
             "latest": latest,
             "summary": best_summary,
+            "profiles": profiles,
         }
 
 
 RUN_MANAGER = RunManager()
 
 
+class _SafeEncoder(json.JSONEncoder):
+    """JSON encoder that converts non-finite floats to null instead of invalid Infinity/NaN literals."""
+
+    def default(self, o):
+        return super().default(o)
+
+    def encode(self, o):
+        return super().encode(_sanitize(o))
+
+
+def _sanitize(obj):
+    if isinstance(obj, float):
+        return None if not math.isfinite(obj) else obj
+    if isinstance(obj, dict):
+        return {k: _sanitize(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_sanitize(v) for v in obj]
+    return obj
+
+
 class Step84TunerHandler(BaseHTTPRequestHandler):
     server_version = "Step84Tuner/1.0"
 
     def _send_json(self, payload: dict, status: HTTPStatus = HTTPStatus.OK) -> None:
-        body = json.dumps(payload).encode("utf-8")
+        body = json.dumps(payload, cls=_SafeEncoder).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
@@ -413,6 +471,8 @@ class Step84TunerHandler(BaseHTTPRequestHandler):
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-Type", mime_type or "application/octet-stream")
         self.send_header("Content-Length", str(len(content)))
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+        self.send_header("Pragma", "no-cache")
         self.end_headers()
         self.wfile.write(content)
 

@@ -389,6 +389,28 @@
                     <h3>Stderr Tail</h3>
                     <textarea id="stderr-tail" rows="12" readonly spellcheck="false"></textarea>
                 </div>
+                <div class="chart-card chart-card--wide">
+                    <div class="chart-card__header">
+                        <h3>Eval Phase Breakdown (ms)</h3>
+                    </div>
+                    <div id="profile-phase-chart" class="plot-surface"></div>
+                </div>
+                <div class="chart-card chart-card--wide">
+                    <div class="chart-card__header">
+                        <h3>Generation Throughput</h3>
+                    </div>
+                    <div id="profile-throughput-chart" class="plot-surface"></div>
+                </div>
+                <div class="chart-card chart-card--wide">
+                    <div class="chart-card__header">
+                        <h3>Wall Time per Generation</h3>
+                    </div>
+                    <div id="profile-walltime-chart" class="plot-surface"></div>
+                </div>
+                <div class="chart-card chart-card--wide">
+                    <h3>Profile Summary</h3>
+                    <div id="profile-summary" class="live-metrics"></div>
+                </div>
             </div>
         </section>
     </div>
