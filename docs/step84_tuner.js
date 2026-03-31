@@ -1,4 +1,5 @@
 const STORAGE_KEY = "ade3x3-step84-tuner";
+const STORAGE_SCHEMA_VERSION = 2;
 const POLL_INTERVAL_MS = 2000;
 const PLOTLY_LAYOUT_BASE = {
     paper_bgcolor: "rgba(0,0,0,0)",
@@ -39,6 +40,11 @@ const COPY_COLORS = [
 let pollHandle = null;
 let fitnessScaleMode = "log";
 let shadowScaleMode = "linear";
+let activeSettingsEnvelope = null;
+let serverState = null;
+let freshDraftUnlocked = false;
+let lockedBatchState = null;
+const TAB_ID = `tab-${Math.random().toString(36).slice(2, 10)}`;
 
 const defaults = {
     topologyMode: "explicit",
@@ -235,9 +241,168 @@ const numericFields = new Set([
 ]);
 
 const checkboxFields = new Set(["bestExportIncludeDense"]);
+const RUN_LOCKED_SETTING_KEYS = new Set(["topologyMode", ...Object.keys(fieldMap)]);
+const ENV_TO_STATE_KEY = {
+    STEP84_WORKERS: "workers",
+    STEP84_TIMEOUT_SECONDS: "timeoutSeconds",
+    STEP84_GENERATIONS: "generations",
+    STEP84_SEED: "seed",
+    STEP84_OFFSPRING_MULTIPLIER: "offspringMultiplier",
+    STEP84_WARM_SEEDS: "warmSeeds",
+    STEP84_MIGRATION_INTERVAL: "migrationInterval",
+    STEP84_MIGRATION_SIZE: "migrationSize",
+    STEP84_CHECKPOINT_INTERVAL: "checkpointInterval",
+    STEP84_TOURNAMENT_SIZE: "tournamentSize",
+    STEP84_EXECUTOR_KIND: "executorKind",
+    STEP84_RESUME_CHECKPOINT: "resumeCheckpoint",
+    STEP84_SIGNATURE333_SURVIVOR_FRACTION: "signature333Fraction",
+    STEP84_SHADOW_SURVIVOR_FRACTION: "shadowSurvivorFraction",
+    STEP84_SHADOW_PARENT_RATE: "shadowParentRate",
+    STEP84_SHADOW_VARIABLE_BUCKET: "shadowVariableBucket",
+    STEP84_SHADOW_METRICS_INTERVAL: "shadowMetricsInterval",
+    STEP84_HIT_THRESHOLD: "hitThreshold",
+    STEP84_CROSSOVER_RATE: "crossoverRate",
+    STEP84_FACTOR_CROSSOVER_RATE: "factorCrossoverRate",
+    STEP84_MUTATION_SUPPORT_RATE: "mutationSupportRate",
+    STEP84_MUTATION_COEFF_RATE: "mutationCoeffRate",
+    STEP84_MUTATION_REPLACE_RATE: "mutationReplaceRate",
+    STEP84_ALS_SWEEPS: "alsSweeps",
+    STEP84_NEWTON_THRESHOLD: "newtonThreshold",
+    STEP84_POLISH_MAX_NFEV: "polishMaxNfev",
+    STEP84_POLISH_VARIABLE_CAP: "polishVariableCap",
+    STEP84_ACTIVE_VALUE_FLOOR: "activeValueFloor",
+    STEP84_SUPPORT_MIN: "supportMin",
+    STEP84_SUPPORT_MAX: "supportMax",
+    STEP84_INIT_SUPPORT_MIN: "initSupportMin",
+    STEP84_INIT_SUPPORT_MAX: "initSupportMax",
+    STEP84_SUPPORT_ADD_PROB: "supportAddProb",
+    STEP84_SUPPORT_DROP_PROB: "supportDropProb",
+    STEP84_SUPPORT_ADD_LOW: "supportAddLow",
+    STEP84_SUPPORT_ADD_HIGH: "supportAddHigh",
+    STEP84_COEFF_SIGMA_MIN: "coeffSigmaMin",
+    STEP84_COEFF_SIGMA_MAX: "coeffSigmaMax",
+    STEP84_COEFF_INIT_LOW: "coeffInitLow",
+    STEP84_COEFF_INIT_HIGH: "coeffInitHigh",
+    STEP84_BEST_EXPORT_INCLUDE_DENSE: "bestExportIncludeDense"
+};
 
 function cloneDefaults() {
     return JSON.parse(JSON.stringify(defaults));
+}
+
+function sanitizeState(candidate = {}) {
+    const state = cloneDefaults();
+    if (candidate.topologyMode === "explicit" || candidate.topologyMode === "power") {
+        state.topologyMode = candidate.topologyMode;
+    }
+
+    Object.keys(fieldMap).forEach((key) => {
+        if (!(key in candidate)) {
+            return;
+        }
+        if (checkboxFields.has(key)) {
+            state[key] = Boolean(candidate[key]);
+            return;
+        }
+        if (numericFields.has(key)) {
+            const value = Number(candidate[key]);
+            if (Number.isFinite(value)) {
+                state[key] = value;
+            }
+            return;
+        }
+        if (candidate[key] !== null && candidate[key] !== undefined) {
+            state[key] = String(candidate[key]);
+        }
+    });
+
+    return state;
+}
+
+function statesEqual(left, right) {
+    const leftState = sanitizeState(left);
+    const rightState = sanitizeState(right);
+    if (leftState.topologyMode !== rightState.topologyMode) {
+        return false;
+    }
+
+    return Object.keys(fieldMap).every((key) => normalizeValue(key, leftState[key]) === normalizeValue(key, rightState[key]));
+}
+
+function normalizeEnvelope(candidate) {
+    if (!candidate || typeof candidate !== "object" || Array.isArray(candidate)) {
+        return null;
+    }
+
+    const hasNestedSettings = candidate.settings && typeof candidate.settings === "object" && !Array.isArray(candidate.settings);
+    const savedAtMsRaw = Number(candidate.savedAtMs);
+    const parsedSavedAtMs = Number.isFinite(savedAtMsRaw)
+        ? savedAtMsRaw
+        : Date.parse(typeof candidate.savedAt === "string" ? candidate.savedAt : "");
+    const savedAtMs = Number.isFinite(parsedSavedAtMs) ? parsedSavedAtMs : 0;
+
+    return {
+        schemaVersion: hasNestedSettings ? Number(candidate.schemaVersion) || 1 : 1,
+        savedAtMs,
+        savedAt: savedAtMs ? new Date(savedAtMs).toISOString() : "",
+        sourceTabId: hasNestedSettings && candidate.sourceTabId ? String(candidate.sourceTabId) : "",
+        settings: sanitizeState(hasNestedSettings ? candidate.settings : candidate)
+    };
+}
+
+function createSettingsEnvelope(state, overrides = {}) {
+    const savedAtMs = overrides.savedAtMs ?? Date.now();
+    return {
+        schemaVersion: STORAGE_SCHEMA_VERSION,
+        savedAtMs,
+        savedAt: new Date(savedAtMs).toISOString(),
+        sourceTabId: overrides.sourceTabId || TAB_ID,
+        settings: sanitizeState(state)
+    };
+}
+
+function readStoredEnvelope() {
+    try {
+        const raw = window.localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+            return null;
+        }
+        return normalizeEnvelope(JSON.parse(raw));
+    } catch (_error) {
+        return null;
+    }
+}
+
+function formatSavedTime(savedAtMs) {
+    if (!Number.isFinite(savedAtMs) || savedAtMs <= 0) {
+        return "unknown time";
+    }
+    return new Date(savedAtMs).toLocaleTimeString();
+}
+
+function setSavedStatus(message) {
+    const saved = document.getElementById("saved-status");
+    if (saved) {
+        saved.textContent = message;
+    }
+}
+
+function setLockStatus(message) {
+    const lock = document.getElementById("lock-status");
+    if (lock) {
+        lock.textContent = message;
+    }
+}
+
+function applyEnvelope(envelope, options = {}) {
+    if (!envelope) {
+        return;
+    }
+    activeSettingsEnvelope = envelope;
+    applyState(envelope.settings, { persist: false });
+    if (options.message) {
+        setSavedStatus(options.message);
+    }
 }
 
 function getHelpText(key) {
@@ -249,15 +414,53 @@ function getHelpText(key) {
 }
 
 function getSavedState() {
-    try {
-        const raw = window.localStorage.getItem(STORAGE_KEY);
-        if (!raw) {
-            return cloneDefaults();
+    const envelope = readStoredEnvelope();
+    activeSettingsEnvelope = envelope;
+    return envelope ? envelope.settings : cloneDefaults();
+}
+
+function buildStateFromEnv(env = {}) {
+    const state = cloneDefaults();
+    if (typeof env.STEP84_ISLAND_POPULATIONS === "string" && env.STEP84_ISLAND_POPULATIONS.trim()) {
+        state.topologyMode = "explicit";
+        state.islandPopulations = env.STEP84_ISLAND_POPULATIONS;
+    } else if (
+        env.STEP84_ISLAND_MIN_EXP !== undefined ||
+        env.STEP84_ISLAND_MAX_EXP !== undefined ||
+        env.STEP84_ISLAND_COPIES !== undefined
+    ) {
+        state.topologyMode = "power";
+        if (env.STEP84_ISLAND_MIN_EXP !== undefined) {
+            state.islandMinExp = Number(env.STEP84_ISLAND_MIN_EXP);
         }
-        return { ...cloneDefaults(), ...JSON.parse(raw) };
-    } catch (_error) {
-        return cloneDefaults();
+        if (env.STEP84_ISLAND_MAX_EXP !== undefined) {
+            state.islandMaxExp = Number(env.STEP84_ISLAND_MAX_EXP);
+        }
+        if (env.STEP84_ISLAND_COPIES !== undefined) {
+            state.islandCopies = Number(env.STEP84_ISLAND_COPIES);
+        }
     }
+
+    Object.entries(ENV_TO_STATE_KEY).forEach(([envKey, stateKey]) => {
+        if (!(envKey in env)) {
+            return;
+        }
+        if (checkboxFields.has(stateKey)) {
+            const raw = String(env[envKey]).trim().toLowerCase();
+            state[stateKey] = ["1", "true", "yes", "on"].includes(raw);
+            return;
+        }
+        if (numericFields.has(stateKey)) {
+            const value = Number(env[envKey]);
+            if (Number.isFinite(value)) {
+                state[stateKey] = value;
+            }
+            return;
+        }
+        state[stateKey] = String(env[envKey]);
+    });
+
+    return sanitizeState(state);
 }
 
 function parsePopulationList(text) {
@@ -302,7 +505,7 @@ function getState() {
     return state;
 }
 
-function applyState(state) {
+function applyState(state, options = {}) {
     Object.entries(fieldMap).forEach(([key, id]) => {
         const element = document.getElementById(id);
         if (!element || !(key in state)) {
@@ -316,7 +519,11 @@ function applyState(state) {
     });
 
     setTopologyMode(state.topologyMode || "explicit");
-    render();
+    render({
+        persist: options.persist ?? true,
+        forcePersist: options.forcePersist ?? false,
+        saveMessage: options.saveMessage
+    });
 }
 
 function setElementValue(key, value) {
@@ -378,6 +585,17 @@ function normalizeValue(key, value) {
     return String(value ?? "");
 }
 
+function hasContinuationContext(payload) {
+    return Boolean(payload && Number(payload.copy_count) > 0);
+}
+
+function shouldLockRunSettings() {
+    if (serverState?.running) {
+        return true;
+    }
+    return hasContinuationContext(serverState) && !freshDraftUnlocked;
+}
+
 function isDefaultValue(key, state) {
     return normalizeValue(key, state[key]) === normalizeValue(key, defaults[key]);
 }
@@ -385,7 +603,7 @@ function isDefaultValue(key, state) {
 function resetSetting(key) {
     const state = getState();
     state[key] = defaults[key];
-    applyState(state);
+    applyState(state, { persist: true });
 }
 
 function buildEnvEntries(state) {
@@ -491,7 +709,8 @@ function buildProfileCommand(state) {
 }
 
 function downloadJson(state) {
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const envelope = createSettingsEnvelope(state);
+    const blob = new Blob([JSON.stringify(envelope, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
@@ -508,12 +727,37 @@ async function copyText(text) {
     }
 }
 
-function saveState(state) {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    const saved = document.getElementById("saved-status");
-    if (saved) {
-        saved.textContent = `Autosaved locally at ${new Date().toLocaleTimeString()}.`;
+function saveState(state, options = {}) {
+    const currentState = sanitizeState(state);
+    const currentStoredEnvelope = readStoredEnvelope();
+
+    if (!options.force && currentStoredEnvelope && activeSettingsEnvelope && currentStoredEnvelope.savedAtMs > activeSettingsEnvelope.savedAtMs) {
+        if (!statesEqual(currentStoredEnvelope.settings, currentState)) {
+            applyEnvelope(currentStoredEnvelope, {
+                message: `A newer tab saved settings at ${formatSavedTime(currentStoredEnvelope.savedAtMs)}. Reloaded the latest snapshot.`
+            });
+            return { saved: false, conflict: true, envelope: currentStoredEnvelope };
+        }
+        activeSettingsEnvelope = currentStoredEnvelope;
+        if (options.message) {
+            setSavedStatus(options.message);
+        }
+        return { saved: false, conflict: false, envelope: currentStoredEnvelope };
     }
+
+    if (currentStoredEnvelope && statesEqual(currentStoredEnvelope.settings, currentState)) {
+        activeSettingsEnvelope = currentStoredEnvelope;
+        if (options.message) {
+            setSavedStatus(options.message);
+        }
+        return { saved: false, conflict: false, envelope: currentStoredEnvelope };
+    }
+
+    const envelope = createSettingsEnvelope(currentState);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(envelope));
+    activeSettingsEnvelope = envelope;
+    setSavedStatus(options.message || `Autosaved locally at ${formatSavedTime(envelope.savedAtMs)}.`);
+    return { saved: true, conflict: false, envelope };
 }
 
 function createTooltipNode(key) {
@@ -637,12 +881,122 @@ function decorateControls() {
 }
 
 function updateResetButtons(state) {
+    const locked = shouldLockRunSettings();
     document.querySelectorAll("[data-setting-reset]").forEach((button) => {
         const key = button.dataset.settingReset;
         const atDefault = isDefaultValue(key, state);
-        button.disabled = atDefault;
-        button.title = atDefault ? "Already at default." : `Reset to default (${formatValue(defaults[key])}).`;
+        const lockedSetting = locked && RUN_LOCKED_SETTING_KEYS.has(key);
+        button.disabled = atDefault || lockedSetting;
+        button.title = lockedSetting
+            ? "Locked to the current batch. Start a fresh run to change this setting."
+            : atDefault
+                ? "Already at default."
+                : `Reset to default (${formatValue(defaults[key])}).`;
     });
+}
+
+function updateRunLockedControls() {
+    const locked = shouldLockRunSettings();
+    document.querySelectorAll(".segmented__item").forEach((button) => {
+        button.disabled = locked;
+    });
+    document.querySelectorAll("[data-preset]").forEach((button) => {
+        button.disabled = locked;
+    });
+
+    Object.entries(fieldMap).forEach(([key, id]) => {
+        const element = document.getElementById(id);
+        if (!element) {
+            return;
+        }
+        element.disabled = locked && RUN_LOCKED_SETTING_KEYS.has(key);
+    });
+
+    const saveButton = document.getElementById("save-config");
+    if (saveButton) {
+        saveButton.disabled = locked;
+    }
+
+    const importInput = document.getElementById("import-config");
+    if (importInput) {
+        importInput.disabled = locked;
+        importInput.parentElement?.classList.toggle("is-disabled", locked);
+        importInput.parentElement?.setAttribute(
+            "title",
+            locked ? "Import is locked to the current batch. Start a fresh run to change settings." : ""
+        );
+    }
+}
+
+function updateRunActionControls() {
+    const startRunButton = document.getElementById("start-run");
+    const startFreshButton = document.getElementById("start-fresh-run");
+    const stopButton = document.getElementById("stop-run");
+    if (!startRunButton || !startFreshButton || !stopButton) {
+        return;
+    }
+
+    const running = Boolean(serverState?.running);
+    const hasBatch = hasContinuationContext(serverState);
+
+    if (running) {
+        freshDraftUnlocked = false;
+        startRunButton.textContent = "Run active";
+        startRunButton.disabled = true;
+        startFreshButton.textContent = "Fresh run unavailable";
+        startFreshButton.disabled = true;
+        stopButton.disabled = false;
+        setLockStatus("Run-defining settings are locked while the current batch is running.");
+    } else if (hasBatch && freshDraftUnlocked) {
+        startRunButton.textContent = "Return to current batch";
+        startRunButton.disabled = false;
+        startFreshButton.textContent = "Launch fresh run";
+        startFreshButton.disabled = false;
+        stopButton.disabled = true;
+        setLockStatus("Fresh draft unlocked. Edit settings now, then launch a fresh run to replace the current batch lineage.");
+    } else if (hasBatch) {
+        startRunButton.textContent = "Continue current batch";
+        startRunButton.disabled = false;
+        startFreshButton.textContent = "New fresh draft";
+        startFreshButton.disabled = false;
+        stopButton.disabled = true;
+        setLockStatus("Run-defining settings are locked to the current batch. Use New fresh draft to change them before starting a fresh run.");
+    } else {
+        freshDraftUnlocked = false;
+        lockedBatchState = null;
+        startRunButton.textContent = "Start run";
+        startRunButton.disabled = false;
+        startFreshButton.textContent = "Start fresh run";
+        startFreshButton.disabled = false;
+        stopButton.disabled = true;
+        setLockStatus("No resumable batch is active. All settings are editable.");
+    }
+
+    updateRunLockedControls();
+}
+
+function enterFreshDraftMode() {
+    if (serverState?.running || !hasContinuationContext(serverState)) {
+        return false;
+    }
+    lockedBatchState = sanitizeState(getState());
+    freshDraftUnlocked = true;
+    updateRunActionControls();
+    setSavedStatus("Fresh draft unlocked. Edit settings, then use Launch fresh run.");
+    return true;
+}
+
+function restoreLockedBatchState() {
+    freshDraftUnlocked = false;
+    if (lockedBatchState) {
+        applyState(lockedBatchState, {
+            persist: true,
+            forcePersist: true,
+            saveMessage: "Restored the locked current-batch settings."
+        });
+        return;
+    }
+    updateRunActionControls();
 }
 
 async function apiRequest(path, options = {}) {
@@ -783,6 +1137,27 @@ function buildCopyTrace(copy, valueKey, color, name, yAxis = "y", visible = true
     };
 }
 
+const SQRT27 = Math.sqrt(27);
+
+function buildRelativeCopyTrace(copy, color, name) {
+    const history = (copy.history || []).filter(
+        (row) => row.best_fitness !== null && row.best_fitness !== undefined && row.best_fitness > 0
+    );
+    return {
+        type: "scatter",
+        mode: "lines+markers",
+        name,
+        x: history.map((row) => row.generation),
+        y: history.map((row) => row.best_fitness / SQRT27),
+        line: { color, width: 1.5, shape: "linear", simplify: false, dash: "dot" },
+        marker: { color, size: 3, symbol: "diamond" },
+        hovertemplate: `Copy ${copy.index}<br>Generation %{x}<br>${name}: %{y:.6g}<extra></extra>`,
+        connectgaps: false,
+        yaxis: "y2",
+        visible: true
+    };
+}
+
 function renderPlot(targetId, traces, layout) {
     const target = document.getElementById(targetId);
     if (!window.Plotly) {
@@ -835,6 +1210,7 @@ function updateCharts(payload) {
         const color = COPY_COLORS[index % COPY_COLORS.length];
         fitnessTraces.push(buildCopyTrace(copy, "best_fitness", color, `copy ${copy.index} best`));
         fitnessTraces.push(buildCopyTrace(copy, "mean_fitness", color, `copy ${copy.index} mean`, "y", false));
+        fitnessTraces.push(buildRelativeCopyTrace(copy, color, `copy ${copy.index} rel (÷√27)`));
 
         shadowTraces.push(buildCopyTrace(copy, "shadow_pool_size", color, `copy ${copy.index} shadow`, "y"));
         shadowTraces.push(buildCopyTrace(copy, "signature_333_count", color, `copy ${copy.index} (3,3,3)`, "y2", false));
@@ -844,8 +1220,19 @@ function updateCharts(payload) {
         title: { text: "", font: { size: 14 } },
         yaxis: {
             ...PLOTLY_LAYOUT_BASE.yaxis,
-            title: "Residual",
+            title: "Absolute residual",
             type: fitnessScaleMode === "log" ? "log" : "linear"
+        },
+        yaxis2: {
+            title: "Relative residual (÷√27)",
+            overlaying: "y",
+            side: "right",
+            type: fitnessScaleMode === "log" ? "log" : "linear",
+            gridcolor: "rgba(0,0,0,0)",
+            linecolor: "rgba(31, 36, 48, 0.12)",
+            zeroline: false,
+            automargin: true,
+            tickformat: ".3g"
         },
         uirevision: `fitness-${fitnessScaleMode}`
     });
@@ -877,6 +1264,14 @@ function updateLogs(payload) {
 }
 
 function applyServerState(payload) {
+    serverState = payload;
+    if (hasContinuationContext(payload) && !freshDraftUnlocked) {
+        lockedBatchState = buildStateFromEnv(payload.env || {});
+        lockedBatchState.batchCopies = Number(payload.copy_count) || defaults.batchCopies;
+        if (!statesEqual(getState(), lockedBatchState)) {
+            applyState(lockedBatchState, { persist: false });
+        }
+    }
     updateLiveMetrics(payload);
     renderCopyMetrics(payload);
     updateCharts(payload);
@@ -896,6 +1291,7 @@ function applyServerState(payload) {
     } else {
         setRunStatus("Backend reachable. No active Step 84 run.");
     }
+    updateRunActionControls();
 }
 
 async function refreshServerState() {
@@ -904,17 +1300,36 @@ async function refreshServerState() {
         applyServerState(payload);
     } catch (_error) {
         setRunStatus("Backend not reachable. Start the local server to enable run control and live graphs.");
+        updateRunActionControls();
     }
 }
 
 async function startRun(freshStart = false) {
+    if (freshStart && hasContinuationContext(serverState) && !serverState?.running && !freshDraftUnlocked) {
+        enterFreshDraftMode();
+        return;
+    }
+
+    if (!freshStart && freshDraftUnlocked && hasContinuationContext(serverState) && !serverState?.running) {
+        restoreLockedBatchState();
+        return;
+    }
+
     try {
-        const state = getState();
-        saveState(state);
+        const state = !freshStart && hasContinuationContext(serverState) && lockedBatchState
+            ? sanitizeState(lockedBatchState)
+            : getState();
+        const saveResult = saveState(state);
+        if (saveResult.conflict) {
+            setRunStatus("A newer settings snapshot was applied from another tab. Review it before starting a run.");
+            return;
+        }
         const payload = await apiRequest("/api/run/start", {
             method: "POST",
             body: JSON.stringify({ env: buildEnvObject(state), copies: state.batchCopies, fresh_start: freshStart })
         });
+        freshDraftUnlocked = false;
+        lockedBatchState = sanitizeState(state);
         applyServerState(payload.state);
     } catch (error) {
         setRunStatus(error.message);
@@ -930,7 +1345,7 @@ async function stopRun() {
     }
 }
 
-function render() {
+function render(options = {}) {
     const state = getState();
     const derived = getDerived(state);
 
@@ -944,14 +1359,20 @@ function render() {
     document.getElementById("step84-command").value = buildRunCommand(state);
     document.getElementById("profile-command").value = buildProfileCommand(state);
     updateResetButtons(state);
-    saveState(state);
+    updateRunActionControls();
+    if (options.persist ?? true) {
+        saveState(state, {
+            force: options.forcePersist ?? false,
+            message: options.saveMessage
+        });
+    }
 }
 
 function wirePresets() {
     document.querySelectorAll("[data-preset]").forEach((button) => {
         button.addEventListener("click", () => {
             const current = getState();
-            applyState({ ...current, ...presetMap[button.dataset.preset] });
+            applyState({ ...current, ...presetMap[button.dataset.preset] }, { persist: true });
         });
     });
 }
@@ -1000,13 +1421,40 @@ function wireActions() {
         }
         const text = await file.text();
         try {
-            applyState({ ...cloneDefaults(), ...JSON.parse(text) });
+            const parsed = normalizeEnvelope(JSON.parse(text));
+            if (!parsed) {
+                throw new Error("Invalid JSON config.");
+            }
+            applyState(parsed.settings, {
+                persist: true,
+                forcePersist: true,
+                saveMessage: "Imported JSON and promoted it to the latest local snapshot."
+            });
         } catch (_error) {
             window.alert("Invalid JSON config.");
         }
         event.target.value = "";
     });
     window.addEventListener("beforeunload", () => saveState(getState()));
+    window.addEventListener("storage", (event) => {
+        if (event.key !== STORAGE_KEY || !event.newValue) {
+            return;
+        }
+        let envelope = null;
+        try {
+            envelope = normalizeEnvelope(JSON.parse(event.newValue));
+        } catch (_error) {
+            return;
+        }
+        if (!envelope) {
+            return;
+        }
+        if (!activeSettingsEnvelope || envelope.savedAtMs > activeSettingsEnvelope.savedAtMs) {
+            applyEnvelope(envelope, {
+                message: `Loaded newer settings from another tab saved at ${formatSavedTime(envelope.savedAtMs)}.`
+            });
+        }
+    });
 }
 
 function init() {
@@ -1015,7 +1463,8 @@ function init() {
     wireModeToggle();
     wireFieldUpdates();
     wireActions();
-    applyState(getSavedState());
+    applyState(getSavedState(), { persist: false });
+    updateRunActionControls();
     refreshServerState();
     pollHandle = window.setInterval(refreshServerState, POLL_INTERVAL_MS);
 }

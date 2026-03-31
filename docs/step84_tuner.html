@@ -290,6 +290,7 @@
 
                 <div class="output-stack">
                     <div class="status-band status-band--live" id="run-status">Backend idle. Start the local server to enable run control.</div>
+                    <div class="status-band" id="lock-status">No resumable batch is active. All settings are editable.</div>
                     <div class="status-band status-band--saved" id="saved-status">Autosave ready.</div>
                     <div class="status-band" id="derived-summary"></div>
 
@@ -348,7 +349,7 @@
                     <div class="output-block output-block--notes">
                         <h3>Notes</h3>
                         <p>For live run control, start the local server with <span class="inline-chip">.\.venv\Scripts\python.exe .\scripts\step84_tuner_server.py</span> and then open this page through http://127.0.0.1:8765/step84_tuner.html.</p>
-                        <p>The UI stores your last settings in localStorage only. The local server simply starts Step 84, tails stdout and stderr, and polls the existing export files for graph data.</p>
+                        <p>The UI stores a timestamped local settings snapshot, syncs newer changes across tabs, and exports the same envelope as JSON. The local server simply starts Step 84, tails stdout and stderr, and polls the existing export files for graph data.</p>
                     </div>
                 </div>
             </aside>
@@ -362,7 +363,7 @@
                 </div>
             </div>
             <div class="chart-grid">
-                <div class="chart-card">
+                <div class="chart-card chart-card--wide">
                     <div class="chart-card__header">
                         <h3>Residual by Copy</h3>
                         <div class="button-row">

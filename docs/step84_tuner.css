@@ -26,6 +26,7 @@ html,
 body {
     margin: 0;
     min-height: 100%;
+    overflow-x: clip;
     background:
         radial-gradient(circle at top left, rgba(191, 92, 54, 0.18), transparent 28%),
         radial-gradient(circle at top right, rgba(30, 94, 99, 0.18), transparent 24%),
@@ -54,6 +55,7 @@ textarea {
 
 .page-shell {
     width: min(1480px, calc(100vw - 32px));
+    max-width: 100%;
     margin: 0 auto;
     padding: 28px 0 44px;
 }
@@ -152,13 +154,14 @@ h3 {
 
 .layout-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+    grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
     gap: 20px;
 }
 
 .panel {
     border-radius: var(--radius-lg);
     padding: 24px;
+    min-width: 0;
 }
 
 .panel__header {
@@ -194,6 +197,19 @@ button,
 button:hover,
 .upload-button:hover {
     transform: translateY(-1px);
+}
+
+button:disabled,
+.upload-button.is-disabled {
+    opacity: 0.48;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+button:disabled:hover,
+.upload-button.is-disabled:hover {
+    transform: none;
 }
 
 .ghost-button,
@@ -416,6 +432,7 @@ textarea:focus {
     border: 1px solid var(--line);
     color: var(--ink);
     line-height: 1.55;
+    overflow-wrap: anywhere;
 }
 
 .status-band--live {
@@ -445,6 +462,8 @@ textarea:focus {
     color: var(--ink);
     font-family: var(--font-mono);
     font-size: 0.88rem;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 .live-metrics {
@@ -543,6 +562,7 @@ textarea:focus {
     display: block;
     margin-top: 6px;
     font-size: 1rem;
+    overflow-wrap: anywhere;
 }
 
 .panel--charts {
@@ -560,6 +580,14 @@ textarea:focus {
     border-radius: 22px;
     background: rgba(255, 255, 255, 0.52);
     border: 1px solid var(--line);
+}
+
+.chart-card--wide {
+    grid-column: 1 / -1;
+}
+
+.chart-card--wide .plot-surface {
+    min-height: 560px;
 }
 
 .chart-card__header {
@@ -592,6 +620,16 @@ textarea:focus {
 
     .panel--output {
         position: static;
+    }
+}
+
+@media (max-width: 1240px) {
+    .panel__header {
+        flex-wrap: wrap;
+    }
+
+    .button-row {
+        width: 100%;
     }
 }
 
