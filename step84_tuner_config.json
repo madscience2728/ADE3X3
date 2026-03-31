@@ -32,7 +32,7 @@
     "factorCrossoverRate": 0.2,
     "mutationSupportRate": 0.3,
     "mutationCoeffRate": 0.5,
-    "mutationReplaceRate": 0.05,
+    "mutationReplaceRate": 0.12,
     "alsSweeps": 1,
     "newtonThreshold": 0.25,
     "polishMaxNfev": 20,
@@ -47,7 +47,7 @@
     "supportAddLow": 0.00001,
     "supportAddHigh": 0.1,
     "coeffSigmaMin": 0.01,
-    "coeffSigmaMax": 0.35,
+    "coeffSigmaMax": 0.5,
     "coeffInitLow": 0.00001,
     "coeffInitHigh": 2,
     "bestExportIncludeDense": false

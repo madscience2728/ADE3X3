@@ -35,6 +35,7 @@ import os
 import platform
 import re
 import sys
+import threading
 import time
 from collections import defaultdict
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, ThreadPoolExecutor, wait
@@ -186,7 +187,122 @@ COEFF_INIT_LOW = env_float("STEP84_COEFF_INIT_LOW", 1.0)
 COEFF_INIT_HIGH = env_float("STEP84_COEFF_INIT_HIGH", 2.0)
 SUPPORT_ADD_LOW = env_float("STEP84_SUPPORT_ADD_LOW", 0.01)
 SUPPORT_ADD_HIGH = env_float("STEP84_SUPPORT_ADD_HIGH", 0.10)
+ALGEBRAIC_MODE = bool(env_int("STEP84_ALGEBRAIC_MODE", 0))
+ALGEBRAIC_NEARBY_K = env_int("STEP84_ALGEBRAIC_NEARBY_K", 5)
 RESUME_CHECKPOINT = (os.environ.get("STEP84_RESUME_CHECKPOINT") or "").strip() or None
+
+
+def _build_algebraic_lookup() -> np.ndarray:
+    """Build sorted array of ~1400 algebraic magnitudes for coefficient mutations."""
+    table: dict[str, float] = {}
+    for x in range(0, 21):
+        for y in range(1, 21):
+            v = x / y
+            if v > 3.5:
+                continue
+            table[f"{x}/{y}"] = v
+    for x in range(1, 21):
+        for y in range(1, 21):
+            v = np.sqrt(x / y)
+            if v > 3.5:
+                continue
+            table[f"sqrt({x}/{y})"] = v
+    for x in range(1, 21):
+        for y in range(1, 21):
+            v = (x / y) ** (1 / 3)
+            if v > 3.5:
+                continue
+            table[f"cbrt({x}/{y})"] = v
+    for x in range(1, 21):
+        for y in range(1, 21):
+            v = (x / y) ** 0.25
+            if v > 3.5:
+                continue
+            table[f"4rt({x}/{y})"] = v
+    for x in range(1, 11):
+        for y in range(1, 11):
+            v = (x / y) ** (1 / 6)
+            if v > 3.5:
+                continue
+            table[f"6rt({x}/{y})"] = v
+    # 27-family: tensor norm is 27
+    for y in range(1, 28):
+        v = np.sqrt(27.0 / y)
+        if v < 3.5:
+            table[f"sqrt(27/{y})"] = v
+        v = (27.0 / y) ** (1 / 3)
+        if v < 3.5:
+            table[f"cbrt(27/{y})"] = v
+        v = (27.0 / y) ** 0.25
+        if v < 3.5:
+            table[f"4rt(27/{y})"] = v
+        v = (27.0 / y) ** (1 / 6)
+        if v < 3.5:
+            table[f"6rt(27/{y})"] = v
+    for k in range(-6, 7):
+        for n in [2, 3, 4, 6]:
+            v = 3.0 ** (k / n)
+            if 0.01 < v < 3.5:
+                table[f"3^({k}/{n})"] = v
+    for m in [1, 2, 3, 4, 6, 9, 12, 18, 27]:
+        base = np.sqrt(27.0 / m)
+        for p in range(1, 4):
+            for q in range(1, 4):
+                v = base * p / q
+                if 0.01 < v < 3.5:
+                    table[f"{p}/{q}*sqrt(27/{m})"] = v
+    # Products: sqrt * cbrt, rational * sqrt, rational * cbrt
+    for a in range(1, 6):
+        for b in range(1, 6):
+            for c in range(1, 6):
+                for d in range(1, 6):
+                    v = np.sqrt(a / b) * ((c / d) ** (1 / 3))
+                    if 0.01 < v < 3.0:
+                        table[f"sqrt({a}/{b})*cbrt({c}/{d})"] = v
+    for a in range(1, 6):
+        for b in range(1, 6):
+            for c in range(1, 4):
+                for d in range(1, 4):
+                    v = np.sqrt(a / b) * (c / d)
+                    if 0.01 < v < 3.0:
+                        table[f"{c}/{d}*sqrt({a}/{b})"] = v
+    for a in range(1, 6):
+        for b in range(1, 6):
+            for c in range(1, 4):
+                for d in range(1, 4):
+                    v = ((a / b) ** (1 / 3)) * (c / d)
+                    if 0.01 < v < 3.0:
+                        table[f"{c}/{d}*cbrt({a}/{b})"] = v
+    for a in range(-3, 4):
+        for b in range(-3, 4):
+            for c in [2, 3, 4, 6]:
+                v = abs((2**a) * (3**b)) ** (1 / c)
+                if 0.01 < v < 3.0:
+                    table[f"(2^{a}*3^{b})^(1/{c})"] = v
+    for p in range(1, 10):
+        for q in range(1, 10):
+            v = 3.0 * p / q
+            if 0.01 < v < 3.5:
+                table[f"3*{p}/{q}"] = v
+            v = np.sqrt(3.0) * p / q
+            if 0.01 < v < 3.5:
+                table[f"sqrt3*{p}/{q}"] = v
+            v = 3.0 ** (2 / 3) * p / q
+            if 0.01 < v < 3.5:
+                table[f"3^(2/3)*{p}/{q}"] = v
+    table["0"] = 0.0
+    deduped: dict[float, float] = {}
+    for _name, val in sorted(table.items(), key=lambda x: (len(x[0]), x[0])):
+        rounded = round(val, 8)
+        if rounded not in deduped:
+            deduped[rounded] = val
+    return np.array(sorted(deduped.values()))
+
+
+ALGEBRAIC_LOOKUP: np.ndarray = _build_algebraic_lookup() if ALGEBRAIC_MODE else np.empty(0)
+if ALGEBRAIC_MODE:
+    print(f"[step84] Algebraic mode ON: {len(ALGEBRAIC_LOOKUP)} lookup values")
+
 
 TARGET_TENSOR = matrix_multiplication_tensor(3).astype(np.float64)
 TARGET_FLAT = TARGET_TENSOR.reshape(-1)
@@ -315,7 +431,15 @@ def read_csv_rows(path: Path) -> list[dict]:
 
 def random_signed_values(rng: np.random.Generator, count: int, low: float, high: float) -> np.ndarray:
     signs = rng.choice(np.array([-1.0, 1.0], dtype=np.float64), size=count)
-    magnitudes = rng.uniform(low, high, size=count)
+    if ALGEBRAIC_MODE and ALGEBRAIC_LOOKUP.size > 0:
+        lo_idx = int(np.searchsorted(ALGEBRAIC_LOOKUP, low))
+        hi_idx = int(np.searchsorted(ALGEBRAIC_LOOKUP, high, side="right"))
+        if hi_idx <= lo_idx:
+            hi_idx = min(lo_idx + 1, len(ALGEBRAIC_LOOKUP))
+        indices = rng.integers(lo_idx, hi_idx, size=count)
+        magnitudes = ALGEBRAIC_LOOKUP[indices]
+    else:
+        magnitudes = rng.uniform(low, high, size=count)
     return signs * magnitudes
 
 
@@ -324,6 +448,49 @@ def finite_or_none(value: float | None) -> float | None:
         return None
     value = float(value)
     return value if math.isfinite(value) else None
+
+
+def _checkpoint_json_default(obj):
+    """Fallback handler for json.dump: convert stray numpy types in checkpoint payloads."""
+    if isinstance(obj, np.integer):
+        return int(obj)
+    if isinstance(obj, np.floating):
+        v = float(obj)
+        return v if math.isfinite(v) else None
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    if isinstance(obj, (np.bool_, bool)):
+        return bool(obj)
+    raise TypeError(f"Object of type {type(obj).__name__} is not JSON serializable")
+
+
+_checkpoint_write_lock = threading.Lock()
+_checkpoint_bg_thread: threading.Thread | None = None
+
+
+def _write_compact_json_sync(path: Path, json_bytes: bytes) -> None:
+    """Write pre-serialized JSON bytes to *path* atomically via temp file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".tmp")
+    try:
+        with open(tmp, "wb") as handle:
+            handle.write(json_bytes)
+        tmp.replace(path)
+    except BaseException:
+        try:
+            tmp.unlink(missing_ok=True)
+        except OSError:
+            pass
+        raise
+
+
+def _flush_checkpoint_thread() -> None:
+    """Block until any in-flight background checkpoint write completes."""
+    global _checkpoint_bg_thread
+    with _checkpoint_write_lock:
+        t = _checkpoint_bg_thread
+    if t is not None:
+        t.join()
 
 
 def json_safe(value):
@@ -622,7 +789,7 @@ def build_shadow_pool(population: list[Individual]) -> list[Individual]:
     grouped: dict[tuple[str, str], list[Individual]] = defaultdict(list)
     for individual in population:
         grouped[selection_shadow_key(individual)].append(individual)
-    representatives = [min(group, key=fitness_key).copy() for group in grouped.values()]
+    representatives = [min(group, key=fitness_key) for group in grouped.values()]
     representatives.sort(key=fitness_key)
     return representatives
 
@@ -1261,7 +1428,33 @@ def mutate_support(individual: Individual, rng: np.random.Generator) -> None:
     setattr(term, f"{factor_name}_values", values)
 
 
+def _mutate_coefficients_algebraic(individual: Individual, rng: np.random.Generator, best_fitness: float) -> None:
+    """Algebraic mode: jump to a nearby algebraic value instead of Gaussian perturbation."""
+    term = individual.terms[int(rng.integers(0, RANK_VALUE))]
+    factor_name = str(rng.choice(np.array(["alpha", "beta", "gamma"])))
+    values = np.asarray(getattr(term, f"{factor_name}_values"), dtype=np.float64).copy()
+    if values.size == 0:
+        return
+    value_index = int(rng.integers(0, values.size))
+    current = float(values[value_index])
+    sign = 1.0 if current >= 0 else -1.0
+    absv = abs(current)
+    pos = int(np.searchsorted(ALGEBRAIC_LOOKUP, absv))
+    # Adaptive jump range: wider when fitness is bad, tighter when good
+    k = max(1, int(ALGEBRAIC_NEARBY_K * (0.5 + math.sqrt(max(best_fitness, 1e-12)))))
+    lo = max(0, pos - k)
+    hi = min(len(ALGEBRAIC_LOOKUP), pos + k + 1)
+    new_abs = float(ALGEBRAIC_LOOKUP[int(rng.integers(lo, hi))])
+    if rng.random() < 0.1:
+        sign = -sign
+    values[value_index] = sign * new_abs
+    apply_floor_to_values(values, rng)
+    setattr(term, f"{factor_name}_values", values)
+
+
 def mutate_coefficients(individual: Individual, rng: np.random.Generator, best_fitness: float) -> None:
+    if ALGEBRAIC_MODE and ALGEBRAIC_LOOKUP.size > 0:
+        return _mutate_coefficients_algebraic(individual, rng, best_fitness)
     sigma = adaptive_sigma(best_fitness)
     term = individual.terms[int(rng.integers(0, RANK_VALUE))]
     factor_name = str(rng.choice(np.array(["alpha", "beta", "gamma"])))
@@ -1336,7 +1529,7 @@ def select_survivors(
         max(0, survivor_target - 1),
         int(math.ceil(survivor_target * SIGNATURE333_SURVIVOR_FRACTION)),
     )
-    exact_333_survivors = [individual.copy() for individual in exact_333_candidates[:exact_333_slots]]
+    exact_333_survivors = list(exact_333_candidates[:exact_333_slots])
 
     remaining_target = survivor_target - len(exact_333_survivors)
     shadow_slots = 0 if remaining_target <= 1 else max(1, min(remaining_target - 1, int(math.ceil(remaining_target * SHADOW_SURVIVOR_FRACTION))))
@@ -1564,6 +1757,7 @@ def write_checkpoint(
     warm_seed_count: int,
     steady_state_completed: int,
 ) -> None:
+    global _checkpoint_bg_thread
     checkpoint_path = EXPORTS / f"step84_checkpoint_gen{generation:04d}.json"
     payload = checkpoint_payload(
         populations,
@@ -1577,7 +1771,21 @@ def write_checkpoint(
         warm_seed_count,
         steady_state_completed,
     )
-    write_json(checkpoint_path, json_safe(payload))
+    # Serialize to compact JSON bytes in the main thread (payload is pure-Python
+    # types from to_dict(); _checkpoint_json_default handles stray numpy types
+    # in RNG state without a full recursive json_safe walk).
+    json_bytes = json.dumps(
+        payload, default=_checkpoint_json_default, separators=(",", ":")
+    ).encode("utf-8")
+    # Wait for any prior background write to finish before starting a new one.
+    with _checkpoint_write_lock:
+        if _checkpoint_bg_thread is not None:
+            _checkpoint_bg_thread.join()
+        t = threading.Thread(
+            target=_write_compact_json_sync, args=(checkpoint_path, json_bytes), daemon=True
+        )
+        _checkpoint_bg_thread = t
+        t.start()
     _purge_old_checkpoints()
 
 
@@ -1596,7 +1804,7 @@ def _purge_old_checkpoints() -> None:
 
 def load_checkpoint(path: Path) -> tuple[list[list[Individual]], list[np.random.Generator], dict]:
     with open(path, "r", encoding="utf-8") as handle:
-        payload = json_safe(json.load(handle))
+        payload = json.load(handle)
     populations: list[list[Individual]] = []
     island_rngs: list[np.random.Generator] = []
     for island_payload in payload["islands"]:
@@ -1962,6 +2170,7 @@ def main() -> None:
                 break
 
     total_wall_seconds = elapsed_base + (time.time() - run_start)
+    _flush_checkpoint_thread()  # ensure any in-flight background checkpoint finishes before final writes
     profiler.record_generation(current_generation)
     write_json(PROFILE_PATH, json_safe(profiler.to_dict(current_generation)))
     if global_best is not None:

@@ -121,7 +121,9 @@ const defaults = {
     coeffSigmaMax: 0.35,
     coeffInitLow: 1.0,
     coeffInitHigh: 2.0,
-    bestExportIncludeDense: false
+    bestExportIncludeDense: false,
+    algebraicMode: false,
+    algebraicNearbyK: 5
 };
 
 const presetMap = {
@@ -204,7 +206,9 @@ const fieldMap = {
     coeffSigmaMax: "coeff-sigma-max",
     coeffInitLow: "coeff-init-low",
     coeffInitHigh: "coeff-init-high",
-    bestExportIncludeDense: "best-export-include-dense"
+    bestExportIncludeDense: "best-export-include-dense",
+    algebraicMode: "algebraic-mode",
+    algebraicNearbyK: "algebraic-nearby-k"
 };
 
 const settingHelp = {
@@ -254,7 +258,9 @@ const settingHelp = {
     coeffSigmaMax: "Upper bound for Gaussian coefficient perturbation strength. This should stay greater than or equal to coeff sigma min. Reasonable range: 0.15..0.50. Larger values increase jumpiness and can help escape flat basins.",
     coeffInitLow: "Lower bound for random initial coefficient magnitudes. This should stay less than or equal to coeff init high. Reasonable range: 0.5..1.5.",
     coeffInitHigh: "Upper bound for random initial coefficient magnitudes. This should stay greater than or equal to coeff init low. Reasonable range: 1.5..3.0. Wider spreads increase diversity but can make ALS stabilization harder.",
-    bestExportIncludeDense: "Include dense matrices and arrays in the best-individual export. This is mainly for forensic debugging. Leave this off for normal runs because artifact size can balloon quickly. Recommended setting: 0 except for short diagnostic runs."
+    bestExportIncludeDense: "Include dense matrices and arrays in the best-individual export. This is mainly for forensic debugging. Leave this off for normal runs because artifact size can balloon quickly. Recommended setting: 0 except for short diagnostic runs.",
+    algebraicMode: "Constrain coefficient mutations and initialization to algebraic values instead of continuous floats. Uses a ~1400-entry lookup table of rationals, square/cube/4th/6th roots, products, and 27-family values. When ON, Gaussian perturbation is replaced with jumps between nearby algebraic grid points. This dramatically narrows the search space to structurally meaningful coefficients.",
+    algebraicNearbyK: "How many algebraic neighbors to consider when mutating a coefficient in algebraic mode. The jump range scales adaptively with fitness: wider when stuck, tighter near optima. Reasonable range: 3..10. Lower values make finer local moves; higher values allow larger jumps."
 };
 
 const numericFields = new Set([
@@ -265,11 +271,14 @@ const numericFields = new Set([
     "mutationSupportRate", "mutationCoeffRate", "mutationReplaceRate", "alsSweeps", "newtonThreshold",
     "polishMaxNfev", "polishVariableCap", "activeValueFloor", "supportMin", "supportMax", "initSupportMin",
     "initSupportMax", "supportAddProb", "supportDropProb", "supportAddLow", "supportAddHigh", "coeffSigmaMin",
-    "coeffSigmaMax", "coeffInitLow", "coeffInitHigh"
+    "coeffSigmaMax", "coeffInitLow", "coeffInitHigh", "algebraicNearbyK"
 ]);
 
-const checkboxFields = new Set(["bestExportIncludeDense"]);
-const RUN_LOCKED_SETTING_KEYS = new Set(["topologyMode", ...Object.keys(fieldMap)]);
+const checkboxFields = new Set(["bestExportIncludeDense", "algebraicMode"]);
+const RUN_LOCKED_SETTING_KEYS = new Set([
+    "topologyMode", "islandPopulations", "islandMinExp", "islandMaxExp", "islandCopies",
+    "workers", "batchCopies", "seed", "executorKind", "resumeCheckpoint",
+]);
 const ENV_TO_STATE_KEY = {
     STEP84_WORKERS: "workers",
     STEP84_TIMEOUT_SECONDS: "timeoutSeconds",
@@ -311,7 +320,9 @@ const ENV_TO_STATE_KEY = {
     STEP84_COEFF_SIGMA_MAX: "coeffSigmaMax",
     STEP84_COEFF_INIT_LOW: "coeffInitLow",
     STEP84_COEFF_INIT_HIGH: "coeffInitHigh",
-    STEP84_BEST_EXPORT_INCLUDE_DENSE: "bestExportIncludeDense"
+    STEP84_BEST_EXPORT_INCLUDE_DENSE: "bestExportIncludeDense",
+    STEP84_ALGEBRAIC_MODE: "algebraicMode",
+    STEP84_ALGEBRAIC_NEARBY_K: "algebraicNearbyK"
 };
 
 function cloneDefaults() {
@@ -675,7 +686,9 @@ function buildEnvEntries(state) {
         ["STEP84_COEFF_INIT_LOW", state.coeffInitLow],
         ["STEP84_COEFF_INIT_HIGH", state.coeffInitHigh],
         ["STEP84_SUPPORT_ADD_LOW", state.supportAddLow],
-        ["STEP84_SUPPORT_ADD_HIGH", state.supportAddHigh]
+        ["STEP84_SUPPORT_ADD_HIGH", state.supportAddHigh],
+        ["STEP84_ALGEBRAIC_MODE", state.algebraicMode],
+        ["STEP84_ALGEBRAIC_NEARBY_K", state.algebraicNearbyK]
     ];
 
     if (state.topologyMode === "explicit") {

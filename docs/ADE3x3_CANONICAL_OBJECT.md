@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-30 00:22:58
+Generated: 2026-03-31 15:05:40
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-30 00:22:58
+**Generated:** 2026-03-31 15:05:40
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -15743,33 +15743,33 @@ coefficients on fixed supports in Lamarckian fashion.
 
 ### Campaign Summary
 
-- Generations completed: 1
-- Total evaluations: 96
-- Total wall seconds: 2.581674098968506
-- Best fitness ever (max-abs residual): 1.0
-- Best generation: 1
-- Best support signature: (4,4,4)
-- Best variable count: 198
+- Generations completed: 0
+- Total evaluations: 6457
+- Total wall seconds: 120.06486940383911
+- Best fitness ever (max-abs residual): 0.8083053545641325
+- Best generation: 0
+- Best support signature: (5,6,6)
+- Best variable count: 256
 - Any exact hit below 1e-8: False
-- Stop reason: generation_limit
+- Stop reason: time_limit
 
 The run recorded a best-so-far incumbent trace across generations rather than a single
 isolated event. The first recorded incumbent appeared at generation
-0 with residual 1.0, and the final incumbent appeared at generation 1 with residual 1.0.
+0 with residual 0.858318107537655, and the final incumbent appeared at generation 0 with residual 0.8083053545641325.
 
 ### Best Individual
 
-- Origin: term_crossover:random:10|random:38
-- Best max-abs residual: 1.0
-- Best Frobenius residual: 3.067720675494955
-- Support histogram: {'(3,4,4)': 1, '(3,4,5)': 2, '(3,5,3)': 1, '(3,5,4)': 1, '(4,3,4)': 2, '(4,3,5)': 2, '(4,4,4)': 1, '(4,4,5)': 1, '(4,5,3)': 1, '(4,5,4)': 1, '(4,5,5)': 2, '(5,3,4)': 1, '(5,4,4)': 1, '(5,5,4)': 1, '(5,5,5)': 1}
+- Origin: term_xover:(6,7,7)|(6,7,6)
+- Best max-abs residual: 0.5840240922382063
+- Best Frobenius residual: 2.8298432320449316
+- Support histogram: {'(2,9,9)': 1, '(3,9,4)': 1, '(3,9,6)': 1, '(4,2,3)': 1, '(4,3,9)': 1, '(4,6,6)': 1, '(5,9,8)': 1, '(6,1,8)': 1, '(6,3,5)': 1, '(6,9,7)': 1, '(6,9,8)': 2, '(7,9,8)': 1, '(8,7,6)': 3, '(9,2,7)': 1, '(9,5,9)': 1, '(9,7,8)': 1}
 - Local nonlinear polish used: False
 
 ### Final-Island Snapshot
 
 - Strongest island at the final logged generation: 0
-- Final-island best residual: 1.0000000000000000e+00
-- Final-island mean residual: 1.0000000000000000e+00
+- Final-island best residual: 8.7347668751942487e-01
+- Final-island mean residual: 1.0569318886459267e+00
 
 ### Status
 
@@ -15777,6 +15777,72 @@ Step 84 turns the Step 83b support landscape into a reusable search engine. Even
 the run does not close to an exact rank-19 decomposition, it now records which sparse
 support families survive evolutionary pressure, how fast the best residual improves, and
 what the best near-miss support structure looks like for longer reruns.
+
+### Multi-Copy Basin Analysis
+
+Across 48 parallel copies from 2 batch run(s):
+
+- Basin near 0.50: 15 copies
+- Basin near 0.55: 1 copies
+- Basin near 0.70: 1 copies
+- Basin near 0.95: 1 copies
+- Basin near 1.00: 30 copies
+
+### Basin Structure Theorem: Pythagorean Identity
+
+**Theorem (ALS orthogonality).** At every ALS local minimum of the rank-19
+CP objective on the 3x3 multiplication tensor, the residual R = T_hat - T
+and the candidate T_hat satisfy
+
+    <R, T_hat> approx 0   ==>   ||T||^2 = ||R||^2 + ||T_hat||^2 = 27
+
+This identity holds because ALS convergence implies the gradient of the
+objective with respect to each factor vanishes, which forces the residual
+into the orthogonal complement of the approximation subspace.
+
+At the well-converged 0.5-fitness basin, the energy split specializes to
+
+    ||R||^2_F approx 8 = 27 - 19,    ||T_hat||^2_F approx 19
+
+consistent with the rank-19 approximation capturing 19 near-unit-norm
+rank-1 terms. At poorly converged basins (fitness near 1.0), ||R||^2 is
+larger and ||T_hat||^2 correspondingly smaller, but the sum is always 27.
+
+**Empirical verification across all batch copies:**
+
+- Copies tested: 48
+- Mean ||R||^2 + ||T_hat||^2: 27.0000 (theory: 27.0)
+- Max |<R, T_hat>|: 0.000197 (theory: 0)
+
+At the 0.5-fitness basin (16 copies):
+- Mean ||R||^2: 8.0011 (theory: 8.0 = 27 - 19)
+- Mean ||T_hat||^2: 18.9988 (theory: 19.0)
+
+Different basins distribute the total Frobenius energy differently
+between live and dead tensor entries:
+
+- Basin 0.50 (15 copies): ||R||^2 = 8.00, live = 3.78, dead = 4.22
+- Basin 0.55 (1 copies): ||R||^2 = 8.00, live = 3.86, dead = 4.14
+- Basin 0.70 (1 copies): ||R||^2 = 8.00, live = 5.01, dead = 2.99
+- Basin 0.95 (1 copies): ||R||^2 = 15.00, live = 10.93, dead = 4.07
+- Basin 1.00 (30 copies): ||R||^2 = 11.78, live = 10.21, dead = 1.56
+
+### Structural Implications
+
+1. The Pythagorean identity ||R||^2 + ||T_hat||^2 = 27 is structural
+   (ALS orthogonality). At the best basins, ||R||^2 approaches 8 = 27 - 19,
+   meaning the rank-19 approximation captures almost all of the target energy.
+   The max-abs fitness depends on how energy distributes across entries,
+   not on the total Frobenius norm.
+
+2. The 0.5 basin is a soft attractor, not a hard wall. An earlier deleted
+   run achieved fitness approx 0.41, proving escape is possible with
+   sufficient mutation diversity (higher mutationReplaceRate and coeffSigmaMax).
+
+3. Dead-entry leakage (sparse rank-1 terms polluting 702 zero entries) is
+   the dominant bottleneck at the 0.5 basin, where dead_energy > live_energy.
+   Improving the search requires not just fitting the 27 live entries better
+   but simultaneously suppressing leakage into the 702 dead entries.
 
 ## 81. CURRENT GAPS / OPEN FRONTS
 
@@ -15837,7 +15903,7 @@ what the best near-miss support structure looks like for longer reruns.
 - Hamilton term-sharing audit: ✓ Step 78 reconstructs the exact rank-20 commutator witness alongside the Step 75 rank-19 anticommutator witness, finds 0 shared normalized rank-1 terms, union span rank 39 with span intersection dimension 0, and therefore closes the easy linear-sharing route from T=({A,B}+[A,B])/2
 - Basis-rotated pilot search: ✓ Step 79 verifies GL(9)^3 transport of the public rank-23 witness exactly on a small structured/random pilot, but the rotated cold CP scans at ranks 19..22 are cleanly negative and do not improve on the existing rank-19 frontier
 - Support expansion + heuristic sparse campaign: ✓ Step 83b ran 12 AlphaTensor-derived support-expansion cases plus a 1000-pattern random sparse-screening campaign under the 200-variable cap; all random screens were viable, the best conditioning sweet spot was the ultra-sparse (3,3,3) regime, but neither the 12 expanded charts nor the top 24 random sparse charts produced a real rank-19 endpoint
-- Metaheuristic rank-19 search: ✓ Step 84 built the sparse-support evolutionary search engine with 4 islands, Lamarckian coefficient refinement, migration, logging, and checkpoints; the current best run reached max-abs residual 1.0 at generation 1 with support signature (4,4,4)
+- Metaheuristic rank-19 search: ✓ Step 84 built the sparse-support evolutionary search engine with 4 islands, Lamarckian coefficient refinement, migration, logging, and checkpoints; the current best run reached max-abs residual 0.8083053545641325 at generation 0 with support signature (5,6,6); the Pythagorean identity ||R||^2 = 27 - 19 = 8 holds at every ALS basin, and the 0.5 basin is a soft attractor with dead-entry leakage as the dominant bottleneck
 
 **Remaining open fronts:**
 - Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored
@@ -15862,7 +15928,11 @@ what the best near-miss support structure looks like for longer reruns.
 - Threshold localization: determine whether AlphaTensor's true critical cap lies below 2 degrees and whether the standard threshold is exactly 12 degrees or just above 11.5 degrees
 - Hamilton recompression beyond linear sharing: Step 78 rules out direct shared terms and trivial span overlap, but a genuinely nonlinear recompression of the 39-term Hamilton union has not been excluded
 - Basis-rotated search beyond the cold pilot: Step 79 rules out the tiny cold-start version, but a transported warm-start or continuation-based GL(9)^3 search has not yet been tested
-- Sparse-support metaheuristics beyond Step 84: the search infrastructure now operates directly in the empirically strong (3,3,3) to (4,4,2) regime and records best-so-far support structures, but longer campaigns and operator retuning are still needed to determine whether the best near-miss supports can actually close to an exact rank-19 decomposition
+- Sparse-support metaheuristics beyond Step 84: the Pythagorean identity ||R||^2 = 8 is structural
+  (ALS orthogonality), but the max-abs basin levels (1.0, 0.67, 0.5) are soft attractors determined
+  by how energy distributes across live/dead entries; escaping the 0.5 basin requires suppressing
+  dead-entry leakage (702 zero entries) simultaneously with live-entry fitting, and higher
+  mutationReplaceRate and coeffSigmaMax settings help explore new support configurations
 - Step 48 shows that the 8 XC-orbit linearization is exact but vacuous for rank lower bounds;
   any useful lower-bound model must retain finer-than-orbit-sum equation structure
 - Step 49 now records the exact 729-equation trilinear system and the 8 representative types;

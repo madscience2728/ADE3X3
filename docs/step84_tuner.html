@@ -225,6 +225,14 @@
                     <h2>Support + Coefficients</h2>
                 </div>
                 <div class="control-grid">
+                    <label class="toggle-card" style="grid-column: 1 / -1">
+                        <input id="algebraic-mode" type="checkbox">
+                        <span>STEP84_ALGEBRAIC_MODE — constrain coefficients to algebraic values (~1400 rationals, roots, products)</span>
+                    </label>
+                    <div>
+                        <label for="algebraic-nearby-k">STEP84_ALGEBRAIC_NEARBY_K</label>
+                        <input id="algebraic-nearby-k" type="number" min="1" step="1" value="5">
+                    </div>
                     <div>
                         <label for="support-min">STEP84_SUPPORT_MIN</label>
                         <input id="support-min" type="number" min="1" step="1" value="2">
