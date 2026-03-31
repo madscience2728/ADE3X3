@@ -221,15 +221,48 @@ def full_coordinate_list() -> list[tuple[int, int, int]]:
 
 def build_jacobian(model: SupportModel, free_vector: np.ndarray, coordinates: list[tuple[int, int, int]]) -> np.ndarray:
     alpha, beta, gamma = unpack_free_vector(model, free_vector)
-    jacobian = np.zeros((len(coordinates), len(model.variable_specs)), dtype=np.float64)
-    for row_index, (a_idx, b_idx, c_idx) in enumerate(coordinates):
-        for spec in model.variable_specs:
-            if spec.factor_name == 'alpha' and spec.flat_index == a_idx:
-                jacobian[row_index, spec.variable_index] = beta[spec.term_index, b_idx] * gamma[spec.term_index, c_idx]
-            elif spec.factor_name == 'beta' and spec.flat_index == b_idx:
-                jacobian[row_index, spec.variable_index] = alpha[spec.term_index, a_idx] * gamma[spec.term_index, c_idx]
-            elif spec.factor_name == 'gamma' and spec.flat_index == c_idx:
-                jacobian[row_index, spec.variable_index] = alpha[spec.term_index, a_idx] * beta[spec.term_index, b_idx]
+    n_coords = len(coordinates)
+    n_vars = len(model.variable_specs)
+    if n_vars == 0:
+        return np.zeros((n_coords, 0), dtype=np.float64)
+
+    coords = np.asarray(coordinates, dtype=np.intp)
+    coord_a, coord_b, coord_c = coords[:, 0], coords[:, 1], coords[:, 2]
+
+    factor_map = {'alpha': 0, 'beta': 1, 'gamma': 2}
+    spec_factor = np.empty(n_vars, dtype=np.int8)
+    spec_flat = np.empty(n_vars, dtype=np.intp)
+    spec_term = np.empty(n_vars, dtype=np.intp)
+    spec_col = np.empty(n_vars, dtype=np.intp)
+    for j, spec in enumerate(model.variable_specs):
+        spec_factor[j] = factor_map[spec.factor_name]
+        spec_flat[j] = spec.flat_index
+        spec_term[j] = spec.term_index
+        spec_col[j] = spec.variable_index
+
+    jacobian = np.zeros((n_coords, n_vars), dtype=np.float64)
+
+    # Alpha variables: d/d(alpha[t,f]) = delta(a,f) * beta[t,b] * gamma[t,c]
+    idx = np.where(spec_factor == 0)[0]
+    if idx.size:
+        t, f, c = spec_term[idx], spec_flat[idx], spec_col[idx]
+        mask = (coord_a[None, :] == f[:, None])  # (n_group, n_coords)
+        jacobian[:, c] = (mask * beta[t][:, coord_b] * gamma[t][:, coord_c]).T
+
+    # Beta variables: d/d(beta[t,f]) = alpha[t,a] * delta(b,f) * gamma[t,c]
+    idx = np.where(spec_factor == 1)[0]
+    if idx.size:
+        t, f, c = spec_term[idx], spec_flat[idx], spec_col[idx]
+        mask = (coord_b[None, :] == f[:, None])
+        jacobian[:, c] = (mask * alpha[t][:, coord_a] * gamma[t][:, coord_c]).T
+
+    # Gamma variables: d/d(gamma[t,f]) = alpha[t,a] * beta[t,b] * delta(c,f)
+    idx = np.where(spec_factor == 2)[0]
+    if idx.size:
+        t, f, c = spec_term[idx], spec_flat[idx], spec_col[idx]
+        mask = (coord_c[None, :] == f[:, None])
+        jacobian[:, c] = (mask * alpha[t][:, coord_a] * beta[t][:, coord_b]).T
+
     return jacobian
 
 

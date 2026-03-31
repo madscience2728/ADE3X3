@@ -68,6 +68,15 @@ from src.ade3x3.steps.ade3x3_step81_homotopy_bridge_pilot import (
 from src.ade3x3.steps.ade3x3_step83b_support_expansion_sparse_meta_analysis import (
     build_track2_terms_from_row,
 )
+from src.ade3x3.steps.ade3x3_step84_canonical_constraints import (
+    canonical_support_hash,
+    dead_leakage_batch,
+    fiber_biased_support,
+    live_compatible_beta_positions,
+    live_compatible_gamma_positions,
+    structural_penalty,
+    LIVE_B_FOR_A,
+)
 
 
 BASE_EXPORTS = Path("outputs/exports")
@@ -518,10 +527,11 @@ def selection_shadow_key(individual: Individual) -> tuple[str, str]:
     )
 
 
-def dedupe_by_support_hash(individuals: list[Individual]) -> list[Individual]:
+def dedupe_by_support_hash(individuals: list[Individual], presorted: bool = False) -> list[Individual]:
     seen: set[str] = set()
     unique: list[Individual] = []
-    for individual in sorted(individuals, key=fitness_key):
+    source = individuals if presorted else sorted(individuals, key=fitness_key)
+    for individual in source:
         support_hash = individual.support_hash or support_pattern_hash(individual)
         if support_hash in seen:
             continue
@@ -593,8 +603,12 @@ def random_support_positions(rng: np.random.Generator, count: int) -> tuple[int,
 
 def build_random_term_gene(rng: np.random.Generator) -> SparseTermGene:
     alpha_support = random_support_positions(rng, sample_support_count(rng))
-    beta_support = random_support_positions(rng, sample_support_count(rng))
-    gamma_support = random_support_positions(rng, sample_support_count(rng))
+    beta_count = sample_support_count(rng)
+    preferred_beta = live_compatible_beta_positions(alpha_support)
+    beta_support = fiber_biased_support(rng, beta_count, preferred_beta)
+    gamma_count = sample_support_count(rng)
+    preferred_gamma = live_compatible_gamma_positions(alpha_support, beta_support)
+    gamma_support = fiber_biased_support(rng, gamma_count, preferred_gamma)
     return SparseTermGene(
         alpha_support,
         beta_support,
@@ -872,11 +886,17 @@ def evaluate_individual_worker(payload: dict) -> dict:
                 individual = polished_candidate
                 fitness = polished_fitness
                 fro_residual = polished_fro
+        # Soft dead-leakage penalty: nudge search toward fiber-respecting solutions
+        if math.isfinite(fitness):
+            alpha_m, beta_m, _gamma_m = dense_factor_arrays(individual)
+            fitness += structural_penalty(alpha_m, beta_m, _gamma_m)
         individual.fitness = float(fitness)
         individual.fro_residual = float(fro_residual)
         individual.newton_polished = bool(polished)
         individual.support_signature = support_signature_string(individual)
-        individual.support_hash = support_pattern_hash(individual)
+        individual.support_hash = canonical_support_hash([
+            (t.alpha_support, t.beta_support, t.gamma_support) for t in individual.terms
+        ])
         return {
             "status": "ok",
             "individual": individual.to_dict(),
@@ -893,7 +913,9 @@ def evaluate_individual_worker(payload: dict) -> dict:
         fallback.fro_residual = math.inf
         fallback.newton_polished = False
         fallback.support_signature = support_signature_string(fallback)
-        fallback.support_hash = support_pattern_hash(fallback)
+        fallback.support_hash = canonical_support_hash([
+            (t.alpha_support, t.beta_support, t.gamma_support) for t in fallback.terms
+        ])
         return {
             "status": "error",
             "error": str(exc),
@@ -997,6 +1019,27 @@ def build_single_offspring(
     return mutate(child, rng, best_fitness)
 
 
+_INTEGRATION_BATCH_SIZE = 10
+_SHADOW_REBUILD_BATCH = 10
+
+
+def integrate_offspring_batch(
+    populations: list[list[Individual]],
+    island_index: int,
+    offspring_batch: list[Individual],
+    variable_count_cache: dict[str, int],
+) -> None:
+    """Integrate a batch of offspring into an island in one select_survivors call."""
+    if not offspring_batch:
+        return
+    populations[island_index] = select_survivors(
+        populations[island_index],
+        offspring_batch,
+        variable_count_cache,
+        ISLAND_POPULATIONS[island_index],
+    )
+
+
 def integrate_evaluated_offspring(
     populations: list[list[Individual]],
     island_index: int,
@@ -1086,7 +1129,23 @@ def mutate_support(individual: Individual, rng: np.random.Generator) -> None:
     if do_add:
         missing = [index for index in range(9) if index not in support]
         if missing:
-            new_index = int(rng.choice(np.array(missing, dtype=np.int64)))
+            # Fiber-biased: prefer positions forming live (a,b) pairs
+            if factor_name == "beta":
+                preferred = set(live_compatible_beta_positions(term.alpha_support))
+                preferred_missing = [i for i in missing if i in preferred]
+            elif factor_name == "alpha":
+                # Reverse: prefer alpha positions compatible with existing beta
+                s_values = {b // 3 for b in term.beta_support}
+                preferred_missing = [i for i in missing if i % 3 in s_values]
+            elif factor_name == "gamma":
+                preferred = set(live_compatible_gamma_positions(term.alpha_support, term.beta_support))
+                preferred_missing = [i for i in missing if i in preferred]
+            else:
+                preferred_missing = []
+            if preferred_missing and rng.random() < 0.7:
+                new_index = int(rng.choice(np.array(preferred_missing, dtype=np.int64)))
+            else:
+                new_index = int(rng.choice(np.array(missing, dtype=np.int64)))
             support.append(new_index)
             values = np.append(values, random_signed_values(rng, 1, SUPPORT_ADD_LOW, SUPPORT_ADD_HIGH))
     else:
@@ -1161,15 +1220,17 @@ def select_survivors(
     variable_count_cache: dict[str, int],
     survivor_target: int,
 ) -> list[Individual]:
-    combined = dedupe_by_support_hash(population + offspring)
+    # Sort once; timsort is O(N) when population is already sorted + appended offspring
+    all_individuals = sorted(population + offspring, key=fitness_key)
+    combined = dedupe_by_support_hash(all_individuals, presorted=True)
     if len(combined) <= survivor_target:
-        combined.sort(key=fitness_key)
         return combined[:survivor_target]
 
+    # combined is already sorted by fitness_key from dedupe_by_support_hash
     exact_333_candidates = [
         individual for individual in combined if is_exact_333_signature(individual.support_signature or support_signature_string(individual))
     ]
-    exact_333_candidates.sort(key=fitness_key)
+    # already sorted since combined is sorted
     exact_333_slots = min(
         len(exact_333_candidates),
         max(0, survivor_target - 1),
@@ -1182,8 +1243,13 @@ def select_survivors(
     elite_slots = remaining_target - shadow_slots
 
     selected_hashes = {individual.support_hash for individual in exact_333_survivors}
-    global_elites = [individual for individual in sorted(combined, key=fitness_key) if individual.support_hash not in selected_hashes]
-    elites = global_elites[:elite_slots]
+    # combined is already sorted — no need to re-sort
+    elites: list[Individual] = []
+    for individual in combined:
+        if len(elites) >= elite_slots:
+            break
+        if individual.support_hash not in selected_hashes:
+            elites.append(individual)
     selected_hashes.update(individual.support_hash for individual in elites)
 
     grouped: dict[tuple[str, str], list[Individual]] = defaultdict(list)
@@ -1192,17 +1258,21 @@ def select_survivors(
 
     shadow_candidates: list[Individual] = []
     for group in grouped.values():
-        group.sort(key=fitness_key)
+        # groups preserve insertion order from sorted combined
         champion = group[0]
         if champion.support_hash not in selected_hashes:
             shadow_candidates.append(champion)
     shadow_candidates.sort(key=fitness_key)
 
     survivors = exact_333_survivors + elites + shadow_candidates[:shadow_slots]
-    selected_hashes = {individual.support_hash for individual in survivors}
     if len(survivors) < survivor_target:
-        remainder = [individual for individual in sorted(combined, key=fitness_key) if individual.support_hash not in selected_hashes]
-        survivors.extend(remainder[: survivor_target - len(survivors)])
+        selected_hashes = {individual.support_hash for individual in survivors}
+        for individual in combined:
+            if len(survivors) >= survivor_target:
+                break
+            if individual.support_hash not in selected_hashes:
+                survivors.append(individual)
+                selected_hashes.add(individual.support_hash)
     survivors.sort(key=fitness_key)
     return survivors[:survivor_target]
 
@@ -1483,7 +1553,8 @@ def log_generation(
 
 
 def generation_best(populations: list[list[Individual]]) -> Individual:
-    return min((individual for island in populations for individual in island), key=fitness_key)
+    # Islands are kept sorted by fitness_key; only need to compare leaders
+    return min((island[0] for island in populations if island), key=fitness_key)
 
 
 def summary_payload(
@@ -1609,6 +1680,24 @@ def main() -> None:
         last_logged_generation = current_generation
         last_checkpoint_generation = current_generation
 
+        # Batched integration: accumulate offspring per island, flush periodically
+        offspring_buffers: list[list[Individual]] = [[] for _ in range(NUM_ISLANDS)]
+        shadow_rebuild_counters: list[int] = [0] * NUM_ISLANDS
+
+        def flush_island(island_index: int) -> None:
+            """Flush buffered offspring for one island via a single select_survivors call."""
+            buf = offspring_buffers[island_index]
+            if not buf:
+                return
+            integrate_offspring_batch(populations, island_index, buf, variable_count_cache)
+            offspring_buffers[island_index] = []
+
+        def flush_all_islands() -> None:
+            for idx in range(NUM_ISLANDS):
+                flush_island(idx)
+                shadow_pools[idx] = build_shadow_pool(populations[idx])
+                shadow_rebuild_counters[idx] = 0
+
         def submit_one(island_index: int) -> None:
             global_best_fitness = math.inf if global_best is None else float(global_best.fitness)
             child = build_single_offspring(
@@ -1650,8 +1739,16 @@ def main() -> None:
                 individual.newton_polished = bool(result.get("newton_polished", False))
                 individual.support_signature = str(result.get("support_signature", support_signature_string(individual)))
                 individual.support_hash = str(result.get("support_hash", support_pattern_hash(individual)))
-                integrate_evaluated_offspring(populations, island_index, individual, variable_count_cache)
-                shadow_pools[island_index] = build_shadow_pool(populations[island_index])
+
+                # Buffer offspring; flush when batch is full
+                offspring_buffers[island_index].append(individual)
+                if len(offspring_buffers[island_index]) >= _INTEGRATION_BATCH_SIZE:
+                    flush_island(island_index)
+                    shadow_rebuild_counters[island_index] += 1
+                    if shadow_rebuild_counters[island_index] >= _SHADOW_REBUILD_BATCH:
+                        shadow_pools[island_index] = build_shadow_pool(populations[island_index])
+                        shadow_rebuild_counters[island_index] = 0
+
                 total_evaluations += 1
                 steady_state_completed += 1
                 if individual.newton_polished:
@@ -1663,6 +1760,9 @@ def main() -> None:
                     submit_one(island_index)
 
             next_generation = steady_state_generation(steady_state_completed)
+            # Flush all buffers on generation transition so generation_best sees all evaluated offspring
+            if next_generation > current_generation:
+                flush_all_islands()
             current_best = generation_best(populations)
             if is_better(current_best, global_best):
                 should_print_improvement = is_meaningful_numeric_improvement(current_best, global_best)
@@ -1691,6 +1791,7 @@ def main() -> None:
                 if MIGRATION_INTERVAL > 0 and current_generation % MIGRATION_INTERVAL == 0:
                     migrate(populations, island_rngs)
                     shadow_pools = [build_shadow_pool(population) for population in populations]
+                    shadow_rebuild_counters = [0] * NUM_ISLANDS
                 if current_generation % CHECKPOINT_INTERVAL == 0 and current_generation != last_checkpoint_generation:
                     write_checkpoint(
                         populations,
