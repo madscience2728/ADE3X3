@@ -187,10 +187,61 @@ def load_profile(profile_path: Path) -> dict | None:
 
 
 def latest_checkpoint(export_dir: Path) -> Path | None:
-    candidates = sorted(export_dir.glob("step84_checkpoint_gen*.json"))
-    if not candidates:
-        return None
-    return candidates[-1]
+    candidates = sorted(export_dir.glob("step84_checkpoint_gen*.json"), reverse=True)
+    for path in candidates:
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if "islands" in data:
+                return path
+        except (json.JSONDecodeError, OSError):
+            continue
+    return None
+
+
+def list_batches() -> list[dict]:
+    """Scan BATCH_EXPORTS for completed/in-progress runs and return metadata."""
+    if not BATCH_EXPORTS.exists():
+        return []
+    runs = []
+    for run_dir in sorted(
+        (d for d in BATCH_EXPORTS.iterdir() if d.is_dir() and d.name.startswith("run_")),
+        key=lambda d: d.name,
+        reverse=True,
+    ):
+        copy_dirs = sorted(run_dir.glob("copy_*"))
+        best_residual = None
+        copy_count = len(copy_dirs)
+        for copy_dir in copy_dirs:
+            best_path = copy_dir / "step84_best_individual.json"
+            if best_path.exists():
+                try:
+                    data = json.loads(best_path.read_text(encoding="utf-8"))
+                    v = data.get("verification", {})
+                    r = v.get("max_abs_residual") if v else data.get("fitness")
+                    if r is not None and math.isfinite(float(r)):
+                        if best_residual is None or float(r) < best_residual:
+                            best_residual = float(r)
+                except (json.JSONDecodeError, OSError, TypeError, ValueError):
+                    pass
+            # Fall back to summary
+            if best_residual is None:
+                summary_path = copy_dir / "step84_summary.json"
+                if summary_path.exists():
+                    try:
+                        data = json.loads(summary_path.read_text(encoding="utf-8"))
+                        r = data.get("best_fitness_ever")
+                        if r is not None and math.isfinite(float(r)):
+                            if best_residual is None or float(r) < best_residual:
+                                best_residual = float(r)
+                    except (json.JSONDecodeError, OSError, TypeError, ValueError):
+                        pass
+        runs.append({
+            "dir": str(run_dir),
+            "name": run_dir.name,
+            "copy_count": copy_count,
+            "best_residual": best_residual,
+        })
+    return runs
 
 
 def _purge_old_batches(current_batch: Path | None = None) -> None:
@@ -248,7 +299,7 @@ class RunManager:
     def is_running(self) -> bool:
         return any(copy.process.poll() is None for copy in self.copies)
 
-    def start(self, env_overrides: dict[str, str], copies: int = 1, fresh_start: bool = False) -> None:
+    def start(self, env_overrides: dict[str, str], copies: int = 1, fresh_start: bool = False, resume_run_dir: str | None = None) -> None:
         with self.lock:
             if self.is_running():
                 raise RuntimeError("Step 84 is already running")
@@ -258,6 +309,8 @@ class RunManager:
             previous_copies = list(self.copies)
             previous_batch_dir = self.batch_dir
             explicit_resume = bool(str(env_overrides.get("STEP84_RESUME_CHECKPOINT", "")).strip()) and not fresh_start
+            # resume_run_dir: resume each copy from its per-copy checkpoint in the chosen batch dir
+            run_dir_resume = Path(resume_run_dir) if resume_run_dir and not fresh_start else None
 
             env = os.environ.copy()
             env.setdefault("OMP_NUM_THREADS", "1")
@@ -274,9 +327,12 @@ class RunManager:
             self.resumed_copy_count = 0
 
             BATCH_EXPORTS.mkdir(parents=True, exist_ok=True)
-            auto_continue = previous_copies and not explicit_resume and not fresh_start
+            auto_continue = previous_copies and not explicit_resume and not fresh_start and not run_dir_resume
             if auto_continue and previous_batch_dir is not None:
                 self.batch_dir = previous_batch_dir
+                self.continued_from_previous = True
+            elif run_dir_resume is not None and run_dir_resume.is_dir():
+                self.batch_dir = run_dir_resume
                 self.continued_from_previous = True
             else:
                 batch_stamp = time.strftime("%Y%m%d_%H%M%S")
@@ -298,6 +354,11 @@ class RunManager:
                 copy_env["STEP84_SEED"] = str(base_seed + index)
                 if explicit_resume:
                     copy_env["STEP84_RESUME_CHECKPOINT"] = str(env_overrides["STEP84_RESUME_CHECKPOINT"])
+                elif run_dir_resume is not None:
+                    checkpoint_path = latest_checkpoint(run_dir_resume / f"copy_{index + 1:03d}")
+                    if checkpoint_path is not None:
+                        copy_env["STEP84_RESUME_CHECKPOINT"] = str(checkpoint_path)
+                        self.resumed_copy_count += 1
                 elif auto_continue and index < len(previous_copies):
                     checkpoint_path = latest_checkpoint(previous_copies[index].export_dir)
                     if checkpoint_path is not None:
@@ -488,6 +549,9 @@ class Step84TunerHandler(BaseHTTPRequestHandler):
         if parsed.path == "/api/state":
             self._send_json(RUN_MANAGER.payload())
             return
+        if parsed.path == "/api/batches":
+            self._send_json({"batches": list_batches()})
+            return
         if parsed.path in {"/", "/step84_tuner.html", "/step84_tuner.css", "/step84_tuner.js"}:
             target = "/step84_tuner.html" if parsed.path == "/" else parsed.path
             self._serve_static(target)
@@ -502,7 +566,8 @@ class Step84TunerHandler(BaseHTTPRequestHandler):
                 env = {str(key): str(value) for key, value in payload.get("env", {}).items()}
                 copies = int(payload.get("copies", 1))
                 fresh_start = bool(payload.get("fresh_start", False))
-                RUN_MANAGER.start(env, copies=copies, fresh_start=fresh_start)
+                resume_run_dir = str(payload["resume_run_dir"]).strip() if payload.get("resume_run_dir") else None
+                RUN_MANAGER.start(env, copies=copies, fresh_start=fresh_start, resume_run_dir=resume_run_dir)
             except RuntimeError as error:
                 self._send_json({"ok": False, "error": str(error)}, HTTPStatus.CONFLICT)
                 return

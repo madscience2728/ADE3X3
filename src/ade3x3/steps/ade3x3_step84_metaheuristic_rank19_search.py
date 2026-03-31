@@ -1623,7 +1623,21 @@ def maybe_resume() -> tuple[list[list[Individual]], list[np.random.Generator], d
     checkpoint_path = Path(RESUME_CHECKPOINT)
     if not checkpoint_path.exists():
         raise RuntimeError(f"Requested STEP84_RESUME_CHECKPOINT does not exist: {checkpoint_path}")
-    return load_checkpoint(checkpoint_path)
+    # Try the requested checkpoint first, then fall back to earlier ones in the same directory
+    candidates = [checkpoint_path] + sorted(
+        (p for p in checkpoint_path.parent.glob("step84_checkpoint_gen*.json") if p != checkpoint_path),
+        key=lambda p: p.name,
+        reverse=True,
+    )
+    for candidate in candidates:
+        try:
+            result = load_checkpoint(candidate)
+            if candidate != checkpoint_path:
+                print(f"[step84] WARNING: {checkpoint_path.name} was corrupt, resumed from {candidate.name} instead.")
+            return result
+        except (json.JSONDecodeError, KeyError, ValueError, OSError) as exc:
+            print(f"[step84] WARNING: checkpoint {candidate.name} is corrupt ({exc}), trying earlier checkpoint.")
+    raise RuntimeError(f"All checkpoints in {checkpoint_path.parent} are corrupt or unreadable. Cannot resume.")
 
 
 def log_generation(

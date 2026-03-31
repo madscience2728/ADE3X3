@@ -131,7 +131,16 @@
                         </select>
                     </div>
                     <div>
-                        <label for="resume-checkpoint">STEP84_RESUME_CHECKPOINT</label>
+                        <label for="resume-run-select">Resume from saved run</label>
+                        <div style="display:flex;gap:6px;align-items:center">
+                            <select id="resume-run-select" style="flex:1">
+                                <option value="">— none (auto-continue or fresh) —</option>
+                            </select>
+                            <button type="button" id="refresh-runs" class="ghost-button" style="white-space:nowrap;padding:2px 8px">↺</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="resume-checkpoint">STEP84_RESUME_CHECKPOINT (single path override)</label>
                         <input id="resume-checkpoint" type="text" value="">
                     </div>
                 </div>

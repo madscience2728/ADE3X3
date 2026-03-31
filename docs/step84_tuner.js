@@ -1,6 +1,34 @@
 const STORAGE_KEY = "ade3x3-step84-tuner";
 const STORAGE_SCHEMA_VERSION = 2;
 const POLL_INTERVAL_MS = 2000;
+
+let selectedResumeRunDir = "";
+
+async function loadBatchList() {
+    const select = document.getElementById("resume-run-select");
+    if (!select) return;
+    try {
+        const data = await apiRequest("/api/batches");
+        const batches = data.batches || [];
+        // keep the placeholder option, replace the rest
+        while (select.options.length > 1) select.remove(1);
+        for (const b of batches) {
+            const opt = document.createElement("option");
+            opt.value = b.dir;
+            const residualStr = b.best_residual != null
+                ? ` — best ${b.best_residual.toExponential(3)} (÷√27: ${(b.best_residual / Math.sqrt(27)).toFixed(4)})`
+                : " — no residual data";
+            opt.textContent = `${b.name}  [${b.copy_count} copies]${residualStr}`;
+            if (b.dir === selectedResumeRunDir) opt.selected = true;
+            select.appendChild(opt);
+        }
+        // Restore selection if still valid
+        if (selectedResumeRunDir && [...select.options].some(o => o.value === selectedResumeRunDir)) {
+            select.value = selectedResumeRunDir;
+        }
+    } catch (_) { /* server not running yet */ }
+}
+
 const PLOTLY_LAYOUT_BASE = {
     paper_bgcolor: "rgba(0,0,0,0)",
     plot_bgcolor: "rgba(255,251,245,0.92)",
@@ -1365,7 +1393,12 @@ async function startRun(freshStart = false) {
         }
         const payload = await apiRequest("/api/run/start", {
             method: "POST",
-            body: JSON.stringify({ env: buildEnvObject(state), copies: state.batchCopies, fresh_start: freshStart })
+            body: JSON.stringify({
+                env: buildEnvObject(state),
+                copies: state.batchCopies,
+                fresh_start: freshStart,
+                resume_run_dir: freshStart ? "" : (selectedResumeRunDir || ""),
+            })
         });
         freshDraftUnlocked = false;
         lockedBatchState = sanitizeState(state);
@@ -1444,6 +1477,14 @@ function wireActions() {
     document.getElementById("start-run").addEventListener("click", () => startRun(false));
     document.getElementById("start-fresh-run").addEventListener("click", () => startRun(true));
     document.getElementById("stop-run").addEventListener("click", stopRun);
+
+    const resumeRunSelect = document.getElementById("resume-run-select");
+    if (resumeRunSelect) {
+        resumeRunSelect.addEventListener("change", () => { selectedResumeRunDir = resumeRunSelect.value; });
+        loadBatchList();
+    }
+    const refreshRunsBtn = document.getElementById("refresh-runs");
+    if (refreshRunsBtn) refreshRunsBtn.addEventListener("click", loadBatchList);
     document.getElementById("refresh-state").addEventListener("click", refreshServerState);
     document.getElementById("fitness-scale-toggle").addEventListener("click", () => {
         fitnessScaleMode = fitnessScaleMode === "log" ? "linear" : "log";
