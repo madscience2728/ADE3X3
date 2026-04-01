@@ -42,9 +42,17 @@ def _signal_handler(signum, frame):
     print("\n[orchestrator] Graceful shutdown requested (Ctrl+C). Finishing current generation...")
 
 
-def seed_from_json(conn, json_paths: list[Path], generation: int = 0) -> int:
-    """Import JSON candidates into the database."""
+def seed_from_json(conn, json_paths: list[Path], generation: int = 0,
+                   n_islands: int | None = None, perturbations: int = 20) -> int:
+    """Import JSON candidates into the database with perturbed copies.
+
+    For each JSON file, inserts the original plus *perturbations* mutated copies
+    at geometrically increasing sigma, spread round-robin across all islands.
+    """
+    target_n_islands = n_islands if n_islands is not None else N_ISLANDS
+    rng = np.random.default_rng()
     count = 0
+
     for p in json_paths:
         if not p.exists():
             continue
@@ -53,6 +61,8 @@ def seed_from_json(conn, json_paths: list[Path], generation: int = 0) -> int:
         if len(data.get("terms", [])) != RANK:
             continue
         alpha, beta, gamma = factors_from_json(data)
+
+        # Insert original
         blob = factors_to_blob(alpha, beta, gamma)
         s_hash = compute_support_hash(alpha, beta, gamma)
         s_sig = compute_support_sig(alpha, beta, gamma)
@@ -65,11 +75,10 @@ def seed_from_json(conn, json_paths: list[Path], generation: int = 0) -> int:
                 fitness_fp32, fitness_fp64, fro_residual,
                 generation, status, tier_reached, created_at, evaluated_at)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-            (blob, s_hash, s_sig, "seed", hash(s_hash) % N_ISLANDS,
+            (blob, s_hash, s_sig, "seed", count % target_n_islands,
              float(fit), float(fit), float(fro),
              generation, "refined", 3, now, now),
         )
-        # Also insert into shadow
         conn.execute(
             """INSERT OR IGNORE INTO shadow
                (factors_blob, support_hash, fitness_fp64, origin_run, archived_at)
@@ -77,6 +86,34 @@ def seed_from_json(conn, json_paths: list[Path], generation: int = 0) -> int:
             (blob, s_hash, float(fit), "seed", now),
         )
         count += 1
+
+        # Insert perturbed copies at varying sigma, spread across islands
+        sigmas = np.geomspace(0.001, 0.10, perturbations)
+        for i, sigma in enumerate(sigmas):
+            a2, b2, g2 = alpha.copy(), beta.copy(), gamma.copy()
+            # Perturb a random subset of coefficients (5-30%)
+            n_perturb = rng.integers(max(1, RANK), max(2, RANK * DIM // 3))
+            for _ in range(n_perturb):
+                fi = rng.integers(3)
+                ri = rng.integers(RANK)
+                di = rng.integers(DIM)
+                [a2, b2, g2][fi][ri, di] += rng.normal(0, sigma)
+            blob2 = factors_to_blob(a2, b2, g2)
+            s_hash2 = compute_support_hash(a2, b2, g2)
+            s_sig2 = compute_support_sig(a2, b2, g2)
+            island = (count) % target_n_islands
+            conn.execute(
+                """INSERT INTO candidates
+                   (factors_blob, support_hash, support_sig, origin, virtual_island,
+                    fitness_fp32, fitness_fp64, fro_residual,
+                    generation, status, tier_reached, created_at, evaluated_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (blob2, s_hash2, s_sig2, f"seed_perturb_s{sigma:.4f}", island,
+                 None, None, None,
+                 generation, "pending", 0, now, None),
+            )
+            count += 1
+
     conn.commit()
     return count
 

@@ -250,7 +250,7 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
         fetch_refine_candidates, update_refined, update_minimax_batch,
         prune_duplicates, archive_to_shadow, pending_count, island_counts,
         insert_candidates, log_event,
-        promote_best, demote_random,
+        promote_best, demote_random, fetch_shadow_pool,
     )
     import numpy as np
 
@@ -409,6 +409,33 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
             # (not read_only=True; Windows backslash paths break ?mode=ro URIs)
             gen_read_conn = get_connection(db_path, check_same_thread=False)
 
+            # Shadow pool + plateau detection state
+            shadow_pool = []
+            shadow_refresh_cycle = 0
+            plateau_gens = 0
+            last_best_fitness = None
+
+            # ── Adaptive sigma per island ──
+            # Tracks per-island best and scales sigma based on stagnation
+            island_best_fitness: dict[int, float] = {}
+            island_stale_cycles: dict[int, int] = {}
+            island_sigma_mult: dict[int, float] = {}  # multiplier on base sigma
+            SIGMA_GROW = 1.3       # multiply sigma by this each stale cycle
+            SIGMA_DECAY = 0.85     # decay toward 1.0 on improvement
+            SIGMA_MAX_MULT = 10.0  # cap: 10x base sigma
+            SIGMA_MIN_MULT = 0.5   # floor: half base sigma on rapid improvement
+
+            # ── Operator credit assignment (per island) ──
+            # EMA of success rate per operator → adaptive probabilities
+            OP_NAMES = ["mutate_coeff", "mutate_gaussian", "crossover", "shadow_reinject", "mutate_support"]
+            island_op_credits: dict[int, dict[str, float]] = {}
+            OP_EMA_ALPHA = 0.15   # learning rate for credit updates
+            OP_MIN_PROB = 0.03    # floor probability for any operator
+
+            # ── Random immigrant injection ──
+            IMMIGRANT_PLATEAU_THRESH = 30  # stale cycles before injection
+            HYPERMUT_PLATEAU_THRESH = 20   # stale cycles before sigma spike
+
             while _is_running():
                 _set_activity("generator", "checking", "backpressure")
                 n_pend = pending_count(gen_read_conn)
@@ -423,6 +450,97 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
 
                 t0 = time.time()
                 counts = island_counts(gen_read_conn, N_ISLANDS)
+
+                # Refresh shadow pool every 10 cycles
+                shadow_refresh_cycle += 1
+                if shadow_refresh_cycle >= 10 or not shadow_pool:
+                    shadow_refresh_cycle = 0
+                    shadow_rows = fetch_shadow_pool(gen_read_conn, limit=200)
+                    if shadow_rows:
+                        shadow_pool = [blob_to_factors(r["factors_blob"]) for r in shadow_rows]
+
+                # Plateau detection: track if best fitness is stagnant
+                cur_best_row = gen_read_conn.execute(
+                    "SELECT MIN(COALESCE(fitness_fp64, fitness_fp32)) as best FROM candidates WHERE fitness_fp32 IS NOT NULL"
+                ).fetchone()
+                cur_best = cur_best_row["best"] if cur_best_row else None
+                if cur_best is not None and last_best_fitness is not None:
+                    if cur_best < last_best_fitness - 1e-12:
+                        plateau_gens = 0  # improving
+                    else:
+                        plateau_gens += 1
+                if cur_best is not None:
+                    last_best_fitness = cur_best
+                # Shadow rate multiplier: 1x normally, ramp to 3x on plateau (after 10 stale gens)
+                shadow_boost = min(3.0, 1.0 + max(0, plateau_gens - 10) * 0.2)
+
+                # ── Update per-island adaptive state ──
+                for island_meta in ISLAND_LAYOUT:
+                    isl = island_meta["id"]
+                    row = gen_read_conn.execute(
+                        "SELECT MIN(COALESCE(fitness_fp64, fitness_fp32)) as best FROM candidates "
+                        "WHERE virtual_island = ? AND fitness_fp32 IS NOT NULL",
+                        (isl,),
+                    ).fetchone()
+                    isl_best = row["best"] if row and row["best"] is not None else None
+                    if isl_best is None:
+                        continue
+                    prev = island_best_fitness.get(isl)
+                    if prev is not None and isl_best < prev - 1e-12:
+                        # Improvement: decay sigma multiplier toward 1.0
+                        island_stale_cycles[isl] = 0
+                        island_sigma_mult[isl] = max(SIGMA_MIN_MULT,
+                                                     island_sigma_mult.get(isl, 1.0) * SIGMA_DECAY)
+                        # Credit the operator that produced the improvement
+                        best_origin = gen_read_conn.execute(
+                            "SELECT origin FROM candidates WHERE virtual_island = ? "
+                            "AND COALESCE(fitness_fp64, fitness_fp32) = ? LIMIT 1",
+                            (isl, isl_best),
+                        ).fetchone()
+                        if best_origin:
+                            op = best_origin["origin"]
+                            credits = island_op_credits.setdefault(isl,
+                                {name: 1.0 / len(OP_NAMES) for name in OP_NAMES})
+                            for name in OP_NAMES:
+                                if name == op:
+                                    credits[name] += OP_EMA_ALPHA * (1.0 - credits[name])
+                                else:
+                                    credits[name] *= (1.0 - OP_EMA_ALPHA)
+                    else:
+                        stale = island_stale_cycles.get(isl, 0) + 1
+                        island_stale_cycles[isl] = stale
+                        # Stagnation: grow sigma multiplier
+                        if stale >= 3:
+                            island_sigma_mult[isl] = min(SIGMA_MAX_MULT,
+                                                         island_sigma_mult.get(isl, 1.0) * SIGMA_GROW)
+                    island_best_fitness[isl] = isl_best
+
+                # ── Hypermutation: spike sigma on moderate plateau ──
+                hypermut_active = (plateau_gens >= HYPERMUT_PLATEAU_THRESH
+                                   and plateau_gens % 5 == 0)
+
+                # ── Random immigrant injection on deep plateau ──
+                if plateau_gens >= IMMIGRANT_PLATEAU_THRESH and plateau_gens % 10 == 0:
+                    n_immigrants = max(N_ISLANDS, GENERATION_BATCH_SIZE // 20)
+                    imm_rows = []
+                    imm_alloc = _allocate_island_budget(
+                        [{"id": m["id"], "room": m["cap"], "weight": m["cap"]}
+                         for m in ISLAND_LAYOUT if m["role"] in ("explore", "wide_explore", "balanced")],
+                        n_immigrants,
+                    )
+                    gen = _gen_counter[0]
+                    for isl, n_imm in imm_alloc.items():
+                        for _ in range(n_imm):
+                            a = rng.standard_normal((cfg.RANK, cfg.DIM))
+                            b = rng.standard_normal((cfg.RANK, cfg.DIM))
+                            g = rng.standard_normal((cfg.RANK, cfg.DIM))
+                            blob = factors_to_blob(a, b, g)
+                            s_hash = compute_support_hash(a, b, g)
+                            s_sig = compute_support_sig(a, b, g)
+                            imm_rows.append((blob, s_hash, s_sig, "random_immigrant", isl, gen))
+                    if imm_rows:
+                        _db_submit("insert_candidates", (imm_rows,))
+                        print(f"  [GEN] Injected {len(imm_rows)} random immigrants (plateau={plateau_gens})")
 
                 # Per-island generation using island-specific configs
                 _set_activity("generator", "working", "selecting parents")
@@ -454,13 +572,46 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                     role = island_meta["role"]
                     icfg = ISLAND_CONFIG.get(role, ISLAND_CONFIG["balanced"])
                     parents = [blob_to_factors(row["factors_blob"]) for row in parent_rows_by_island[island]]
+                    effective_p_shadow = min(0.40, icfg["p_shadow"] * shadow_boost)
+
+                    # Adaptive sigma: base × island multiplier × hypermutation spike
+                    sigma_mult = island_sigma_mult.get(island, 1.0)
+                    if hypermut_active:
+                        sigma_mult = max(sigma_mult, 5.0)
+                    effective_sigma = icfg["sigma"] * sigma_mult
+
+                    # Adaptive operator probabilities from credit assignment
+                    credits = island_op_credits.get(island)
+                    if credits:
+                        total_credit = sum(credits.values())
+                        if total_credit > 0:
+                            normed = {k: max(OP_MIN_PROB, v / total_credit) for k, v in credits.items()}
+                            s = sum(normed.values())
+                            eff_p_coeff = normed.get("mutate_coeff", icfg["p_coeff"]) / s
+                            eff_p_gauss = normed.get("mutate_gaussian", icfg["p_gaussian"]) / s
+                            eff_p_cross = normed.get("crossover", icfg["p_crossover"]) / s
+                            # shadow is boosted separately; scale remaining ops
+                            remaining = 1.0 - effective_p_shadow
+                            op_sum = eff_p_coeff + eff_p_gauss + eff_p_cross
+                            if op_sum > 0:
+                                eff_p_coeff = eff_p_coeff / op_sum * remaining * 0.85
+                                eff_p_gauss = eff_p_gauss / op_sum * remaining * 0.85
+                                eff_p_cross = eff_p_cross / op_sum * remaining * 0.85
+                            else:
+                                eff_p_coeff, eff_p_gauss, eff_p_cross = icfg["p_coeff"], icfg["p_gaussian"], icfg["p_crossover"]
+                        else:
+                            eff_p_coeff, eff_p_gauss, eff_p_cross = icfg["p_coeff"], icfg["p_gaussian"], icfg["p_crossover"]
+                    else:
+                        eff_p_coeff, eff_p_gauss, eff_p_cross = icfg["p_coeff"], icfg["p_gaussian"], icfg["p_crossover"]
+
                     children = generate_batch(
                         parents, n_children, rng,
-                        p_coeff=icfg["p_coeff"],
-                        p_gaussian=icfg["p_gaussian"],
-                        p_crossover=icfg["p_crossover"],
-                        p_shadow=icfg["p_shadow"],
-                        sigma=icfg["sigma"],
+                        shadow_pool=shadow_pool or None,
+                        p_coeff=eff_p_coeff,
+                        p_gaussian=eff_p_gauss,
+                        p_crossover=eff_p_cross,
+                        p_shadow=effective_p_shadow,
+                        sigma=effective_sigma,
                     )
 
                     gen = _gen_counter[0]
@@ -496,13 +647,19 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                             island_meta = ISLAND_LAYOUT[island]
                             role = island_meta["role"]
                             icfg = ISLAND_CONFIG.get(role, ISLAND_CONFIG["balanced"])
+                            effective_p_shadow = min(0.40, icfg["p_shadow"] * shadow_boost)
+                            fb_sigma_mult = island_sigma_mult.get(island, 1.0)
+                            if hypermut_active:
+                                fb_sigma_mult = max(fb_sigma_mult, 5.0)
+                            fb_sigma = icfg["sigma"] * fb_sigma_mult
                             children = generate_batch(
                                 parents, n_children, rng,
+                                shadow_pool=shadow_pool or None,
                                 p_coeff=icfg["p_coeff"],
                                 p_gaussian=icfg["p_gaussian"],
                                 p_crossover=icfg["p_crossover"],
-                                p_shadow=icfg["p_shadow"],
-                                sigma=icfg["sigma"],
+                                p_shadow=effective_p_shadow,
+                                sigma=fb_sigma,
                             )
                             fb_rows = []
                             for alpha, beta, gamma, origin in children:
@@ -874,7 +1031,7 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                 from db_optimizer.orchestrator import seed_from_json
                 seed_paths = sorted(seed_dir.glob("optimized_*.json"))
                 if seed_paths:
-                    n = seed_from_json(conn, seed_paths)
+                    n = seed_from_json(conn, seed_paths, n_islands=N_ISLANDS)
                     with _optimizer_lock:
                         _optimizer_status["total_candidates"] = n
                     log_event(conn, "seed", generation=0, detail_json=json.dumps({"count": n, "mode": "resume_fallback"}))
@@ -896,7 +1053,7 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
             else:
                 seed_paths = sorted(seed_dir.glob("optimized_*.json"))
             if seed_paths:
-                n = seed_from_json(conn, seed_paths)
+                n = seed_from_json(conn, seed_paths, n_islands=N_ISLANDS)
                 with _optimizer_lock:
                     _optimizer_status["total_candidates"] = n
                 log_event(conn, "seed", generation=0, detail_json=json.dumps({"count": n, "mode": "seed"}))

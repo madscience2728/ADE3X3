@@ -158,6 +158,14 @@ def archive_to_shadow(conn: sqlite3.Connection, cid: int) -> None:
         "SELECT factors_blob, support_hash, fitness_fp64 FROM candidates WHERE id = ?",
         (cid,),
     ).fetchone()
+
+
+def fetch_shadow_pool(conn: sqlite3.Connection, limit: int = 200) -> list[sqlite3.Row]:
+    """Fetch top shadow candidates for reinject diversity."""
+    return conn.execute(
+        "SELECT factors_blob FROM shadow ORDER BY fitness_fp64 ASC LIMIT ?",
+        (limit,),
+    ).fetchall()
     if row and row["fitness_fp64"] is not None:
         conn.execute(
             """INSERT OR IGNORE INTO shadow

@@ -340,13 +340,26 @@ function updateIslandChart(history) {
         return;
     }
 
-    const traces = islands.map((isl, idx) => ({
-        x: history.filter(h => h.island_bests && h.island_bests[isl] != null).map(h => h.generation),
-        y: history.filter(h => h.island_bests && h.island_bests[isl] != null).map(h => h.island_bests[isl]),
-        mode: "lines",
-        name: `Island ${isl}`,
-        line: { color: ISLAND_COLORS[idx % ISLAND_COLORS.length], width: 1.5 },
-    }));
+    const traces = islands.map((isl, idx) => {
+        // Carry forward last known value to fill gaps
+        const xs = [], ys = [];
+        let last = null;
+        for (const h of history) {
+            const v = h.island_bests && h.island_bests[isl] != null ? h.island_bests[isl] : null;
+            if (v != null) last = v;
+            if (last != null) {
+                xs.push(h.generation);
+                ys.push(last);
+            }
+        }
+        return {
+            x: xs,
+            y: ys,
+            mode: "lines",
+            name: `Island ${isl}`,
+            line: { color: ISLAND_COLORS[idx % ISLAND_COLORS.length], width: 1.5 },
+        };
+    });
 
     if (!chartIslandsInit) {
         Plotly.newPlot("chart-islands", traces, PLOTLY_LAYOUT, PLOTLY_CONFIG);
