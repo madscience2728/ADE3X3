@@ -3,7 +3,7 @@ let polling = null;
 
 // ── Hyperparameter defaults & wiring ────────────────
 const defaults = {
-    n_islands: 8,
+    n_islands: 32,
     batch_size: 8192,
     max_pending: 200000,
     elite_k: 20,
@@ -22,6 +22,10 @@ const defaults = {
     max_generations: 100000,
     cpu_workers: Math.max(1, (navigator.hardwareConcurrency || 4) - 2),
     refine_batch: 44,
+    gpu_minimax_sweeps: 3,
+    gpu_minimax_batch: 40000,
+    gpu_minimax_n_trials: 64,
+    gpu_minimax_fine_range: 0.005,
 };
 
 const fieldMap = {
@@ -44,10 +48,14 @@ const fieldMap = {
     max_generations: "cfg-max-gens",
     cpu_workers: "cfg-cpu-workers",
     refine_batch: "cfg-refine-batch",
+    gpu_minimax_sweeps: "cfg-gpu-mm-sweeps",
+    gpu_minimax_batch: "cfg-gpu-mm-batch",
+    gpu_minimax_n_trials: "cfg-gpu-mm-trials",
+    gpu_minimax_fine_range: "cfg-gpu-mm-fine",
 };
 
 const settingHelp = {
-    n_islands: "Number of virtual islands for population diversity. Each island evolves semi-independently with occasional migration. Reasonable range: 2–16.",
+    n_islands: "Number of active islands sampled from the full role×size lattice. Higher values cover more role/size combinations; lower values keep the search tighter.",
     batch_size: "Children generated per generation across all islands. Larger batches exploit GPU parallelism better but increase memory. Reasonable range: 256–8192.",
     max_pending: "Maximum candidates waiting for GPU screening. Acts as backpressure — generation pauses when this is full. Reasonable range: 10000–200000.",
     elite_k: "Top K candidates per island used as parents for the next generation. Higher values increase diversity; lower values increase selection pressure. Reasonable range: 3–30.",
@@ -66,11 +74,24 @@ const settingHelp = {
     max_generations: "Maximum generations before the optimizer stops. Use a large value for open-ended search. Reasonable range: 1000–10000000.",
     cpu_workers: "Number of parallel CPU processes for minimax coordinate descent refinement. Default is (CPU cores − 2). Higher values increase CPU utilization but also memory usage. Reasonable range: 4–24.",
     refine_batch: "Number of candidates sent to the CPU refine pool per cycle. Should be ≥ cpu_workers to keep all workers busy. Reasonable range: 10–100.",
+    gpu_minimax_sweeps: "Number of GPU minimax coordinate descent sweeps (Tier 2). Each sweep iterates all 513 coefficients on GPU. More sweeps = better refinement, higher GPU utilization. Reasonable range: 1–10.",
+    gpu_minimax_batch: "Maximum candidates per GPU minimax batch. Larger batches fill more GPU SMs. Capped by VRAM. Reasonable range: 5000–60000.",
+    gpu_minimax_n_trials: "Trial perturbations per coefficient during GPU minimax. More trials = more parallel GPU work per step. Reasonable range: 16–128.",
+    gpu_minimax_fine_range: "Half-width of perturbation grid during GPU minimax. Wider = more exploration per sweep. Reasonable range: 0.001–0.01.",
 };
+
+function resetSettings() {
+    localStorage.removeItem("dbopt_settings");
+    for (const [key, elId] of Object.entries(fieldMap)) {
+        const el = $(elId);
+        if (el) el.value = defaults[key];
+    }
+    markDirty();
+}
 
 function loadSettings() {
     const saved = localStorage.getItem("dbopt_settings");
-    const state = saved ? JSON.parse(saved) : { ...defaults };
+    const state = saved ? { ...defaults, ...JSON.parse(saved) } : { ...defaults };
     for (const [key, elId] of Object.entries(fieldMap)) {
         const el = $(elId);
         if (el) el.value = state[key] ?? defaults[key];
@@ -265,10 +286,6 @@ function updateActivity(activity) {
     }
 }
 
-const ISLAND_ROLE_NAMES = [
-    "elite", "strong", "exploit", "balanced", "balanced", "explore", "explore", "wide"
-];
-
 function updateIslands(islands) {
     const tbody = $("island-tbody");
     if (!tbody) return;
@@ -276,10 +293,11 @@ function updateIslands(islands) {
     for (const s of islands) {
         if (s.count === 0) continue;
         const tr = document.createElement("tr");
-        const role = ISLAND_ROLE_NAMES[s.island] || "—";
         tr.innerHTML = `
             <td>${s.island}</td>
-            <td>${role}</td>
+            <td>${s.role || "—"}</td>
+            <td>2^${s.size_exp ?? "—"}</td>
+            <td>${s.cap != null ? s.cap.toLocaleString() : "—"}</td>
             <td>${s.count}</td>
             <td>${s.best != null ? s.best.toFixed(6) : "—"}</td>
             <td>${s.mean != null ? s.mean.toFixed(6) : "—"}</td>
@@ -434,9 +452,10 @@ $("btn-start").addEventListener("click", async () => {
         cfg.mode = mode;
         if (pathEl && pathEl.value) cfg.seed_path = pathEl.value;
 
-        if (mode === "fresh") {
+        if (mode === "fresh" || mode === "seed") {
+            const label = mode === "seed" ? "Seed from JSON" : "Fresh random";
             const confirmed = window.confirm(
-                "Fresh run will permanently clear the current optimizer database before starting. Continue?"
+                `${label} will permanently clear the current optimizer database before starting. Continue?`
             );
             if (!confirmed) {
                 return;
@@ -457,7 +476,7 @@ $("btn-start").addEventListener("click", async () => {
             throw new Error(data.error || `${resp.status}`);
         }
 
-        if (mode === "fresh") {
+        if (mode === "fresh" || mode === "seed") {
             clearDashboardForFreshRun();
             if (data.backup_path) {
                 alert(`Database backed up to:\n${data.backup_path}`);

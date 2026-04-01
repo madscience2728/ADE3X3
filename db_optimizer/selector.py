@@ -174,6 +174,21 @@ def pending_count(conn: sqlite3.Connection) -> int:
     return row["cnt"]
 
 
+def island_counts(conn: sqlite3.Connection, n_islands: int) -> list[int]:
+    """Return total population count per island, including pending rows."""
+    counts = [0] * n_islands
+    rows = conn.execute(
+        """SELECT virtual_island, COUNT(*) as cnt
+           FROM candidates
+           GROUP BY virtual_island"""
+    ).fetchall()
+    for row in rows:
+        island = row["virtual_island"]
+        if 0 <= island < n_islands:
+            counts[island] = row["cnt"]
+    return counts
+
+
 def island_stats(conn: sqlite3.Connection, n_islands: int) -> list[dict]:
     """Per-island statistics."""
     stats = []
@@ -181,16 +196,18 @@ def island_stats(conn: sqlite3.Connection, n_islands: int) -> list[dict]:
         row = conn.execute(
             """SELECT
                  COUNT(*) as cnt,
+                 SUM(CASE WHEN fitness_fp32 IS NOT NULL THEN 1 ELSE 0 END) as scored,
                  MIN(fitness_fp32) as best,
                  AVG(fitness_fp32) as mean,
                  MAX(fitness_fp32) as worst
                FROM candidates
-               WHERE virtual_island = ? AND fitness_fp32 IS NOT NULL""",
+               WHERE virtual_island = ?""",
             (island,),
         ).fetchone()
         stats.append({
             "island": island,
             "count": row["cnt"],
+            "scored": row["scored"] or 0,
             "best": row["best"],
             "mean": row["mean"],
             "worst": row["worst"],
@@ -254,8 +271,22 @@ def update_minimax_batch(
 
 # ── Power-law island migration ───────────────────────────────────────
 
-def promote_best(conn: sqlite3.Connection, src_island: int, dst_island: int, k: int = 1) -> int:
+def promote_best(
+    conn: sqlite3.Connection,
+    src_island: int,
+    dst_island: int,
+    k: int = 1,
+    dst_capacity: int | None = None,
+) -> int:
     """Promote the best k candidates from a larger island to a smaller one."""
+    if dst_capacity is not None:
+        current = conn.execute(
+            "SELECT COUNT(*) as cnt FROM candidates WHERE virtual_island = ?",
+            (dst_island,),
+        ).fetchone()["cnt"]
+        k = min(k, max(0, dst_capacity - current))
+        if k <= 0:
+            return 0
     rows = conn.execute(
         """SELECT id FROM candidates
            WHERE virtual_island = ? AND fitness_fp32 IS NOT NULL
@@ -274,8 +305,22 @@ def promote_best(conn: sqlite3.Connection, src_island: int, dst_island: int, k: 
     return len(ids)
 
 
-def demote_random(conn: sqlite3.Connection, src_island: int, dst_island: int, k: int = 1) -> int:
+def demote_random(
+    conn: sqlite3.Connection,
+    src_island: int,
+    dst_island: int,
+    k: int = 1,
+    dst_capacity: int | None = None,
+) -> int:
     """Demote k random candidates from a smaller island to a larger one (diversity injection)."""
+    if dst_capacity is not None:
+        current = conn.execute(
+            "SELECT COUNT(*) as cnt FROM candidates WHERE virtual_island = ?",
+            (dst_island,),
+        ).fetchone()["cnt"]
+        k = min(k, max(0, dst_capacity - current))
+        if k <= 0:
+            return 0
     rows = conn.execute(
         """SELECT id FROM candidates
            WHERE virtual_island = ? AND fitness_fp32 IS NOT NULL

@@ -54,6 +54,24 @@ def gpu_batch_fitness(
     beta_np = np.stack([f[1] for f in factors_list])
     gamma_np = np.stack([f[2] for f in factors_list])
 
+    return gpu_batch_fitness_stacked(alpha_np, beta_np, gamma_np, device=device, dtype=dtype)
+
+
+def gpu_batch_fitness_stacked(
+    alpha_np: np.ndarray,
+    beta_np: np.ndarray,
+    gamma_np: np.ndarray,
+    device: torch.device | None = None,
+    dtype: torch.dtype = torch.float32,
+) -> np.ndarray:
+    """Tier 1: Compute max-abs fitness from pre-stacked (N, RANK, DIM) arrays."""
+    if device is None:
+        device = _get_device()
+
+    N = alpha_np.shape[0]
+    if N == 0:
+        return np.array([], dtype=np.float32)
+
     alpha_t = torch.tensor(alpha_np, dtype=dtype, device=device)
     beta_t = torch.tensor(beta_np, dtype=dtype, device=device)
     gamma_t = torch.tensor(gamma_np, dtype=dtype, device=device)
@@ -124,7 +142,28 @@ def gpu_minimax_refine(
     fine_range: float = GPU_MINIMAX_FINE_RANGE,
     device: torch.device | None = None,
 ) -> list[tuple[np.ndarray, np.ndarray, np.ndarray, float]]:
-    """Tier 2: GPU-accelerated minimax coordinate descent.
+    """Tier 2: GPU-accelerated minimax coordinate descent (list-of-tuples API)."""
+    N = len(factors_list)
+    if N == 0:
+        return []
+    alpha_np = np.stack([f[0] for f in factors_list])
+    beta_np = np.stack([f[1] for f in factors_list])
+    gamma_np = np.stack([f[2] for f in factors_list])
+    return gpu_minimax_refine_stacked(alpha_np, beta_np, gamma_np,
+                                      sweeps=sweeps, n_trials=n_trials,
+                                      fine_range=fine_range, device=device)
+
+
+def gpu_minimax_refine_stacked(
+    alpha_np: np.ndarray,
+    beta_np: np.ndarray,
+    gamma_np: np.ndarray,
+    sweeps: int = GPU_MINIMAX_SWEEPS,
+    n_trials: int = GPU_MINIMAX_N_TRIALS,
+    fine_range: float = GPU_MINIMAX_FINE_RANGE,
+    device: torch.device | None = None,
+) -> list[tuple[np.ndarray, np.ndarray, np.ndarray, float]]:
+    """Tier 2: GPU-accelerated minimax coordinate descent from pre-stacked arrays.
 
     For each candidate, performs ``sweeps`` passes over all 513 coefficients.
     Each coefficient is perturbed with ``n_trials`` linearly-spaced trial values
@@ -136,7 +175,7 @@ def gpu_minimax_refine(
 
     Parameters
     ----------
-    factors_list : list of (alpha, beta, gamma), each (RANK, DIM) arrays
+    alpha_np, beta_np, gamma_np : pre-stacked (N, RANK, DIM) float64 arrays
     sweeps : coordinate descent passes over all 513 coefficients
     n_trials : trial perturbations per coefficient
     fine_range : half-width of perturbation grid around current value
@@ -149,14 +188,9 @@ def gpu_minimax_refine(
     if device is None:
         device = _get_device()
 
-    N = len(factors_list)
+    N = alpha_np.shape[0]
     if N == 0:
         return []
-
-    # Pack into GPU tensors (N, R, DIM)
-    alpha_np = np.stack([f[0] for f in factors_list])
-    beta_np = np.stack([f[1] for f in factors_list])
-    gamma_np = np.stack([f[2] for f in factors_list])
 
     alpha = torch.tensor(alpha_np, dtype=torch.float32, device=device)
     beta = torch.tensor(beta_np, dtype=torch.float32, device=device)

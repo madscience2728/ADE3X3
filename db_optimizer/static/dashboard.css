@@ -186,6 +186,15 @@ h2 { font-size: 1.1rem; }
 
 .action-button--stop:hover:not(:disabled) { background: #a33025; }
 
+.action-button--reset {
+    background: var(--muted);
+    color: #fff;
+    font-size: 0.78rem;
+    padding: 5px 14px;
+}
+
+.action-button--reset:hover:not(:disabled) { background: #3d423d; }
+
 /* ── Status grid ────────────────────────────────────── */
 .status-grid {
     display: grid;

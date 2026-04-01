@@ -123,7 +123,7 @@
                 </div>
                 <div id="island-table-container">
                     <table class="data-table" id="island-table">
-                        <thead><tr><th>Island</th><th>Role</th><th>Count</th><th>Best</th><th>Mean</th></tr></thead>
+                        <thead><tr><th>Island</th><th>Role</th><th>Size</th><th>Cap</th><th>Count</th><th>Best</th><th>Mean</th></tr></thead>
                         <tbody id="island-tbody"></tbody>
                     </table>
                 </div>
@@ -134,8 +134,9 @@
                 <div class="control-grid">
                     <label for="cfg-seed-mode">Start Mode</label>
                     <select id="cfg-seed-mode">
-                        <option value="seed" selected>Seed from JSON</option>
-                        <option value="fresh">Start fresh</option>
+                        <option value="resume" selected>Resume</option>
+                        <option value="seed">Seed from JSON (wipe DB)</option>
+                        <option value="fresh">Fresh random (wipe DB)</option>
                     </select>
                     <label for="cfg-seed-path">Seed Path</label>
                     <input type="text" id="cfg-seed-path" placeholder="(repo root)">
@@ -143,6 +144,7 @@
 
                 <div class="panel__header panel__header--spaced">
                     <h2>Hyperparameters</h2>
+                    <button class="action-button action-button--reset" onclick="resetSettings()">Reset All</button>
                 </div>
 
                 <h3 class="settings-group-title">Population</h3>
@@ -194,6 +196,21 @@
 
                     <label for="cfg-hit-thresh">Hit Threshold</label>
                     <input type="number" id="cfg-hit-thresh" min="0" max="0.001" step="1e-11">
+                </div>
+
+                <h3 class="settings-group-title">GPU Minimax (Tier 2)</h3>
+                <div class="control-grid">
+                    <label for="cfg-gpu-mm-sweeps">GPU MM Sweeps</label>
+                    <input type="number" id="cfg-gpu-mm-sweeps" min="1" max="10" step="1">
+
+                    <label for="cfg-gpu-mm-batch">GPU MM Batch</label>
+                    <input type="number" id="cfg-gpu-mm-batch" min="1000" max="100000" step="1000">
+
+                    <label for="cfg-gpu-mm-trials">GPU MM Trials</label>
+                    <input type="number" id="cfg-gpu-mm-trials" min="8" max="256" step="8">
+
+                    <label for="cfg-gpu-mm-fine">GPU MM Fine Range</label>
+                    <input type="number" id="cfg-gpu-mm-fine" min="0.001" max="0.02" step="0.001">
                 </div>
 
                 <h3 class="settings-group-title">CPU Refinement</h3>

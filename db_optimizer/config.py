@@ -22,12 +22,11 @@ HIT_THRESHOLD = 1e-10
 
 # ── GPU batching ─────────────────────────────────────────────────────
 MAX_GPU_BATCH_SIZE = 100_000  # RTX 3060 12GB can handle this
-GPU_MINIMAX_SWEEPS = 1
-GPU_MINIMAX_FINE_RANGE = 0.003
-GPU_MINIMAX_N_TRIALS = 32
+GPU_MINIMAX_SWEEPS = 3
+GPU_MINIMAX_FINE_RANGE = 0.005
+GPU_MINIMAX_N_TRIALS = 64
 
 # ── Population ───────────────────────────────────────────────────────
-N_ISLANDS = 8
 GENERATION_BATCH_SIZE = 8192
 MAX_PENDING = 200_000
 TOURNAMENT_SIZE = 4
@@ -40,19 +39,18 @@ P_MUTATE_GAUSSIAN = 0.25
 P_CROSSOVER = 0.12
 P_SHADOW_REINJECT = 0.08
 
-# ── Power-law islands (explore / exploit structure) ──────────────
-ISLAND_SIZES = [4, 8, 16, 32, 64, 128, 256, 512]
-
-ISLAND_ROLES: list[str] = [
-    "elite_exploit",   # 0 — deterministic best, deep polish
-    "strong_exploit",  # 1 — tight tournament, low mutation
-    "exploit",         # 2 — standard tournament
-    "balanced",        # 3 — default EA behavior
-    "balanced",        # 4 — default EA behavior
-    "explore",         # 5 — loose selection, heavy mutation
-    "explore",         # 6 — loose selection, heavy mutation
-    "wide_explore",    # 7 — random diverse, maximal exploration
+# ── Power-law islands (algorithm type × population cap) ──────────────
+ISLAND_ROLE_ORDER: list[str] = [
+    "elite_exploit",
+    "strong_exploit",
+    "exploit",
+    "balanced",
+    "explore",
+    "wide_explore",
 ]
+
+ISLAND_SIZE_EXPONENTS = list(range(5, 13))
+ISLAND_SIZES = [2 ** exp for exp in ISLAND_SIZE_EXPONENTS]
 
 ISLAND_CONFIG: dict[str, dict] = {
     "elite_exploit":  {"selection": "deterministic", "sigma": 0.002, "cpu_sweeps": 20,
@@ -69,6 +67,26 @@ ISLAND_CONFIG: dict[str, dict] = {
                        "p_coeff": 0.30, "p_gaussian": 0.25, "p_crossover": 0.20, "p_shadow": 0.15},
 }
 
+
+def build_island_layout() -> list[dict]:
+    """Build the full role × size island lattice."""
+    layout: list[dict] = []
+    island_id = 0
+    for role in ISLAND_ROLE_ORDER:
+        for size_exp in ISLAND_SIZE_EXPONENTS:
+            layout.append({
+                "id": island_id,
+                "role": role,
+                "size_exp": size_exp,
+                "cap": 2 ** size_exp,
+            })
+            island_id += 1
+    return layout
+
+
+ISLAND_LAYOUT = build_island_layout()
+N_ISLANDS = len(ISLAND_LAYOUT)
+
 # ── CPU refinement ───────────────────────────────────────────────
 CPU_MINIMAX_SWEEPS = 5
 CPU_MINIMAX_FINE_RANGE = 0.003
@@ -76,7 +94,7 @@ CPU_MIN_SWEEPS = 3
 CPU_MAX_SWEEPS = 20
 
 # ── GPU minimax (Tier 2) ─────────────────────────────────────────
-GPU_MINIMAX_BATCH_SIZE = 20_000
+GPU_MINIMAX_BATCH_SIZE = 40_000
 
 
 def build_target_tensor() -> np.ndarray:
