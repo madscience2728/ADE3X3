@@ -123,7 +123,10 @@ const defaults = {
     coeffInitHigh: 2.0,
     bestExportIncludeDense: false,
     algebraicMode: false,
-    algebraicNearbyK: 5
+    algebraicNearbyK: 5,
+    minimaxSweeps: 1,
+    minimaxFineRange: 0.003,
+    injectCandidate: ""
 };
 
 const presetMap = {
@@ -208,7 +211,10 @@ const fieldMap = {
     coeffInitHigh: "coeff-init-high",
     bestExportIncludeDense: "best-export-include-dense",
     algebraicMode: "algebraic-mode",
-    algebraicNearbyK: "algebraic-nearby-k"
+    algebraicNearbyK: "algebraic-nearby-k",
+    minimaxSweeps: "minimax-sweeps",
+    minimaxFineRange: "minimax-fine-range",
+    injectCandidate: "inject-candidate"
 };
 
 const settingHelp = {
@@ -260,7 +266,10 @@ const settingHelp = {
     coeffInitHigh: "Upper bound for random initial coefficient magnitudes. This should stay greater than or equal to coeff init low. Reasonable range: 1.5..3.0. Wider spreads increase diversity but can make ALS stabilization harder.",
     bestExportIncludeDense: "Include dense matrices and arrays in the best-individual export. This is mainly for forensic debugging. Leave this off for normal runs because artifact size can balloon quickly. Recommended setting: 0 except for short diagnostic runs.",
     algebraicMode: "Constrain coefficient mutations and initialization to algebraic values instead of continuous floats. Uses a ~1400-entry lookup table of rationals, square/cube/4th/6th roots, products, and 27-family values. When ON, Gaussian perturbation is replaced with jumps between nearby algebraic grid points. This dramatically narrows the search space to structurally meaningful coefficients.",
-    algebraicNearbyK: "How many algebraic neighbors to consider when mutating a coefficient in algebraic mode. The jump range scales adaptively with fitness: wider when stuck, tighter near optima. Reasonable range: 3..10. Lower values make finer local moves; higher values allow larger jumps."
+    algebraicNearbyK: "How many algebraic neighbors to consider when mutating a coefficient in algebraic mode. The jump range scales adaptively with fitness: wider when stuck, tighter near optima. Reasonable range: 3..10. Lower values make finer local moves; higher values allow larger jumps.",
+    minimaxSweeps: "Number of V2-style greedy minimax local search sweeps per evaluation. Each sweep iterates over all coefficients (shuffled) testing algebraic neighbors and fine-grid values, keeping only strict improvements to max-abs residual. Even-numbered sweeps also run pair moves (two coefficients in the same factor). Set to 0 to disable. Reasonable range: 0..3. Higher values give better local search at the cost of slower evaluations.",
+    minimaxFineRange: "Half-width of the fine grid around each coefficient during minimax local search. Smaller values make tighter local moves; larger values explore further. Reasonable range: 0.001..0.01. Default 0.003 matches optimize_v2.py.",
+    injectCandidate: "Path to a pre-optimized candidate JSON file (e.g. optimized_als_r10_at_0.09.json) to inject as the top warm seed. The candidate is loaded directly into the initial population of every island, giving the EA a head start from an already-good solution. Relative paths resolve from the repo root. Leave blank to skip injection."
 };
 
 const numericFields = new Set([
@@ -271,7 +280,7 @@ const numericFields = new Set([
     "mutationSupportRate", "mutationCoeffRate", "mutationReplaceRate", "alsSweeps", "newtonThreshold",
     "polishMaxNfev", "polishVariableCap", "activeValueFloor", "supportMin", "supportMax", "initSupportMin",
     "initSupportMax", "supportAddProb", "supportDropProb", "supportAddLow", "supportAddHigh", "coeffSigmaMin",
-    "coeffSigmaMax", "coeffInitLow", "coeffInitHigh", "algebraicNearbyK"
+    "coeffSigmaMax", "coeffInitLow", "coeffInitHigh", "algebraicNearbyK", "minimaxSweeps", "minimaxFineRange"
 ]);
 
 const checkboxFields = new Set(["bestExportIncludeDense", "algebraicMode"]);
@@ -322,7 +331,10 @@ const ENV_TO_STATE_KEY = {
     STEP84_COEFF_INIT_HIGH: "coeffInitHigh",
     STEP84_BEST_EXPORT_INCLUDE_DENSE: "bestExportIncludeDense",
     STEP84_ALGEBRAIC_MODE: "algebraicMode",
-    STEP84_ALGEBRAIC_NEARBY_K: "algebraicNearbyK"
+    STEP84_ALGEBRAIC_NEARBY_K: "algebraicNearbyK",
+    STEP84_MINIMAX_SWEEPS: "minimaxSweeps",
+    STEP84_MINIMAX_FINE_RANGE: "minimaxFineRange",
+    STEP84_INJECT_CANDIDATE: "injectCandidate"
 };
 
 function cloneDefaults() {
@@ -688,7 +700,10 @@ function buildEnvEntries(state) {
         ["STEP84_SUPPORT_ADD_LOW", state.supportAddLow],
         ["STEP84_SUPPORT_ADD_HIGH", state.supportAddHigh],
         ["STEP84_ALGEBRAIC_MODE", state.algebraicMode],
-        ["STEP84_ALGEBRAIC_NEARBY_K", state.algebraicNearbyK]
+        ["STEP84_ALGEBRAIC_NEARBY_K", state.algebraicNearbyK],
+        ["STEP84_MINIMAX_SWEEPS", state.minimaxSweeps],
+        ["STEP84_MINIMAX_FINE_RANGE", state.minimaxFineRange],
+        ["STEP84_INJECT_CANDIDATE", state.injectCandidate]
     ];
 
     if (state.topologyMode === "explicit") {

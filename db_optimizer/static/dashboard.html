@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DB Optimizer — ADE3x3 Rank-19 Search</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="hero">
+            <div class="hero__copy">
+                <p class="eyebrow">ADE3X3 / DB Optimizer</p>
+                <h1>GPU-Accelerated Rank-19 Search</h1>
+                <p class="hero__lede">4-stage pipeline: GPU screen → GPU minimax → CPU adaptive polish. Power-law islands for explore/exploit balance.</p>
+            </div>
+            <div class="hero__metrics">
+                <div class="metric-card">
+                    <span class="metric-card__label">Status</span>
+                    <strong id="status-label">Connecting…</strong>
+                </div>
+                <div class="metric-card metric-card--accent">
+                    <span class="metric-card__label">Best Fitness</span>
+                    <strong id="best-fitness">—</strong>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-card__label">Generation</span>
+                    <strong id="generation">—</strong>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-card__label">Total Candidates</span>
+                    <strong id="total-candidates">—</strong>
+                </div>
+            </div>
+        </header>
+
+        <main class="layout-grid">
+            <section class="panel panel--controls">
+                <div class="panel__header">
+                    <h2>Controls</h2>
+                </div>
+                <div class="button-row">
+                    <button type="button" class="action-button action-button--start" id="btn-start">▶ Start</button>
+                    <button type="button" class="action-button action-button--stop" id="btn-stop" disabled>■ Stop</button>
+                </div>
+
+                <div class="panel__header panel__header--spaced">
+                    <h2>Pipeline Activity</h2>
+                </div>
+
+                <div class="activity-boxes">
+                    <div class="activity-box" id="act-generator">
+                        <div class="activity-box__icon">⚙</div>
+                        <div class="activity-box__label">Generator</div>
+                        <div class="activity-box__detail" id="act-generator-detail">idle</div>
+                        <div class="activity-box__rate" id="act-generator-rate"></div>
+                    </div>
+                    <div class="activity-box" id="act-gpu_screen">
+                        <div class="activity-box__icon">🔲</div>
+                        <div class="activity-box__label">GPU Screen</div>
+                        <div class="activity-box__detail" id="act-gpu_screen-detail">idle</div>
+                        <div class="activity-box__rate" id="act-gpu_screen-rate"></div>
+                    </div>
+                    <div class="activity-box" id="act-gpu_minimax">
+                        <div class="activity-box__icon">🔥</div>
+                        <div class="activity-box__label">GPU Minimax</div>
+                        <div class="activity-box__detail" id="act-gpu_minimax-detail">idle</div>
+                        <div class="activity-box__rate" id="act-gpu_minimax-rate"></div>
+                    </div>
+                    <div class="activity-box" id="act-cpu_refine">
+                        <div class="activity-box__icon">🔬</div>
+                        <div class="activity-box__label">CPU Refine</div>
+                        <div class="activity-box__detail" id="act-cpu_refine-detail">idle</div>
+                        <div class="activity-box__rate" id="act-cpu_refine-rate"></div>
+                    </div>
+                    <div class="activity-box" id="act-db_io">
+                        <div class="activity-box__icon">💾</div>
+                        <div class="activity-box__label">DB I/O</div>
+                        <div class="activity-box__detail" id="act-db_io-detail">idle</div>
+                        <div class="activity-box__rate" id="act-db_io-rate"></div>
+                    </div>
+                    <div class="activity-box" id="act-monitor">
+                        <div class="activity-box__icon">📡</div>
+                        <div class="activity-box__label">Monitor</div>
+                        <div class="activity-box__detail" id="act-monitor-detail">idle</div>
+                        <div class="activity-box__rate" id="act-monitor-rate"></div>
+                    </div>
+                </div>
+
+                <div class="panel__header panel__header--spaced">
+                    <h2>Pipeline Counts</h2>
+                </div>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <span class="status-item__label">Pending</span>
+                        <span class="status-item__value" id="pending-count">—</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-item__label">Screened (Tier 1)</span>
+                        <span class="status-item__value" id="screened-count">—</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-item__label">Minimax (Tier 2)</span>
+                        <span class="status-item__value" id="minimax-count">—</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-item__label">Refined (Tier 3)</span>
+                        <span class="status-item__value" id="refined-count">—</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-item__label">Shadow Archive</span>
+                        <span class="status-item__value" id="shadow-count">—</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-item__label">GPU→CPU Queue</span>
+                        <span class="status-item__value" id="queue-count">—</span>
+                    </div>
+                </div>
+
+                <div class="panel__header panel__header--spaced">
+                    <h2>Islands</h2>
+                </div>
+                <div id="island-table-container">
+                    <table class="data-table" id="island-table">
+                        <thead><tr><th>Island</th><th>Role</th><th>Count</th><th>Best</th><th>Mean</th></tr></thead>
+                        <tbody id="island-tbody"></tbody>
+                    </table>
+                </div>
+
+                <div class="panel__header panel__header--spaced">
+                    <h2>Seed Control</h2>
+                </div>
+                <div class="control-grid">
+                    <label for="cfg-seed-mode">Start Mode</label>
+                    <select id="cfg-seed-mode">
+                        <option value="seed" selected>Seed from JSON</option>
+                        <option value="fresh">Start fresh</option>
+                    </select>
+                    <label for="cfg-seed-path">Seed Path</label>
+                    <input type="text" id="cfg-seed-path" placeholder="(repo root)">
+                </div>
+
+                <div class="panel__header panel__header--spaced">
+                    <h2>Hyperparameters</h2>
+                </div>
+
+                <h3 class="settings-group-title">Population</h3>
+                <div class="control-grid">
+                    <label for="cfg-n-islands">Islands</label>
+                    <input type="number" id="cfg-n-islands" min="1" max="64" step="1">
+
+                    <label for="cfg-batch-size">Batch Size</label>
+                    <input type="number" id="cfg-batch-size" min="16" max="100000" step="16">
+
+                    <label for="cfg-max-pending">Max Pending</label>
+                    <input type="number" id="cfg-max-pending" min="100" max="500000" step="100">
+
+                    <label for="cfg-elite-k">Elite K</label>
+                    <input type="number" id="cfg-elite-k" min="1" max="100" step="1">
+
+                    <label for="cfg-tournament-size">Tournament Size</label>
+                    <input type="number" id="cfg-tournament-size" min="2" max="20" step="1">
+
+                    <label for="cfg-migration-prob">Migration Prob</label>
+                    <input type="number" id="cfg-migration-prob" min="0" max="1" step="0.01">
+                </div>
+
+                <h3 class="settings-group-title">Mutation Probabilities</h3>
+                <div class="control-grid">
+                    <label for="cfg-p-coeff">Coeff Mutate</label>
+                    <input type="number" id="cfg-p-coeff" min="0" max="1" step="0.01">
+
+                    <label for="cfg-p-gaussian">Gaussian Mutate</label>
+                    <input type="number" id="cfg-p-gaussian" min="0" max="1" step="0.01">
+
+                    <label for="cfg-p-crossover">Crossover</label>
+                    <input type="number" id="cfg-p-crossover" min="0" max="1" step="0.01">
+
+                    <label for="cfg-p-shadow">Shadow Reinject</label>
+                    <input type="number" id="cfg-p-shadow" min="0" max="1" step="0.01">
+                </div>
+
+                <h3 class="settings-group-title">Evaluation Tiers</h3>
+                <div class="control-grid">
+                    <label for="cfg-tier1-thresh">Tier 1 Threshold</label>
+                    <input type="number" id="cfg-tier1-thresh" min="0.01" max="1" step="0.005">
+
+                    <label for="cfg-tier2-thresh">Tier 2 Threshold</label>
+                    <input type="number" id="cfg-tier2-thresh" min="0.01" max="1" step="0.005">
+
+                    <label for="cfg-max-gpu-batch">Max GPU Batch</label>
+                    <input type="number" id="cfg-max-gpu-batch" min="100" max="200000" step="100">
+
+                    <label for="cfg-hit-thresh">Hit Threshold</label>
+                    <input type="number" id="cfg-hit-thresh" min="0" max="0.001" step="1e-11">
+                </div>
+
+                <h3 class="settings-group-title">CPU Refinement</h3>
+                <div class="control-grid">
+                    <label for="cfg-minimax-sweeps">Minimax Sweeps</label>
+                    <input type="number" id="cfg-minimax-sweeps" min="0" max="20" step="1">
+
+                    <label for="cfg-minimax-fine">Fine Range</label>
+                    <input type="number" id="cfg-minimax-fine" min="0.0001" max="0.1" step="0.0005">
+                </div>
+
+                <h3 class="settings-group-title">Runtime</h3>
+                <div class="control-grid">
+                    <label for="cfg-max-gens">Max Generations</label>
+                    <input type="number" id="cfg-max-gens" min="1" max="10000000" step="100">
+
+                    <label for="cfg-cpu-workers">CPU Workers</label>
+                    <input type="number" id="cfg-cpu-workers" min="1" max="128" step="1">
+
+                    <label for="cfg-refine-batch">Refine Batch</label>
+                    <input type="number" id="cfg-refine-batch" min="1" max="500" step="1">
+                </div>
+
+            </section>
+
+            <section class="panel panel--chart">
+                <div class="panel__header">
+                    <h2>Per-Island Best Fitness</h2>
+                </div>
+                <div id="chart-islands" class="chart-container"></div>
+            </section>
+
+            <section class="panel panel--chart">
+                <div class="panel__header">
+                    <h2>Fitness Envelope</h2>
+                </div>
+                <div id="chart-envelope" class="chart-container"></div>
+            </section>
+
+            <section class="panel panel--leaderboard">
+                <div class="panel__header">
+                    <h2>Top 20 Candidates</h2>
+                </div>
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Fitness</th><th>Frobenius</th>
+                                <th>Origin</th><th>Island</th><th>Gen</th><th>Tier</th>
+                            </tr>
+                        </thead>
+                        <tbody id="top-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+</html>

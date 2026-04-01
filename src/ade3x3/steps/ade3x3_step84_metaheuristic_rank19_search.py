@@ -189,6 +189,9 @@ SUPPORT_ADD_LOW = env_float("STEP84_SUPPORT_ADD_LOW", 0.01)
 SUPPORT_ADD_HIGH = env_float("STEP84_SUPPORT_ADD_HIGH", 0.10)
 ALGEBRAIC_MODE = bool(env_int("STEP84_ALGEBRAIC_MODE", 0))
 ALGEBRAIC_NEARBY_K = env_int("STEP84_ALGEBRAIC_NEARBY_K", 5)
+MINIMAX_SWEEPS = env_int("STEP84_MINIMAX_SWEEPS", 1)
+MINIMAX_FINE_RANGE = env_float("STEP84_MINIMAX_FINE_RANGE", 0.003)
+INJECT_CANDIDATE = (os.environ.get("STEP84_INJECT_CANDIDATE") or "").strip() or None
 RESUME_CHECKPOINT = (os.environ.get("STEP84_RESUME_CHECKPOINT") or "").strip() or None
 
 
@@ -907,9 +910,35 @@ def individual_from_terms(terms: list[Term], origin: str, rng: np.random.Generat
 
 
 def load_warm_seed_individuals() -> list[Individual]:
+    seeds: list[Individual] = []
+    # Inject a pre-optimized candidate JSON if provided
+    if INJECT_CANDIDATE:
+        inject_path = Path(INJECT_CANDIDATE)
+        if not inject_path.is_absolute():
+            inject_path = REPO_ROOT / inject_path
+        if inject_path.exists():
+            with open(inject_path, "r", encoding="utf-8") as fh:
+                data = json.load(fh)
+            rng_inject = np.random.default_rng(SEED + 777)
+            genes: list[SparseTermGene] = []
+            for term_data in data.get("terms", []):
+                a_sup = tuple(int(i) for i in term_data["alpha_support"])
+                b_sup = tuple(int(i) for i in term_data["beta_support"])
+                g_sup = tuple(int(i) for i in term_data["gamma_support"])
+                a_val = np.array(term_data["alpha_values"], dtype=np.float64)
+                b_val = np.array(term_data["beta_values"], dtype=np.float64)
+                g_val = np.array(term_data["gamma_values"], dtype=np.float64)
+                genes.append(SparseTermGene(a_sup, b_sup, g_sup, a_val, b_val, g_val))
+            injected = Individual(genes, f"injected:{inject_path.name}")
+            injected.reset_metrics()
+            seeds.append(injected)
+            print(f"[step84] Injected candidate from {inject_path.name} ({len(genes)} terms, supports preserved as-is)")
+        else:
+            print(f"[step84] WARNING: STEP84_INJECT_CANDIDATE path not found: {inject_path}")
+
     rows = read_csv_rows(TRACK2_SCREENING_PATH)
     if not rows:
-        return []
+        return seeds
     viable_rows = [row for row in rows if row.get("status") == "screened_ok"]
     viable_rows.sort(
         key=lambda row: (
@@ -919,7 +948,6 @@ def load_warm_seed_individuals() -> list[Individual]:
         )
     )
     rng = np.random.default_rng(SEED + 901)
-    seeds: list[Individual] = []
     for row in viable_rows[:WARM_SEED_COUNT]:
         terms = build_track2_terms_from_row(row)
         seeds.append(individual_from_terms(terms, f"warm_seed:{row['case_id']}", rng))
@@ -1043,6 +1071,193 @@ def alternating_least_squares(individual: Individual, eval_seed: int) -> Individ
     return finalize_individual_structure(individual, rng)
 
 
+# ── V2-style greedy minimax local search ──────────────────────────────────
+
+_PAIR_TOP_K = 6  # top-K largest coefficients for pair moves
+
+
+def _minimax_trial_values(val: float, fine_range: float) -> list[float]:
+    """Generate candidate replacement values for greedy minimax descent."""
+    trials: set[float] = set()
+    sign = 1.0 if val >= 0 else -1.0
+    absv = abs(val)
+    n_nearby = 8
+    fine_steps = 5
+
+    # Algebraic neighbors from lookup table
+    if ALGEBRAIC_MODE and ALGEBRAIC_LOOKUP.size > 0:
+        idx = int(np.searchsorted(ALGEBRAIC_LOOKUP, absv))
+        lo = max(0, idx - n_nearby)
+        hi = min(len(ALGEBRAIC_LOOKUP), idx + n_nearby + 1)
+        for i in range(lo, hi):
+            aval = float(ALGEBRAIC_LOOKUP[i])
+            trials.add(sign * aval)
+            if absv < 0.3:
+                trials.add(-sign * aval)
+        # Fine grid around top algebraic neighbors
+        lo3 = max(0, idx - 3)
+        hi3 = min(len(ALGEBRAIC_LOOKUP), idx + 4)
+        for i in range(lo3, hi3):
+            aval = float(ALGEBRAIC_LOOKUP[i])
+            for d in np.linspace(-fine_range / 2, fine_range / 2, fine_steps):
+                trials.add(sign * aval + d)
+
+    # Fine grid around current value
+    for d in np.linspace(-fine_range, fine_range, fine_steps * 2 + 1):
+        if d != 0:
+            trials.add(val + d)
+
+    trials.discard(val)
+    return sorted(trials)
+
+
+def minimax_local_search(individual: Individual, rng: np.random.Generator) -> Individual:
+    """V2-style greedy minimax coordinate descent.
+
+    Phase A: for each coefficient (shuffled), test algebraic neighbors + fine
+    grid and accept only strict improvements to the max-abs residual.
+    Phase B (every other sweep): pair moves — two coefficients in the same
+    factor/term, tested over a 4x4 delta grid.
+    """
+    if MINIMAX_SWEEPS <= 0:
+        return individual
+
+    alpha, beta, gamma = dense_factor_arrays(individual)
+    factors = [alpha, beta, gamma]
+    R = full_tensor_from_factors(alpha, beta, gamma) - TARGET_TENSOR
+    best_mx = float(np.max(np.abs(R)))
+    fine_range = float(MINIMAX_FINE_RANGE)
+    _arange9 = np.arange(9)
+
+    for sweep in range(MINIMAX_SWEEPS):
+        sweep_improved = False
+
+        # ── Phase A: single-coefficient greedy sweep ──
+        coeffs = [(r, fi, i) for r in range(RANK_VALUE) for fi in range(3) for i in range(9)]
+        order = rng.permutation(len(coeffs))
+
+        for ci in order:
+            r, fi, i = coeffs[int(ci)]
+            old_val = float(factors[fi][r, i])
+            trials = _minimax_trial_values(old_val, fine_range)
+            if not trials:
+                continue
+
+            # Incremental: only one 9x9 slice of R is affected
+            if fi == 0:
+                outer = np.outer(beta[r], gamma[r])
+                R_slice = R[i, :, :].copy()
+                other_max = float(np.max(np.abs(R[_arange9 != i, :, :])))
+            elif fi == 1:
+                outer = np.outer(alpha[r], gamma[r])
+                R_slice = R[:, i, :].copy()
+                other_max = float(np.max(np.abs(R[:, _arange9 != i, :])))
+            else:
+                outer = np.outer(alpha[r], beta[r])
+                R_slice = R[:, :, i].copy()
+                other_max = float(np.max(np.abs(R[:, :, _arange9 != i])))
+
+            best_tv = None
+            best_tv_mx = best_mx
+
+            for tv in trials:
+                delta = tv - old_val
+                new_slice = R_slice + delta * outer
+                new_mx = max(other_max, float(np.max(np.abs(new_slice))))
+                if new_mx < best_tv_mx - 1e-12:
+                    best_tv = tv
+                    best_tv_mx = new_mx
+
+            if best_tv is not None:
+                delta = best_tv - old_val
+                factors[fi][r, i] = best_tv
+                if fi == 0:
+                    R[i, :, :] += delta * outer
+                elif fi == 1:
+                    R[:, i, :] += delta * outer
+                else:
+                    R[:, :, i] += delta * outer
+                best_mx = best_tv_mx
+                sweep_improved = True
+
+        # ── Phase B: pair swaps within same factor (every other sweep) ──
+        if sweep % 2 == 0:
+            pair_deltas = np.array(
+                [-fine_range * 3, -fine_range, fine_range, fine_range * 3]
+            )
+            for r in range(RANK_VALUE):
+                for fi in range(3):
+                    factor = factors[fi]
+                    ranked = sorted(range(9), key=lambda k: abs(factor[r, k]), reverse=True)
+                    top_k = ranked[:_PAIR_TOP_K]
+                    # Outer product of the OTHER two factors
+                    if fi == 0:
+                        bg = np.outer(beta[r], gamma[r])
+                    elif fi == 1:
+                        bg = np.outer(alpha[r], gamma[r])
+                    else:
+                        bg = np.outer(alpha[r], beta[r])
+
+                    for p1_pos in range(len(top_k)):
+                        for p2_pos in range(p1_pos + 1, len(top_k)):
+                            p1, p2 = top_k[p1_pos], top_k[p2_pos]
+                            v1 = float(factor[r, p1])
+                            v2_val = float(factor[r, p2])
+                            # max over slices NOT p1 or p2
+                            if fi == 0:
+                                mask = (_arange9 != p1) & (_arange9 != p2)
+                                other_max = float(np.max(np.abs(R[mask, :, :])))
+                                s1 = R[p1, :, :].copy()
+                                s2 = R[p2, :, :].copy()
+                            elif fi == 1:
+                                mask = (_arange9 != p1) & (_arange9 != p2)
+                                other_max = float(np.max(np.abs(R[:, mask, :])))
+                                s1 = R[:, p1, :].copy()
+                                s2 = R[:, p2, :].copy()
+                            else:
+                                mask = (_arange9 != p1) & (_arange9 != p2)
+                                other_max = float(np.max(np.abs(R[:, :, mask])))
+                                s1 = R[:, :, p1].copy()
+                                s2 = R[:, :, p2].copy()
+
+                            best_pair = None
+                            pair_mx = best_mx
+                            for d1 in pair_deltas:
+                                for d2 in pair_deltas:
+                                    ns1 = s1 + d1 * bg
+                                    ns2 = s2 + d2 * bg
+                                    new_mx = max(
+                                        other_max,
+                                        float(np.max(np.abs(ns1))),
+                                        float(np.max(np.abs(ns2))),
+                                    )
+                                    if new_mx < pair_mx - 1e-12:
+                                        best_pair = (d1, d2)
+                                        pair_mx = new_mx
+
+                            if best_pair is not None:
+                                d1, d2 = best_pair
+                                factor[r, p1] = v1 + d1
+                                factor[r, p2] = v2_val + d2
+                                if fi == 0:
+                                    R[p1, :, :] += d1 * bg
+                                    R[p2, :, :] += d2 * bg
+                                elif fi == 1:
+                                    R[:, p1, :] += d1 * bg
+                                    R[:, p2, :] += d2 * bg
+                                else:
+                                    R[:, :, p1] += d1 * bg
+                                    R[:, :, p2] += d2 * bg
+                                best_mx = pair_mx
+                                sweep_improved = True
+
+        if not sweep_improved:
+            break
+
+    update_individual_from_dense(individual, alpha, beta, gamma)
+    return finalize_individual_structure(individual, rng)
+
+
 def individual_to_terms(individual: Individual, source_label: str) -> list[Term]:
     terms: list[Term] = []
     for term_index, term in enumerate(individual.terms, start=1):
@@ -1127,9 +1342,20 @@ def evaluate_individual_worker(payload: dict) -> dict:
         individual = finalize_individual_structure(individual, rng)
         _t2 = time.perf_counter()
         _pt["finalize_ms"] = (_t2 - _t1) * 1000
-        individual = alternating_least_squares(individual, eval_seed)
+        # Check pre-ALS fitness: skip ALS if already good (protects minimax-optimised injections)
+        pre_als_fitness, _ = residual_metrics(individual)
+        if pre_als_fitness < NEWTON_THRESHOLD:
+            _pt["als_skipped"] = True
+        else:
+            individual = alternating_least_squares(individual, eval_seed)
+            _pt["als_skipped"] = False
         _t3 = time.perf_counter()
         _pt["als_ms"] = (_t3 - _t2) * 1000
+        # V2-style greedy minimax local search
+        if MINIMAX_SWEEPS > 0:
+            individual = minimax_local_search(individual, rng)
+        _t3b = time.perf_counter()
+        _pt["minimax_ms"] = (_t3b - _t3) * 1000
         fitness, fro_residual = residual_metrics(individual)
         _t4 = time.perf_counter()
         _pt["residual_ms"] = (_t4 - _t3) * 1000
@@ -1144,7 +1370,9 @@ def evaluate_individual_worker(payload: dict) -> dict:
         _t5 = time.perf_counter()
         _pt["polish_ms"] = (_t5 - _t4) * 1000
         # Soft dead-leakage penalty: nudge search toward fiber-respecting solutions
-        if math.isfinite(fitness):
+        # Skip for already-good individuals (e.g. dense L-BFGS injections) where
+        # dead leakage is structural but the minimax residual is already excellent.
+        if math.isfinite(fitness) and fitness >= NEWTON_THRESHOLD:
             alpha_m, beta_m, _gamma_m = dense_factor_arrays(individual)
             fitness += structural_penalty(alpha_m, beta_m, _gamma_m)
         _t6 = time.perf_counter()

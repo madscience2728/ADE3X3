@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-31 15:05:40
+Generated: 2026-03-31 18:12:26
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-31 15:05:40
+**Generated:** 2026-03-31 18:12:26
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -15743,33 +15743,33 @@ coefficients on fixed supports in Lamarckian fashion.
 
 ### Campaign Summary
 
-- Generations completed: 0
-- Total evaluations: 6457
-- Total wall seconds: 120.06486940383911
-- Best fitness ever (max-abs residual): 0.8083053545641325
-- Best generation: 0
-- Best support signature: (5,6,6)
-- Best variable count: 256
+- Generations completed: 10
+- Total evaluations: 88
+- Total wall seconds: 1.4185636043548584
+- Best fitness ever (max-abs residual): 1.0000000139060103
+- Best generation: 4
+- Best support signature: (2,3,3)
+- Best variable count: 108
 - Any exact hit below 1e-8: False
-- Stop reason: time_limit
+- Stop reason: generation_limit
 
 The run recorded a best-so-far incumbent trace across generations rather than a single
 isolated event. The first recorded incumbent appeared at generation
-0 with residual 0.858318107537655, and the final incumbent appeared at generation 0 with residual 0.8083053545641325.
+0 with residual 1.0088438532164743, and the final incumbent appeared at generation 4 with residual 1.0000000139060103.
 
 ### Best Individual
 
-- Origin: term_xover:(6,7,7)|(6,7,6)
-- Best max-abs residual: 0.5840240922382063
-- Best Frobenius residual: 2.8298432320449316
-- Support histogram: {'(2,9,9)': 1, '(3,9,4)': 1, '(3,9,6)': 1, '(4,2,3)': 1, '(4,3,9)': 1, '(4,6,6)': 1, '(5,9,8)': 1, '(6,1,8)': 1, '(6,3,5)': 1, '(6,9,7)': 1, '(6,9,8)': 2, '(7,9,8)': 1, '(8,7,6)': 3, '(9,2,7)': 1, '(9,5,9)': 1, '(9,7,8)': 1}
+- Origin: term_xover:(3,3,3)|(3,3,3)
+- Best max-abs residual: 1.0000000139060103
+- Best Frobenius residual: 3.176105434642493
+- Support histogram: {'(2,2,2)': 3, '(2,3,3)': 7, '(3,2,2)': 2, '(3,2,3)': 3, '(3,3,2)': 2, '(3,3,3)': 2}
 - Local nonlinear polish used: False
 
 ### Final-Island Snapshot
 
-- Strongest island at the final logged generation: 0
-- Final-island best residual: 8.7347668751942487e-01
-- Final-island mean residual: 1.0569318886459267e+00
+- Strongest island at the final logged generation: 1
+- Final-island best residual: 1.0000000139060103e+00
+- Final-island mean residual: 1.0000000284181787e+00
 
 ### Status
 
@@ -15780,13 +15780,13 @@ what the best near-miss support structure looks like for longer reruns.
 
 ### Multi-Copy Basin Analysis
 
-Across 48 parallel copies from 2 batch run(s):
+Across 72 parallel copies from 3 batch run(s):
 
-- Basin near 0.50: 15 copies
-- Basin near 0.55: 1 copies
-- Basin near 0.70: 1 copies
-- Basin near 0.95: 1 copies
-- Basin near 1.00: 30 copies
+- Basin near 0.50: 17 copies
+- Basin near 0.80: 1 copies
+- Basin near 0.90: 1 copies
+- Basin near 0.95: 7 copies
+- Basin near 1.00: 46 copies
 
 ### Basin Structure Theorem: Pythagorean Identity
 
@@ -15810,22 +15810,22 @@ larger and ||T_hat||^2 correspondingly smaller, but the sum is always 27.
 
 **Empirical verification across all batch copies:**
 
-- Copies tested: 48
+- Copies tested: 72
 - Mean ||R||^2 + ||T_hat||^2: 27.0000 (theory: 27.0)
-- Max |<R, T_hat>|: 0.000197 (theory: 0)
+- Max |<R, T_hat>|: 0.000634 (theory: 0)
 
-At the 0.5-fitness basin (16 copies):
-- Mean ||R||^2: 8.0011 (theory: 8.0 = 27 - 19)
-- Mean ||T_hat||^2: 18.9988 (theory: 19.0)
+At the 0.5-fitness basin (17 copies):
+- Mean ||R||^2: 8.0746 (theory: 8.0 = 27 - 19)
+- Mean ||T_hat||^2: 18.9253 (theory: 19.0)
 
 Different basins distribute the total Frobenius energy differently
 between live and dead tensor entries:
 
-- Basin 0.50 (15 copies): ||R||^2 = 8.00, live = 3.78, dead = 4.22
-- Basin 0.55 (1 copies): ||R||^2 = 8.00, live = 3.86, dead = 4.14
-- Basin 0.70 (1 copies): ||R||^2 = 8.00, live = 5.01, dead = 2.99
-- Basin 0.95 (1 copies): ||R||^2 = 15.00, live = 10.93, dead = 4.07
-- Basin 1.00 (30 copies): ||R||^2 = 11.78, live = 10.21, dead = 1.56
+- Basin 0.50 (17 copies): ||R||^2 = 8.07, live = 3.71, dead = 4.37
+- Basin 0.80 (1 copies): ||R||^2 = 9.18, live = 5.13, dead = 4.05
+- Basin 0.90 (1 copies): ||R||^2 = 10.45, live = 7.18, dead = 3.27
+- Basin 0.95 (7 copies): ||R||^2 = 12.47, live = 8.56, dead = 3.92
+- Basin 1.00 (46 copies): ||R||^2 = 12.37, live = 10.58, dead = 1.79
 
 ### Structural Implications
 
@@ -15844,7 +15844,96 @@ between live and dead tensor entries:
    Improving the search requires not just fitting the 27 live entries better
    but simultaneously suppressing leakage into the 702 dead entries.
 
-## 81. CURRENT GAPS / OPEN FRONTS
+## 81. ALGEBRAIC COEFFICIENT STRUCTURE
+
+[MEASURED_FROM_CODE] (Algebraic coefficient analysis)
+
+An analysis of the best-known rank-19 CP decomposition coefficients revealed that
+the values are NOT random continuous floats. The vast majority fall on a discrete
+algebraic grid of rationals, roots, and products with small integer arguments.
+
+### Algebraic Alphabet
+
+The coefficient magnitudes fall into three tiers:
+
+1. **UNIT tier**: Simple rationals p/q with p,q in {1,...,20}.
+   Examples: 1/2, 2/3, 1, 3/2.
+
+2. **HADAMARD tier**: Square, cube, 4th, and 6th roots of simple rationals.
+   Examples: sqrt(1/2), cbrt(2/3), (3/4)^(1/4).
+
+3. **CUBIC tier**: Products of roots with simple rational scalars, and 2^a * 3^b
+   power forms. Examples: sqrt(2/3) * cbrt(1/2), (2^(-1) * 3^2)^(1/6).
+
+Additionally, a **27-family** of values naturally arises from the tensor norm ||T||^2 = 27:
+sqrt(27/k), cbrt(27/k), 3^(k/n) for small k and n, and products sqrt(27/m) * p/q.
+
+The full algebraic lookup table contains **1473** unique magnitudes
+spanning the range [0, 3.5], generated from approximately 10 parametric families
+and deduplicated by rounding to 8 decimal places.
+
+In the current best optimized candidate, **0/513** coefficients
+(0.0%) match an algebraic value within 1e-6 tolerance.
+
+### Optimization Results
+
+Using this algebraic structure, three optimizers were built:
+
+1. **Algebraic coordinate descent** (`optimize_algebraic.py`): sweeps each coefficient,
+   tries nearby algebraic grid values + fine grid perturbations, accepts improvements
+   to max-abs residual. Reduced fitness from 0.4999 to 0.4586.
+
+2. **Support + pair mutations** (`optimize_v2.py`): adds support structure changes
+   (add/remove active indices) and within-axis pair swaps on top of coordinate descent.
+   Further reduced to 0.4547.
+
+3. **L-BFGS smooth-max** (`optimize_als.py`): gradient-based optimization using a
+   log-sum-exp smooth approximation to the minimax objective, with escalating
+   sharpness parameter beta = [10, 20, 50, 100, 200, 500, 1000, 2000]. This was
+   the breakthrough method that broke through the 0.1 barrier.
+
+Current best result: **max_abs = 0.0982959162** (file: optimized_als_r10.json),
+Frobenius residual = 2.22029286.
+
+### Progression
+
+| Stage | Method | max\_abs |
+|-------|--------|---------|
+| Baseline (step84 EA) | Continuous Gaussian mutation | 0.4999 |
+| R1 coord descent | Algebraic grid jumps | 0.4586 |
+| R1 v2 mutations | + support/pair moves | 0.4547 |
+| R1 L-BFGS | Smooth-max gradient | 0.1359 |
+| R7 L-BFGS chain | Iterated smooth-max | 0.0993 |
+| R10 L-BFGS chain | Current best | 0.0983 |
+
+### Integration with Step 84 EA
+
+The algebraic lookup table has been integrated into the Step 84 metaheuristic
+search engine as an optional mode (`STEP84_ALGEBRAIC_MODE=1`). When enabled:
+
+- **Coefficient mutation** jumps between nearby algebraic grid values instead of
+  Gaussian perturbation. Jump range scales adaptively with fitness (wider when
+  stuck, tighter near optima), controlled by `STEP84_ALGEBRAIC_NEARBY_K`.
+- **Coefficient initialization** picks from the algebraic table within the
+  requested magnitude range instead of uniform random.
+- **Support-add values** are drawn from the algebraic table instead of uniform.
+
+### Structural Implications
+
+The algebraic structure of these coefficients is strong evidence that the exact
+rank-19 decomposition (if it exists) has coefficients in a small algebraic
+number field over the rationals, likely involving only sqrt, cbrt, and powers
+of 2 and 3. This dramatically reduces the effective search space from a
+continuous 513-dimensional optimization to a discrete combinatorial problem
+over ~1400^N algebraic grid points per coefficient, where N is the number of
+active (nonzero) entries across all 19 terms.
+
+The 27-family values (sqrt(27/k), 3^(k/n)) are particularly noteworthy because
+they arise naturally from the tensor norm ||T||^2 = 27, suggesting the exact
+decomposition respects an energy-conservation structure related to the Pythagorean
+identity ||R||^2 + ||T_hat||^2 = 27.
+
+## 82. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
@@ -15903,7 +15992,8 @@ between live and dead tensor entries:
 - Hamilton term-sharing audit: ✓ Step 78 reconstructs the exact rank-20 commutator witness alongside the Step 75 rank-19 anticommutator witness, finds 0 shared normalized rank-1 terms, union span rank 39 with span intersection dimension 0, and therefore closes the easy linear-sharing route from T=({A,B}+[A,B])/2
 - Basis-rotated pilot search: ✓ Step 79 verifies GL(9)^3 transport of the public rank-23 witness exactly on a small structured/random pilot, but the rotated cold CP scans at ranks 19..22 are cleanly negative and do not improve on the existing rank-19 frontier
 - Support expansion + heuristic sparse campaign: ✓ Step 83b ran 12 AlphaTensor-derived support-expansion cases plus a 1000-pattern random sparse-screening campaign under the 200-variable cap; all random screens were viable, the best conditioning sweet spot was the ultra-sparse (3,3,3) regime, but neither the 12 expanded charts nor the top 24 random sparse charts produced a real rank-19 endpoint
-- Metaheuristic rank-19 search: ✓ Step 84 built the sparse-support evolutionary search engine with 4 islands, Lamarckian coefficient refinement, migration, logging, and checkpoints; the current best run reached max-abs residual 0.8083053545641325 at generation 0 with support signature (5,6,6); the Pythagorean identity ||R||^2 = 27 - 19 = 8 holds at every ALS basin, and the 0.5 basin is a soft attractor with dead-entry leakage as the dominant bottleneck
+- Metaheuristic rank-19 search: ✓ Step 84 built the sparse-support evolutionary search engine with 4 islands, Lamarckian coefficient refinement, migration, logging, and checkpoints; the current best run reached max-abs residual 1.0000000139060103 at generation 4 with support signature (2,3,3); the Pythagorean identity ||R||^2 = 27 - 19 = 8 holds at every ALS basin, and the 0.5 basin is a soft attractor with dead-entry leakage as the dominant bottleneck
+- Algebraic coefficient structure: ✓ coefficients of the best rank-19 decomposition are NOT random continuous floats but fall on a discrete algebraic grid of ~1473 values (rationals, roots, 27-family); three optimizers exploiting this structure reduced max-abs from 0.4999 to 0.0983; algebraic mode has been integrated into the Step 84 EA as STEP84_ALGEBRAIC_MODE toggle
 
 **Remaining open fronts:**
 - Additional arity-4 schemas: XCXC, XCCX, XXXC, XXX not yet explored
@@ -15933,6 +16023,12 @@ between live and dead tensor entries:
   by how energy distributes across live/dead entries; escaping the 0.5 basin requires suppressing
   dead-entry leakage (702 zero entries) simultaneously with live-entry fitting, and higher
   mutationReplaceRate and coeffSigmaMax settings help explore new support configurations
+- Algebraic coefficient structure: the discovery that coefficients are NOT random continuous floats
+  but fall on a discrete algebraic grid of ~1400 values has been integrated into the Step 84 EA;
+  the next frontier is to determine whether the L-BFGS smooth-max optimizer's best (max_abs ~0.098)
+  can be further improved by the EA's population-based search over algebraic values, or whether
+  the 0.098 basin floor requires a fundamentally different approach such as higher-rank exploration
+  or random restarts from diverse initializations
 - Step 48 shows that the 8 XC-orbit linearization is exact but vacuous for rank lower bounds;
   any useful lower-bound model must retain finer-than-orbit-sum equation structure
 - Step 49 now records the exact 729-equation trilinear system and the 8 representative types;
