@@ -48,11 +48,20 @@ def bulk_blobs_to_stacked(blobs: list[bytes]) -> tuple[np.ndarray, np.ndarray, n
 
 
 def factors_from_json(data: dict) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Load factor matrices from the JSON format used by optimize_v2 / step84.
+    """Load factor matrices from JSON.
 
-    JSON has {"terms": [{"alpha_support": [...], "alpha_values": [...], ...}, ...]}.
+    Supports two formats:
+      1. Sparse: {"terms": [{"alpha_support": [...], "alpha_values": [...], ...}, ...]}
+      2. Dense:  {"alpha": [[...], ...], "beta": [[...], ...], "gamma": [[...], ...]}
     Returns dense (RANK, DIM) arrays.
     """
+    if "alpha" in data and "beta" in data and "gamma" in data:
+        alpha = np.array(data["alpha"], dtype=np.float64)
+        beta = np.array(data["beta"], dtype=np.float64)
+        gamma = np.array(data["gamma"], dtype=np.float64)
+        assert alpha.shape == (RANK, DIM), f"Expected alpha ({RANK},{DIM}), got {alpha.shape}"
+        return alpha, beta, gamma
+
     terms = data["terms"]
     assert len(terms) == RANK, f"Expected {RANK} terms, got {len(terms)}"
     alpha = np.zeros((RANK, DIM), dtype=np.float64)

@@ -484,6 +484,178 @@ def cpu_algebraic_snap(
 # ALS lands at ~0.5; L-BFGS pushes to ~0.10-0.12. Let it run on anything in the basin.
 LBFGS_FITNESS_THRESHOLD = 1.0
 
+# ── Tier 4: SLP minimax threshold ────────────────────────────────
+# SLP is expensive (~1-2s per LP iteration) but breaks the L-BFGS basin floor.
+# Only run on candidates that have already converged through L-BFGS.
+SLP_FITNESS_THRESHOLD = 0.12
+SLP_DEFAULT_ITERS = 100
+SLP_ACTIVE_K = 500  # number of active constraints in LP subset
+
+
+from scipy.optimize import linprog
+
+
+# ── Tier 4: SLP minimax refinement ───────────────────────────────
+
+def _slp_build_jacobian(alpha, beta, gamma):
+    """Build full Jacobian (729 x 513) — vectorized over rank."""
+    R, D = alpha.shape
+    N = D ** 3
+    P = 3 * R * D
+    J = np.zeros((N, P))
+    ai_range = np.arange(D)
+
+    # alpha block: dT[a,b,c]/d alpha[k,a'] = delta(a,a') * beta[k,b] * gamma[k,c]
+    bg = np.einsum('kb,kc->kbc', beta, gamma).reshape(R, D * D)
+    for ai in range(D):
+        J[ai * D * D:(ai + 1) * D * D, ai::D][:, :R] += bg.T
+
+    # beta block: dT[a,b,c]/d beta[k,b'] = alpha[k,a] * delta(b,b') * gamma[k,c]
+    ag = np.einsum('ka,kc->kac', alpha, gamma).reshape(R, D * D)
+    for bi in range(D):
+        idx = (ai_range[:, None] * D * D + bi * D + ai_range[None, :]).ravel()
+        J[idx[:, None], R * D + np.arange(R) * D + bi] += ag.T
+
+    # gamma block: dT[a,b,c]/d gamma[k,c'] = alpha[k,a] * beta[k,b] * delta(c,c')
+    ab = np.einsum('ka,kb->kab', alpha, beta).reshape(R, D * D)
+    for ci in range(D):
+        idx = (ai_range[:, None] * D * D + ai_range[None, :] * D + ci).ravel()
+        J[idx[:, None], 2 * R * D + np.arange(R) * D + ci] += ab.T
+
+    return J
+
+
+def _slp_solve_lp(res_flat, J, trust, active_k):
+    """Solve LP with active-set: min t s.t. |R + J@dx| <= t, ||dx||_inf <= trust."""
+    N, P = J.shape
+    abs_res = np.abs(res_flat)
+
+    # Active set: top-K constraints
+    k = min(active_k, N)
+    active_idx = np.argpartition(abs_res, -k)[-k:]
+
+    J_sub = J[active_idx]
+    r_sub = res_flat[active_idx]
+    n_act = len(active_idx)
+
+    ones_col = -np.ones((n_act, 1))
+    A_ub = np.vstack([
+        np.hstack([J_sub, ones_col]),
+        np.hstack([-J_sub, ones_col]),
+    ])
+    b_ub = np.concatenate([-r_sub, r_sub])
+    c_obj = np.zeros(P + 1)
+    c_obj[P] = 1.0
+    bounds = [(-trust, trust)] * P + [(0, None)]
+
+    result = linprog(c_obj, A_ub=A_ub, b_ub=b_ub, bounds=bounds,
+                     method='highs', options={'presolve': True, 'time_limit': 30})
+    if not result.success:
+        return None, None
+
+    dx = result.x[:P]
+    t_pred = result.x[P]
+
+    # Verify active set was sufficient
+    new_res_lin = res_flat + J @ dx
+    if np.max(np.abs(new_res_lin)) > t_pred * 1.01:
+        # Fallback to full LP
+        ones_full = -np.ones((N, 1))
+        A_ub = np.vstack([np.hstack([J, ones_full]), np.hstack([-J, ones_full])])
+        b_ub = np.concatenate([-res_flat, res_flat])
+        result = linprog(c_obj, A_ub=A_ub, b_ub=b_ub, bounds=bounds,
+                         method='highs', options={'presolve': True, 'time_limit': 60})
+        if not result.success:
+            return None, None
+        dx = result.x[:P]
+        t_pred = result.x[P]
+
+    return dx, t_pred
+
+
+def cpu_slp_refine(
+    alpha: np.ndarray,
+    beta: np.ndarray,
+    gamma: np.ndarray,
+    max_iters: int = SLP_DEFAULT_ITERS,
+    trust_init: float = 0.003,
+    trust_max: float = 0.5,
+    trust_min: float = 1e-8,
+    eta_accept: float = 0.01,
+    active_k: int = SLP_ACTIVE_K,
+    check_preempt: Callable[[], bool] | None = None,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, float]:
+    """SLP minimax refinement: iterative LP targeting true minimax objective.
+
+    Breaks through the L-BFGS basin floor by directly optimizing max|residual|
+    without smooth-max approximation. Each iteration builds a Jacobian, solves
+    a linear program, and takes a trust-region-managed step.
+    """
+    R, D = alpha.shape
+    P = 3 * R * D
+
+    def _pack(a, b, g):
+        return np.concatenate([a.ravel(), b.ravel(), g.ravel()])
+
+    def _unpack(x):
+        return (x[:R*D].reshape(R, D),
+                x[R*D:2*R*D].reshape(R, D),
+                x[2*R*D:].reshape(R, D))
+
+    def _residual(x):
+        a, b, g = _unpack(x)
+        return (np.einsum('ra,rb,rc->abc', a, b, g, optimize=True) - _T).ravel()
+
+    x = _pack(alpha, beta, gamma)
+    current_fit = float(np.max(np.abs(_residual(x))))
+    best_x = x.copy()
+    best_fit = current_fit
+
+    trust = trust_init
+
+    for it in range(max_iters):
+        if check_preempt and check_preempt():
+            break
+
+        res = _residual(x)
+        a, b, g = _unpack(x)
+        J = _slp_build_jacobian(a, b, g)
+
+        dx, t_pred = _slp_solve_lp(res, J, trust, active_k)
+        if dx is None:
+            trust = max(trust / 4, trust_min)
+            if trust <= trust_min:
+                break
+            continue
+
+        pred_improvement = current_fit - t_pred
+        if pred_improvement < 1e-14:
+            break
+
+        x_new = x + dx
+        new_fit = float(np.max(np.abs(_residual(x_new))))
+        actual_improvement = current_fit - new_fit
+        rho = actual_improvement / pred_improvement
+
+        if rho >= eta_accept and actual_improvement > 0:
+            x = x_new
+            current_fit = new_fit
+            if new_fit < best_fit:
+                best_x = x.copy()
+                best_fit = new_fit
+            if rho > 0.75:
+                trust = min(trust * 2, trust_max)
+            elif rho > 0.5:
+                trust = min(trust * 1.5, trust_max)
+        else:
+            trust = max(trust / 2, trust_min)
+
+        if trust < trust_min:
+            break
+
+    a_out, b_out, g_out = _unpack(best_x)
+    return a_out, b_out, g_out, best_fit
+
 
 def cpu_full_refine(
     alpha: np.ndarray,
@@ -532,8 +704,30 @@ def cpu_full_refine(
             # Pair moves escaped basin — re-run L-BFGS to polish
             a, b, g, fit = cpu_lbfgs_refine(a, b, g, max_iters=100)
 
-    # Stage 4: algebraic snap (only for really good candidates)
+    # Stage 4+5: Fork — snap and SLP are competing strategies.
+    # Snap discretizes coefficients (good for exact solutions, destroys SLP gradients).
+    # SLP needs smooth continuous values. Run both from pre-snap state, keep best.
     if fit < LBFGS_FITNESS_THRESHOLD:
-        a, b, g, fit = cpu_algebraic_snap(a, b, g, k=4)
+        # Save pre-snap state for SLP branch
+        a_pre, b_pre, g_pre, fit_pre = a.copy(), b.copy(), g.copy(), fit
+
+        # Branch A: algebraic snap
+        a_snap, b_snap, g_snap, fit_snap = cpu_algebraic_snap(a, b, g, k=4)
+
+        # Branch B: SLP minimax (from pre-snap continuous values)
+        if fit_pre < SLP_FITNESS_THRESHOLD:
+            a_slp, b_slp, g_slp, fit_slp = cpu_slp_refine(
+                a_pre, b_pre, g_pre, max_iters=SLP_DEFAULT_ITERS,
+                trust_init=0.003, active_k=SLP_ACTIVE_K,
+                check_preempt=check_preempt,
+            )
+        else:
+            a_slp, b_slp, g_slp, fit_slp = a_pre, b_pre, g_pre, fit_pre
+
+        # Pick the winner
+        if fit_slp < fit_snap:
+            a, b, g, fit = a_slp, b_slp, g_slp, fit_slp
+        else:
+            a, b, g, fit = a_snap, b_snap, g_snap, fit_snap
 
     return a, b, g, fit

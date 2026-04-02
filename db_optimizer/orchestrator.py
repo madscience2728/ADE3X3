@@ -58,7 +58,10 @@ def seed_from_json(conn, json_paths: list[Path], generation: int = 0,
             continue
         with open(p) as f:
             data = json.load(f)
-        if len(data.get("terms", [])) != RANK:
+        # Support both sparse ("terms") and dense ("alpha"/"beta"/"gamma") formats
+        has_terms = len(data.get("terms", [])) == RANK
+        has_dense = all(k in data for k in ("alpha", "beta", "gamma"))
+        if not has_terms and not has_dense:
             continue
         alpha, beta, gamma = factors_from_json(data)
 

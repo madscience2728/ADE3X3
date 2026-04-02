@@ -14,6 +14,7 @@ import argparse
 import json
 import sys
 import time
+import threading
 import multiprocessing as mp
 from pathlib import Path
 
@@ -66,34 +67,34 @@ def maxabs(x):
 
 
 def build_jacobian(x):
-    """Fully vectorized Jacobian (729 x 513). No Python loops over entries."""
+    """Fully vectorized Jacobian (729 x 513). Zero Python loops over entries."""
     a, b, g = unpack(x)
     J = np.zeros((N_ENTRIES, N_PARAMS))
 
-    # Index layout: flat[a,b,c] = a*D*D + b*D + c
+    # Precompute index arrays (could cache these but they're cheap)
+    ai_range = np.arange(D)
+    
     # alpha block: dT[a,b,c]/d alpha[k,a'] = delta(a,a') * beta[k,b] * gamma[k,c]
-    # For each rank k, for each a_idx, slice [a_idx*D*D : (a_idx+1)*D*D] gets outer(b[k], g[k])
-    for k in range(R):
-        bg = np.outer(b[k], g[k]).ravel()  # D*D
-        for ai in range(D):
-            J[ai*D*D:(ai+1)*D*D, k*D + ai] += bg
+    # For each k: block of D columns at [k*D : k*D+D]
+    # For a' in 0..D-1: rows a'*D*D .. (a'+1)*D*D get outer(b[k], g[k])
+    bg = np.einsum('kb,kc->kbc', b, g).reshape(R, D*D)  # (R, D*D)
+    for ai in range(D):
+        # J[ai*D*D:(ai+1)*D*D, k*D+ai for k in 0..R-1] += bg[k]
+        J[ai*D*D:(ai+1)*D*D, ai::D][:, :R] += bg.T  # (D*D, R)
 
     # beta block: dT[a,b,c]/d beta[k,b'] = alpha[k,a] * delta(b,b') * gamma[k,c]
-    ab_idx = np.arange(D)[:, None] * D * D  # (D,1) — a offsets
-    c_idx = np.arange(D)[None, :]            # (1,D) — c offsets
-    for k in range(R):
-        ag = np.outer(a[k], g[k])  # (D,D): a[k,a]*g[k,c]
-        for bi in range(D):
-            idx = (ab_idx + bi * D + c_idx).ravel()  # D*D entries with b=bi
-            J[idx, R*D + k*D + bi] += ag.ravel()
+    # Rows with b=b': indices a*D*D + b'*D + c for all a,c → shape (D,D) reshaped to D*D
+    ag = np.einsum('ka,kc->kac', a, g).reshape(R, D*D)  # (R, D*D)
+    for bi in range(D):
+        idx = (ai_range[:, None] * D * D + bi * D + ai_range[None, :]).ravel()
+        J[np.ix_(idx, R*D + bi + ai_range[:R] * D)] = 0  # not needed, J is zeros
+        J[idx[:, None], R*D + np.arange(R) * D + bi] += ag.T  # (D*D, R)
 
     # gamma block: dT[a,b,c]/d gamma[k,c'] = alpha[k,a] * beta[k,b] * delta(c,c')
-    b_idx = np.arange(D)[None, :] * D  # (1,D) — b offsets
-    for k in range(R):
-        ab_vals = np.outer(a[k], b[k])  # (D,D): a[k,a]*b[k,b]
-        for ci in range(D):
-            idx = (ab_idx + b_idx + ci).ravel()  # D*D entries with c=ci
-            J[idx, 2*R*D + k*D + ci] += ab_vals.ravel()
+    ab = np.einsum('ka,kb->kab', a, b).reshape(R, D*D)  # (R, D*D)
+    for ci in range(D):
+        idx = (ai_range[:, None] * D * D + ai_range[None, :] * D + ci).ravel()
+        J[idx[:, None], 2*R*D + np.arange(R) * D + ci] += ab.T  # (D*D, R)
 
     return J
 
@@ -155,6 +156,19 @@ def _solve_lp(res_flat, J, trust, idx, prev_basis=None):
     return None, None, None
 
 
+# ── Shared progress state ────────────────────────────────────────────────
+
+_progress_iters = None   # shared Array: iteration count per worker
+_progress_fits = None    # shared Array: current best fitness per worker
+_progress_accepts = None # shared Array: accept count per worker
+
+def _init_worker(iters_arr, fits_arr, accepts_arr):
+    global _progress_iters, _progress_fits, _progress_accepts
+    _progress_iters = iters_arr
+    _progress_fits = fits_arr
+    _progress_accepts = accepts_arr
+
+
 # ── Single worker descent ────────────────────────────────────────────────
 
 def slp_descent(args_tuple):
@@ -171,6 +185,10 @@ def slp_descent(args_tuple):
     n_rejects = 0
     prev_basis = None
     trajectory = [(0, current_fit)]
+    
+    # Update shared progress
+    if _progress_fits is not None:
+        _progress_fits[worker_id] = current_fit
     
     for it in range(max_iters):
         res = residual_flat(x)
@@ -214,6 +232,12 @@ def slp_descent(args_tuple):
         
         if trust < trust_min:
             break
+        
+        # Update shared progress every iteration
+        if _progress_iters is not None:
+            _progress_iters[worker_id] = it + 1
+            _progress_fits[worker_id] = best_fit
+            _progress_accepts[worker_id] = n_accepts
         
         # Log every 50 accepts
         if n_accepts > 0 and n_accepts % 50 == 0 and actual_improvement > 0:
@@ -271,7 +295,7 @@ def main():
     parser = argparse.ArgumentParser(description="Turbo SLP: active-set + parallel")
     parser.add_argument("--input", default="slp_best.json")
     parser.add_argument("--out", default="slp_turbo_best.json")
-    parser.add_argument("--workers", type=int, default=24)
+    parser.add_argument("--workers", type=int, default=12)
     parser.add_argument("--max-iters", type=int, default=500,
                         help="Iterations per worker")
     parser.add_argument("--trust-init", type=float, default=0.003)
@@ -323,9 +347,44 @@ def main():
             for wid in range(args.workers)
         ]
         
+        # Shared progress arrays
+        sh_iters = mp.Array('i', args.workers)    # int: iteration count
+        sh_fits = mp.Array('d', args.workers)     # double: best fitness
+        sh_accepts = mp.Array('i', args.workers)  # int: accept count
+        for wi in range(args.workers):
+            sh_fits[wi] = seed_fits[wi]
+        
+        # Progress monitor thread
+        stop_monitor = threading.Event()
+        def monitor():
+            while not stop_monitor.is_set():
+                stop_monitor.wait(15)  # print every 15s
+                if stop_monitor.is_set():
+                    break
+                iters = [sh_iters[i] for i in range(args.workers)]
+                fits = [sh_fits[i] for i in range(args.workers)]
+                accs = [sh_accepts[i] for i in range(args.workers)]
+                best_w = int(np.argmin(fits))
+                min_it = min(iters)
+                max_it = max(iters)
+                done_pct = sum(iters) / (args.workers * args.max_iters) * 100
+                print(f"  [{time.time()-t_round:.0f}s] "
+                      f"progress {done_pct:.0f}%  "
+                      f"iters {min_it}-{max_it}/{args.max_iters}  "
+                      f"best W{best_w:02d}={fits[best_w]:.10f} ({accs[best_w]}acc)  "
+                      f"global_best={min(fits):.10f}",
+                      flush=True)
+        
+        mon_thread = threading.Thread(target=monitor, daemon=True)
+        mon_thread.start()
+        
         # Launch parallel descents
-        with mp.Pool(args.workers) as pool:
+        with mp.Pool(args.workers, initializer=_init_worker,
+                     initargs=(sh_iters, sh_fits, sh_accepts)) as pool:
             results = pool.map(slp_descent, work)
+        
+        stop_monitor.set()
+        mon_thread.join(timeout=2)
         
         dt_round = time.time() - t_round
         
