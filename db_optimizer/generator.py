@@ -40,8 +40,8 @@ def mutate_gaussian(
     """Add Gaussian noise to a random subset of coefficients."""
     alpha, beta, gamma = alpha.copy(), beta.copy(), gamma.copy()
     factors = [alpha, beta, gamma]
-    # Perturb 1-5 random coefficients
-    n_perturb = rng.integers(1, 6)
+    # Perturb 1-10 random coefficients (wider range for more exploration)
+    n_perturb = rng.integers(1, 11)
     for _ in range(n_perturb):
         fi = rng.integers(3)
         ri = rng.integers(RANK)
@@ -68,6 +68,62 @@ def mutate_support_flip(
     else:
         factors[fi][ri, di] = 0.0
     return alpha, beta, gamma
+
+
+# Ternary alphabet — the only known exact 3×3 decomposition uses {-1, 0, 1}
+_TERNARY = np.array([-1.0, 0.0, 1.0])
+
+
+def mutate_ternary(
+    alpha: np.ndarray, beta: np.ndarray, gamma: np.ndarray,
+    rng: np.random.Generator, n_moves: int = 1,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Snap one or more random coefficients to a ternary {-1, 0, 1} value."""
+    alpha, beta, gamma = alpha.copy(), beta.copy(), gamma.copy()
+    factors = [alpha, beta, gamma]
+    for _ in range(n_moves):
+        fi = rng.integers(3)
+        ri = rng.integers(RANK)
+        di = rng.integers(DIM)
+        factors[fi][ri, di] = _TERNARY[rng.integers(3)]
+    return alpha, beta, gamma
+
+
+def _support_vector(parent, threshold=1e-8):
+    """Binary support vector: 1 where |coeff| > threshold, 0 elsewhere."""
+    return np.concatenate([
+        (np.abs(parent[0]).ravel() > threshold).astype(np.float32),
+        (np.abs(parent[1]).ravel() > threshold).astype(np.float32),
+        (np.abs(parent[2]).ravel() > threshold).astype(np.float32),
+    ])
+
+
+def _pick_dissimilar_pair(parents, rng):
+    """Pick two parents with the most dissimilar support patterns.
+
+    Disassortative mating: crossing structurally different parents produces
+    offspring that explore the intersection of different solution basins.
+    """
+    n = len(parents)
+    if n == 2:
+        return 0, 1
+
+    # Precompute support vectors
+    svecs = [_support_vector(p) for p in parents]
+
+    # Pick parent A randomly, then find most dissimilar B
+    a = int(rng.integers(n))
+    sa = svecs[a]
+    best_b, best_dist = -1, -1.0
+    for b in range(n):
+        if b == a:
+            continue
+        # Hamming distance (number of differing support entries)
+        dist = float(np.sum(sa != svecs[b]))
+        if dist > best_dist:
+            best_dist = dist
+            best_b = b
+    return a, best_b
 
 
 def crossover(
@@ -118,9 +174,9 @@ def generate_batch(
             children.append((*child, "mutate_gaussian"))
         elif r < p_coeff + p_gaussian + p_crossover:
             if len(parents) >= 2:
-                idx = rng.choice(len(parents), size=2, replace=False)
-                pa = (parents[idx[0]][0], parents[idx[0]][1], parents[idx[0]][2])
-                pb = (parents[idx[1]][0], parents[idx[1]][1], parents[idx[1]][2])
+                ia, ib = _pick_dissimilar_pair(parents, rng)
+                pa = (parents[ia][0], parents[ia][1], parents[ia][2])
+                pb = (parents[ib][0], parents[ib][1], parents[ib][2])
                 child = crossover(pa, pb, rng)
                 children.append((*child, "crossover"))
             else:
@@ -134,6 +190,11 @@ def generate_batch(
             children.append((*child, "shadow_reinject"))
         else:
             parent = parents[rng.integers(len(parents))]
-            child = mutate_support_flip(*parent, rng)
-            children.append((*child, "mutate_support"))
+            # Split: 20% ternary snap, 80% support flip
+            if rng.random() < 0.2:
+                child = mutate_ternary(*parent, rng, n_moves=rng.integers(1, 4))
+                children.append((*child, "mutate_ternary"))
+            else:
+                child = mutate_support_flip(*parent, rng)
+                children.append((*child, "mutate_support"))
     return children

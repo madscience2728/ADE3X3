@@ -241,16 +241,16 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
         factors_to_blob, blob_to_factors, bulk_blobs_to_stacked,
         compute_support_hash, compute_support_sig,
     )
-    from db_optimizer.tensor import fitness_frobenius
+    from db_optimizer.tensor import fitness_frobenius, dead_live_energy
     from db_optimizer.gpu_eval import gpu_batch_fitness, gpu_batch_fitness_stacked, gpu_minimax_refine, gpu_minimax_refine_stacked
-    from db_optimizer.cpu_refine import cpu_minimax_refine
+    from db_optimizer.cpu_refine import cpu_minimax_refine, cpu_pair_refine, cpu_lbfgs_refine, cpu_algebraic_snap, cpu_full_refine, cpu_als_init
     from db_optimizer.generator import generate_batch
     from db_optimizer.selector import (
         select_parents, select_global_elites, fetch_pending, update_fitness_batch,
         fetch_refine_candidates, update_refined, update_minimax_batch,
         prune_duplicates, archive_to_shadow, pending_count, island_counts,
         insert_candidates, log_event,
-        promote_best, demote_random, fetch_shadow_pool,
+        promote_best, demote_random, fetch_shadow_pool, refresh_olympus,
     )
     import numpy as np
 
@@ -279,6 +279,7 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
     GPU_MINIMAX_BATCH = int(ov.get("gpu_minimax_batch", cfg.GPU_MINIMAX_BATCH_SIZE))
     GPU_MINIMAX_N_TRIALS = int(ov.get("gpu_minimax_n_trials", cfg.GPU_MINIMAX_N_TRIALS))
     GPU_MINIMAX_FINE_RANGE = float(ov.get("gpu_minimax_fine_range", cfg.GPU_MINIMAX_FINE_RANGE))
+    MAX_GPU_ERRORS = 5  # consecutive GPU errors before hard-stopping
     START_MODE = str(ov.get("mode", "resume")).lower()
     SEED_PATH = ov.get("seed_path")
 
@@ -346,7 +347,7 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                     elif op == "fetch_refine_candidates":
                         val = fetch_refine_candidates(conn, args[0])
                     elif op == "update_refined":
-                        update_refined(conn, args[0], args[1], args[2], args[3])
+                        update_refined(conn, args[0], args[1], args[2], args[3], dead_energy=args[4] if len(args) > 4 else None)
                     elif op == "archive_to_shadow":
                         archive_to_shadow(conn, args[0])
                     elif op == "prune_duplicates":
@@ -366,6 +367,8 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                         val = promote_best(conn, args[0], args[1], k=args[2], dst_capacity=args[3])
                     elif op == "demote_random":
                         val = demote_random(conn, args[0], args[1], k=args[2], dst_capacity=args[3])
+                    elif op == "refresh_olympus":
+                        val = refresh_olympus(conn, args[0], cap=args[1])
                     elif op == "monitor_query":
                         best_row = conn.execute(
                             "SELECT MIN(COALESCE(fitness_fp64, fitness_fp32)) as best FROM candidates WHERE fitness_fp32 IS NOT NULL"
@@ -519,7 +522,9 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                 hypermut_active = (plateau_gens >= HYPERMUT_PLATEAU_THRESH
                                    and plateau_gens % 5 == 0)
 
-                # ── Random immigrant injection on deep plateau ──
+                # ── Ancestor re-injection on deep plateau ──
+                # Instead of random immigrants, walk back up the lineage tree:
+                # pull shadow ancestors and mutate them with moderate noise.
                 if plateau_gens >= IMMIGRANT_PLATEAU_THRESH and plateau_gens % 10 == 0:
                     n_immigrants = max(N_ISLANDS, GENERATION_BATCH_SIZE // 20)
                     imm_rows = []
@@ -528,19 +533,34 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                          for m in ISLAND_LAYOUT if m["role"] in ("explore", "wide_explore", "balanced")],
                         n_immigrants,
                     )
+                    # Refresh shadow pool for ancestor injection
+                    ancestor_rows = fetch_shadow_pool(gen_read_conn, limit=500)
+                    ancestors = [blob_to_factors(r["factors_blob"]) for r in ancestor_rows] if ancestor_rows else []
                     gen = _gen_counter[0]
-                    for isl, n_imm in imm_alloc.items():
-                        for _ in range(n_imm):
-                            a = rng.standard_normal((cfg.RANK, cfg.DIM))
-                            b = rng.standard_normal((cfg.RANK, cfg.DIM))
-                            g = rng.standard_normal((cfg.RANK, cfg.DIM))
-                            blob = factors_to_blob(a, b, g)
-                            s_hash = compute_support_hash(a, b, g)
-                            s_sig = compute_support_sig(a, b, g)
-                            imm_rows.append((blob, s_hash, s_sig, "random_immigrant", isl, gen))
-                    if imm_rows:
-                        _db_submit("insert_candidates", (imm_rows,))
-                        print(f"  [GEN] Injected {len(imm_rows)} random immigrants (plateau={plateau_gens})")
+                    if ancestors:
+                        for isl, n_imm in imm_alloc.items():
+                            for _ in range(n_imm):
+                                # Pick a random ancestor, mutate with moderate Gaussian
+                                anc = ancestors[int(rng.integers(len(ancestors)))]
+                                a, b, g = anc[0].copy(), anc[1].copy(), anc[2].copy()
+                                # Moderate perturbation: enough to escape old basin
+                                sigma_imm = 0.03
+                                n_perturb = int(rng.integers(3, 15))
+                                factors = [a, b, g]
+                                for _ in range(n_perturb):
+                                    fi = int(rng.integers(3))
+                                    ri = int(rng.integers(cfg.RANK))
+                                    di = int(rng.integers(cfg.DIM))
+                                    factors[fi][ri, di] += float(rng.normal(0, sigma_imm))
+                                blob = factors_to_blob(a, b, g)
+                                s_hash = compute_support_hash(a, b, g)
+                                s_sig = compute_support_sig(a, b, g)
+                                imm_rows.append((blob, s_hash, s_sig, "ancestor_reinject", isl, gen))
+                        if imm_rows:
+                            _db_submit("insert_candidates", (imm_rows,))
+                            print(f"  [GEN] Re-injected {len(imm_rows)} mutated ancestors (plateau={plateau_gens})")
+                    else:
+                        print(f"  [GEN] Plateau={plateau_gens} but shadow pool empty — skipping ancestor injection")
 
                 # Per-island generation using island-specific configs
                 _set_activity("generator", "working", "selecting parents")
@@ -696,8 +716,10 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
 
     # ── Thread B: GPU Eval (Tier 1 Screen + Tier 2 Minimax) ─────
     def _gpu_eval_loop(conn):
+        import torch  # needed for CUDA error types
         try:
             cycle = 0
+            gpu_errors = 0  # consecutive CUDA error counter
             last_log = 0.0
             # Own connection for reads — GPU never waits on the DB writer
             gpu_read_conn = get_connection(db_path, check_same_thread=False)
@@ -770,38 +792,85 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                 except _queue_mod.Empty:
                     continue
 
-                if kind == "screen":
-                    # ── Tier 1: Bulk GPU screen ──
-                    t0 = time.time()
-                    N = alpha_np.shape[0]
-                    _set_activity("gpu_screen", "working", f"evaluating {N} on GPU")
+                try:
+                    if kind == "screen":
+                        # ── Tier 1: Bulk GPU screen ──
+                        t0 = time.time()
+                        N = alpha_np.shape[0]
+                        _set_activity("gpu_screen", "working", f"evaluating {N} on GPU")
 
-                    # Track in-flight for the main thread's view
-                    gpu_in_flight.update(ids)
+                        # Track in-flight for the main thread's view
+                        gpu_in_flight.update(ids)
 
-                    fitness_fp32 = gpu_batch_fitness_stacked(alpha_np, beta_np, gamma_np)
-                    _db_submit("update_fitness_batch", (ids, fitness_fp32.tolist(), 1))
+                        fitness_fp32 = gpu_batch_fitness_stacked(alpha_np, beta_np, gamma_np)
+                        _db_submit("update_fitness_batch", (ids, fitness_fp32.tolist(), 1))
 
-                    dt_screen = time.time() - t0
-                    best_batch = float(fitness_fp32.min()) if N > 0 else 999
-                    _set_activity("gpu_screen", "idle", "", items=N, dt=dt_screen)
+                        dt_screen = time.time() - t0
+                        best_batch = float(fitness_fp32.min()) if N > 0 else 999
+                        _set_activity("gpu_screen", "idle", "", items=N, dt=dt_screen)
 
-                    # Inline tier-2: minimax survivors directly (already decoded)
-                    surv_mask = fitness_fp32 < TIER1_SURVIVOR_THRESHOLD
-                    n_surv = int(surv_mask.sum())
-                    if n_surv > 0:
-                        s_alpha = alpha_np[surv_mask]
-                        s_beta = beta_np[surv_mask]
-                        s_gamma = gamma_np[surv_mask]
-                        s_ids = [ids[i] for i in range(N) if surv_mask[i]]
-                        s_islands = [islands[i] for i in range(N) if surv_mask[i]]
+                        # Inline tier-2: minimax survivors directly (already decoded)
+                        surv_mask = fitness_fp32 < TIER1_SURVIVOR_THRESHOLD
+                        n_surv = int(surv_mask.sum())
+                        if n_surv > 0:
+                            s_alpha = alpha_np[surv_mask]
+                            s_beta = beta_np[surv_mask]
+                            s_gamma = gamma_np[surv_mask]
+                            s_ids = [ids[i] for i in range(N) if surv_mask[i]]
+                            s_islands = [islands[i] for i in range(N) if surv_mask[i]]
 
+                            t1 = time.time()
+                            _set_activity("gpu_minimax", "working",
+                                          f"refining {n_surv} survivors ({GPU_MINIMAX_SWEEPS} sweeps)")
+
+                            minimax_results = gpu_minimax_refine_stacked(
+                                s_alpha, s_beta, s_gamma,
+                                sweeps=GPU_MINIMAX_SWEEPS,
+                                n_trials=GPU_MINIMAX_N_TRIALS,
+                                fine_range=GPU_MINIMAX_FINE_RANGE,
+                            )
+
+                            mm_ids, mm_blobs, mm_fitness = [], [], []
+                            for i, (a_r, b_r, g_r, fit) in enumerate(minimax_results):
+                                mm_ids.append(s_ids[i])
+                                mm_blobs.append(factors_to_blob(a_r, b_r, g_r))
+                                mm_fitness.append(fit)
+
+                            _db_submit("update_minimax_batch", (mm_ids, mm_blobs, mm_fitness))
+
+                            for i, (a_r, b_r, g_r, fit) in enumerate(minimax_results):
+                                if fit < TIER2_REFINE_THRESHOLD:
+                                    try:
+                                        _gpu_out_queue.put_nowait(
+                                            (s_ids[i], a_r, b_r, g_r, fit, s_islands[i])
+                                        )
+                                    except _queue_mod.Full:
+                                        break
+
+                            dt_mm = time.time() - t1
+                            best_mm = min(r[3] for r in minimax_results) if minimax_results else 999
+                            _set_activity("gpu_minimax", "idle", "", items=n_surv, dt=dt_mm)
+                        else:
+                            dt_mm = 0.0
+                            best_mm = 999
+
+                        now = time.time()
+                        if cycle % 5 == 0 or (now - last_log) >= 10.0:
+                            print(
+                                f"  [GPU] cycle {cycle}: screened {N} (best={best_batch:.6f}), "
+                                f"minimax {n_surv}, screen={dt_screen:.2f}s, mm={dt_mm:.2f}s"
+                            )
+                            last_log = now
+
+                    elif kind == "minimax":
+                        # ── Fill-in: GPU minimax on best candidates ──
+                        N = alpha_np.shape[0]
                         t1 = time.time()
                         _set_activity("gpu_minimax", "working",
-                                      f"refining {n_surv} survivors ({GPU_MINIMAX_SWEEPS} sweeps)")
+                                      f"minimax {N} candidates ({GPU_MINIMAX_SWEEPS} sweeps)")
 
                         minimax_results = gpu_minimax_refine_stacked(
-                            s_alpha, s_beta, s_gamma,
+                            alpha_np, beta_np, gamma_np,
                             sweeps=GPU_MINIMAX_SWEEPS,
                             n_trials=GPU_MINIMAX_N_TRIALS,
                             fine_range=GPU_MINIMAX_FINE_RANGE,
@@ -809,7 +878,7 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
 
                         mm_ids, mm_blobs, mm_fitness = [], [], []
                         for i, (a_r, b_r, g_r, fit) in enumerate(minimax_results):
-                            mm_ids.append(s_ids[i])
+                            mm_ids.append(ids[i])
                             mm_blobs.append(factors_to_blob(a_r, b_r, g_r))
                             mm_fitness.append(fit)
 
@@ -819,65 +888,44 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                             if fit < TIER2_REFINE_THRESHOLD:
                                 try:
                                     _gpu_out_queue.put_nowait(
-                                        (s_ids[i], a_r, b_r, g_r, fit, s_islands[i])
+                                        (ids[i], a_r, b_r, g_r, fit, islands[i])
                                     )
                                 except _queue_mod.Full:
                                     break
 
                         dt_mm = time.time() - t1
                         best_mm = min(r[3] for r in minimax_results) if minimax_results else 999
-                        _set_activity("gpu_minimax", "idle", "", items=n_surv, dt=dt_mm)
+                        _set_activity("gpu_minimax", "idle", "", items=N, dt=dt_mm)
+
+                        now = time.time()
+                        if cycle % 5 == 0 or dt_mm >= 2.0 or (now - last_log) >= 10.0:
+                            print(f"  [GPU] cycle {cycle}: minimax {N}, best={best_mm:.6f}, {dt_mm:.2f}s")
+                            last_log = now
+
+                    gpu_errors = 0  # reset on success
+
+                except torch.cuda.OutOfMemoryError:
+                    gpu_errors += 1
+                    torch.cuda.empty_cache()
+                    print(f"  [GPU] CUDA OOM on {kind} (batch={alpha_np.shape[0]}), "
+                          f"cleared cache, error #{gpu_errors}")
+                    _set_activity("gpu_screen", "recovering", f"OOM #{gpu_errors}")
+                    time.sleep(1.0)
+                    if gpu_errors >= MAX_GPU_ERRORS:
+                        raise RuntimeError(f"GPU OOM {gpu_errors} times in a row — stopping")
+
+                except RuntimeError as cuda_err:
+                    err_msg = str(cuda_err).lower()
+                    if "cuda" in err_msg or "nccl" in err_msg or "device-side" in err_msg:
+                        gpu_errors += 1
+                        torch.cuda.empty_cache()
+                        print(f"  [GPU] CUDA error on {kind}: {cuda_err} (error #{gpu_errors})")
+                        _set_activity("gpu_screen", "recovering", f"CUDA err #{gpu_errors}")
+                        time.sleep(2.0)
+                        if gpu_errors >= MAX_GPU_ERRORS:
+                            raise
                     else:
-                        dt_mm = 0.0
-                        best_mm = 999
-
-                    now = time.time()
-                    if cycle % 5 == 0 or (now - last_log) >= 10.0:
-                        print(
-                            f"  [GPU] cycle {cycle}: screened {N} (best={best_batch:.6f}), "
-                            f"minimax {n_surv}, screen={dt_screen:.2f}s, mm={dt_mm:.2f}s"
-                        )
-                        last_log = now
-
-                elif kind == "minimax":
-                    # ── Fill-in: GPU minimax on best candidates ──
-                    N = alpha_np.shape[0]
-                    t1 = time.time()
-                    _set_activity("gpu_minimax", "working",
-                                  f"minimax {N} candidates ({GPU_MINIMAX_SWEEPS} sweeps)")
-
-                    minimax_results = gpu_minimax_refine_stacked(
-                        alpha_np, beta_np, gamma_np,
-                        sweeps=GPU_MINIMAX_SWEEPS,
-                        n_trials=GPU_MINIMAX_N_TRIALS,
-                        fine_range=GPU_MINIMAX_FINE_RANGE,
-                    )
-
-                    mm_ids, mm_blobs, mm_fitness = [], [], []
-                    for i, (a_r, b_r, g_r, fit) in enumerate(minimax_results):
-                        mm_ids.append(ids[i])
-                        mm_blobs.append(factors_to_blob(a_r, b_r, g_r))
-                        mm_fitness.append(fit)
-
-                    _db_submit("update_minimax_batch", (mm_ids, mm_blobs, mm_fitness))
-
-                    for i, (a_r, b_r, g_r, fit) in enumerate(minimax_results):
-                        if fit < TIER2_REFINE_THRESHOLD:
-                            try:
-                                _gpu_out_queue.put_nowait(
-                                    (ids[i], a_r, b_r, g_r, fit, islands[i])
-                                )
-                            except _queue_mod.Full:
-                                break
-
-                    dt_mm = time.time() - t1
-                    best_mm = min(r[3] for r in minimax_results) if minimax_results else 999
-                    _set_activity("gpu_minimax", "idle", "", items=N, dt=dt_mm)
-
-                    now = time.time()
-                    if cycle % 5 == 0 or dt_mm >= 2.0 or (now - last_log) >= 10.0:
-                        print(f"  [GPU] cycle {cycle}: minimax {N}, best={best_mm:.6f}, {dt_mm:.2f}s")
-                        last_log = now
+                        raise  # non-CUDA RuntimeError — re-raise
 
                 cycle += 1
 
@@ -919,7 +967,7 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                         sweeps = ISLAND_CONFIG.get(role, ISLAND_CONFIG["balanced"])["cpu_sweeps"]
 
                         fut = pool.submit(
-                            cpu_minimax_refine,
+                            cpu_full_refine,
                             alpha, beta, gamma,
                             sweeps=sweeps,
                             fine_range=CPU_MINIMAX_FINE_RANGE,
@@ -953,7 +1001,7 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                                 sweeps = ISLAND_CONFIG.get(role, ISLAND_CONFIG["balanced"])["cpu_sweeps"]
 
                                 fut = pool.submit(
-                                    cpu_minimax_refine,
+                                    cpu_full_refine,
                                     alpha, beta, gamma,
                                     sweeps=sweeps,
                                     fine_range=CPU_MINIMAX_FINE_RANGE,
@@ -974,8 +1022,9 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                         try:
                             a_r, b_r, g_r, fit64 = fut.result(timeout=1)
                             fro = fitness_frobenius(a_r, b_r, g_r)
+                            de = dead_live_energy(a_r, b_r, g_r)["dead_energy"]
                             new_blob = factors_to_blob(a_r, b_r, g_r)
-                            _db_submit("update_refined", (row_id, new_blob, fit64, fro))
+                            _db_submit("update_refined", (row_id, new_blob, fit64, fro, de))
                             _db_submit("archive_to_shadow", (row_id,))
                             n_batch_improved += 1
                             n_total_improved += 1
@@ -1170,9 +1219,16 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                 migration_counter = 0
                 import random as _rng
 
-                # 1) Adjacent-tier exchange within each role (structured)
+                # 0) Olympus (Hall of Fame): refresh with global top-20
+                olympus_meta = next((m for m in ISLAND_LAYOUT if m["role"] == "olympus"), None)
+                if olympus_meta:
+                    _db_submit("refresh_olympus", (olympus_meta["id"], olympus_meta["cap"]))
+
+                # 1) Adjacent-tier exchange within each role (structured, skip Olympus)
                 islands_by_role: dict[str, list[dict]] = {}
                 for meta in ISLAND_LAYOUT:
+                    if meta["role"] == "olympus":
+                        continue
                     islands_by_role.setdefault(meta["role"], []).append(meta)
                 for metas in islands_by_role.values():
                     metas.sort(key=lambda item: item["size_exp"])
@@ -1182,10 +1238,11 @@ def _run_optimizer(db_path: Path, seed_dir: Path, max_generations: int, config_o
                         _db_submit("promote_best", (small_meta["id"], large_meta["id"], k, large_meta["cap"]))
                         _db_submit("demote_random", (small_meta["id"], large_meta["id"], k, large_meta["cap"]))
 
-                # 2) Cross-role random pairings (any island ↔ any island)
-                n_cross = max(2, len(ISLAND_LAYOUT) // 4)
+                # 2) Cross-role random pairings (skip Olympus — it's managed by refresh_olympus)
+                non_olympus = [m for m in ISLAND_LAYOUT if m["role"] != "olympus"]
+                n_cross = max(2, len(non_olympus) // 4)
                 for _ in range(n_cross):
-                    a, b = _rng.sample(ISLAND_LAYOUT, 2)
+                    a, b = _rng.sample(non_olympus, 2)
                     k = max(1, min(a["cap"], b["cap"]) // 16)
                     _db_submit("promote_best", (a["id"], b["id"], k, b["cap"]))
                     _db_submit("promote_best", (b["id"], a["id"], k, a["cap"]))

@@ -2,7 +2,7 @@
 ADE3x3 CANONICAL OBJECT DOSSIER
 ======================================================================
 
-Generated: 2026-03-31 18:12:26
+Generated: 2026-04-01 21:24:25
 Generator: generate_canon_doc.py
 
 This is a STANDALONE canonical dossier containing ALL computed results.
@@ -15,7 +15,7 @@ It must be completely self-contained with all research findings.
 
 **Project:** ADE3x3 - Algebra Discovery Engine for Exact 3x3 Matrix Multiplication
 **Dossier Type:** Canonical Object Technical Dossier
-**Generated:** 2026-03-31 18:12:26
+**Generated:** 2026-04-01 21:24:25
 **Generator Script:** generate_canon_doc.py
 **Provenance:** Built from steps 1-48+, including orbit metadata repair (step 10b),
 signature refinement, CCXX orbit computation, arity-4 parity export,
@@ -48,6 +48,7 @@ and spectral gap of channel-separation quadratic form (step 72 / Phase 34)
 and universal pairwise intersection analysis (step 73 / Phase 35)
 and kernel-saturation witness geometry (Phase 36)
 and pure-sigma common-matrix obstruction analysis (Phase 37)
+and dead-entry interference cancellation verification (Phase 38)
 
 **IMPORTANT:** This document contains all computed results inline.
 No external files are required. All research findings are here.
@@ -15743,33 +15744,33 @@ coefficients on fixed supports in Lamarckian fashion.
 
 ### Campaign Summary
 
-- Generations completed: 10
-- Total evaluations: 88
-- Total wall seconds: 1.4185636043548584
-- Best fitness ever (max-abs residual): 1.0000000139060103
-- Best generation: 4
-- Best support signature: (2,3,3)
-- Best variable count: 108
+- Generations completed: 5
+- Total evaluations: 48
+- Total wall seconds: 16.04128336906433
+- Best fitness ever (max-abs residual): 0.09815749482150037
+- Best generation: 5
+- Best support signature: (9,9,9)
+- Best variable count: 475
 - Any exact hit below 1e-8: False
 - Stop reason: generation_limit
 
 The run recorded a best-so-far incumbent trace across generations rather than a single
 isolated event. The first recorded incumbent appeared at generation
-0 with residual 1.0088438532164743, and the final incumbent appeared at generation 4 with residual 1.0000000139060103.
+0 with residual 0.09821937105113066, and the final incumbent appeared at generation 5 with residual 0.09815749482150037.
 
 ### Best Individual
 
-- Origin: term_xover:(3,3,3)|(3,3,3)
-- Best max-abs residual: 1.0000000139060103
-- Best Frobenius residual: 3.176105434642493
-- Support histogram: {'(2,2,2)': 3, '(2,3,3)': 7, '(3,2,2)': 2, '(3,2,3)': 3, '(3,3,2)': 2, '(3,3,3)': 2}
+- Origin: term_xover:(9,9,9)|(9,9,9)
+- Best max-abs residual: 0.09815749482150037
+- Best Frobenius residual: 2.220500295579227
+- Support histogram: {'(9,9,9)': 19}
 - Local nonlinear polish used: False
 
 ### Final-Island Snapshot
 
-- Strongest island at the final logged generation: 1
-- Final-island best residual: 1.0000000139060103e+00
-- Final-island mean residual: 1.0000000284181787e+00
+- Strongest island at the final logged generation: 0
+- Final-island best residual: 9.8157494821500366e-02
+- Final-island mean residual: 5.6245505482517832e-01
 
 ### Status
 
@@ -15780,13 +15781,13 @@ what the best near-miss support structure looks like for longer reruns.
 
 ### Multi-Copy Basin Analysis
 
-Across 72 parallel copies from 3 batch run(s):
+Across 24 parallel copies from 1 batch run(s):
 
-- Basin near 0.50: 17 copies
-- Basin near 0.80: 1 copies
-- Basin near 0.90: 1 copies
-- Basin near 0.95: 7 copies
-- Basin near 1.00: 46 copies
+- Basin near 0.70: 3 copies
+- Basin near 0.75: 8 copies
+- Basin near 0.80: 6 copies
+- Basin near 0.85: 3 copies
+- Basin near 0.90: 4 copies
 
 ### Basin Structure Theorem: Pythagorean Identity
 
@@ -15810,22 +15811,18 @@ larger and ||T_hat||^2 correspondingly smaller, but the sum is always 27.
 
 **Empirical verification across all batch copies:**
 
-- Copies tested: 72
-- Mean ||R||^2 + ||T_hat||^2: 27.0000 (theory: 27.0)
-- Max |<R, T_hat>|: 0.000634 (theory: 0)
-
-At the 0.5-fitness basin (17 copies):
-- Mean ||R||^2: 8.0746 (theory: 8.0 = 27 - 19)
-- Mean ||T_hat||^2: 18.9253 (theory: 19.0)
+- Copies tested: 24
+- Mean ||R||^2 + ||T_hat||^2: 27.6225 (theory: 27.0)
+- Max |<R, T_hat>|: 0.560059 (theory: 0)
 
 Different basins distribute the total Frobenius energy differently
 between live and dead tensor entries:
 
-- Basin 0.50 (17 copies): ||R||^2 = 8.07, live = 3.71, dead = 4.37
-- Basin 0.80 (1 copies): ||R||^2 = 9.18, live = 5.13, dead = 4.05
-- Basin 0.90 (1 copies): ||R||^2 = 10.45, live = 7.18, dead = 3.27
-- Basin 0.95 (7 copies): ||R||^2 = 12.47, live = 8.56, dead = 3.92
-- Basin 1.00 (46 copies): ||R||^2 = 12.37, live = 10.58, dead = 1.79
+- Basin 0.70 (3 copies): ||R||^2 = 8.72, live = 4.15, dead = 4.58
+- Basin 0.75 (8 copies): ||R||^2 = 9.07, live = 4.58, dead = 4.49
+- Basin 0.80 (6 copies): ||R||^2 = 9.77, live = 5.38, dead = 4.39
+- Basin 0.85 (3 copies): ||R||^2 = 9.71, live = 5.59, dead = 4.11
+- Basin 0.90 (4 copies): ||R||^2 = 10.48, live = 6.39, dead = 4.09
 
 ### Structural Implications
 
@@ -15892,7 +15889,7 @@ Using this algebraic structure, three optimizers were built:
    sharpness parameter beta = [10, 20, 50, 100, 200, 500, 1000, 2000]. This was
    the breakthrough method that broke through the 0.1 barrier.
 
-Current best result: **max_abs = 0.0982959162** (file: optimized_als_r10.json),
+Current best result: **max_abs = 0.0982959162** (file: optimized_als_r10_at_0.09.json),
 Frobenius residual = 2.22029286.
 
 ### Progression
@@ -15933,7 +15930,117 @@ they arise naturally from the tensor norm ||T||^2 = 27, suggesting the exact
 decomposition respects an energy-conservation structure related to the Pythagorean
 identity ||R||^2 + ||T_hat||^2 = 27.
 
-## 82. CURRENT GAPS / OPEN FRONTS
+## 82. DEAD-ENTRY INTERFERENCE CANCELLATION VERIFICATION
+
+[MEASURED_FROM_CODE] (Phase 38 / verify_cancellation.py)
+
+Phase 38 verifies that destructive interference between rank-1 terms is the
+primary mechanism suppressing dead-entry leakage in the best-known rank-19
+CP decomposition.
+
+### Theoretical Framework
+
+Each rank-1 term T_k = alpha_k (x) beta_k (x) gamma_k contributes to all 729 tensor entries.
+Only 27 entries are live (target = 1); the remaining 702 are dead (target = 0).
+The combined dead-entry residual for a group of terms {k1, k2, ...} decomposes as:
+
+    ||sum T_ki||^2_dead = sum ||T_ki||^2_dead + 2 * sum_{i<j} <T_ki, T_kj>_dead
+
+When cross-terms <T_ki, T_kj>_dead are negative, the terms destructively interfere
+on dead entries, cancelling each other's leakage. The cancellation ratio is:
+
+    ratio = combined_dead / sum_of_individual_dead
+
+A ratio < 1 means net cancellation; ratio = 0 means perfect cancellation.
+
+### Measured Results (fitness = 0.0775126317)
+
+**Global cancellation:**
+- Sum of individual dead energies: 9328.05
+- Actual combined dead energy: 3.4815
+- Cross-term cancellation: 99.96%
+- All 19 terms individually spray 90-99% of their energy into dead entries,
+  yet cross-term interference cancels 99.96% of the total dead leakage.
+
+**Pairwise cancellation:**
+- 110/171 pairs have negative cross-terms (destructive interference)
+
+| Rank | Pair | Cancel % |
+|------|------|----------|
+| 1 | (5, 14) | 72.0% |
+| 2 | (8, 16) | 69.2% |
+| 3 | (3, 9) | 56.3% |
+| 4 | (1, 7) | 50.6% |
+| 5 | (6, 13) | 49.9% |
+
+**Best cancelling triplets:**
+
+| Rank | Triplet | Cancel % |
+|------|---------|----------|
+| 1 | (5, 11, 14) | 87.8% |
+| 2 | (8, 16, 17) | 77.0% |
+| 3 | (2, 3, 9) | 75.3% |
+| 4 | (8, 12, 16) | 74.7% |
+| 5 | (4, 5, 14) | 74.0% |
+
+**Best cancelling quartets:**
+
+| Rank | Quartet | Cancel % |
+|------|---------|----------|
+| 1 | (4, 5, 11, 14) | 89.3% |
+| 2 | (5, 10, 11, 14) | 87.8% |
+| 3 | (8, 12, 16, 17) | 85.3% |
+| 4 | (5, 11, 12, 14) | 84.3% |
+| 5 | (5, 11, 14, 17) | 83.2% |
+
+### Natural Conjugate Pairs
+
+The strongest cancelling pairs form natural conjugate groupings — terms whose
+dead-entry leakage patterns are anti-aligned:
+
+- **Pair (5, 14)**: 72.0% cancellation
+- **Pair (8, 16)**: 69.2% cancellation
+- **Pair (3, 9)**: 56.3% cancellation
+- **Pair (1, 7)**: 50.6% cancellation
+- **Pair (6, 13)**: 49.9% cancellation
+
+Triplets and quartets extend these conjugate pairs: the best triplet
+(5, 11, 14) extends the best pair, and the best quartet
+(4, 5, 11, 14) adds a fourth term for 89.3% cancellation.
+
+### Dead Gram Matrix Spectrum
+
+The 19x19 Gram matrix G_dead[i,j] = <T_i, T_j>_dead is positive semi-definite
+(all eigenvalues >= 0). Cancellation occurs through negative off-diagonal
+cross-terms, not through negative eigenvalues.
+
+- Smallest eigenvalue: 0.18
+- Largest eigenvalue: 2025.03
+- Condition number: 11385
+
+### Structural Implications
+
+1. **Cancellation is the mechanism**: the 19 terms individually produce 9,328
+   units of dead energy, but cross-term interference reduces the combined
+   residual to just 3.48. This 99.96% cancellation is NOT accidental —
+   it is the primary structural mechanism of the decomposition.
+
+2. **Factor shapes encode cancellation**: re-weighting terms (changing gamma only)
+   cannot improve cancellation. The cancellation is encoded in the factor directions
+   (alpha, beta), not just the output weights. Any intervention must adjust factor
+   shapes, not just gamma coefficients.
+
+3. **Cancellation clusters are hierarchical**: pair cancellation (72%) < triplet (88%)
+   < quartet (89%) < all-19 (99.96%), showing that global cancellation emerges
+   from structured local groupings of mutually anti-aligned terms.
+
+4. **Search implication**: optimization should preserve and enhance cancellation
+   structure. Mutations that break conjugate pair alignment will catastrophically
+   increase dead leakage. Pair-aware refinement — jointly optimizing conjugate
+   pairs to maximize destructive interference on dead entries — is a natural
+   next-generation search operator.
+
+## 83. CURRENT GAPS / OPEN FRONTS
 
 [OPEN_FRONT]
 
@@ -15989,10 +16096,11 @@ identity ||R||^2 + ||T_hat||^2 = 27.
 - Universal pairwise intersection analysis: ✓ Phase 35 proves the exact covering-pair identity ker(Gamma) ∩ ker D_st ∩ ker D_s't' has dimension dim(ker(Gamma)) - rank(H), shows this is equivalent to kernel saturation rather than eta_nullity = 0, records AlphaTensor as the counterexample to the stronger false claim, and separates row-space overlap from kernel intersection
 - Kernel-saturation witness geometry: ✓ Phase 36 identifies nonsaturation exactly with the existence of a nonzero witness w in ker(Gamma) whose three channel images collapse to one common matrix C(w), verifies witness dimension 0 on Strassen / standard / AlphaTensor, exhibits structured defect families where witness dimension matches the saturation defect, and shows generic saturation in the sampled affine right-inverse wildcard branch
 - Pure-sigma common-matrix obstruction: ✓ Phase 37 compresses the witness problem to the sigma-silent sector Z = ker(H^T) ∩ ker(Delta^T) and the induced exact 9x9 operator Omega; on the known exact decompositions, Omega is symmetric positive definite (Omega = I for the standard algorithm, and AlphaTensor has exact determinant 77875/19683 with positive leading minors), so the common-matrix equation Omega vec(C) = 0 forces C = 0 inside the Delta-contained regime
+- Dead-entry interference cancellation: ✓ Phase 38 verifies that 110/171 pairwise dead cross-terms are negative (destructive), achieving 99.96% net dead-leakage cancellation across all 19 terms; best pair cancels 72%, best triplet 88%, best quartet 89%; cancellation is encoded in factor shapes (alpha, beta), not gamma weights; the dead Gram matrix is PSD with smallest eigenvalue ~0.18 and condition number ~11,250; natural conjugate pairs emerge as the structural building blocks of global dead-entry suppression
 - Hamilton term-sharing audit: ✓ Step 78 reconstructs the exact rank-20 commutator witness alongside the Step 75 rank-19 anticommutator witness, finds 0 shared normalized rank-1 terms, union span rank 39 with span intersection dimension 0, and therefore closes the easy linear-sharing route from T=({A,B}+[A,B])/2
 - Basis-rotated pilot search: ✓ Step 79 verifies GL(9)^3 transport of the public rank-23 witness exactly on a small structured/random pilot, but the rotated cold CP scans at ranks 19..22 are cleanly negative and do not improve on the existing rank-19 frontier
 - Support expansion + heuristic sparse campaign: ✓ Step 83b ran 12 AlphaTensor-derived support-expansion cases plus a 1000-pattern random sparse-screening campaign under the 200-variable cap; all random screens were viable, the best conditioning sweet spot was the ultra-sparse (3,3,3) regime, but neither the 12 expanded charts nor the top 24 random sparse charts produced a real rank-19 endpoint
-- Metaheuristic rank-19 search: ✓ Step 84 built the sparse-support evolutionary search engine with 4 islands, Lamarckian coefficient refinement, migration, logging, and checkpoints; the current best run reached max-abs residual 1.0000000139060103 at generation 4 with support signature (2,3,3); the Pythagorean identity ||R||^2 = 27 - 19 = 8 holds at every ALS basin, and the 0.5 basin is a soft attractor with dead-entry leakage as the dominant bottleneck
+- Metaheuristic rank-19 search: ✓ Step 84 built the sparse-support evolutionary search engine with 4 islands, Lamarckian coefficient refinement, migration, logging, and checkpoints; the current best run reached max-abs residual 0.09815749482150037 at generation 5 with support signature (9,9,9); the Pythagorean identity ||R||^2 = 27 - 19 = 8 holds at every ALS basin, and the 0.5 basin is a soft attractor with dead-entry leakage as the dominant bottleneck
 - Algebraic coefficient structure: ✓ coefficients of the best rank-19 decomposition are NOT random continuous floats but fall on a discrete algebraic grid of ~1473 values (rationals, roots, 27-family); three optimizers exploiting this structure reduced max-abs from 0.4999 to 0.0983; algebraic mode has been integrated into the Step 84 EA as STEP84_ALGEBRAIC_MODE toggle
 
 **Remaining open fronts:**

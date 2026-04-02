@@ -6,6 +6,19 @@ import time
 from .blob import blob_to_factors, factors_to_blob, compute_support_hash
 
 
+def _tournament_key(row):
+    """Composite key: primary = fitness_fp32, tiebreak = dead_energy.
+
+    Among candidates within 1% fitness, lower dead_energy wins.
+    This biases toward structurally cleaner solutions (less dead-entry leakage).
+    """
+    fit = row["fitness_fp32"]
+    de = row["dead_energy"]
+    if de is None:
+        de = 999.0
+    return (round(fit, 4), de)
+
+
 def select_parents(
     conn: sqlite3.Connection,
     island: int,
@@ -28,7 +41,7 @@ def select_parents(
     selected = []
     for _ in range(k):
         contenders_idx = rng.choice(len(rows), size=min(tournament_size, len(rows)), replace=False)
-        best = min(contenders_idx, key=lambda i: rows[i]["fitness_fp32"])
+        best = min(contenders_idx, key=lambda i: _tournament_key(rows[i]))
         selected.append(rows[best])
     return selected
 
@@ -111,15 +124,16 @@ def update_refined(
     factors_blob: bytes,
     fitness_fp64: float,
     fro_residual: float,
+    dead_energy: float | None = None,
 ) -> None:
     """Update a candidate after Tier 3 CPU refinement."""
     now = time.time()
     conn.execute(
         """UPDATE candidates
            SET factors_blob = ?, fitness_fp64 = ?, fro_residual = ?,
-               status = 'refined', tier_reached = 3, evaluated_at = ?
+               dead_energy = ?, status = 'refined', tier_reached = 3, evaluated_at = ?
            WHERE id = ?""",
-        (factors_blob, fitness_fp64, fro_residual, now, cid),
+        (factors_blob, fitness_fp64, fro_residual, dead_energy, now, cid),
     )
     conn.commit()
 
@@ -158,14 +172,6 @@ def archive_to_shadow(conn: sqlite3.Connection, cid: int) -> None:
         "SELECT factors_blob, support_hash, fitness_fp64 FROM candidates WHERE id = ?",
         (cid,),
     ).fetchone()
-
-
-def fetch_shadow_pool(conn: sqlite3.Connection, limit: int = 200) -> list[sqlite3.Row]:
-    """Fetch top shadow candidates for reinject diversity."""
-    return conn.execute(
-        "SELECT factors_blob FROM shadow ORDER BY fitness_fp64 ASC LIMIT ?",
-        (limit,),
-    ).fetchall()
     if row and row["fitness_fp64"] is not None:
         conn.execute(
             """INSERT OR IGNORE INTO shadow
@@ -174,6 +180,14 @@ def fetch_shadow_pool(conn: sqlite3.Connection, limit: int = 200) -> list[sqlite
             (row["factors_blob"], row["support_hash"], row["fitness_fp64"], time.time()),
         )
         conn.commit()
+
+
+def fetch_shadow_pool(conn: sqlite3.Connection, limit: int = 200) -> list[sqlite3.Row]:
+    """Fetch top shadow candidates for reinject diversity."""
+    return conn.execute(
+        "SELECT factors_blob FROM shadow ORDER BY fitness_fp64 ASC LIMIT ?",
+        (limit,),
+    ).fetchall()
 
 
 def pending_count(conn: sqlite3.Connection) -> int:
@@ -275,6 +289,59 @@ def update_minimax_batch(
         [(blob, float(f), now, cid) for cid, blob, f in zip(ids, blobs, fitness_list)],
     )
     conn.commit()
+
+
+# ── Olympus (Hall of Fame) ───────────────────────────────────────────
+
+def refresh_olympus(
+    conn: sqlite3.Connection,
+    olympus_island: int,
+    cap: int = 20,
+) -> int:
+    """Replace the Olympus island population with the global top-k.
+
+    Unlike promote_best, this *copies* candidates (INSERT new rows) so
+    source islands keep their elites.  The old Olympus population is
+    purged first to guarantee only the current best reside there.
+    """
+    # 1) Remove current Olympus residents
+    conn.execute(
+        "DELETE FROM candidates WHERE virtual_island = ?",
+        (olympus_island,),
+    )
+
+    # 2) Copy global top-k into Olympus
+    rows = conn.execute(
+        """SELECT factors_blob, support_hash, support_sig, fitness_fp32,
+                  fitness_fp64, fro_residual, dead_energy, generation
+           FROM candidates
+           WHERE fitness_fp32 IS NOT NULL
+           ORDER BY COALESCE(fitness_fp64, fitness_fp32) ASC
+           LIMIT ?""",
+        (cap,),
+    ).fetchall()
+
+    if not rows:
+        conn.commit()
+        return 0
+
+    now = time.time()
+    conn.executemany(
+        """INSERT INTO candidates
+           (factors_blob, support_hash, support_sig, origin, virtual_island,
+            fitness_fp32, fitness_fp64, fro_residual, dead_energy,
+            generation, status, tier_reached, created_at, evaluated_at)
+           VALUES (?, ?, ?, 'olympus_copy', ?,
+                   ?, ?, ?, ?,
+                   ?, 'refined', 3, ?, ?)""",
+        [(r["factors_blob"], r["support_hash"], r["support_sig"],
+          olympus_island,
+          r["fitness_fp32"], r["fitness_fp64"], r["fro_residual"], r["dead_energy"],
+          r["generation"], now, now)
+         for r in rows],
+    )
+    conn.commit()
+    return len(rows)
 
 
 # ── Power-law island migration ───────────────────────────────────────

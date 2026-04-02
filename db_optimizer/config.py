@@ -23,7 +23,7 @@ HIT_THRESHOLD = 1e-10
 # ── GPU batching ─────────────────────────────────────────────────────
 MAX_GPU_BATCH_SIZE = 100_000  # RTX 3060 12GB can handle this
 GPU_MINIMAX_SWEEPS = 3
-GPU_MINIMAX_FINE_RANGE = 0.005
+GPU_MINIMAX_FINE_RANGE = 0.05   # 10× wider → escape shallow local minima
 GPU_MINIMAX_N_TRIALS = 64
 
 # ── Population ───────────────────────────────────────────────────────
@@ -34,13 +34,14 @@ ELITE_K = 20  # per island
 MIGRATION_PROB = 0.08
 
 # ── Mutation probabilities (global defaults) ─────────────────────
-P_MUTATE_COEFF = 0.55
-P_MUTATE_GAUSSIAN = 0.25
-P_CROSSOVER = 0.12
-P_SHADOW_REINJECT = 0.08
+P_MUTATE_COEFF = 0.20
+P_MUTATE_GAUSSIAN = 0.50
+P_CROSSOVER = 0.15
+P_SHADOW_REINJECT = 0.15
 
 # ── Power-law islands (algorithm type × population cap) ──────────────
 ISLAND_ROLE_ORDER: list[str] = [
+    "olympus",
     "elite_exploit",
     "strong_exploit",
     "exploit",
@@ -53,26 +54,44 @@ ISLAND_SIZE_EXPONENTS = list(range(5, 13))
 ISLAND_SIZES = [2 ** exp for exp in ISLAND_SIZE_EXPONENTS]
 
 ISLAND_CONFIG: dict[str, dict] = {
-    "elite_exploit":  {"selection": "deterministic", "sigma": 0.002, "cpu_sweeps": 20,
-                       "p_coeff": 0.80, "p_gaussian": 0.15, "p_crossover": 0.03, "p_shadow": 0.02},
-    "strong_exploit": {"selection": "tournament_tight", "sigma": 0.005, "cpu_sweeps": 15,
-                       "p_coeff": 0.70, "p_gaussian": 0.20, "p_crossover": 0.05, "p_shadow": 0.05},
-    "exploit":        {"selection": "tournament", "sigma": 0.008, "cpu_sweeps": 10,
-                       "p_coeff": 0.60, "p_gaussian": 0.25, "p_crossover": 0.10, "p_shadow": 0.05},
-    "balanced":       {"selection": "tournament", "sigma": 0.01, "cpu_sweeps": 7,
-                       "p_coeff": 0.55, "p_gaussian": 0.25, "p_crossover": 0.12, "p_shadow": 0.08},
-    "explore":        {"selection": "random", "sigma": 0.02, "cpu_sweeps": 4,
-                       "p_coeff": 0.40, "p_gaussian": 0.30, "p_crossover": 0.15, "p_shadow": 0.10},
-    "wide_explore":   {"selection": "random_diverse", "sigma": 0.05, "cpu_sweeps": 3,
-                       "p_coeff": 0.30, "p_gaussian": 0.25, "p_crossover": 0.20, "p_shadow": 0.15},
+    "olympus":        {"selection": "deterministic", "sigma": 0.003, "cpu_sweeps": 25,
+                       "p_coeff": 0.30, "p_gaussian": 0.25, "p_crossover": 0.40, "p_shadow": 0.05},
+    "elite_exploit":  {"selection": "deterministic", "sigma": 0.005, "cpu_sweeps": 20,
+                       "p_coeff": 0.50, "p_gaussian": 0.40, "p_crossover": 0.05, "p_shadow": 0.05},
+    "strong_exploit": {"selection": "tournament_tight", "sigma": 0.01, "cpu_sweeps": 15,
+                       "p_coeff": 0.35, "p_gaussian": 0.45, "p_crossover": 0.10, "p_shadow": 0.10},
+    "exploit":        {"selection": "tournament", "sigma": 0.02, "cpu_sweeps": 10,
+                       "p_coeff": 0.25, "p_gaussian": 0.50, "p_crossover": 0.15, "p_shadow": 0.10},
+    "balanced":       {"selection": "tournament", "sigma": 0.03, "cpu_sweeps": 7,
+                       "p_coeff": 0.20, "p_gaussian": 0.50, "p_crossover": 0.15, "p_shadow": 0.15},
+    "explore":        {"selection": "random", "sigma": 0.06, "cpu_sweeps": 4,
+                       "p_coeff": 0.10, "p_gaussian": 0.60, "p_crossover": 0.15, "p_shadow": 0.15},
+    "wide_explore":   {"selection": "random_diverse", "sigma": 0.10, "cpu_sweeps": 3,
+                       "p_coeff": 0.05, "p_gaussian": 0.65, "p_crossover": 0.15, "p_shadow": 0.15},
 }
 
 
+OLYMPUS_CAP = 20  # Hall of Fame: fixed-size elite island
+
+
 def build_island_layout() -> list[dict]:
-    """Build the full role × size island lattice."""
+    """Build the full role × size island lattice, plus a single Olympus island."""
     layout: list[dict] = []
     island_id = 0
+
+    # Olympus: a single fixed-size elite island (Hall of Fame)
+    layout.append({
+        "id": island_id,
+        "role": "olympus",
+        "size_exp": None,
+        "cap": OLYMPUS_CAP,
+    })
+    island_id += 1
+
+    # Regular role × size lattice
     for role in ISLAND_ROLE_ORDER:
+        if role == "olympus":
+            continue  # already added above
         for size_exp in ISLAND_SIZE_EXPONENTS:
             layout.append({
                 "id": island_id,

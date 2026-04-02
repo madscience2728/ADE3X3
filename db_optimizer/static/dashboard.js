@@ -159,6 +159,7 @@ const PLOTLY_LAYOUT = {
     },
     yaxis: {
         title: "max |residual|",
+        type: "log",
         gridcolor: "rgba(31, 36, 48, 0.08)",
         linecolor: "rgba(31, 36, 48, 0.12)",
         zeroline: false,

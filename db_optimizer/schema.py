@@ -67,6 +67,24 @@ CREATE TABLE IF NOT EXISTS run_log (
 def create_schema(conn: sqlite3.Connection) -> None:
     """Create all tables and indexes (idempotent)."""
     conn.executescript(SCHEMA_SQL)
+    _migrate(conn)
+
+
+_MIGRATIONS = [
+    # (column, table, type, default)
+    ("dead_energy", "candidates", "REAL", None),
+]
+
+
+def _migrate(conn: sqlite3.Connection) -> None:
+    """Add columns introduced after initial schema (safe to re-run)."""
+    for col, table, dtype, default in _MIGRATIONS:
+        try:
+            default_clause = f" DEFAULT {default}" if default is not None else ""
+            conn.execute(f"ALTER TABLE {table} ADD COLUMN {col} {dtype}{default_clause}")
+            conn.commit()
+        except sqlite3.OperationalError:
+            pass  # column already exists
 
 
 def get_table_names(conn: sqlite3.Connection) -> list[str]:
