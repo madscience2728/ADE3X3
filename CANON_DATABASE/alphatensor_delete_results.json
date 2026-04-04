@@ -1,0 +1,1702 @@
+[
+  {
+    "deleted": [
+      2,
+      5,
+      14,
+      16
+    ],
+    "rank_H": 12,
+    "rank_N": 12,
+    "rank_SN": 19,
+    "gate1_gap": 2,
+    "delta_leak": 0,
+    "delta_resid": 6.775191285751169e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 7,
+    "recon_err": 2.7147193837919645
+  },
+  {
+    "deleted": [
+      13,
+      14,
+      16,
+      20
+    ],
+    "rank_H": 12,
+    "rank_N": 12,
+    "rank_SN": 19,
+    "gate1_gap": 2,
+    "delta_leak": 0,
+    "delta_resid": 7.586097082587697e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 7,
+    "recon_err": 3.0
+  },
+  {
+    "deleted": [
+      8,
+      11,
+      14,
+      16
+    ],
+    "rank_H": 12,
+    "rank_N": 12,
+    "rank_SN": 19,
+    "gate1_gap": 2,
+    "delta_leak": 0,
+    "delta_resid": 7.742415307633357e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 7,
+    "recon_err": 2.7265235187443007
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      8,
+      11
+    ],
+    "rank_H": 12,
+    "rank_N": 12,
+    "rank_SN": 19,
+    "gate1_gap": 2,
+    "delta_leak": 0,
+    "delta_resid": 8.289694000700275e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 7,
+    "recon_err": 2.727806499261448
+  },
+  {
+    "deleted": [
+      6,
+      8,
+      10,
+      11
+    ],
+    "rank_H": 12,
+    "rank_N": 12,
+    "rank_SN": 19,
+    "gate1_gap": 2,
+    "delta_leak": 0,
+    "delta_resid": 8.632217878889917e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 7,
+    "recon_err": 3.0
+  },
+  {
+    "deleted": [
+      0,
+      1,
+      2,
+      5
+    ],
+    "rank_H": 12,
+    "rank_N": 12,
+    "rank_SN": 19,
+    "gate1_gap": 2,
+    "delta_leak": 0,
+    "delta_resid": 1.1380595574642094e-14,
+    "augmented_gap": 0,
+    "sigma_innov": 7,
+    "recon_err": 3.0
+  },
+  {
+    "deleted": [
+      13,
+      14,
+      17,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 4.75500861426062e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.0000000000000004
+  },
+  {
+    "deleted": [
+      6,
+      8,
+      11,
+      12
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.039106403669831e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.796426934444626
+  },
+  {
+    "deleted": [
+      7,
+      13,
+      14,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.302504569437307e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.0000000000000004
+  },
+  {
+    "deleted": [
+      4,
+      6,
+      10,
+      11
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.411208518236535e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5432026832452492
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      19,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.4184166250776034e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.558479209061979
+  },
+  {
+    "deleted": [
+      6,
+      10,
+      11,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.4824369034956625e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.561237331920249
+  },
+  {
+    "deleted": [
+      8,
+      11,
+      15,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.535916894691292e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.732109543826908
+  },
+  {
+    "deleted": [
+      1,
+      9,
+      14,
+      16
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.561566551346539e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7148613336509775
+  },
+  {
+    "deleted": [
+      6,
+      10,
+      11,
+      22
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.575804624932796e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5350987120007447
+  },
+  {
+    "deleted": [
+      12,
+      14,
+      15,
+      16
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.594489286805413e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7254038021629294
+  },
+  {
+    "deleted": [
+      2,
+      4,
+      5,
+      13
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.6066926791029814e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5531210798659476
+  },
+  {
+    "deleted": [
+      10,
+      14,
+      16,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.6277000455834016e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7244823535345724
+  },
+  {
+    "deleted": [
+      5,
+      13,
+      14,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.693849307010933e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.0000000000000004
+  },
+  {
+    "deleted": [
+      8,
+      9,
+      11,
+      13
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.808916245021548e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.727953765441508
+  },
+  {
+    "deleted": [
+      11,
+      14,
+      15,
+      16
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.8527422362322655e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.718739540937545
+  },
+  {
+    "deleted": [
+      0,
+      2,
+      5,
+      16
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.854288879638788e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.637466064490261
+  },
+  {
+    "deleted": [
+      4,
+      9,
+      10,
+      14
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.922908743176348e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.4761535182168983
+  },
+  {
+    "deleted": [
+      13,
+      14,
+      17,
+      21
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.943367055288756e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 1.79745164076474
+  },
+  {
+    "deleted": [
+      8,
+      11,
+      13,
+      15
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.973759700031752e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.731770117702341
+  },
+  {
+    "deleted": [
+      0,
+      14,
+      16,
+      18
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 5.9820804089053446e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7147263087988653
+  },
+  {
+    "deleted": [
+      2,
+      8,
+      11,
+      18
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.062221372835933e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7266555576768234
+  },
+  {
+    "deleted": [
+      6,
+      10,
+      11,
+      13
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.078670103626081e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5539948305616686
+  },
+  {
+    "deleted": [
+      7,
+      8,
+      10,
+      11
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.082108575998005e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.76807477769067
+  },
+  {
+    "deleted": [
+      6,
+      12,
+      14,
+      16
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.094433229874249e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7235887733712225
+  },
+  {
+    "deleted": [
+      3,
+      4,
+      9,
+      10
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.1061894451435025e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.4783854064284947
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      12,
+      14
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.236704026714418e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.55196733672208
+  },
+  {
+    "deleted": [
+      8,
+      13,
+      14,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.268269316114333e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.0
+  },
+  {
+    "deleted": [
+      6,
+      8,
+      10,
+      13
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.3361523557883456e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.6843800083280476
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      6,
+      9
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.3783277526207364e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.555329726800605
+  },
+  {
+    "deleted": [
+      3,
+      14,
+      16,
+      22
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.395082413551942e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.755865704173993
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      9,
+      14
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.398674734021304e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.555323573309185
+  },
+  {
+    "deleted": [
+      1,
+      3,
+      4,
+      10
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.42095512257828e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.3175272984864077
+  },
+  {
+    "deleted": [
+      12,
+      16,
+      18,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.429107298459849e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 1.1727743669673392
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      6,
+      17
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.4300272398003375e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.551912927459267
+  },
+  {
+    "deleted": [
+      1,
+      4,
+      9,
+      10
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.442304509783451e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.4819103169432077
+  },
+  {
+    "deleted": [
+      0,
+      8,
+      11,
+      14
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.45883553417795e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.726523792606878
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      7,
+      21
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.4602959348535665e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5833313742829653
+  },
+  {
+    "deleted": [
+      1,
+      8,
+      11,
+      22
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.47705366933605e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.729873294668187
+  },
+  {
+    "deleted": [
+      6,
+      14,
+      16,
+      17
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.502027998317971e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7192918776170902
+  },
+  {
+    "deleted": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.50510006179688e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.567616337215557
+  },
+  {
+    "deleted": [
+      8,
+      10,
+      11,
+      17
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.50979358529891e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7674763843202825
+  },
+  {
+    "deleted": [
+      4,
+      6,
+      9,
+      11
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.516044237977576e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.280535912613586
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      7,
+      13
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.525235223163981e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.583331847353625
+  },
+  {
+    "deleted": [
+      8,
+      9,
+      11,
+      12
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.535218772280957e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7308078090765284
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      13,
+      18
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.536749195003253e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.551911986225119
+  },
+  {
+    "deleted": [
+      4,
+      9,
+      10,
+      12
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.5418207867871716e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.518244036096758
+  },
+  {
+    "deleted": [
+      1,
+      13,
+      14,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.587270240622704e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 1.9999999999999998
+  },
+  {
+    "deleted": [
+      1,
+      2,
+      5,
+      6
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.600224447560387e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5769268004345527
+  },
+  {
+    "deleted": [
+      7,
+      14,
+      16,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.605660768120693e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7230863350417067
+  },
+  {
+    "deleted": [
+      4,
+      9,
+      15,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.622387361993008e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.2397125650915175
+  },
+  {
+    "deleted": [
+      0,
+      2,
+      5,
+      6
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.622986553105004e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.6374738381805143
+  },
+  {
+    "deleted": [
+      13,
+      14,
+      18,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.622989131538989e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.0
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      13,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.640134334632786e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5519172945084625
+  },
+  {
+    "deleted": [
+      4,
+      8,
+      11,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.6422712862145424e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7292909165281545
+  },
+  {
+    "deleted": [
+      1,
+      2,
+      8,
+      11
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.644192327634447e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.726708960604399
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      14,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.650766669304416e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5519172945084625
+  },
+  {
+    "deleted": [
+      11,
+      13,
+      16,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.6540426135452015e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.723692788135875
+  },
+  {
+    "deleted": [
+      9,
+      10,
+      14,
+      16
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.702160738163287e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.715159564592362
+  },
+  {
+    "deleted": [
+      6,
+      10,
+      11,
+      17
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.712184987221155e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5450846774238216
+  },
+  {
+    "deleted": [
+      1,
+      6,
+      8,
+      11
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.718431276271418e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.775283993403744
+  },
+  {
+    "deleted": [
+      1,
+      3,
+      4,
+      13
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.732064432070297e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 1.754822093489844
+  },
+  {
+    "deleted": [
+      7,
+      14,
+      16,
+      21
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.750641970545398e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7148391792057254
+  },
+  {
+    "deleted": [
+      4,
+      8,
+      11,
+      12
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.758779061515188e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7312294858062147
+  },
+  {
+    "deleted": [
+      1,
+      11,
+      14,
+      16
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.7725009817533334e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7152326049743225
+  },
+  {
+    "deleted": [
+      4,
+      9,
+      10,
+      18
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.7732439757956006e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.4756637296003348
+  },
+  {
+    "deleted": [
+      8,
+      11,
+      12,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.7825739728907975e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.730182659094901
+  },
+  {
+    "deleted": [
+      0,
+      1,
+      2,
+      9
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.791803696851499e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5915293433844346
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      19,
+      22
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.797835193725932e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.558988851812364
+  },
+  {
+    "deleted": [
+      1,
+      13,
+      17,
+      19
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.8021430821802995e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 1.0932044591530596
+  },
+  {
+    "deleted": [
+      2,
+      4,
+      5,
+      22
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.816156771385403e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5533952238957722
+  },
+  {
+    "deleted": [
+      4,
+      13,
+      15,
+      16
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.818383204119918e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 1.7461289029392202
+  },
+  {
+    "deleted": [
+      8,
+      11,
+      14,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.819301722357444e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.727927210513789
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      12,
+      16
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.821420192063262e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5519648329784355
+  },
+  {
+    "deleted": [
+      0,
+      1,
+      3,
+      4
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.826831297780767e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.0193333327028973
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      13,
+      17
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.832537646998144e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.551913368950173
+  },
+  {
+    "deleted": [
+      5,
+      8,
+      11,
+      21
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.8335452816016015e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.727406557457093
+  },
+  {
+    "deleted": [
+      8,
+      9,
+      11,
+      14
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.835105294475183e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.727404411353076
+  },
+  {
+    "deleted": [
+      3,
+      8,
+      11,
+      14
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.842652347727977e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7267201573188458
+  },
+  {
+    "deleted": [
+      4,
+      12,
+      18,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.846891299730101e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 1.6443699179110458
+  },
+  {
+    "deleted": [
+      8,
+      10,
+      11,
+      18
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.8486327174356164e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.764207344228667
+  },
+  {
+    "deleted": [
+      6,
+      14,
+      18,
+      22
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.8564937690793224e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 1.81768257883442
+  },
+  {
+    "deleted": [
+      6,
+      14,
+      16,
+      20
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.856768493648156e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7243799136700164
+  },
+  {
+    "deleted": [
+      6,
+      8,
+      11,
+      15
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.8673908160473055e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7804709082713046
+  },
+  {
+    "deleted": [
+      3,
+      8,
+      11,
+      16
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.873201564311803e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7266582051706485
+  },
+  {
+    "deleted": [
+      10,
+      14,
+      16,
+      17
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.8783367352794716e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7190732488929386
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      6,
+      10
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.879372529225661e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.5529192797896014
+  },
+  {
+    "deleted": [
+      4,
+      6,
+      8,
+      11
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.905450567673927e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.813771724219133
+  },
+  {
+    "deleted": [
+      3,
+      17,
+      20,
+      21
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.905499696974051e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 1.5000000000000016
+  },
+  {
+    "deleted": [
+      4,
+      9,
+      10,
+      16
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.9056588752787965e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.4756495886098135
+  },
+  {
+    "deleted": [
+      12,
+      13,
+      16,
+      18
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.912226793071931e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 1.9720714886109145
+  },
+  {
+    "deleted": [
+      3,
+      6,
+      7,
+      16
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.9187228492454885e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 1.706105748996135
+  },
+  {
+    "deleted": [
+      5,
+      6,
+      10,
+      11
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.9250708042259454e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.533888614098705
+  },
+  {
+    "deleted": [
+      14,
+      15,
+      16,
+      21
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.925835462972044e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.7183439660320547
+  },
+  {
+    "deleted": [
+      2,
+      5,
+      11,
+      13
+    ],
+    "rank_H": 13,
+    "rank_N": 13,
+    "rank_SN": 19,
+    "gate1_gap": 3,
+    "delta_leak": 0,
+    "delta_resid": 6.950965494341215e-15,
+    "augmented_gap": 0,
+    "sigma_innov": 6,
+    "recon_err": 2.552289245028387
+  }
+]

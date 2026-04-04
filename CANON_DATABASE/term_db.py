@@ -591,8 +591,14 @@ class TermDB:
         elapsed = time.time() - t0
         self._print(None, f"Saved in {elapsed:.1f}s")
 
-    def _load(self, path, progress_callback=None):
-        """Load from disk. ~10s from NVMe via memory-mapping."""
+    def _load(self, path, progress_callback=None, readonly=False):
+        """Load from disk. ~10s from NVMe via memory-mapping.
+        
+        Args:
+            readonly: If True, use mmap_mode='r' (read-only). Multiple processes
+                      mapping the same file read-only share OS pages on Windows,
+                      keeping RAM usage at ~1× the file size instead of N× copies.
+        """
         p = Path(path)
         self._data_path = str(p.resolve())
         # Only use standalone console when NOT driven by dashboard (progress_callback)
@@ -600,15 +606,16 @@ class TermDB:
         silent = bool(progress_callback)
         self._print(console, f"Loading from {p}...", silent=silent)
         t0 = time.time()
+        mmap_mode = 'r' if readonly else 'r+'
         if progress_callback:
             progress_callback("load: templates")
         self.templates = np.load(p / "templates.npy")
         if progress_callback:
             progress_callback("load: H memmap")
-        self.H = np.load(p / "H.npy", mmap_mode='r+')
+        self.H = np.load(p / "H.npy", mmap_mode=mmap_mode)
         if progress_callback:
             progress_callback("load: sigma memmap")
-        self.sigma = np.load(p / "sigma.npy", mmap_mode='r+')
+        self.sigma = np.load(p / "sigma.npy", mmap_mode=mmap_mode)
         if progress_callback:
             progress_callback("load: factor indices")
         self.alpha_idx = np.load(p / "alpha_idx.npy")

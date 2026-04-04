@@ -17,10 +17,14 @@ class SearchConfig:
     sigma_rank_prune_min_depth: int = 3
 
     max_assembly_candidates: int = 200000
-    max_dependents_per_branch: int = 256
+    max_dependents_per_branch: int = 256   # kept for legacy DFS (unused)
     max_depth1_candidates: int = 10000
     max_solutions_per_rank: int = 1
     innovation_threshold: float = 1e-8
+
+    # Random greedy trial search (replaces DFS)
+    n_assembly_trials: int = 2000         # random trials per packet
+    trial_top_k: int = 64                 # at each depth, sample from top-K viable by innovation
 
     gate3_residual_tol: float = 1e-10
     rank_tol: float = 1e-10

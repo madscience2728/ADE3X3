@@ -135,3 +135,34 @@ leaving a 2-dimensional kernel of the bilinear map.
 4. **The gate2_algebra.py obstruction for R=13,20** (rk(N)=rk(H)+1 on the
    rank(H)=target subvariety) is a **non-generic** phenomenon: the leak appears
    only when you force rank(H) down to target. Generically, Gate 2 is free.
+
+---
+
+## Phase 4 Results (2026-04-04)
+
+### Tool 1 — AlphaTensor 4-Term Deletion Search
+
+- **Search space**: C(23,4) = 8,855 deletions (exhaustive)
+- **Result**: ZERO deletions pass Gate 1. ALL pass Gate 2 and Gate 3.
+- **Root cause**: AlphaTensor R=23 has rank(H)=14. Deleting 4 terms reduces rank
+  by at most 2 (best observed: rank(H)=12, gate1_gap=2). Cannot reach rank(H)=10.
+- **Conclusion**: R=19 is definitively NOT obtainable by 4-term deletion from AlphaTensor.
+- **Output**: `CANON_DATABASE/alphatensor_delete_results.json` (top 100 by score)
+
+### Tool 2 — Full-Packet Swap Optimizer (1-hour run, 20 workers)
+
+- **Starting point**: random Gate-1-satisfying 19-term packets from TermDB
+- **Best score reached**: `(0, 0, ~7.5e-15, 9, 2.8)` — tuple is `(gate1_gap, delta_leak, delta_resid, augmented_gap, recon_err)`
+- **Gate 1** (gate1_gap=0): satisfied from early in the run.
+- **Gate 2** (delta_leak=0, delta_resid~0): achieved at ~759s after starting at delta_leak=2.
+  This is significant — Gate-2-neutral and Gate-1-satisfying held simultaneously,
+  disproving the Phase 3 disjointness finding for individual terms (it does not
+  extend to full R-packets).
+- **Gate 3** (augmented_gap=9): NOT satisfied. rank([Sigma|H|Delta]) = 10, need 19.
+  Gap of 9 is unchanged throughout the run — the Sigma subspace is structurally
+  orthogonal to H+Delta in every packet found so far.
+- **Active bottleneck**: Gate 3 / augmented rank. The packet reconstruction error
+  (~2.8) confirms gamma coefficients cannot fit the target tensor with the
+  current H+Sigma structure.
+- **Output**: `CANON_DATABASE/swap_improvements.jsonl`, `CANON_DATABASE/swap_checkpoint.json`
+- **Tools**: `CANON_DATABASE/scripts/swap_*.py`, `CANON_DATABASE/scripts/alphatensor_delete.py`

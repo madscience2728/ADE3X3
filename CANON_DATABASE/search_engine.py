@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import hashlib
+import multiprocessing
 import tempfile
 import os
 import threading
@@ -43,7 +44,7 @@ def _worker_init(db_path: str, config):
     global _worker_db, _worker_config
     _worker_config = config
     _worker_db = TermDB.__new__(TermDB)
-    _worker_db._load(db_path)  # mmap'd, ~0 RAM, shares OS page cache with coordinator
+    _worker_db._load(db_path, progress_callback=lambda _: None, readonly=True)
 
 
 def _worker_process_basis(args: tuple) -> tuple[list[dict], dict, str | None]:
@@ -522,7 +523,9 @@ def _s2_worker_init(db_path: str, config):
     global _worker_db, _worker_config
     _worker_config = config
     _worker_db = TermDB.__new__(TermDB)
-    _worker_db._load(db_path)
+    # readonly=True: use mmap_mode='r' so all worker processes share OS pages
+    # (avoids N x 11 GB RAM copies on Windows). silent via no-op callback.
+    _worker_db._load(db_path, progress_callback=lambda _: None, readonly=True)
 
 
 def _s2_worker_process_packet(packet_path: str) -> tuple[str, list[dict], dict, str | None]:
