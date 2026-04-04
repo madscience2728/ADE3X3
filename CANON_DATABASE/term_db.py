@@ -34,6 +34,14 @@ except ImportError:
     HAS_RICH = False
 
 
+class _NullStatus:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+
 class TermDB:
     """
     In-RAM database of all 387,420,489 (α, β) pairs over {-1, 0, 1}^{3×3}.
@@ -370,7 +378,71 @@ class TermDB:
     #  DEDUPLICATION (optional, for faster queries)
     # ─────────────────────────────────────────────────────────────
 
-    def build_dedup_index(self):
+    def _dedup_cache_path(self) -> Path | None:
+        """Return the directory where dedup cache files would live, or None."""
+        if hasattr(self, '_data_path') and self._data_path:
+            return Path(self._data_path)
+        return None
+
+    def _try_load_dedup_cache(self, progress_callback=None) -> bool:
+        """Attempt to load cached dedup artifacts. Returns True on success."""
+        cache_dir = self._dedup_cache_path()
+        if cache_dir is None:
+            return False
+        files = {
+            'unique_H': cache_dir / 'dedup_unique_H.npy',
+            'H_dedup_map': cache_dir / 'dedup_H_dedup_map.npy',
+            'H_dedup_counts': cache_dir / 'dedup_H_dedup_counts.npy',
+        }
+        if not all(f.exists() for f in files.values()):
+            return False
+        try:
+            if progress_callback:
+                progress_callback("dedup: loading cached unique_H")
+            self.unique_H = np.load(str(files['unique_H']), mmap_mode=None)
+            if progress_callback:
+                progress_callback("dedup: loading cached H_dedup_map")
+            self.H_dedup_map = np.load(str(files['H_dedup_map']), mmap_mode=None)
+            if progress_callback:
+                progress_callback("dedup: loading cached H_dedup_counts")
+            self.H_dedup_counts = np.load(str(files['H_dedup_counts']), mmap_mode=None)
+            self.n_unique_H = self.unique_H.shape[0]
+            # Validate sizes match current DB
+            if self.H_dedup_map.shape[0] != self.N_PAIRS:
+                if progress_callback:
+                    progress_callback("dedup: cache size mismatch, rebuilding")
+                return False
+            # Roundtrip sanity check on cached data
+            rng = np.random.default_rng(0)
+            check_idx = rng.choice(self.N_PAIRS, min(1000, self.N_PAIRS), replace=False)
+            for idx in check_idx:
+                if not np.array_equal(self.H[idx], self.unique_H[self.H_dedup_map[idx]]):
+                    if progress_callback:
+                        progress_callback("dedup: cache roundtrip failed, rebuilding")
+                    return False
+            if progress_callback:
+                progress_callback(f"dedup: loaded cache — {self.n_unique_H:,} unique")
+            return True
+        except Exception:
+            return False
+
+    def _save_dedup_cache(self, progress_callback=None):
+        """Save dedup artifacts to disk for next run."""
+        cache_dir = self._dedup_cache_path()
+        if cache_dir is None:
+            return
+        try:
+            if progress_callback:
+                progress_callback("dedup: saving cache to disk")
+            np.save(str(cache_dir / 'dedup_unique_H.npy'), self.unique_H)
+            np.save(str(cache_dir / 'dedup_H_dedup_map.npy'), self.H_dedup_map)
+            np.save(str(cache_dir / 'dedup_H_dedup_counts.npy'), self.H_dedup_counts)
+            if progress_callback:
+                progress_callback("dedup: cache saved")
+        except Exception:
+            pass  # non-fatal
+
+    def build_dedup_index(self, progress_callback=None):
         """
         Build a deduplicated H-row index. Many (α,β) pairs produce
         identical H-rows. Queries on the deduped set are 30-50% faster.
@@ -378,28 +450,81 @@ class TermDB:
         Sets:
             self.unique_H:      (M, 18) int8 — unique H-rows (M < N)
             self.H_dedup_map:   (N,) uint32  — maps record → unique H index
-            self.dedup_reverse:  dict[int, list[int]] — unique H index → record indices
+            self.H_dedup_counts:(M,) uint32  — count per unique row
         """
-        self._print(None, "Building dedup index...")
+        # Try loading from cache first
+        if self._try_load_dedup_cache(progress_callback):
+            return
+
+        console = Console() if (HAS_RICH and not progress_callback) else None
+        silent = bool(progress_callback)
+        self._print(console, "Building dedup index...", silent=silent)
         t0 = time.time()
 
-        # View H rows as bytes for hashing
-        H_bytes = np.ascontiguousarray(self.H).view(
-            dtype=np.dtype([('row', np.int8, 18)])
-        ).ravel()
+        # Pack each 18-value H-row into a single int64 key.
+        # Entries are {-2, -1, 0, 1, 2} → map to {0, 1, 2, 3, 4} then encode in base 5.
+        # 5^18 = 3,814,697,265,625 < 2^63, so fits comfortably in int64.
+        # np.unique on plain int64 is a pure C sort that RELEASES the GIL.
+        if progress_callback:
+            progress_callback("dedup: packing H rows into int64 keys")
+        N = self.H.shape[0]
+        keys = np.zeros(N, dtype=np.int64)
+        H = self.H  # (N, 18) int8 — values in {-2, -1, 0, 1, 2}
+        # Horner's method from the last column backwards: key = (...((h17+2)*5 + h16+2)*5 + ...)*5 + h0+2
+        # Each op is a single vectorized numpy call on int64 that releases the GIL
+        for col in range(17, -1, -1):
+            keys *= 5
+            # Adding int8 column to int64 array — numpy upcasts the int8 automatically
+            keys += H[:, col]
+            keys += 2  # shift {-2,-1,0,1,2} → {0,1,2,3,4}
 
-        unique_rows, inverse, counts = np.unique(
-            H_bytes, return_inverse=True, return_counts=True
+        if progress_callback:
+            progress_callback("dedup: sorting (GIL-free np.unique on int64)")
+        unique_keys, inverse, counts = np.unique(
+            keys, return_inverse=True, return_counts=True
         )
+        del keys  # free 2.9 GB
 
-        self.unique_H = unique_rows['row']  # (M, 18)
+        if progress_callback:
+            progress_callback("dedup: unpacking unique H rows")
+        # Decode unique keys back to (M, 18) int8 rows
+        M = len(unique_keys)
+        unique_H = np.empty((M, 18), dtype=np.int8)
+        temp = unique_keys.copy()
+        del unique_keys  # free M*8 bytes
+        for col in range(18):
+            unique_H[:, col] = (temp % 5).astype(np.int8) - 2
+            temp //= 5
+        del temp
+
+        self.unique_H = unique_H
         self.H_dedup_map = inverse.astype(np.uint32)
-        self.n_unique_H = len(unique_rows)
+        self.H_dedup_counts = counts.astype(np.uint32)
+        self.n_unique_H = M
+
+        # ── Self-test: catch encoding bugs before they propagate ──
+        h_min, h_max = int(self.H.min()), int(self.H.max())
+        assert h_min >= -2 and h_max <= 2, (
+            f"H entries [{h_min}, {h_max}] outside expected range {{-2..2}}"
+        )
+        rng = np.random.default_rng(0)
+        check_idx = rng.choice(self.N_PAIRS, min(1000, self.N_PAIRS), replace=False)
+        for idx in check_idx:
+            assert np.array_equal(self.H[idx], self.unique_H[self.H_dedup_map[idx]]), (
+                f"Dedup roundtrip failed at record {idx}: "
+                f"H={self.H[idx].tolist()}, "
+                f"unique_H[{self.H_dedup_map[idx]}]={self.unique_H[self.H_dedup_map[idx]].tolist()}"
+            )
 
         elapsed = time.time() - t0
         ratio = self.n_unique_H / self.N_PAIRS * 100
-        self._print(None, f"Dedup: {self.N_PAIRS:,} → {self.n_unique_H:,} unique H-rows "
-                          f"({ratio:.1f}%), {elapsed:.1f}s")
+        if progress_callback:
+            progress_callback(f"dedup: done — {self.n_unique_H:,} unique ({ratio:.1f}%) in {elapsed:.1f}s")
+        self._print(console, f"Dedup: {self.N_PAIRS:,} → {self.n_unique_H:,} unique H-rows "
+                             f"({ratio:.1f}%), {elapsed:.1f}s", silent=silent)
+
+        # Save cache for next run
+        self._save_dedup_cache(progress_callback)
 
     def query_subspace_dedup(self, V_basis):
         """
@@ -414,15 +539,32 @@ class TermDB:
             return np.arange(self.N_PAIRS)
 
         V = np.asarray(V_perp)
-        if np.max(np.abs(V)) * 2 * 18 < 32767:
-            proj = self.unique_H.astype(np.int16) @ V.astype(np.int16).T
+        # Use pre-cached int16 view if available (set by finalize_for_search)
+        uH = self._unique_H_i16 if hasattr(self, '_unique_H_i16') else self.unique_H.astype(np.int16)
+        # Choose dtype to avoid overflow: H entries in {-2..2}, V entries may be larger.
+        # Each dot product is sum of 18 terms. Worst case: 18 * 2 * max(|V|).
+        max_dot = int(np.max(np.abs(V))) * 2 * 18
+        if max_dot < 32767:
+            proj = uH @ V.astype(np.int16).T
         else:
-            proj = self.unique_H.astype(np.int32) @ V.astype(np.int32).T
+            proj = uH.astype(np.int32) @ V.astype(np.int32).T
         unique_hits = np.where(np.all(proj == 0, axis=1))[0]
 
-        # Map back to record indices
-        record_hits = np.where(np.isin(self.H_dedup_map, unique_hits))[0]
+        if unique_hits.size == 0:
+            return np.empty(0, dtype=np.int64)
+
+        # Fast expansion: use boolean mask on H_dedup_map instead of np.isin
+        # Build a membership set for the unique hit indices
+        hit_mask = np.zeros(self.n_unique_H, dtype=np.bool_)
+        hit_mask[unique_hits] = True
+        record_hits = np.where(hit_mask[self.H_dedup_map])[0]
         return record_hits
+
+    def finalize_for_search(self):
+        """Pre-cache expensive conversions so worker threads don't each allocate copies."""
+        # Cache int16 version of unique_H — 31.7M × 18 × 2 = ~1.1 GB, allocated once
+        if not hasattr(self, '_unique_H_i16'):
+            self._unique_H_i16 = self.unique_H.astype(np.int16)
 
     # ─────────────────────────────────────────────────────────────
     #  PERSISTENCE (optional, for fast reload)
@@ -432,6 +574,7 @@ class TermDB:
         """Save arrays to disk for fast reload. ~38 GB, writes in ~13s on NVMe."""
         p = Path(path)
         p.mkdir(parents=True, exist_ok=True)
+        self._data_path = str(p.resolve())
         self._print(None, f"Saving to {p}...")
         t0 = time.time()
         np.save(p / "H.npy", self.H)
@@ -442,31 +585,52 @@ class TermDB:
         elapsed = time.time() - t0
         self._print(None, f"Saved in {elapsed:.1f}s")
 
-    def _load(self, path):
+    def _load(self, path, progress_callback=None):
         """Load from disk. ~10s from NVMe via memory-mapping."""
         p = Path(path)
-        self._print(None, f"Loading from {p}...")
+        self._data_path = str(p.resolve())
+        # Only use standalone console when NOT driven by dashboard (progress_callback)
+        console = Console() if (HAS_RICH and not progress_callback) else None
+        silent = bool(progress_callback)
+        self._print(console, f"Loading from {p}...", silent=silent)
         t0 = time.time()
+        if progress_callback:
+            progress_callback("load: templates")
         self.templates = np.load(p / "templates.npy")
-        # Memory-map the big arrays for instant load, then optionally copy to RAM
+        if progress_callback:
+            progress_callback("load: H memmap")
         self.H = np.load(p / "H.npy", mmap_mode='r+')
+        if progress_callback:
+            progress_callback("load: sigma memmap")
         self.sigma = np.load(p / "sigma.npy", mmap_mode='r+')
+        if progress_callback:
+            progress_callback("load: factor indices")
         self.alpha_idx = np.load(p / "alpha_idx.npy")
         self.beta_idx = np.load(p / "beta_idx.npy")
         elapsed = time.time() - t0
-        self._print(None, f"Loaded {self.H.shape[0]:,} records in {elapsed:.1f}s "
-                          f"({self._sizeof_gb():.1f} GB)")
+        if progress_callback:
+            progress_callback(f"load: complete in {elapsed:.1f}s")
+        self._print(console, f"Loaded {self.H.shape[0]:,} records in {elapsed:.1f}s "
+                             f"({self._sizeof_gb():.1f} GB)", silent=silent)
 
-    def load_to_ram(self):
+    def load_to_ram(self, progress_callback=None):
         """Force memory-mapped arrays fully into RAM for max query speed."""
-        self._print(None, "Loading arrays fully into RAM...")
+        console = Console() if (HAS_RICH and not progress_callback) else None
+        silent = bool(progress_callback)
+        self._print(console, "Loading arrays fully into RAM...", silent=silent)
         t0 = time.time()
+        if progress_callback:
+            progress_callback("load_to_ram: H")
         if isinstance(self.H, np.memmap):
             self.H = np.array(self.H)
+        if progress_callback:
+            progress_callback("load_to_ram: sigma")
         if isinstance(self.sigma, np.memmap):
             self.sigma = np.array(self.sigma)
         elapsed = time.time() - t0
-        self._print(None, f"Fully in RAM: {self._sizeof_gb():.1f} GB, {elapsed:.1f}s")
+        if progress_callback:
+            progress_callback(f"load_to_ram: complete in {elapsed:.1f}s")
+        self._print(console, f"Fully in RAM: {self._sizeof_gb():.1f} GB, {elapsed:.1f}s", silent=silent)
 
     # ─────────────────────────────────────────────────────────────
     #  UTILITIES
@@ -479,7 +643,9 @@ class TermDB:
                  self.templates.nbytes)
         return total / (1024**3)
 
-    def _print(self, console, msg):
+    def _print(self, console, msg, silent=False):
+        if silent:
+            return
         if console and HAS_RICH:
             console.print(msg)
         else:
