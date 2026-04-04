@@ -111,6 +111,97 @@ class BasisBuilder:
         return np.asarray(candidates[order[: min(self.config.basis_seed_count, candidates.size)]], dtype=np.int64)
 
     def build_bases(self) -> Generator[BasisResult, None, None]:
+        """Greedy random sampling: pick independent rows until rank is reached.
+
+        Generates up to max_bases_per_rank bases, each in O(target_rank * pool_size) time.
+        Falls back to DFS if config.basis_mode == 'dfs'.
+        """
+        mode = getattr(self.config, 'basis_mode', 'greedy')
+        if mode == 'dfs':
+            yield from self._build_bases_dfs()
+            return
+
+        target_d = self.target_rank
+        unique_H = self._unique_H_i64
+        norms = self._norms
+        n_unique = unique_H.shape[0]
+
+        # Pool: all rows with sufficient norm
+        pool_mask = norms >= float(self.config.basis_norm_min)
+        pool_indices = np.flatnonzero(pool_mask)
+        if pool_indices.size < target_d:
+            return
+
+        self.stats.seeds_total = self.config.max_bases_per_rank
+        self.stats.seeds_processed = 0
+        built = 0
+        seen_keys: set[tuple[int, ...]] = set()
+        max_attempts = self.config.max_bases_per_rank * 10  # avoid infinite loop
+        attempts = 0
+
+        while built < self.config.max_bases_per_rank and attempts < max_attempts:
+            attempts += 1
+            self.stats.seeds_processed = attempts
+            self.stats.depth1_total = target_d
+            self.stats.depth1_done = 0
+
+            # Greedy: randomly pick rows, keep if independent
+            order = self.rng.permutation(pool_indices.size)
+            chosen: list[int] = []
+            rows: list[np.ndarray] = []
+            V_f64 = np.empty((0, unique_H.shape[1]), dtype=np.float64)
+
+            for j in range(order.size):
+                if len(chosen) >= target_d:
+                    break
+                idx = int(pool_indices[order[j]])
+                row = unique_H[idx].astype(np.float64)
+
+                # Quick independence check via QR
+                if V_f64.shape[0] > 0:
+                    Q, _ = np.linalg.qr(V_f64.T, mode='reduced')
+                    residual = np.linalg.norm(row - (row @ Q) @ Q.T)
+                    if residual < 1e-8:
+                        continue
+                elif np.linalg.norm(row) < 0.5:
+                    continue
+
+                chosen.append(idx)
+                rows.append(unique_H[idx])
+                V_f64 = np.vstack([V_f64, row.reshape(1, -1)])
+                self.stats.depth1_done = len(chosen)
+
+            if len(chosen) < target_d:
+                continue
+
+            # Dedup by sorted index tuple
+            key = tuple(sorted(chosen))
+            if key in seen_keys:
+                continue
+            seen_keys.add(key)
+
+            V_basis = np.vstack([r.reshape(1, -1) for r in rows]).astype(np.int64)
+            dep_est = quick_dependent_count(
+                self.db, V_basis, self.config.dependent_count_sample_size, self.rng,
+            )
+            if dep_est < self.config.min_dependent_count:
+                self.stats.pruned_dependent += 1
+                continue
+
+            sigma_rows = [self._sigma_for_unique_index(idx) for idx in chosen]
+            self.stats.built_bases += 1
+            built += 1
+            yield BasisResult(
+                rank=self.rank,
+                indices=chosen,
+                V_basis=V_basis,
+                V_perp=_integer_nullspace(V_basis),
+                sigma_basis=np.vstack(sigma_rows).astype(np.int64),
+                dependent_estimate=dep_est,
+            )
+
+    def _build_bases_dfs(self) -> Generator[BasisResult, None, None]:
+        """Original DFS-based basis builder (slow but exhaustive)."""
         seeds = self._seed_unique_indices()
         self.stats.seeds_total = len(seeds)
         self.stats.seeds_processed = 0

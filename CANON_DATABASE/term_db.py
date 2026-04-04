@@ -231,8 +231,9 @@ class TermDB:
         # Simpler: row reduce V^T (18×d) augmented with I_18.
         # Actually, let's just do RREF on V (d×18) directly.
 
-        # Integer RREF via fraction-free Gaussian elimination
-        A = V.copy()  # d × 18
+        # Integer RREF via fraction-free Gaussian elimination (Python ints — no overflow)
+        from math import gcd as _gcd
+        A = [[int(V[i, j]) for j in range(n)] for i in range(m)]
         pivot_cols = []
         row = 0
         for col in range(n):
@@ -241,25 +242,27 @@ class TermDB:
             # Find pivot in this column
             pivot = None
             for r in range(row, m):
-                if A[r, col] != 0:
+                if A[r][col] != 0:
                     pivot = r
                     break
             if pivot is None:
                 continue
             # Swap rows
-            A[[row, pivot]] = A[[pivot, row]]
+            A[row], A[pivot] = A[pivot], A[row]
             pivot_cols.append(col)
             # Eliminate all other rows
             for r in range(m):
-                if r != row and A[r, col] != 0:
-                    # A[r] = A[r] * A[row, col] - A[row] * A[r, col]
-                    factor_r = A[r, col]
-                    factor_p = A[row, col]
-                    A[r] = A[r] * factor_p - A[row] * factor_r
-                    # Reduce by GCD to prevent integer overflow
-                    g = np.gcd.reduce(np.abs(A[r][A[r] != 0])) if np.any(A[r] != 0) else 1
+                if r != row and A[r][col] != 0:
+                    factor_r = A[r][col]
+                    factor_p = A[row][col]
+                    A[r] = [A[r][j] * factor_p - A[row][j] * factor_r for j in range(n)]
+                    # Reduce by GCD
+                    g = 0
+                    for v in A[r]:
+                        if v != 0:
+                            g = _gcd(g, abs(v))
                     if g > 1:
-                        A[r] //= g
+                        A[r] = [v // g for v in A[r]]
             row += 1
 
         rank = len(pivot_cols)
@@ -284,27 +287,30 @@ class TermDB:
                 # To stay integer: x[pc] = -A[j, fc], and scale everything by A[j, pc]
                 pass  # Handle below
 
-        # Better approach: build null space directly from reduced A
-        # After RREF, for each free column fc, the null vector is:
-        # x[fc] = lcm_of_pivots (to clear denominators)
-        # x[pivot_cols[j]] = -A[j, fc] * (lcm / A[j, pivot_cols[j]])
-
+        # Build null space vectors from reduced A
         # Compute LCM of all pivot values for a common denominator
-        pivot_vals = np.array([A[j, pivot_cols[j]] for j in range(rank)], dtype=np.int64)
 
         for i, fc in enumerate(free_cols):
-            # Start with x[fc] = product of all pivot values (guaranteed divisible)
-            common = np.prod(pivot_vals)  # could overflow for large matrices, fine for 18×18
-            null_vectors[i, fc] = common
+            # Use Python ints to avoid int64 overflow in the product
+            pv_py = [A[j][pivot_cols[j]] for j in range(rank)]
+            common = 1
+            for pv in pv_py:
+                common *= pv
+            vec = [0] * n
+            vec[fc] = common
             for j in range(rank):
                 pc = pivot_cols[j]
-                # x[pc] = -A[j, fc] * common / A[j, pc]
-                null_vectors[i, pc] = -A[j, fc] * (common // pivot_vals[j])
+                vec[pc] = -A[j][fc] * (common // pv_py[j])
 
-            # Reduce by GCD
-            g = np.gcd.reduce(np.abs(null_vectors[i][null_vectors[i] != 0]))
+            # Reduce by GCD (in Python ints)
+            g = 0
+            for v in vec:
+                if v != 0:
+                    g = _gcd(g, abs(v))
             if g > 1:
-                null_vectors[i] //= g
+                vec = [v // g for v in vec]
+
+            null_vectors[i] = np.array(vec, dtype=np.int64)
 
         # Verify: V @ null_vectors.T should be zero
         check = V @ null_vectors.T
