@@ -60,4 +60,4 @@ htmlcov/
 .pytype/
 
 outputs/exports/step84_*
-CANON_DATABASE/data/*.npy
+scripts/CANON_DATABASE/data/*.npy

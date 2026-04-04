@@ -26,7 +26,7 @@ sys.path.insert(0, str(_ROOT / "CANON_DATABASE"))
 sys.path.insert(0, str(_ROOT / "CANON_DATABASE" / "scripts"))
 
 from term_db import TermDB
-from swap_scoring import score_packet, score_is_better, score_is_solution
+from swap_scoring import score_packet, score_packet_full, score_is_better, score_is_solution
 from swap_config import SwapConfig
 
 
@@ -171,6 +171,9 @@ def worker_main(
     def _score(indices, H, sigma, delta):
         return score_packet(H, sigma, delta, target_H, rank_tol)
 
+    def _score_full(H, sigma, delta):
+        return score_packet_full(H, sigma, delta, target_H, rank_tol)
+
     def _gate1_ok(H_new: np.ndarray) -> bool:
         sv = np.linalg.svd(H_new, compute_uv=False)
         thresh = rank_tol * max(H_new.shape) * sv[0] if sv[0] > 0 else rank_tol
@@ -207,6 +210,7 @@ def worker_main(
             best_indices = indices.copy()
             _send('update', {
                 'score':   list(best_score),
+                'diag':    _score_full(H, sigma, delta),
                 'indices': best_indices.tolist(),
                 'swaps':   total_swaps,
                 'improv':  total_improv,
@@ -278,6 +282,7 @@ def worker_main(
                     best_indices = indices.copy()
                     _send('update', {
                         'score':   list(best_score),
+                        'diag':    _score_full(H, sigma, delta),
                         'indices': best_indices.tolist(),
                         'swaps':   total_swaps,
                         'improv':  total_improv,

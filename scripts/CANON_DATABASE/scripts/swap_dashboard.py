@@ -37,9 +37,12 @@ class SwapDashboard:
 
         # Per-worker state
         self.worker_scores:    dict[int, Optional[tuple]] = {}
+        self.worker_diags:     dict[int, dict] = {}
         self.worker_swaps:     dict[int, int]  = {i: 0 for i in range(n_workers)}
         self.worker_restarts:  dict[int, int]  = {i: 0 for i in range(n_workers)}
         self.worker_done:      dict[int, bool] = {i: False for i in range(n_workers)}
+
+        self.global_best_diag: Optional[dict] = None
 
         # Score history (last 10 global improvements)
         self.score_history: deque[tuple] = deque(maxlen=10)
@@ -61,8 +64,10 @@ class SwapDashboard:
             self.worker_scores[worker_id]   = score
             self.worker_swaps[worker_id]    = swaps
             self.worker_restarts[worker_id] = restart
+            if 'diag' in payload:
+                self.worker_diags[worker_id] = payload['diag']
 
-            # Update global totals (approximate — workers are independent)
+            # Update global totals (approximate -- workers are independent)
             old_total = sum(self.worker_swaps.get(i, 0) for i in range(self.n_workers))
             if old_total > self._last_swaps + 5000:
                 elapsed = now - self._last_time
@@ -74,6 +79,8 @@ class SwapDashboard:
             if self.global_best_score is None or score < self.global_best_score:
                 self.global_best_score = score
                 self.score_history.append(score)
+                if 'diag' in payload:
+                    self.global_best_diag = payload['diag']
 
         elif kind == 'status':
             swaps    = payload.get('swaps', 0)
@@ -96,16 +103,19 @@ class SwapDashboard:
 
         # --- Global best panel ---
         if self.global_best_score:
-            g1, leak, resid, aug, err = self.global_best_score
-            g1_color  = "green" if g1==0   else "yellow"
-            lk_color  = "green" if leak==0 else "red"
-            ag_color  = "green" if aug==0  else "yellow"
+            g1, combined = self.global_best_score
+            g1_color = "green" if g1 == 0 else "yellow"
+            best_diag = self.global_best_diag or {}
+            leak = best_diag.get('delta_leak', '?')
+            aug  = best_diag.get('augmented_gap', '?')
+            si   = best_diag.get('sigma_innovation', '?')
+            lk_color = "green" if leak == 0 else "red"
+            ag_color = "green" if aug == 0  else "yellow"
             best_lines = (
                 f"  Gate1 gap: [{g1_color}]{g1}[/{g1_color}]   "
                 f"Delta leak: [{lk_color}]{leak}[/{lk_color}]   "
-                f"Delta resid: {resid:.3f}\n"
-                f"  Aug gap:   [{ag_color}]{aug}[/{ag_color}]   "
-                f"Recon err: {err:.4e}\n"
+                f"Aug gap: [{ag_color}]{aug}[/{ag_color}]\n"
+                f"  Sigma innov: {si}   Combined: {combined:.4f}\n"
             )
         else:
             best_lines = "  (waiting for first result...)\n"
@@ -121,9 +131,11 @@ class SwapDashboard:
 
         # --- Delta leak histogram ---
         leaks = [
-            s[1] for s in self.worker_scores.values()
-            if s is not None
+            self.worker_diags.get(i, {}).get('delta_leak', None)
+            for i in range(self.n_workers)
+            if i in self.worker_diags
         ]
+        leaks = [v for v in leaks if v is not None]
         if leaks:
             from collections import Counter
             lc = Counter(leaks)
@@ -150,9 +162,14 @@ class SwapDashboard:
             sw   = self.worker_swaps.get(i, 0)
             rst  = self.worker_restarts.get(i, 0)
             done = self.worker_done.get(i, False)
-            sc_str = (
-                f"({sc[0]},{sc[1]},{sc[2]:.2f},{sc[3]},{sc[4]:.3e})" if sc else "..."
-            )
+            diag = self.worker_diags.get(i, {})
+            if sc:
+                leak = diag.get('delta_leak', '?')
+                aug  = diag.get('augmented_gap', '?')
+                si   = diag.get('sigma_innovation', '?')
+                sc_str = f"g1={sc[0]} leak={leak} aug={aug} si={si} comb={sc[1]:.2f}"
+            else:
+                sc_str = "..."
             wt.add_row(
                 str(i),
                 sc_str,

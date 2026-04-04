@@ -108,6 +108,7 @@ def run(config: SwapConfig):
                         'time':    time.time() - dashboard.start_time,
                         'worker':  msg.worker_id,
                         'score':   list(score),
+                        'diag':    msg.payload.get('diag'),
                         'swaps':   swaps,
                     })
                     log_fh.write(entry + '\n')

@@ -1,0 +1,43 @@
+{
+  "seed_packet_file": "C:\\Users\\death\\OneDrive\\Documents\\C4 Website\\Github\\ADE3X3\\CANON_DATABASE\\gate2_clean_packet.json",
+  "seed_diagnostics": {
+    "rank_H": 10,
+    "rank_N": 10,
+    "delta_leak": 0,
+    "rank_SN": 10,
+    "augmented_gap": 9,
+    "sigma_innovation": 0,
+    "target_rank_H": 10,
+    "gate1_gap": 0
+  },
+  "n_sample_per_position": 200000,
+  "n_positions": 19,
+  "total_evaluated": 3800000,
+  "gate1_violations": 1800128,
+  "gate1_pass_rate": 0.5262821052631579,
+  "elapsed_seconds": 570.2027246952057,
+  "pareto_frontier": {
+    "0": {
+      "sigma_innovation": 0,
+      "delta_leak": 0,
+      "augmented_gap": 9,
+      "rank_H": 10,
+      "rank_N": 10,
+      "rank_SN": 10,
+      "position": 0,
+      "new_db_index": 34577648,
+      "replaced_db_index": 183322996
+    },
+    "1": {
+      "sigma_innovation": 0,
+      "delta_leak": 1,
+      "augmented_gap": 8,
+      "rank_H": 10,
+      "rank_N": 11,
+      "rank_SN": 11,
+      "position": 5,
+      "new_db_index": 184478755,
+      "replaced_db_index": 193704429
+    }
+  }
+}
