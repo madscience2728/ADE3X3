@@ -68,7 +68,8 @@ LEVEL 1 — First reduction
   ↓ Apply S₃ (coordinate permutation), order 6
   
 LEVEL 2 — Full reduction
-  3 super-seeds, 81 parameters, ~25 independent equations
+  3 super-seeds, 81 parameters (24 effective α,β + 57 pure-γ)
+  19 independent profiled equations, ~25 raw
   Super-seeds classified by Hamming weight
   
   ↓ No further symmetry (weights 0,1,2 are distinct)
@@ -81,6 +82,12 @@ STOP — Recursion terminates
 | 0 | 19 | 513 | 729 | 1.42 (overconstrained) |
 | 1 | 7 | 189 | 125 | 0.66 (underdetermined) |
 | 2 | 3 | 81 | ~25 | ~0.31 (highly underdetermined) |
+| 2 (profiled) | 3 | 24 (α,β only) | 19 | 0.79 (underdetermined, 5 d.o.f.) |
+
+**Note (April 2026):** The profiled residual eliminates γ analytically,
+reducing to 24 effective parameters (9+9 for α,β minus stabilizer
+redundancies) and 19 independent equations. The Jacobian of the full
+bilinear map params→(Σ,H,Δ) has rank 22, leaving a 2-dim kernel.
 
 ---
 
@@ -184,6 +191,10 @@ Over {-1, 0, 1} with 3 super-seeds:
 
 **Estimated wall time on Ryzen 9 5900X: hours, not years.**
 
+**Status (April 2026):** The full 526-kernel sweep has been run
+(canon_newton.py, 20 restarts per kernel, 6 workers). No solution found.
+The kernel enumeration route is exhausted numerically.
+
 ### Conservation law as filter
 
 Any candidate must satisfy R + η_nullity = 27. With the symmetric structure:
@@ -227,6 +238,125 @@ terms that touch the corner (0,0,0) of {0,1}³.
 
 The pattern: delete the top-weight orbit and compress its work into the
 boundary terms. **Strassen IS the n=2 case of this construction.**
+
+---
+
+## THE GATE 3 WALL (April 2026)
+
+Algebraic experiments (algebra_experiments.py) revealed the **true bottleneck**
+is not Gate 1 (rank of H) or Gate 2 (Δ containment), but **Gate 3: Sigma
+rank deficiency**.
+
+### Per-seed rank contributions (generic, additive)
+
+| Seed | |orbit| | rk(H) | rk(Σ) | rk(α⊗β) |
+|------|---------|-------|-------|----------|
+| Corner | 1 | 1 | 1 | 1 |
+| Edge | 6 | 2 | 2 | 2 |
+| Face | 12 | 4 | 2 | 4 |
+| Interior | 8 | 8 | 4 | 8 |
+
+For R=19 (Corner+Edge+Face): rk(H) = 1+2+4 = 7 (need 10), rk(Σ) = 1+2+2 = 5 (need 9).
+
+### Key findings
+
+1. **Gate 2 is generically free** for all R ≤ 21 (rk(N)=rk(H) always).
+2. **Gate 3 fails universally** — no orbit combination achieves rk(Σ)=9.
+   Even R=27 (all orbits) only reaches rk(Σ)=8.
+3. The conservation law R+η_null generic values:
+   - R=19: 19+11=30 (overshoots 27 by 3)
+   - R=12,13,20,21: deficit=1 (closest)
+4. **R=13 and R=20** fail Gate 2 on the rank(H)=target subvariety
+   (rk(N)=rk(H)+1 structurally). Both are algebraically dead.
+
+### New strategy: Gate 3-first
+
+Instead of searching for kernels that achieve rk(H)=10, work backwards:
+find the parameter subvariety where rk(Σ)=9, then check whether
+Gate 1 and Gate 2 can be simultaneously satisfied there.
+
+---
+
+## THE AVERAGING IMPOSSIBILITY (April 2026)
+
+The impossibility_test.py experiments proved a stronger result:
+
+### Theorem: rk(Σ) < 9 identically in the averaged family
+
+All 9×9 minors of Σ are **identically zero** for every orbit configuration
+at every parameter value. This was verified by:
+- Sampling 500 random parameter vectors per R
+- Testing all (R choose 9) row subsets × 50 per trial
+- Every determinant is zero to machine precision
+
+This means Gate 3 is not merely non-generic — it is **algebraically
+impossible** in the stabilizer-averaged parameterization.
+
+### Root cause: averaging kills factor sharpness
+
+The standard R=27 algorithm (α_k = e_r e_s^T, β_k = e_s e_u^T) achieves
+rk(Σ) = 9 for R ≥ 13. But it is **NOT** in the symmetric family:
+least-squares fit gives ||error|| ≈ 3.6.
+
+The standard algorithm is **equivariant** (terms related by group transport)
+but NOT **averaged** (factors are NOT stabilizer-averaged). The M_a, M_b
+expansion matrices impose stabilizer averaging:
+
+```
+α_seed → (1/|Stab|) Σ_{g ∈ Stab} g · α_seed
+```
+
+This projection onto the Stab-invariant subspace kills the rank-1 structure
+e_r e_s^T (which is NOT Stab-invariant for Edge and Face seeds).
+
+### Per-orbit Σ image dimension (degree-2 monomials)
+
+| R | params | monomials | rk(Σ image) |
+|--:|-------:|----------:|------------:|
+| 12 | 18 | 171 | 9 |
+| 13 | 36 | 666 | 12 |
+| 19 | 54 | 1485 | 18 |
+| 20 | 36 | 666 | 15 |
+| 27 | 72 | 2628 | 24 |
+
+The Σ image variety is rich (dim 18 for R=19) but every point in it has
+rk ≤ 5. The variety is large but low-rank.
+
+### Resolution: equivariant transport WITHOUT averaging
+
+**UPDATE (April 2026, fixed_transport.py):** Even with correct transport
+(verified on all 27 standard algorithm terms), the standard algorithm is
+NOT in the seed-transport family. ||error|| ≈ 2.0 for α, 2.8 for β.
+
+The root cause is deeper than averaging vs. transport:
+
+**The seed-transport parameterization is too restrictive.**
+
+The standard algorithm's factors for different orbit members are NOT
+related by transporting a single seed — they are independently chosen,
+constrained only by the requirement that the TENSOR (sum of all terms)
+is group-invariant. For example:
+- Term (0,0,1): α = e₀e₀^T (a rank-1 matrix)
+- Term (1,0,0): α = e₁e₀^T (a DIFFERENT rank-1 matrix)
+- Transport of (0,0,1)'s α under the relevant group element produces
+  e₀e₁^T, NOT e₁e₀^T.
+
+**The correct symmetry condition:** The group permutes the R terms as a
+set, and maps one term's factors to another's. But within each orbit,
+the RELATIONSHIP between factors at different orbit members need not be
+simple transport of one seed. The factors can have additional freedom
+parameterized by the stabilizer representation.
+
+**Confirmed: rk(Σ) < 9 identically in the seed-transport family.**
+All 9×9 minors of Σ are zero for every R, every parameter value,
+both with averaged and non-averaged transport. This is structural:
+the seed-transport family lives in a proper subvariety of the full
+equivariant parameter space.
+
+**Next step:** Parameterize the orbit factors with FULL stabilizer
+freedom — each orbit member gets factors that are constrained only
+by the group action relating them pairwise, not by derivation from
+a single seed.
 
 ---
 

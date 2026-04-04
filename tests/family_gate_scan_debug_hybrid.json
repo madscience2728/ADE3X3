@@ -1,0 +1,58 @@
+{
+  "elapsed": 43.46513319015503,
+  "families": {
+    "hybrid_orbit6_r20": {
+      "summary": {
+        "count": 1,
+        "gate1": 0,
+        "gate2": 0,
+        "best": {
+          "fitness_inf": 0.6668369351531135,
+          "fitness_fro": 7.000000000222513,
+          "rank_H": 17,
+          "rank_nuis": 17,
+          "delta_resid": 3.2248438856479435e-11,
+          "gamma_delta": 1.824406674243435,
+          "gamma_sigma_err": 3.0000000000788254,
+          "aug_rank": 20,
+          "conservation": 21,
+          "rank_barrier": 2.9617484674688193e-06,
+          "family": "hybrid_orbit6_r20",
+          "trial": 0,
+          "R": 20,
+          "mode": "hybrid",
+          "note": "R=20 slack control on the sharpest surviving Step 60 orbit",
+          "stage1_loss": 0.141969053746684,
+          "stage2_loss": 7.000000000977984
+        },
+        "rank_counts": {
+          "17": 1
+        },
+        "conservation_counts": {
+          "21": 1
+        }
+      },
+      "trials": [
+        {
+          "fitness_inf": 0.6668369351531135,
+          "fitness_fro": 7.000000000222513,
+          "rank_H": 17,
+          "rank_nuis": 17,
+          "delta_resid": 3.2248438856479435e-11,
+          "gamma_delta": 1.824406674243435,
+          "gamma_sigma_err": 3.0000000000788254,
+          "aug_rank": 20,
+          "conservation": 21,
+          "rank_barrier": 2.9617484674688193e-06,
+          "family": "hybrid_orbit6_r20",
+          "trial": 0,
+          "R": 20,
+          "mode": "hybrid",
+          "note": "R=20 slack control on the sharpest surviving Step 60 orbit",
+          "stage1_loss": 0.141969053746684,
+          "stage2_loss": 7.000000000977984
+        }
+      ]
+    }
+  }
+}

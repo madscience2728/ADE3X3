@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-04-04T03:32:46.671153",
+  "coeff_field": [
+    -1,
+    0,
+    1
+  ],
+  "completed_ranks": [],
+  "stats": {
+    "13": {
+      "candidates_checked": 0,
+      "gate1_passes": 0,
+      "gate2_passes": 0,
+      "gate3_passes": 0,
+      "solutions_found": 0,
+      "workers_done": 0,
+      "workers_active": 0
+    },
+    "_total_units": 5,
+    "_completed_units": 0
+  },
+  "solutions": {
+    "13": []
+  },
+  "elapsed_seconds": 498.8092336000118
+}

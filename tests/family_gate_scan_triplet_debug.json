@@ -1,0 +1,164 @@
+{
+  "elapsed": 46.886569023132324,
+  "families": {
+    "exact3_partition_r20": {
+      "summary": {
+        "count": 1,
+        "gate1": 0,
+        "gate2": 0,
+        "best": {
+          "fitness_inf": 1.0,
+          "fitness_fro": 7.0,
+          "rank_H": 14,
+          "rank_nuis": 14,
+          "delta_resid": 0.0,
+          "gamma_delta": 0.0,
+          "gamma_sigma_err": 4.358898943540674,
+          "aug_rank": 20,
+          "conservation": 24,
+          "rank_barrier": 1.8304570027243392e-09,
+          "family": "exact3_partition_r20",
+          "trial": 0,
+          "R": 20,
+          "mode": "partition_samefiber",
+          "note": "Step 57 first exact-3 survivor type for R=20",
+          "stage1_loss": 0.14000000000000126,
+          "stage2_loss": 7.000000000000001
+        },
+        "rank_counts": {
+          "14": 1
+        },
+        "conservation_counts": {
+          "24": 1
+        }
+      },
+      "trials": [
+        {
+          "fitness_inf": 1.0,
+          "fitness_fro": 7.0,
+          "rank_H": 14,
+          "rank_nuis": 14,
+          "delta_resid": 0.0,
+          "gamma_delta": 0.0,
+          "gamma_sigma_err": 4.358898943540674,
+          "aug_rank": 20,
+          "conservation": 24,
+          "rank_barrier": 1.8304570027243392e-09,
+          "family": "exact3_partition_r20",
+          "trial": 0,
+          "R": 20,
+          "mode": "partition_samefiber",
+          "note": "Step 57 first exact-3 survivor type for R=20",
+          "stage1_loss": 0.14000000000000126,
+          "stage2_loss": 7.000000000000001
+        }
+      ]
+    },
+    "samefiber_core_r13": {
+      "summary": {
+        "count": 1,
+        "gate1": 0,
+        "gate2": 0,
+        "best": {
+          "fitness_inf": 1.0,
+          "fitness_fro": 14.0,
+          "rank_H": 12,
+          "rank_nuis": 12,
+          "delta_resid": 0.0,
+          "gamma_delta": 0.0,
+          "gamma_sigma_err": 5.477225575051661,
+          "aug_rank": 13,
+          "conservation": 19,
+          "rank_barrier": 3.0479333098228033e-09,
+          "family": "samefiber_core_r13",
+          "trial": 0,
+          "R": 13,
+          "mode": "partition_samefiber",
+          "note": "R=13 same-fiber control family with concentrated orbit budget",
+          "stage1_loss": 0.28000000000000425,
+          "stage2_loss": 14.000000000000002
+        },
+        "rank_counts": {
+          "12": 1
+        },
+        "conservation_counts": {
+          "19": 1
+        }
+      },
+      "trials": [
+        {
+          "fitness_inf": 1.0,
+          "fitness_fro": 14.0,
+          "rank_H": 12,
+          "rank_nuis": 12,
+          "delta_resid": 0.0,
+          "gamma_delta": 0.0,
+          "gamma_sigma_err": 5.477225575051661,
+          "aug_rank": 13,
+          "conservation": 19,
+          "rank_barrier": 3.0479333098228033e-09,
+          "family": "samefiber_core_r13",
+          "trial": 0,
+          "R": 13,
+          "mode": "partition_samefiber",
+          "note": "R=13 same-fiber control family with concentrated orbit budget",
+          "stage1_loss": 0.28000000000000425,
+          "stage2_loss": 14.000000000000002
+        }
+      ]
+    },
+    "hybrid_orbit36_r19": {
+      "summary": {
+        "count": 1,
+        "gate1": 0,
+        "gate2": 0,
+        "best": {
+          "fitness_inf": 0.9961006362360274,
+          "fitness_fro": 8.003409970645247,
+          "rank_H": 16,
+          "rank_nuis": 16,
+          "delta_resid": 2.4272043433343594e-13,
+          "gamma_delta": 1.6296612624241955,
+          "gamma_sigma_err": 3.465117972883656,
+          "aug_rank": 19,
+          "conservation": 21,
+          "rank_barrier": 0.007236829043107659,
+          "family": "hybrid_orbit36_r19",
+          "trial": 0,
+          "R": 19,
+          "mode": "hybrid",
+          "note": "Step 60 six-fiber non-rectangular orbit size 36",
+          "stage1_loss": 0.18055134549060176,
+          "stage2_loss": 8.009426147391858
+        },
+        "rank_counts": {
+          "16": 1
+        },
+        "conservation_counts": {
+          "21": 1
+        }
+      },
+      "trials": [
+        {
+          "fitness_inf": 0.9961006362360274,
+          "fitness_fro": 8.003409970645247,
+          "rank_H": 16,
+          "rank_nuis": 16,
+          "delta_resid": 2.4272043433343594e-13,
+          "gamma_delta": 1.6296612624241955,
+          "gamma_sigma_err": 3.465117972883656,
+          "aug_rank": 19,
+          "conservation": 21,
+          "rank_barrier": 0.007236829043107659,
+          "family": "hybrid_orbit36_r19",
+          "trial": 0,
+          "R": 19,
+          "mode": "hybrid",
+          "note": "Step 60 six-fiber non-rectangular orbit size 36",
+          "stage1_loss": 0.18055134549060176,
+          "stage2_loss": 8.009426147391858
+        }
+      ]
+    }
+  }
+}

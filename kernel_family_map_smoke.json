@@ -1,0 +1,5561 @@
+{
+  "irrep_dims": [
+    1,
+    2,
+    2,
+    1,
+    1,
+    1,
+    2,
+    2,
+    3,
+    1,
+    1,
+    2
+  ],
+  "ranks": {
+    "13": {
+      "kernel_dim": 4,
+      "candidate_count": 106,
+      "family_sample_count": 2,
+      "best_family_histogram": {
+        "exact3_partition_r13": 35,
+        "samefiber_core_r13": 71
+      },
+      "top20": [
+        {
+          "combo": [
+            8,
+            9
+          ],
+          "dims": [
+            3,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8069467937744598,
+            "delta_leak": 0.9061577705852426,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8069467937744598,
+              "delta_leak": 0.9061577705852426,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8560836292655413,
+              "delta_leak": 0.9003654180638242,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            8
+          ],
+          "dims": [
+            1,
+            3
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8143282484758104,
+            "delta_leak": 0.922917960003641,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8143282484758104,
+              "delta_leak": 0.922917960003641,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8546675203336204,
+              "delta_leak": 0.8995188982528092,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            8
+          ],
+          "dims": [
+            1,
+            3
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8165239280270296,
+            "delta_leak": 0.9006701784759411,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8217353021149296,
+              "delta_leak": 0.9010587530837716,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8165239280270296,
+              "delta_leak": 0.9006701784759411,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            8,
+            10
+          ],
+          "dims": [
+            3,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8181596968143138,
+            "delta_leak": 0.9244619457888262,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8181596968143138,
+              "delta_leak": 0.9244619457888262,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.856232367582077,
+              "delta_leak": 0.8999454963425124,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            6
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8223705590740493,
+            "delta_leak": 0.9228661173664935,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8223705590740493,
+              "delta_leak": 0.9228661173664935,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8811318684016304,
+              "delta_leak": 0.9728745953532216,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            5,
+            8
+          ],
+          "dims": [
+            1,
+            3
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8277434564842047,
+            "delta_leak": 0.8891751248462773,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.833745131083307,
+              "delta_leak": 0.8928377326636088,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8277434564842047,
+              "delta_leak": 0.8891751248462773,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            1,
+            5
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8299571135344864,
+            "delta_leak": 0.9713819260073168,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8785425225406555,
+              "delta_leak": 0.87639381803534,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8299571135344864,
+              "delta_leak": 0.9713819260073168,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            4,
+            8
+          ],
+          "dims": [
+            1,
+            3
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8366329695579748,
+            "delta_leak": 0.915638530294478,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8366329695579748,
+              "delta_leak": 0.915638530294478,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.867879572497682,
+              "delta_leak": 0.8813581706436817,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            5,
+            6
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8370841315959974,
+            "delta_leak": 0.9695446646276448,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.913209120360676,
+              "delta_leak": 0.848032234564964,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8370841315959974,
+              "delta_leak": 0.9695446646276448,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            3,
+            9
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8460205303735984,
+            "delta_leak": 0.912085246565849,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8460205303735984,
+              "delta_leak": 0.912085246565849,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8945915303215587,
+              "delta_leak": 0.9805793223863132,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            2
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8492073519779609,
+            "delta_leak": 0.9129980431438065,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8492073519779609,
+              "delta_leak": 0.9129980431438065,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9050717139469193,
+              "delta_leak": 0.8102807501861826,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            9,
+            10
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.849709086122558,
+            "delta_leak": 0.9136475388887474,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.849709086122558,
+              "delta_leak": 0.9136475388887474,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.896086660488291,
+              "delta_leak": 0.980970670083884,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            3,
+            5,
+            9
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8512405535334565,
+            "delta_leak": 0.9772756447982514,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9345631593914772,
+              "delta_leak": 0.8362872098036802,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8512405535334565,
+              "delta_leak": 0.9772756447982514,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            3,
+            5,
+            10
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8513901379383565,
+            "delta_leak": 0.9768887839758242,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9442618600791779,
+              "delta_leak": 0.8560866085279398,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8513901379383565,
+              "delta_leak": 0.9768887839758242,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            5,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8515121575902934,
+            "delta_leak": 0.9176276206401774,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9406765629801044,
+              "delta_leak": 0.8625289900412086,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8515121575902934,
+              "delta_leak": 0.9176276206401774,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            11
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8527689224296972,
+            "delta_leak": 0.9362048164709301,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8527689224296972,
+              "delta_leak": 0.9362048164709301,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8948499766258028,
+              "delta_leak": 0.9211452500759673,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            5,
+            9,
+            10
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8528116890392246,
+            "delta_leak": 0.9776683149151667,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9379035622692709,
+              "delta_leak": 0.837990826677479,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8528116890392246,
+              "delta_leak": 0.9776683149151667,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            1,
+            9
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8531524765772283,
+            "delta_leak": 0.8899600061883028,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8531524765772283,
+              "delta_leak": 0.8899600061883028,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8582241903200692,
+              "delta_leak": 0.9816355380555131,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            3,
+            10
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8567221832788233,
+            "delta_leak": 0.9302727992490862,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8567221832788233,
+              "delta_leak": 0.9302727992490862,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.894733867203995,
+              "delta_leak": 0.9801937654533044,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            1,
+            3
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8568116192415327,
+            "delta_leak": 0.9808591600440094,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8601374986434779,
+              "delta_leak": 0.9070195523360836,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8568116192415327,
+              "delta_leak": 0.9808591600440094,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        }
+      ],
+      "all_results": [
+        {
+          "combo": [
+            8,
+            9
+          ],
+          "dims": [
+            3,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8069467937744598,
+            "delta_leak": 0.9061577705852426,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8069467937744598,
+              "delta_leak": 0.9061577705852426,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8560836292655413,
+              "delta_leak": 0.9003654180638242,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            8
+          ],
+          "dims": [
+            1,
+            3
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8143282484758104,
+            "delta_leak": 0.922917960003641,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8143282484758104,
+              "delta_leak": 0.922917960003641,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8546675203336204,
+              "delta_leak": 0.8995188982528092,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            8
+          ],
+          "dims": [
+            1,
+            3
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8165239280270296,
+            "delta_leak": 0.9006701784759411,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8217353021149296,
+              "delta_leak": 0.9010587530837716,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8165239280270296,
+              "delta_leak": 0.9006701784759411,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            8,
+            10
+          ],
+          "dims": [
+            3,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8181596968143138,
+            "delta_leak": 0.9244619457888262,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8181596968143138,
+              "delta_leak": 0.9244619457888262,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.856232367582077,
+              "delta_leak": 0.8999454963425124,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            6
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8223705590740493,
+            "delta_leak": 0.9228661173664935,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8223705590740493,
+              "delta_leak": 0.9228661173664935,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8811318684016304,
+              "delta_leak": 0.9728745953532216,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            5,
+            8
+          ],
+          "dims": [
+            1,
+            3
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8277434564842047,
+            "delta_leak": 0.8891751248462773,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.833745131083307,
+              "delta_leak": 0.8928377326636088,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8277434564842047,
+              "delta_leak": 0.8891751248462773,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            1,
+            5
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8299571135344864,
+            "delta_leak": 0.9713819260073168,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8785425225406555,
+              "delta_leak": 0.87639381803534,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8299571135344864,
+              "delta_leak": 0.9713819260073168,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            4,
+            8
+          ],
+          "dims": [
+            1,
+            3
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8366329695579748,
+            "delta_leak": 0.915638530294478,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8366329695579748,
+              "delta_leak": 0.915638530294478,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.867879572497682,
+              "delta_leak": 0.8813581706436817,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            5,
+            6
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8370841315959974,
+            "delta_leak": 0.9695446646276448,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.913209120360676,
+              "delta_leak": 0.848032234564964,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8370841315959974,
+              "delta_leak": 0.9695446646276448,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            3,
+            9
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8460205303735984,
+            "delta_leak": 0.912085246565849,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8460205303735984,
+              "delta_leak": 0.912085246565849,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8945915303215587,
+              "delta_leak": 0.9805793223863132,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            2
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8492073519779609,
+            "delta_leak": 0.9129980431438065,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8492073519779609,
+              "delta_leak": 0.9129980431438065,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9050717139469193,
+              "delta_leak": 0.8102807501861826,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            9,
+            10
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.849709086122558,
+            "delta_leak": 0.9136475388887474,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.849709086122558,
+              "delta_leak": 0.9136475388887474,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.896086660488291,
+              "delta_leak": 0.980970670083884,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            3,
+            5,
+            9
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8512405535334565,
+            "delta_leak": 0.9772756447982514,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9345631593914772,
+              "delta_leak": 0.8362872098036802,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8512405535334565,
+              "delta_leak": 0.9772756447982514,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            3,
+            5,
+            10
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8513901379383565,
+            "delta_leak": 0.9768887839758242,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9442618600791779,
+              "delta_leak": 0.8560866085279398,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8513901379383565,
+              "delta_leak": 0.9768887839758242,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            5,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8515121575902934,
+            "delta_leak": 0.9176276206401774,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9406765629801044,
+              "delta_leak": 0.8625289900412086,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8515121575902934,
+              "delta_leak": 0.9176276206401774,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            11
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8527689224296972,
+            "delta_leak": 0.9362048164709301,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8527689224296972,
+              "delta_leak": 0.9362048164709301,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8948499766258028,
+              "delta_leak": 0.9211452500759673,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            5,
+            9,
+            10
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8528116890392246,
+            "delta_leak": 0.9776683149151667,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9379035622692709,
+              "delta_leak": 0.837990826677479,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8528116890392246,
+              "delta_leak": 0.9776683149151667,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            1,
+            9
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8531524765772283,
+            "delta_leak": 0.8899600061883028,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8531524765772283,
+              "delta_leak": 0.8899600061883028,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8582241903200692,
+              "delta_leak": 0.9816355380555131,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            3,
+            10
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8567221832788233,
+            "delta_leak": 0.9302727992490862,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8567221832788233,
+              "delta_leak": 0.9302727992490862,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.894733867203995,
+              "delta_leak": 0.9801937654533044,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            1,
+            3
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8568116192415327,
+            "delta_leak": 0.9808591600440094,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8601374986434779,
+              "delta_leak": 0.9070195523360836,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8568116192415327,
+              "delta_leak": 0.9808591600440094,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            5,
+            7
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8581782901507942,
+            "delta_leak": 0.8613588009724432,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9562077948717366,
+              "delta_leak": 0.8123307463338869,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8581782901507942,
+              "delta_leak": 0.8613588009724432,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            1,
+            10
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8583725577214633,
+            "delta_leak": 0.9812503961351877,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8637657725322687,
+              "delta_leak": 0.9085905549995165,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8583725577214633,
+              "delta_leak": 0.9812503961351877,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            2,
+            5
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8622478073290132,
+            "delta_leak": 0.8062795870828677,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9374490320713841,
+              "delta_leak": 0.8372826446681905,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8622478073290132,
+              "delta_leak": 0.8062795870828677,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            3,
+            4,
+            5
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.863102689164067,
+            "delta_leak": 0.9597926988839675,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.960312395348667,
+              "delta_leak": 0.8465508314620213,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.863102689164067,
+              "delta_leak": 0.9597926988839675,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            3,
+            6
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8637170740066599,
+            "delta_leak": 0.9790396837597991,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8955168620246525,
+              "delta_leak": 0.8796459599694838,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8637170740066599,
+              "delta_leak": 0.9790396837597991,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            4,
+            5,
+            9
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8645049809142141,
+            "delta_leak": 0.9605861036691439,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.954061071618318,
+              "delta_leak": 0.8282467353052314,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8645049809142141,
+              "delta_leak": 0.9605861036691439,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            4,
+            5,
+            10
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8646522705829399,
+            "delta_leak": 0.9601925186670607,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9635635370259205,
+              "delta_leak": 0.8482338348376699,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8646522705829399,
+              "delta_leak": 0.9601925186670607,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            5,
+            9
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8647260752128756,
+            "delta_leak": 0.8816354989300832,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8647260752128756,
+              "delta_leak": 0.8816354989300832,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8689054410937174,
+              "delta_leak": 0.971099357338396,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            6,
+            9
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8651183698858022,
+            "delta_leak": 0.979817503470817,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8888099244988658,
+              "delta_leak": 0.8620448707494114,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8651183698858022,
+              "delta_leak": 0.979817503470817,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            6,
+            10
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8652655551405104,
+            "delta_leak": 0.9794316466449869,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8990023600614676,
+              "delta_leak": 0.8812657619611775,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8652655551405104,
+              "delta_leak": 0.9794316466449869,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            3,
+            5
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8675102625208682,
+            "delta_leak": 0.9703145490467248,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8716183530857211,
+              "delta_leak": 0.8988530517715128,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8675102625208682,
+              "delta_leak": 0.9703145490467248,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            4,
+            9
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8675107880017043,
+            "delta_leak": 0.9047186602837564,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8675107880017043,
+              "delta_leak": 0.9047186602837564,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9072223477012724,
+              "delta_leak": 0.963946982016143,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            5,
+            10
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8690519849589066,
+            "delta_leak": 0.9707100350593745,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8751990325985701,
+              "delta_leak": 0.9004383027133741,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8690519849589066,
+              "delta_leak": 0.9707100350593745,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            7
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.869871131774882,
+            "delta_leak": 0.8901710179292687,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.869871131774882,
+              "delta_leak": 0.8901710179292687,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9011955968763182,
+              "delta_leak": 0.8651052569418637,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            1,
+            4
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8699911108240346,
+            "delta_leak": 0.9642316466952684,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8812835786841668,
+              "delta_leak": 0.899611485910723,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8699911108240346,
+              "delta_leak": 0.9642316466952684,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            5,
+            6
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8743312236460246,
+            "delta_leak": 0.9684752627847529,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9065497708530328,
+              "delta_leak": 0.8712229078999514,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8743312236460246,
+              "delta_leak": 0.9684752627847529,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            3,
+            4
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8743811157511003,
+            "delta_leak": 0.921505024387225,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8743811157511003,
+              "delta_leak": 0.921505024387225,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9058861839024629,
+              "delta_leak": 0.9631563457750423,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            5,
+            6,
+            9
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8757155352199687,
+            "delta_leak": 0.9692615603423533,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8999250628529497,
+              "delta_leak": 0.853448123522679,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8757155352199687,
+              "delta_leak": 0.9692615603423533,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            5,
+            6,
+            10
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8758609396612822,
+            "delta_leak": 0.9688714995804243,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9099930111046427,
+              "delta_leak": 0.8728583410634437,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8758609396612822,
+              "delta_leak": 0.9688714995804243,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            4,
+            6
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8767927725387377,
+            "delta_leak": 0.9623807349603983,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.915846427986807,
+              "delta_leak": 0.8720053739244867,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8767927725387377,
+              "delta_leak": 0.9623807349603983,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            3,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8777074085849325,
+            "delta_leak": 0.9276541897875031,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9235106652338255,
+              "delta_leak": 0.8936300144304106,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8777074085849325,
+              "delta_leak": 0.9276541897875031,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            4,
+            10
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8779505275399903,
+            "delta_leak": 0.9230513735894011,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8779505275399903,
+              "delta_leak": 0.9230513735894011,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9073627032049291,
+              "delta_leak": 0.9635547698392429,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            3,
+            9,
+            10
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8789682118954791,
+            "delta_leak": 0.9870851937181597,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9206859642559719,
+              "delta_leak": 0.8699695222391376,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8789682118954791,
+              "delta_leak": 0.9870851937181597,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            9,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8790864036419396,
+            "delta_leak": 0.9284750581257452,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9170084953356876,
+              "delta_leak": 0.8763098464502327,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8790864036419396,
+              "delta_leak": 0.9284750581257452,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            10,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8792312506200329,
+            "delta_leak": 0.9280678552258623,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.926890900821791,
+              "delta_leak": 0.8952245143008966,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8792312506200329,
+              "delta_leak": 0.9280678552258623,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            1,
+            4,
+            5
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8805296347225151,
+            "delta_leak": 0.9535031729040957,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8924924553863626,
+              "delta_leak": 0.8913771176901008,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8805296347225151,
+              "delta_leak": 0.9535031729040957,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            6,
+            9
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8819663663720096,
+            "delta_leak": 0.8848683764118652,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8819663663720096,
+              "delta_leak": 0.8848683764118652,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9012075450119117,
+              "delta_leak": 0.9787593258947006,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            3,
+            7
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8841760674475087,
+            "delta_leak": 0.8720325852175712,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9393257686415455,
+              "delta_leak": 0.8452807731569187,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8841760674475087,
+              "delta_leak": 0.8720325852175712,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            6
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8850237625347931,
+            "delta_leak": 0.8858092195022048,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8850237625347931,
+              "delta_leak": 0.8858092195022048,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9116116719580453,
+              "delta_leak": 0.8080772887889687,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            6,
+            9,
+            10
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8855052030547613,
+            "delta_leak": 0.886478635889298,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8855052030547613,
+              "delta_leak": 0.886478635889298,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9026917171262772,
+              "delta_leak": 0.9791514010096051,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            7,
+            9
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8855449893879942,
+            "delta_leak": 0.8729057609000742,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9329338301033083,
+              "delta_leak": 0.8269485653675767,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8855449893879942,
+              "delta_leak": 0.8729057609000742,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            7,
+            10
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8856887801191404,
+            "delta_leak": 0.8724726229254783,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9426492947324779,
+              "delta_leak": 0.8469663002641478,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8856887801191404,
+              "delta_leak": 0.8724726229254783,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            4,
+            5,
+            6
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8872505117991732,
+            "delta_leak": 0.9516313946441792,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9266373166020241,
+              "delta_leak": 0.8635077952816618,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8872505117991732,
+              "delta_leak": 0.9516313946441792,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            2,
+            3
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8881264672356588,
+            "delta_leak": 0.8176726840338223,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9202229297252575,
+              "delta_leak": 0.869287392691248,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8881264672356588,
+              "delta_leak": 0.8176726840338223,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            5,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8881543783580679,
+            "delta_leak": 0.9164976421572605,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9342130301295463,
+              "delta_leak": 0.885340015502467,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8881543783580679,
+              "delta_leak": 0.9164976421572605,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            6,
+            11
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8884417643603483,
+            "delta_leak": 0.9097098465741991,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8884417643603483,
+              "delta_leak": 0.9097098465741991,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9014640945320719,
+              "delta_leak": 0.9192075838850352,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            5,
+            9,
+            10
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8894003722927399,
+            "delta_leak": 0.9766078086453773,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9314207865627405,
+              "delta_leak": 0.8614518616753962,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8894003722927399,
+              "delta_leak": 0.9766078086453773,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            2,
+            9
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8894893095410047,
+            "delta_leak": 0.8186038455482434,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9136973635232484,
+              "delta_leak": 0.8514722047058746,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8894893095410047,
+              "delta_leak": 0.8186038455482434,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            5,
+            9,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8895171779003751,
+            "delta_leak": 0.9173284939492041,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9277858682805142,
+              "delta_leak": 0.867854415984987,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8895171779003751,
+              "delta_leak": 0.9173284939492041,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            2,
+            10
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8896324627544127,
+            "delta_leak": 0.8181419597406666,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9236151978057445,
+              "delta_leak": 0.8709264603893535,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8896324627544127,
+              "delta_leak": 0.8181419597406666,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            5,
+            10,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.889660326629549,
+            "delta_leak": 0.9169163408692427,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9375546804797237,
+              "delta_leak": 0.886949418718051,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.889660326629549,
+              "delta_leak": 0.9169163408692427,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            3,
+            4,
+            9
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8903180345170406,
+            "delta_leak": 0.9701688039876477,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9371403742439302,
+              "delta_leak": 0.8605875891349833,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8903180345170406,
+              "delta_leak": 0.9701688039876477,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            3,
+            4,
+            10
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8904610545021238,
+            "delta_leak": 0.9697791081337797,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9468126755311544,
+              "delta_leak": 0.8798403165306806,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8904610545021238,
+              "delta_leak": 0.9697791081337797,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            4,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8905777209937478,
+            "delta_leak": 0.9100550930997189,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9432370742747215,
+              "delta_leak": 0.8861100157166972,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8905777209937478,
+              "delta_leak": 0.9100550930997189,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            4,
+            9,
+            10
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8918203291965686,
+            "delta_leak": 0.9705643493885638,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9404716233165475,
+              "delta_leak": 0.8622431947470175,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8918203291965686,
+              "delta_leak": 0.9705643493885638,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            6,
+            10
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.8922369824883157,
+            "delta_leak": 0.9036039107891332,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.8922369824883157,
+              "delta_leak": 0.9036039107891332,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9013488371241984,
+              "delta_leak": 0.978373051738331,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            5,
+            7
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8945474962005484,
+            "delta_leak": 0.8601549057761336,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9498499547282379,
+              "delta_leak": 0.8365117607229265,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8945474962005484,
+              "delta_leak": 0.8601549057761336,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            5,
+            7,
+            9
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8959005709016552,
+            "delta_leak": 0.8610401266271199,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9435293149735384,
+              "delta_leak": 0.8179830500215182,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8959005709016552,
+              "delta_leak": 0.8610401266271199,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            5,
+            7,
+            10
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8960426998422897,
+            "delta_leak": 0.8606010167342197,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.95313678437192,
+              "delta_leak": 0.8382149212118278,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8960426998422897,
+              "delta_leak": 0.8606010167342197,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            4,
+            7
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8969535664082514,
+            "delta_leak": 0.8532870597446499,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9587268271618059,
+              "delta_leak": 0.8373266642901729,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8969535664082514,
+              "delta_leak": 0.8532870597446499,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            3,
+            5
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8984522950698164,
+            "delta_leak": 0.8049933232422392,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9309630912422587,
+              "delta_leak": 0.8607629821565054,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8984522950698164,
+              "delta_leak": 0.8049933232422392,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            5,
+            9
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8997994979435486,
+            "delta_leak": 0.8059391342997816,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9245133362870116,
+              "delta_leak": 0.8427676166925823,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8997994979435486,
+              "delta_leak": 0.8059391342997816,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            5,
+            10
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.8999410111214013,
+            "delta_leak": 0.805469986118544,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9343163653072496,
+              "delta_leak": 0.8624182510622909,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.8999410111214013,
+              "delta_leak": 0.805469986118544,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            4,
+            5,
+            9
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9006187358133378,
+            "delta_leak": 0.9595067172669152,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9476888296805338,
+              "delta_leak": 0.8519761375368299,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9006187358133378,
+              "delta_leak": 0.9595067172669152,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            4,
+            5,
+            10
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.900760120285508,
+            "delta_leak": 0.9591126893239699,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.957254553089025,
+              "delta_leak": 0.8714191430946537,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.900760120285508,
+              "delta_leak": 0.9591126893239699,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            0,
+            2,
+            4
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9008479360302891,
+            "delta_leak": 0.7976506722002461,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9400183348625971,
+              "delta_leak": 0.8615549479600808,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9008479360302891,
+              "delta_leak": 0.7976506722002461,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            4,
+            5,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9008754530134265,
+            "delta_leak": 0.8986800903137042,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9537181004623652,
+              "delta_leak": 0.8777489961899461,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9008754530134265,
+              "delta_leak": 0.8986800903137042,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            4,
+            5,
+            9,
+            10
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9021038766572309,
+            "delta_leak": 0.959906656166919,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9509831287288265,
+              "delta_leak": 0.8536484447631563,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9021038766572309,
+              "delta_leak": 0.959906656166919,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            4,
+            6,
+            9
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9026011859604217,
+            "delta_leak": 0.8772732760299494,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9026011859604217,
+              "delta_leak": 0.8772732760299494,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9137469131175971,
+              "delta_leak": 0.9620955226339419,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            6,
+            7
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9048700014328774,
+            "delta_leak": 0.8622627138708453,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9048700014328774,
+              "delta_leak": 0.8622627138708453,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9077634807000071,
+              "delta_leak": 0.8630417812149628,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            3,
+            9
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9070415986232946,
+            "delta_leak": 0.8745716664602643,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9070415986232946,
+              "delta_leak": 0.8745716664602643,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9246277505354589,
+              "delta_leak": 0.8173369769345057,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            4,
+            5,
+            7
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.907178926675554,
+            "delta_leak": 0.8411447191638184,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.96904033248516,
+              "delta_leak": 0.8284734655318299,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.907178926675554,
+              "delta_leak": 0.8411447191638184,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            4,
+            6
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9092063952590526,
+            "delta_leak": 0.8945747909155418,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9092063952590526,
+              "delta_leak": 0.8945747909155418,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9124203040532888,
+              "delta_leak": 0.961303363637609,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            9,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9103769384390119,
+            "delta_leak": 0.8987711785399173,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9103769384390119,
+              "delta_leak": 0.8987711785399173,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9146245953070847,
+              "delta_leak": 0.9273582972506743,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            9,
+            10
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9104829788956572,
+            "delta_leak": 0.8762008491718459,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9104829788956572,
+              "delta_leak": 0.8762008491718459,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9260743890434789,
+              "delta_leak": 0.8178064452776463,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            4,
+            5
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9110295870946017,
+            "delta_leak": 0.7846478363641954,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9505348529859676,
+              "delta_leak": 0.8529532629127519,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9110295870946017,
+              "delta_leak": 0.7846478363641954,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            4,
+            6,
+            10
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9126396125555633,
+            "delta_leak": 0.8961676098007365,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9126396125555633,
+              "delta_leak": 0.8961676098007365,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9138862665729721,
+              "delta_leak": 0.9617025553746877,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            11
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9133392353782818,
+            "delta_leak": 0.8996974831327286,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9133392353782818,
+              "delta_leak": 0.8996974831327286,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.924877803606722,
+              "delta_leak": 0.7449916094227853,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            9,
+            10,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9138057579525293,
+            "delta_leak": 0.9003565736353635,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9138057579525293,
+              "delta_leak": 0.9003565736353635,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9160870304303178,
+              "delta_leak": 0.9277720946185511,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            10,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9147638150579616,
+            "delta_leak": 0.9269506037657003,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9203305555885871,
+              "delta_leak": 0.9172227730457183,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9147638150579616,
+              "delta_leak": 0.9269506037657003,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            3,
+            10
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9170314188409855,
+            "delta_leak": 0.8935231299718711,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9170314188409855,
+              "delta_leak": 0.8935231299718711,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9247654643524545,
+              "delta_leak": 0.8168743748009011,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            7,
+            9
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9208339554462099,
+            "delta_leak": 0.8717178129019746,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9264162783948668,
+              "delta_leak": 0.8507141788825987,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9208339554462099,
+              "delta_leak": 0.8717178129019746,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            7,
+            10
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9209722365530137,
+            "delta_leak": 0.8712840843677383,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9361993817469677,
+              "delta_leak": 0.8701853814972644,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9209722365530137,
+              "delta_leak": 0.8712840843677383,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            7,
+            11
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9210850384447921,
+            "delta_leak": 0.8042789998355775,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9325830891257237,
+              "delta_leak": 0.876524144295054,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9210850384447921,
+              "delta_leak": 0.8042789998355775,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            7,
+            9,
+            10
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9222865446729135,
+            "delta_leak": 0.8721580094247975,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.929785950690052,
+              "delta_leak": 0.8523889619570835,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9222865446729135,
+              "delta_leak": 0.8721580094247975,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            4,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9256748470186208,
+            "delta_leak": 0.9089157003786449,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9367912082263063,
+              "delta_leak": 0.9083290396887278,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9256748470186208,
+              "delta_leak": 0.9089157003786449,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            4,
+            9,
+            10
+          ],
+          "dims": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9268704034765621,
+            "delta_leak": 0.969496072308759,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9340066722392449,
+              "delta_leak": 0.8850615861486386,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9268704034765621,
+              "delta_leak": 0.969496072308759,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            4,
+            9,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9269824876372741,
+            "delta_leak": 0.9097534765671956,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9303818568347634,
+              "delta_leak": 0.891294557728578,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9269824876372741,
+              "delta_leak": 0.9097534765671956,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            4,
+            9
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9271184881765736,
+            "delta_leak": 0.8668863576257463,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9271184881765736,
+              "delta_leak": 0.8668863576257463,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9368537020825627,
+              "delta_leak": 0.7973065348477121,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            4,
+            10,
+            11
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9271198516831234,
+            "delta_leak": 0.909337890153064,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9401236945400915,
+              "delta_leak": 0.9098977814327422,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9271198516831234,
+              "delta_leak": 0.909337890153064,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            7
+          ],
+          "dims": [
+            2,
+            2
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9293274502105227,
+            "delta_leak": 0.8516927520727348,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9293274502105227,
+              "delta_leak": 0.8516927520727348,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9310187832511534,
+              "delta_leak": 0.6744709274396365,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            3,
+            4,
+            7
+          ],
+          "dims": [
+            1,
+            1,
+            2
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9318105738641363,
+            "delta_leak": 0.8520717600329998,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9523858034659639,
+              "delta_leak": 0.8608058010490571,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9318105738641363,
+              "delta_leak": 0.8520717600329998,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            4,
+            7,
+            9
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9331096160410377,
+            "delta_leak": 0.8529653697407834,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9460821055070796,
+              "delta_leak": 0.8428113498372239,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9331096160410377,
+              "delta_leak": 0.8529653697407834,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            4,
+            7,
+            10
+          ],
+          "dims": [
+            1,
+            2,
+            1
+          ],
+          "best": {
+            "family": "samefiber_core_r13",
+            "sample": 0,
+            "h_leak": 0.9332460782382108,
+            "delta_leak": 0.8525221007803595,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9556639115657335,
+              "delta_leak": 0.8624609877751509,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9332460782382108,
+              "delta_leak": 0.8525221007803595,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            3,
+            4
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.9335502447118829,
+            "delta_leak": 0.8843910971639745,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.9335502447118829,
+              "delta_leak": 0.8843910971639745,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9355598586528611,
+              "delta_leak": 0.7963504710738663,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        },
+        {
+          "combo": [
+            2,
+            4,
+            10
+          ],
+          "dims": [
+            2,
+            1,
+            1
+          ],
+          "best": {
+            "family": "exact3_partition_r13",
+            "sample": 0,
+            "h_leak": 0.936894259042729,
+            "delta_leak": 0.8860022240701648,
+            "sigma_rank": 9,
+            "rank_H": 13,
+            "rank_nuis": 13,
+            "conservation": 18
+          },
+          "evaluations": [
+            {
+              "family": "exact3_partition_r13",
+              "sample": 0,
+              "h_leak": 0.936894259042729,
+              "delta_leak": 0.8860022240701648,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            },
+            {
+              "family": "samefiber_core_r13",
+              "sample": 0,
+              "h_leak": 0.9369896189950833,
+              "delta_leak": 0.796832304097162,
+              "sigma_rank": 9,
+              "rank_H": 13,
+              "rank_nuis": 13,
+              "conservation": 18
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

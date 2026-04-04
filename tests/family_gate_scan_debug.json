@@ -1,0 +1,58 @@
+{
+  "elapsed": 1.4836888313293457,
+  "families": {
+    "exact3_partition_r13": {
+      "summary": {
+        "count": 1,
+        "gate1": 0,
+        "gate2": 0,
+        "best": {
+          "fitness_inf": 1.0,
+          "fitness_fro": 14.0,
+          "rank_H": 9,
+          "rank_nuis": 9,
+          "delta_resid": 0.0,
+          "gamma_delta": 0.0,
+          "gamma_sigma_err": 6.324555320336759,
+          "aug_rank": 13,
+          "conservation": 22,
+          "rank_barrier": 3.001080206428407e-09,
+          "family": "exact3_partition_r13",
+          "trial": 0,
+          "R": 13,
+          "mode": "partition_samefiber",
+          "note": "Step 57 first exact-3 survivor type for R=13",
+          "stage1_loss": 0.2800000000000032,
+          "stage2_loss": 14.000000000000002
+        },
+        "rank_counts": {
+          "9": 1
+        },
+        "conservation_counts": {
+          "22": 1
+        }
+      },
+      "trials": [
+        {
+          "fitness_inf": 1.0,
+          "fitness_fro": 14.0,
+          "rank_H": 9,
+          "rank_nuis": 9,
+          "delta_resid": 0.0,
+          "gamma_delta": 0.0,
+          "gamma_sigma_err": 6.324555320336759,
+          "aug_rank": 13,
+          "conservation": 22,
+          "rank_barrier": 3.001080206428407e-09,
+          "family": "exact3_partition_r13",
+          "trial": 0,
+          "R": 13,
+          "mode": "partition_samefiber",
+          "note": "Step 57 first exact-3 survivor type for R=13",
+          "stage1_loss": 0.2800000000000032,
+          "stage2_loss": 14.000000000000002
+        }
+      ]
+    }
+  }
+}

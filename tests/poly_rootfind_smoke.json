@@ -1,0 +1,278 @@
+{
+  "13": [
+    {
+      "R": 13,
+      "trial": 2213,
+      "cost": 10.000000040816012,
+      "fit_inf": 0.8102287009538205,
+      "rnorm": 4.472135964126317,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 13,
+      "trial": 913,
+      "cost": 10.000000110071452,
+      "fit_inf": 0.815842553373139,
+      "rnorm": 4.472135979612304,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 13,
+      "trial": 113,
+      "cost": 10.000000042591473,
+      "fit_inf": 0.817973129664238,
+      "rnorm": 4.472135964523322,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 13,
+      "trial": 1813,
+      "cost": 10.000000041161734,
+      "fit_inf": 0.8354726844032341,
+      "rnorm": 4.4721359642036225,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 13,
+      "trial": 2113,
+      "cost": 10.000000073796244,
+      "fit_inf": 0.838763176860692,
+      "rnorm": 4.472135971500921,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 13,
+      "trial": 2313,
+      "cost": 10.000000571848588,
+      "fit_inf": 0.8409901264223307,
+      "rnorm": 4.4721360828688095,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 13,
+      "trial": 1713,
+      "cost": 10.00000002451522,
+      "fit_inf": 0.850255464274398,
+      "rnorm": 4.472135960481349,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 13,
+      "trial": 2813,
+      "cost": 10.000000190035516,
+      "fit_inf": 0.8506470431018114,
+      "rnorm": 4.4721359974928125,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 13,
+      "trial": 513,
+      "cost": 10.000000008550199,
+      "fit_inf": 0.8526582231156048,
+      "rnorm": 4.472135956911462,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 13,
+      "trial": 2913,
+      "cost": 10.00000006410929,
+      "fit_inf": 0.8729898077458038,
+      "rnorm": 4.472135969334852,
+      "params": null,
+      "success": false
+    }
+  ],
+  "19": [
+    {
+      "R": 19,
+      "trial": 2319,
+      "cost": 8.500000016883847,
+      "fit_inf": 0.7263031024271025,
+      "rnorm": 4.123105629712595,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 19,
+      "trial": 719,
+      "cost": 8.5000004775921,
+      "fit_inf": 0.74571914278566,
+      "rnorm": 4.1231057414507575,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 19,
+      "trial": 19,
+      "cost": 8.500000019570763,
+      "fit_inf": 0.7547775361723603,
+      "rnorm": 4.123105630364268,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 19,
+      "trial": 1619,
+      "cost": 8.50000001924423,
+      "fit_inf": 0.7569950198976714,
+      "rnorm": 4.123105630285072,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 19,
+      "trial": 2019,
+      "cost": 8.500211930317995,
+      "fit_inf": 0.7713891525322082,
+      "rnorm": 4.123157025949411,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 19,
+      "trial": 919,
+      "cost": 8.500000014790292,
+      "fit_inf": 0.774250435409803,
+      "rnorm": 4.123105629204833,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 19,
+      "trial": 1219,
+      "cost": 8.500000032797466,
+      "fit_inf": 0.776800751681639,
+      "rnorm": 4.123105633572214,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 19,
+      "trial": 2419,
+      "cost": 8.500000009817263,
+      "fit_inf": 0.7955041729584864,
+      "rnorm": 4.123105627998696,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 19,
+      "trial": 2719,
+      "cost": 8.562446018154573,
+      "fit_inf": 0.8023578329774386,
+      "rnorm": 4.138223294640968,
+      "params": null,
+      "success": true
+    },
+    {
+      "R": 19,
+      "trial": 319,
+      "cost": 8.770202552699082,
+      "fit_inf": 0.811358979890678,
+      "rnorm": 4.1881266821095755,
+      "params": null,
+      "success": true
+    }
+  ],
+  "20": [
+    {
+      "R": 20,
+      "trial": 120,
+      "cost": 6.500000008653387,
+      "fit_inf": 0.5589068234027812,
+      "rnorm": 3.605551277864007,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 20,
+      "trial": 1320,
+      "cost": 6.500000033937286,
+      "fit_inf": 0.5853060244205823,
+      "rnorm": 3.605551284876499,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 20,
+      "trial": 20,
+      "cost": 6.500000008524358,
+      "fit_inf": 0.6254198306015001,
+      "rnorm": 3.605551277828221,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 20,
+      "trial": 820,
+      "cost": 6.500000007115308,
+      "fit_inf": 0.6357427740601617,
+      "rnorm": 3.6055512774374208,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 20,
+      "trial": 420,
+      "cost": 6.500000008450938,
+      "fit_inf": 0.6526445329335822,
+      "rnorm": 3.605551277807858,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 20,
+      "trial": 2920,
+      "cost": 6.500000008496854,
+      "fit_inf": 0.6809417882895255,
+      "rnorm": 3.6055512778205925,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 20,
+      "trial": 1520,
+      "cost": 6.500000008512045,
+      "fit_inf": 0.6905946243693386,
+      "rnorm": 3.605551277824806,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 20,
+      "trial": 2620,
+      "cost": 6.500213455998081,
+      "fit_inf": 0.6915456253573682,
+      "rnorm": 3.605610477019968,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 20,
+      "trial": 2120,
+      "cost": 6.500000017618481,
+      "fit_inf": 0.6917711312044867,
+      "rnorm": 3.605551280350477,
+      "params": null,
+      "success": false
+    },
+    {
+      "R": 20,
+      "trial": 2820,
+      "cost": 6.500000008582783,
+      "fit_inf": 0.6919606675519521,
+      "rnorm": 3.605551277844425,
+      "params": null,
+      "success": false
+    }
+  ]
+}

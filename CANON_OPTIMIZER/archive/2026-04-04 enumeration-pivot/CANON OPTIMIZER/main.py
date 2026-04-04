@@ -28,6 +28,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--maxiter", type=int, default=500, help="Scipy optimizer max iterations per run.")
     parser.add_argument("--log-every", type=int, default=10, help="Record a callback entry every N accepted iterations.")
     parser.add_argument("--method", type=str, default="L-BFGS-B", help="Scipy method. Default: L-BFGS-B.")
+    parser.add_argument("--workers", type=int, default=None, help="Number of worker processes for multistart. Default: all logical CPUs up to runs.")
     parser.add_argument("--out", type=str, default="CANON OPTIMIZER/result.json", help="JSON output path.")
     return parser
 
@@ -54,6 +55,7 @@ def main() -> int:
         maxiter=args.maxiter,
         log_every=args.log_every,
         method=args.method,
+        workers=args.workers,
     )
     result = run_search(config)
     save_result(result, args.out)

@@ -17,8 +17,10 @@ while still exposing an 81-parameter interface to the optimizer.
 
 from __future__ import annotations
 
+import os
 import json
 import time
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass
 from itertools import permutations, product
 from pathlib import Path
@@ -416,6 +418,7 @@ class SearchConfig:
     maxiter: int = 500
     log_every: int = 10
     method: str = "L-BFGS-B"
+    workers: int | None = None
 
 
 def _jsonify(value: Any) -> Any:
@@ -434,77 +437,117 @@ def _jsonify(value: Any) -> Any:
     return value
 
 
+def _run_single_search(run_idx: int, config: SearchConfig, verification: dict[str, Any]) -> dict[str, Any]:
+    rng = np.random.default_rng(config.seed + run_idx)
+    x0 = rng.standard_normal(81) * config.seed_scale
+    history: list[dict[str, float | int]] = []
+    call_counter = {"count": 0}
+    accepted_iterations = {"count": 0}
+    start_time = time.time()
+
+    def callback(xk: np.ndarray) -> None:
+        accepted_iterations["count"] += 1
+        if accepted_iterations["count"] % config.log_every != 0:
+            return
+        current_loss = objective_from_params(xk)
+        history.append({
+            "iter": accepted_iterations["count"],
+            "loss_fro": float(current_loss),
+            "elapsed": float(time.time() - start_time),
+        })
+
+    def objective(params: np.ndarray) -> float:
+        call_counter["count"] += 1
+        return objective_from_params(params)
+
+    initial_loss = objective(x0)
+    history.append({"iter": 0, "loss_fro": float(initial_loss), "elapsed": 0.0})
+    result = minimize(
+        objective,
+        x0,
+        method=config.method,
+        callback=callback,
+        options={"maxiter": config.maxiter, "disp": False},
+    )
+
+    final_params = np.array(result.x, dtype=np.float64)
+    built = build_symmetric_decomposition(unpack_seed_params(final_params))
+    diagnostics = compute_diagnostics(built["alpha"], built["beta"], built["gamma"])
+    diagnostics["objective_fro"] = float(result.fun)
+    diagnostics["objective_history_monotone"] = all(
+        history[idx + 1]["loss_fro"] <= history[idx]["loss_fro"] + 1e-12
+        for idx in range(len(history) - 1)
+    )
+    diagnostics["optimizer_calls"] = call_counter["count"]
+    diagnostics["optimizer_success"] = bool(result.success)
+    diagnostics["optimizer_message"] = str(result.message)
+    diagnostics["elapsed_seconds"] = float(time.time() - start_time)
+
+    return {
+        "run": run_idx,
+        "seed": config.seed + run_idx,
+        "raw_seed_params": final_params,
+        "raw_seeds": unpack_seed_params(final_params),
+        "projected_seeds": built["projected_seeds"],
+        "alpha": built["alpha"],
+        "beta": built["beta"],
+        "gamma": built["gamma"],
+        "term_indices": built["term_indices"],
+        "orbit_labels": built["orbit_labels"],
+        "verification": verification,
+        "diagnostics": diagnostics,
+        "history": history,
+    }
+
+
+def _default_worker_count(config: SearchConfig) -> int:
+    cpu_count = os.cpu_count() or 1
+    requested = config.workers or cpu_count
+    return max(1, min(config.runs, requested))
+
+
+def _print_run_summary(run_result: dict[str, Any], completed: int, total: int) -> None:
+    diagnostics = run_result["diagnostics"]
+    print(
+        f"run {completed}/{total} finished: "
+        f"seed={run_result['seed']} "
+        f"max_abs={diagnostics['max_abs_residual']:.6e} "
+        f"loss={diagnostics['loss_fro']:.6e} "
+        f"rank_H={diagnostics['rank_H']} "
+        f"elapsed={diagnostics['elapsed_seconds']:.1f}s"
+    )
+
+
 def run_search(config: SearchConfig) -> dict[str, Any]:
     verification = verify_symmetry_setup()
     if not verification["verification_passed"]:
         raise RuntimeError("Symmetry verification failed; refusing to optimize.")
 
+    worker_count = _default_worker_count(config)
+    print(f"starting multistart: runs={config.runs} workers={worker_count} method={config.method} maxiter={config.maxiter}")
+
     best: dict[str, Any] | None = None
-    for run_idx in range(config.runs):
-        rng = np.random.default_rng(config.seed + run_idx)
-        x0 = rng.standard_normal(81) * config.seed_scale
-        history: list[dict[str, float | int]] = []
-        call_counter = {"count": 0}
-        accepted_iterations = {"count": 0}
-        best_run_value = float("inf")
-        start_time = time.time()
+    completed = 0
 
-        def callback(xk: np.ndarray) -> None:
-            accepted_iterations["count"] += 1
-            if accepted_iterations["count"] % config.log_every != 0:
-                return
-            current_loss = objective_from_params(xk)
-            history.append({
-                "iter": accepted_iterations["count"],
-                "loss_fro": float(current_loss),
-                "elapsed": float(time.time() - start_time),
-            })
-
-        def objective(params: np.ndarray) -> float:
-            call_counter["count"] += 1
-            return objective_from_params(params)
-
-        initial_loss = objective(x0)
-        history.append({"iter": 0, "loss_fro": float(initial_loss), "elapsed": 0.0})
-        result = minimize(
-            objective,
-            x0,
-            method=config.method,
-            callback=callback,
-            options={"maxiter": config.maxiter, "disp": False},
-        )
-
-        final_params = np.array(result.x, dtype=np.float64)
-        built = build_symmetric_decomposition(unpack_seed_params(final_params))
-        diagnostics = compute_diagnostics(built["alpha"], built["beta"], built["gamma"])
-        diagnostics["objective_fro"] = float(result.fun)
-        diagnostics["objective_history_monotone"] = all(
-            history[idx + 1]["loss_fro"] <= history[idx]["loss_fro"] + 1e-12
-            for idx in range(len(history) - 1)
-        )
-        diagnostics["optimizer_calls"] = call_counter["count"]
-        diagnostics["optimizer_success"] = bool(result.success)
-        diagnostics["optimizer_message"] = str(result.message)
-
-        run_result = {
-            "run": run_idx,
-            "seed": config.seed + run_idx,
-            "raw_seed_params": final_params,
-            "raw_seeds": unpack_seed_params(final_params),
-            "projected_seeds": built["projected_seeds"],
-            "alpha": built["alpha"],
-            "beta": built["beta"],
-            "gamma": built["gamma"],
-            "term_indices": built["term_indices"],
-            "orbit_labels": built["orbit_labels"],
-            "verification": verification,
-            "diagnostics": diagnostics,
-            "history": history,
-        }
-
-        best_run_value = diagnostics["max_abs_residual"]
-        if best is None or best_run_value < best["diagnostics"]["max_abs_residual"]:
-            best = run_result
+    if worker_count == 1:
+        for run_idx in range(config.runs):
+            run_result = _run_single_search(run_idx, config, verification)
+            completed += 1
+            _print_run_summary(run_result, completed, config.runs)
+            if best is None or run_result["diagnostics"]["max_abs_residual"] < best["diagnostics"]["max_abs_residual"]:
+                best = run_result
+    else:
+        with ProcessPoolExecutor(max_workers=worker_count) as executor:
+            futures = {
+                executor.submit(_run_single_search, run_idx, config, verification): run_idx
+                for run_idx in range(config.runs)
+            }
+            for future in as_completed(futures):
+                run_result = future.result()
+                completed += 1
+                _print_run_summary(run_result, completed, config.runs)
+                if best is None or run_result["diagnostics"]["max_abs_residual"] < best["diagnostics"]["max_abs_residual"]:
+                    best = run_result
 
     if best is None:
         raise RuntimeError("Search produced no result.")
