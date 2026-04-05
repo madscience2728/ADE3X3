@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-04-05T09:40:21.884251",
+  "elapsed_s": 116.475909948349,
+  "ranks": [
+    19
+  ],
+  "methods": [
+    "a7",
+    "grassmannian",
+    "matroid"
+  ],
+  "n_seeds": 3,
+  "max_shapes": 3,
+  "n_workers": 24,
+  "total_units": 15,
+  "rank_best": {
+    "19": {
+      "a7": 0.7992485345282123,
+      "grassmannian": 0.9670405720558943,
+      "matroid": 0.9632412993242825
+    }
+  }
+}

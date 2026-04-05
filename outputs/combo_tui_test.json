@@ -1,0 +1,1155 @@
+{
+  "timestamp": "2026-04-05T09:56:53.315907",
+  "elapsed_s": 7.735503435134888,
+  "ranks": [
+    19,
+    27
+  ],
+  "n_configs": 10,
+  "n_seeds": 2,
+  "total_units": 40,
+  "errors": 0,
+  "infeasible": 0,
+  "rank_data": {
+    "19": {
+      "A1_pass": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A1_conservation_ok": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A1_rank_H": {
+        "sum": 332.0,
+        "count": 20,
+        "min": 11.0,
+        "max": 18.0
+      },
+      "A2_fitness": {
+        "sum": 240.33555490799256,
+        "count": 20,
+        "min": 1.3091979628136539,
+        "max": 21.86053492679936
+      },
+      "A2_pass": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A3_achievable": {
+        "sum": 16.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 1.0
+      },
+      "A3_rank_sigma": {
+        "sum": 176.0,
+        "count": 20,
+        "min": 8.0,
+        "max": 9.0
+      },
+      "A4_generic_position": {
+        "sum": 16.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 1.0
+      },
+      "A4_minimal_rank": {
+        "sum": 16.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 1.0
+      },
+      "A4_dim_AB": {
+        "sum": 45.0,
+        "count": 20,
+        "min": 1.0,
+        "max": 8.0
+      },
+      "A5_gate2": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A5_gate3": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A5_gates_compatible": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A5_aug_gap": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A6_parity_separation": {
+        "sum": 1.3931409050565622,
+        "count": 20,
+        "min": -0.19375012619924126,
+        "max": 0.43070041963034433
+      },
+      "A6_n_violating": {
+        "sum": 180.0,
+        "count": 20,
+        "min": 9.0,
+        "max": 9.0
+      },
+      "A6b_fiber_pass": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A6b_fiber_sum_err": {
+        "sum": 60.976527952878925,
+        "count": 20,
+        "min": 2.8793027374354234,
+        "max": 3.242336888807033
+      },
+      "A6b_max_fiber_dev": {
+        "sum": 74.48293612917705,
+        "count": 20,
+        "min": 3.022535222501049,
+        "max": 4.508447338817902
+      },
+      "A7_quantized": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A7_best_score": {
+        "sum": 11.251608720216089,
+        "count": 20,
+        "min": 0.5404531873044656,
+        "max": 0.67007843174212
+      },
+      "CL_assoc_pass": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "CL_comm_pass": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "CL_jacobi_pass": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "CL_nilpotent": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "CL_killing_rank": {
+        "sum": 331.0,
+        "count": 20,
+        "min": 9.0,
+        "max": 18.0
+      },
+      "CL_semisimple": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "NV_coherence_max": {
+        "sum": 17.961139363938283,
+        "count": 20,
+        "min": 0.8600237846029295,
+        "max": 1.0000000000000004
+      },
+      "NV_coherence_excess": {
+        "sum": 12.99209941393875,
+        "count": 20,
+        "min": 0.6115717871029529,
+        "max": 0.7515480025000238
+      },
+      "NV_coupling_rank_CA": {
+        "sum": 170.0,
+        "count": 20,
+        "min": 6.0,
+        "max": 9.0
+      },
+      "NV_coupling_rank_AB": {
+        "sum": 170.0,
+        "count": 20,
+        "min": 6.0,
+        "max": 9.0
+      },
+      "NV_spec_symmetry": {
+        "sum": 703.4152819876863,
+        "count": 20,
+        "min": 3.983508321355778,
+        "max": 60.5901856393125
+      },
+      "NV_flat_rank_0": {
+        "sum": 172.0,
+        "count": 20,
+        "min": 7.0,
+        "max": 9.0
+      },
+      "NV_flat_rank_1": {
+        "sum": 180.0,
+        "count": 20,
+        "min": 9.0,
+        "max": 9.0
+      },
+      "NV_flat_rank_2": {
+        "sum": 176.0,
+        "count": 20,
+        "min": 8.0,
+        "max": 9.0
+      },
+      "NV_recon_err": {
+        "sum": 240.33555490799256,
+        "count": 20,
+        "min": 1.3091979628136539,
+        "max": 21.86053492679936
+      }
+    },
+    "27": {
+      "A1_pass": {
+        "sum": 20.0,
+        "count": 20,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "A1_conservation_ok": {
+        "sum": 20.0,
+        "count": 20,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "A1_rank_H": {
+        "sum": 360.0,
+        "count": 20,
+        "min": 18.0,
+        "max": 18.0
+      },
+      "A2_fitness": {
+        "sum": 476.31618907954186,
+        "count": 20,
+        "min": 20.832481225261617,
+        "max": 26.799137682692564
+      },
+      "A2_pass": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A3_achievable": {
+        "sum": 20.0,
+        "count": 20,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "A3_rank_sigma": {
+        "sum": 180.0,
+        "count": 20,
+        "min": 9.0,
+        "max": 9.0
+      },
+      "A4_generic_position": {
+        "sum": 20.0,
+        "count": 20,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "A4_minimal_rank": {
+        "sum": 20.0,
+        "count": 20,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "A4_dim_AB": {
+        "sum": 180.0,
+        "count": 20,
+        "min": 9.0,
+        "max": 9.0
+      },
+      "A5_gate2": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A5_gate3": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A5_gates_compatible": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A5_aug_gap": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A6_parity_separation": {
+        "sum": -2.1866492084776734,
+        "count": 20,
+        "min": -0.21946938292440743,
+        "max": 0.000804462076640089
+      },
+      "A6_n_violating": {
+        "sum": 260.0,
+        "count": 20,
+        "min": 13.0,
+        "max": 13.0
+      },
+      "A6b_fiber_pass": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A6b_fiber_sum_err": {
+        "sum": 62.82608792219882,
+        "count": 20,
+        "min": 2.8357661271933505,
+        "max": 3.446842665026532
+      },
+      "A6b_max_fiber_dev": {
+        "sum": 117.35036859867255,
+        "count": 20,
+        "min": 5.439015236474819,
+        "max": 6.2960216233924395
+      },
+      "A7_quantized": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "A7_best_score": {
+        "sum": 14.220311998342572,
+        "count": 20,
+        "min": 0.702516529156727,
+        "max": 0.7195146706775306
+      },
+      "CL_assoc_pass": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "CL_comm_pass": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "CL_jacobi_pass": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "CL_nilpotent": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "CL_killing_rank": {
+        "sum": 360.0,
+        "count": 20,
+        "min": 18.0,
+        "max": 18.0
+      },
+      "CL_semisimple": {
+        "sum": 0.0,
+        "count": 20,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "NV_coherence_max": {
+        "sum": 17.882483593257373,
+        "count": 20,
+        "min": 0.8590312495871711,
+        "max": 0.9292171097385663
+      },
+      "NV_coherence_excess": {
+        "sum": 12.335481631005083,
+        "count": 20,
+        "min": 0.5816811514745566,
+        "max": 0.6518670116259517
+      },
+      "NV_coupling_rank_CA": {
+        "sum": 180.0,
+        "count": 20,
+        "min": 9.0,
+        "max": 9.0
+      },
+      "NV_coupling_rank_AB": {
+        "sum": 180.0,
+        "count": 20,
+        "min": 9.0,
+        "max": 9.0
+      },
+      "NV_spec_symmetry": {
+        "sum": 1320.9845854897417,
+        "count": 20,
+        "min": 40.796977791274514,
+        "max": 91.3014807576997
+      },
+      "NV_flat_rank_0": {
+        "sum": 180.0,
+        "count": 20,
+        "min": 9.0,
+        "max": 9.0
+      },
+      "NV_flat_rank_1": {
+        "sum": 180.0,
+        "count": 20,
+        "min": 9.0,
+        "max": 9.0
+      },
+      "NV_flat_rank_2": {
+        "sum": 180.0,
+        "count": 20,
+        "min": 9.0,
+        "max": 9.0
+      },
+      "NV_recon_err": {
+        "sum": 476.31618907954186,
+        "count": 20,
+        "min": 20.832481225261617,
+        "max": 26.799137682692564
+      }
+    }
+  },
+  "config_results": {
+    "19_0": {
+      "A1": {
+        "pass": 0,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "19_32": {
+      "A1": {
+        "pass": 0,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "27_32": {
+      "A1": {
+        "pass": 2,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "19_64": {
+      "A1": {
+        "pass": 0,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "27_64": {
+      "A1": {
+        "pass": 2,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "19_128": {
+      "A1": {
+        "pass": 0,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 0,
+        "total": 2
+      },
+      "A4": {
+        "pass": 0,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "27_128": {
+      "A1": {
+        "pass": 2,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "27_0": {
+      "A1": {
+        "pass": 2,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "19_255": {
+      "A1": {
+        "pass": 0,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 0,
+        "total": 2
+      },
+      "A4": {
+        "pass": 0,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "27_255": {
+      "A1": {
+        "pass": 2,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "19_1": {
+      "A1": {
+        "pass": 0,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "27_1": {
+      "A1": {
+        "pass": 2,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "19_2": {
+      "A1": {
+        "pass": 0,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "19_4": {
+      "A1": {
+        "pass": 0,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "27_2": {
+      "A1": {
+        "pass": 2,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "27_4": {
+      "A1": {
+        "pass": 2,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "19_8": {
+      "A1": {
+        "pass": 0,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "27_8": {
+      "A1": {
+        "pass": 2,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "19_16": {
+      "A1": {
+        "pass": 0,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    },
+    "27_16": {
+      "A1": {
+        "pass": 2,
+        "total": 2
+      },
+      "A2": {
+        "pass": 0,
+        "total": 2
+      },
+      "A3": {
+        "pass": 2,
+        "total": 2
+      },
+      "A4": {
+        "pass": 2,
+        "total": 2
+      },
+      "A5": {
+        "pass": 0,
+        "total": 2
+      },
+      "A6": {
+        "pass": 1,
+        "total": 2
+      },
+      "A6b": {
+        "pass": 0,
+        "total": 2
+      },
+      "A7": {
+        "pass": 0,
+        "total": 2
+      }
+    }
+  },
+  "feasibility": {
+    "19_0": true,
+    "19_32": true,
+    "27_32": true,
+    "19_64": true,
+    "27_64": true,
+    "19_128": true,
+    "27_128": true,
+    "27_0": true,
+    "19_255": true,
+    "27_255": true,
+    "19_1": true,
+    "27_1": true,
+    "19_2": true,
+    "19_4": true,
+    "27_2": true,
+    "27_4": true,
+    "19_8": true,
+    "27_8": true,
+    "19_16": true,
+    "27_16": true
+  }
+}

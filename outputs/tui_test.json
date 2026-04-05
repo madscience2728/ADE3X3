@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-04-05T09:08:59.011274",
+  "elapsed_s": 69.40333652496338,
+  "ranks": [
+    19
+  ],
+  "methods": [
+    "a7",
+    "grassmannian",
+    "matroid"
+  ],
+  "n_restarts": 5,
+  "max_shapes": 3,
+  "total_tasks": 5,
+  "total_restarts": 25,
+  "rank_best": {
+    "19": {
+      "a7": 0.889727257421447,
+      "grassmannian": 0.9043969488512178,
+      "matroid": 0.9639032944728709
+    }
+  },
+  "solutions": {
+    "19": {
+      "a7": {
+        "residual": 0.9566588548596185,
+        "label": "A7 shape 3/3"
+      },
+      "grassmannian": {
+        "residual": 0.9043969488512178,
+        "label": "Grassmannian"
+      },
+      "matroid": {
+        "residual": 0.9639032944728709,
+        "label": "Matroid A4"
+      }
+    }
+  }
+}
