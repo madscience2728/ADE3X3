@@ -1,0 +1,14 @@
+{
+  "run_name": "run_20260405_002745",
+  "timestamp": "2026-04-05T00:27:51.361576",
+  "n_results": 10,
+  "metadata": {
+    "ranks": [
+      19
+    ],
+    "cpu_per_rank": 10,
+    "gpu_batches": 2,
+    "workers": 24,
+    "start_time": "2026-04-05T00:27:45.936715"
+  }
+}

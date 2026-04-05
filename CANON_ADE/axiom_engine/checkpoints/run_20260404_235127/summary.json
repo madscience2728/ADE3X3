@@ -1,0 +1,15 @@
+{
+  "n_results": 40,
+  "ranks_tested": [
+    13,
+    19,
+    23,
+    27
+  ],
+  "A1_conservation_ok_rate": 0.25,
+  "A1_pass_rate": 0.25,
+  "A2_pass_rate": 0.0,
+  "CL_assoc_pass_rate": 0.0,
+  "CL_comm_pass_rate": 0.0,
+  "CL_jacobi_pass_rate": 0.0
+}

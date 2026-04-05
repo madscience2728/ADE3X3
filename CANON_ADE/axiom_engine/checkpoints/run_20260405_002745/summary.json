@@ -1,0 +1,13 @@
+{
+  "n_results": 10,
+  "ranks_tested": [
+    19
+  ],
+  "A1_conservation_ok_rate": 0.0,
+  "A1_pass_rate": 0.0,
+  "A2_pass_rate": 0.0,
+  "A6b_fiber_pass_rate": 0.0,
+  "CL_assoc_pass_rate": 0.0,
+  "CL_comm_pass_rate": 0.0,
+  "CL_jacobi_pass_rate": 0.0
+}
