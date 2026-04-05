@@ -225,9 +225,68 @@ The constant algebra (all $f=1$) is the unique solution. Key observations from t
 - `AX_HULL_ZD` killed it (requires some $f=0$, contradicts $f \equiv 1$)
 - `AX_FIBER_ID` was **INCONSISTENT** — forced-fiber elements have $f[\text{id},i,i] \equiv 1 \neq \delta_{ik}$, confirming forced elements are not identities in the constant algebra; the identity axiom is incompatible at the root level
 
-### Second BFS Run (root = 27, correct encoding) — In Progress
+### Second BFS Run (root = 27, correct encoding) — COMPLETE
 
-Running as of Session 2. Expected: meaningful d.o.f. drops from each axiom, with several combinations producing tight solution spaces (d.o.f. $\leq 5$).
+Full results (depth 1–3):
+
+| d.o.f. | Axiom set | Status |
+|--------|-----------|--------|
+| 27 | `{}` root | C4+C2 only |
+| 6 | `{HULL_ZD}` | Best non-trivial family |
+| 3 | `{COMM}` | Commutative sub-family |
+| 1 | `{R_BLIND}`, `{COMM, R_BLIND}` | Near-trivial |
+| 0 | 7 combos incl. `{ANTI_COMM}`, `{COMM,HULL_ZD}` | Zero algebra only |
+| INCONS | All sets containing `FIBER_ID` | Forced elements not identities |
+
+**Key structural coincidences (all verified):**
+- 27 = \|INTERIOR²/G\| — the correct ADE root
+- 6 = 2 × 3, where 3 = \|INTERIOR/G\| (number of G-orbits on INTERIOR)
+- 3 = \|INTERIOR/G\| — the COMM family dimension
+
+**The HULL_ZD family structure:**
+- 6-dim null space, each basis vector supported on exactly 76/439 orbits
+- HULL_ZD zeros 102/439 orbit representatives (products of hull×hull into non-hull)
+- Hull indices = forced-fiber elements: {(1,0,0), (1,0,2), (1,2,0), (1,2,2)}
+
+### COMM + C3 Normalization — DEAD END
+
+Adding C3 gamma-equalization as a linear constraint (making all fiber sums equal) with `{COMM}` gives d.o.f.=0. This means: **the target algebra is non-commutative**. Commutativity survives the linear BFS but dies when the actual C3 normalization (which is a scaling constraint, not a shape constraint) is imposed.
+
+### Phase 1 (Linear BFS) — CONCLUDED
+
+The linear axiom landscape is fully mapped. The two surviving non-trivial families are:
+
+| Family | d.o.f. | Best candidate? |
+|--------|--------|-----------------|
+| `{HULL_ZD}` | 6 | **YES** — proceeds to Phase 2 |
+| `{COMM}` | 3 | No — incompatible with C3 normalization |
+
+### Phase 2: Quadratic BFS on the 6-dim HULL_ZD Family
+
+**Setup:** Any element of the 6-dim family is $f = \sum_{i=1}^{6} \alpha_i \mathbf{v}_i$ where $\mathbf{v}_i$ are the 6 null basis vectors. Associativity imposes:
+
+$$\sum_m f[a,b,m] \cdot f[m,c,d] = \sum_m f[b,c,m] \cdot f[a,m,d] \quad \forall\, a,b,c,d$$
+
+Substituting: this becomes $\alpha^T M_{abcd} \alpha = 0$ for each $(a,b,c,d)$.
+
+**Scale:** 130321 = 19⁴ quadruples, of which 21850 are nontrivially constraining. After deduplication by constraint shape: **34 distinct symmetric $6\times 6$ quadratic forms** on 6 unknowns.
+
+**The algebraic problem:** Find $\alpha \in \mathbb{R}^6$ (nonzero, up to scale $\mathbb{RP}^5$) such that $\alpha^T M_t \alpha = 0$ for all 34 matrices $M_t$. This is a system of 34 quadratic equations in 5 projective unknowns. The solution set is (generically) a variety in $\mathbb{RP}^5$.
+
+**Status: In progress.**
+
+### Updated Open Problems
+
+| # | Problem | Status |
+|---|---------|--------|
+| OP1 | Map 84 ZD pairs to 24 dead Fourier modes | Open |
+| OP2 | C3+C4 combined system exact dim | Resolved: root=27 (first-index C2 only) |
+| OP3 | Axiom subsets with non-empty feasible set | Resolved: `{HULL_ZD}` (d=6), `{COMM}` (d=3) |
+| OP4 | Minimum faithful representation dimension | Blocked on Phase 2 |
+| OP5 | 4 forced-fiber terms uniquely determine factor vectors | Open |
+| OP6 | Are forced-fiber elements ZDs, near-identities, or projectors? | Open |
+| **OP7** | **Does the HULL_ZD 6-dim family contain an associative element?** | **Phase 2 — active** |
+| **OP8** | **What is the variety of associative points in HULL_ZD ∩ $\mathbb{RP}^5$?** | **Phase 2 — active** |
 
 ### FIBER_ID Diagnosis
 
