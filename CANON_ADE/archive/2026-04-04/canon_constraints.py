@@ -326,17 +326,58 @@ class C4_Symmetry:
 class C5_SedenionZDGraph:
     """
     In the sedenion algebra S (CD level 4, dim 16), there are:
-      42 ZD a-vertices: (e_i + e_j), i in {1..7} (L-imaginary), j in {9..15} (U-sector), j != i+8
-      84 undirected ZD pairs
-      Degree-8 regularity: each vertex has exactly 8 annihilators
+      42 ZD vertices: (e_i + e_j), i in {1..7} (L-imaginary), j in {9..15} (U-sector), j != i+8
+      84 undirected ZD pairs (sign-quotiented: identifying (i,j) across ± signs)
+      Degree-4 regular (each vertex has 4 ZD partners)
 
-    The zero-divisor locus of A should mirror this structure:
-    products landing in the 'dead mode' sector of Fourier spectrum are ZD relations in A.
+    PARITY-BLOCK BRIDGE (sedenion → INTERIOR):
+      Sedenion L-imaginary index i in {1..7} has binary (b2,b1,b0) = (i>>2, (i>>1)&1, i&1).
+      This matches the parity type (r%2, s%2, u%2) of INTERIOR points.
+      The 7 nonzero parity types biject with octonion imaginary indices 1..7.
+      Each parity block P_i = {ξ ∈ INTERIOR : parity(ξ) = bits(i)}.
+      Block sizes: 4,4,2,4,2,2,1 for i=1..7 (total 19).
 
-    This constraint pins: for each of the 84 ZD pairs (alpha, beta),
-      alpha * beta = 0  in A.
+      A ZD vertex (i, j) with j in {9..15} maps to the pair of
+      parity blocks (P_i, P_{j-8}).  A ZD pair ((i1,j1),(i2,j2)) = 0
+      means: the composite algebra element
+        Σ_{ξ∈P_{i1}} e_ξ + Σ_{η∈P_{j1-8}} e_η
+      annihilates
+        Σ_{ξ'∈P_{i2}} e_{ξ'} + Σ_{η'∈P_{j2-8}} e_{η'}
+      in the algebra A.
     """
     name = "C5_SedenionZDGraph"
+
+    # --- Parity-block bridge ---
+
+    @staticmethod
+    def _idx_to_parity(i: int) -> Tuple[int, int, int]:
+        """Sedenion imaginary index (1-7) → parity triple (r%2, s%2, u%2)."""
+        return ((i >> 2) & 1, (i >> 1) & 1, i & 1)
+
+    @staticmethod
+    def _parity_to_idx(p: Tuple[int, int, int]) -> int:
+        """Parity triple → sedenion imaginary index (1-7)."""
+        return p[0] * 4 + p[1] * 2 + p[2]
+
+    _parity_blocks: Dict[int, List[int]] = {}  # L-imag index → list of IDX indices
+
+    @classmethod
+    def _build_parity_blocks(cls) -> Dict[int, List[int]]:
+        if cls._parity_blocks:
+            return cls._parity_blocks
+        for xi in INTERIOR:
+            r, s, u = xi
+            p = (r % 2, s % 2, u % 2)
+            idx_val = cls._parity_to_idx(p)
+            cls._parity_blocks.setdefault(idx_val, []).append(IDX[xi])
+        return cls._parity_blocks
+
+    @classmethod
+    def parity_blocks(cls) -> Dict[int, List[int]]:
+        """Return {imag_index: [IDX indices of INTERIOR points in that parity block]}."""
+        return cls._build_parity_blocks()
+
+    # --- Cayley-Dickson arithmetic ---
 
     @staticmethod
     def _conj(x: List[float], lv: int) -> List[float]:
@@ -366,11 +407,17 @@ class C5_SedenionZDGraph:
         v[i] = 1.0
         return v
 
+    # --- ZD pair computation ---
+
     @classmethod
     def build_zd_pairs(cls) -> List[Tuple[Tuple, Tuple]]:
         """
-        Find all weight-2 zero-divisor pairs in the sedenions.
-        Returns list of ((i,j), (k,l)) where (e_i+e_j)*(e_k+e_l)=0.
+        Find all weight-2 zero-divisor pairs in the sedenions, including
+        sign variants.  Returns directed pairs ((i,j), (k,l)) where
+        (e_i ± e_j)*(e_k ± e_l) = 0 for some sign choice.
+
+        After sign-quotienting (identifying vertex (i,j) across ± choices),
+        there are 42 vertices and 84 undirected edges, degree-4 regular.
         """
         LV = 4
         N  = 16
@@ -378,59 +425,153 @@ class C5_SedenionZDGraph:
         def basis_elem(i):
             return cls._e(i, LV)
 
-        def add_vecs(a, b):
-            return [x + y for x, y in zip(a, b)]
-
         def is_zero(v, tol=1e-9):
             return all(abs(x) < tol for x in v)
 
-        pairs = []
-        weight2 = [(i, j) for i in range(N) for j in range(i+1, N)]
+        # Collect sign-quotiented undirected edges
+        edges: Set[Tuple[Tuple, Tuple]] = set()
+        for i in range(1, 8):
+            for j in range(9, 16):
+                if j == i + 8:
+                    continue
+                for k in range(1, 8):
+                    for l in range(9, 16):
+                        if l == k + 8:
+                            continue
+                        for s1 in [1, -1]:
+                            for s2 in [1, -1]:
+                                a = [s1 * basis_elem(i)[m] + basis_elem(j)[m] for m in range(16)]
+                                b = [s2 * basis_elem(k)[m] + basis_elem(l)[m] for m in range(16)]
+                                prod = cls._cd_mul(a, b, LV)
+                                if is_zero(prod):
+                                    v1, v2 = (i, j), (k, l)
+                                    edge = (min(v1, v2), max(v1, v2))
+                                    edges.add(edge)
 
-        for (i, j) in weight2:
-            a = add_vecs(basis_elem(i), basis_elem(j))
-            for (k, l) in weight2:
-                b = add_vecs(basis_elem(k), basis_elem(l))
-                prod = cls._cd_mul(a, b, LV)
-                if is_zero(prod):
-                    pairs.append(((i, j), (k, l)))
-        return pairs
+        return sorted(edges)
 
     @classmethod
     def zd_graph_stats(cls) -> Dict:
-        """Compute the ZD graph vertex/edge statistics."""
-        pairs = cls.build_zd_pairs()
+        """Compute the ZD graph vertex/edge statistics (sign-quotiented)."""
+        edges = cls.build_zd_pairs()
         a_vertices: Set = set()
-        for (ij, kl) in pairs:
-            a_vertices.add(ij)
-            a_vertices.add(kl)
+        for (v1, v2) in edges:
+            a_vertices.add(v1)
+            a_vertices.add(v2)
 
         degree: Dict = {}
         for v in a_vertices:
             nbrs = set()
-            for (ij, kl) in pairs:
-                if ij == v:
-                    nbrs.add(kl)
-                if kl == v:
-                    nbrs.add(ij)
+            for (v1, v2) in edges:
+                if v1 == v:
+                    nbrs.add(v2)
+                if v2 == v:
+                    nbrs.add(v1)
             degree[v] = len(nbrs)
 
         return {
-            "n_pairs": len(pairs),
+            "n_pairs": len(edges),
             "n_vertices": len(a_vertices),
-            "degree_min": min(degree.values()),
-            "degree_max": max(degree.values()),
-            "degree_uniform": len(set(degree.values())) == 1,
-            "pairs": pairs,
+            "degree_min": min(degree.values()) if degree else 0,
+            "degree_max": max(degree.values()) if degree else 0,
+            "degree_uniform": len(set(degree.values())) <= 1,
+            "pairs": edges,
             "vertices": a_vertices,
         }
+
+    @classmethod
+    def zd_pairs_as_parity_blocks(cls) -> List[Tuple[Tuple, Tuple]]:
+        """
+        Return ZD pairs translated to parity-block pairs.
+        Each entry: ((p_a, p_b), (p_c, p_d)) where p_x is a parity triple
+        (r%2, s%2, u%2).
+
+        Meaning: the composite element over blocks p_a, p_b annihilates
+        the composite element over blocks p_c, p_d in the algebra.
+        """
+        edges = cls.build_zd_pairs()
+        result = []
+        for (i, j), (k, l) in edges:
+            pa = cls._idx_to_parity(i)
+            pb = cls._idx_to_parity(j - 8)
+            pc = cls._idx_to_parity(k)
+            pd = cls._idx_to_parity(l - 8)
+            result.append(((pa, pb), (pc, pd)))
+        return result
+
+    _zd_indicator_cache = None  # (n_edges, 2, N) indicator matrices
+
+    @classmethod
+    def _build_zd_indicators(cls):
+        """Precompute indicator vectors for fast ZD constraint evaluation."""
+        if cls._zd_indicator_cache is not None:
+            return cls._zd_indicator_cache
+        blocks = cls.parity_blocks()
+        edges = cls.build_zd_pairs()
+        N = 19
+        # For each edge, build indicator vectors for blocks A and B
+        ind_a = np.zeros((len(edges), N))
+        ind_b = np.zeros((len(edges), N))
+        for e, ((i, j), (k, l)) in enumerate(edges):
+            for idx in blocks[i] + blocks[j - 8]:
+                ind_a[e, idx] = 1.0
+            for idx in blocks[k] + blocks[l - 8]:
+                ind_b[e, idx] = 1.0
+        cls._zd_indicator_cache = (ind_a, ind_b)
+        return ind_a, ind_b
+
+    @classmethod
+    def algebra_zd_constraints(cls, f: 'np.ndarray') -> List[float]:
+        """
+        Given a 19×19×19 structure constant tensor f, evaluate the 84 ZD
+        constraints.  For each ZD edge ((i,j),(k,l)):
+
+          Composite element A = Σ_{ξ∈P_i} e_ξ + Σ_{η∈P_{j-8}} e_η
+          Composite element B = Σ_{ξ'∈P_k} e_{ξ'} + Σ_{η'∈P_{l-8}} e_{η'}
+          Constraint: A * B = 0, i.e. for every output index ζ:
+            Σ_{a∈P_i∪P_{j-8}} Σ_{b∈P_k∪P_{l-8}} f[a,b,ζ] = 0
+
+        Returns a list of 84 * 19 scalar constraint values (should all be 0).
+        """
+        blocks = cls.parity_blocks()
+        edges = cls.build_zd_pairs()
+        violations = []
+        N = f.shape[0]
+        for (i, j), (k, l) in edges:
+            block_a = blocks[i] + blocks[j - 8]
+            block_b = blocks[k] + blocks[l - 8]
+            for zeta in range(N):
+                val = sum(f[a, b, zeta] for a in block_a for b in block_b)
+                violations.append(val)
+        return violations
+
+    @classmethod
+    def algebra_zd_loss_fast(cls, f: 'np.ndarray') -> float:
+        """Fast sum-of-squares C5 ZD loss using precomputed indicators."""
+        ind_a, ind_b = cls._build_zd_indicators()
+        # For each edge e: constraint[e, zeta] = ind_a[e] @ f[:,:,zeta] @ ind_b[e]
+        #   = sum_{a,b} ind_a[e,a] * f[a,b,zeta] * ind_b[e,b]
+        # Vectorized: C[e, zeta] = ind_a[e] @ f_reshaped @ ind_b[e]
+        # f is (19,19,19). Reshape to do batch matmul.
+        # C = einsum('ea,abz,eb->ez', ind_a, f, ind_b)
+        C = np.einsum('ea,abz,eb->ez', ind_a, f, ind_b)
+        return float(np.sum(C ** 2))
+
+    @classmethod
+    def algebra_zd_max_violation_fast(cls, f: 'np.ndarray') -> float:
+        """Fast max |violation| using precomputed indicators."""
+        ind_a, ind_b = cls._build_zd_indicators()
+        C = np.einsum('ea,abz,eb->ez', ind_a, f, ind_b)
+        return float(np.max(np.abs(C)))
 
     @staticmethod
     def describe() -> str:
         return (
             "C5: The sedenion ZD graph has 42 vertices and 84 undirected pairs, "
-            "degree-8 regular. The zero-divisor locus of A must mirror this: "
-            "products in the dead-mode sector of Fourier spectrum are ZD relations."
+            "degree-4 regular. Vertices are L-imaginary × U-sector pairs (e_i+e_j). "
+            "The parity-block bridge maps sedenion index i to INTERIOR points with "
+            "matching parity (r%2,s%2,u%2) = bits(i). ZD pairs constrain the algebra: "
+            "composite block-sum elements must annihilate each other."
         )
 
 
