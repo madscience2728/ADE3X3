@@ -1,0 +1,18 @@
+{
+  "status": "blocked",
+  "wall_time_seconds": 0.0,
+  "orbit_config": [
+    1,
+    8,
+    12
+  ],
+  "rank": 21,
+  "ed_degree": null,
+  "real_solutions": null,
+  "note": "Requested ED computation is blocked until the full-stabilizer polynomial chart is implemented. The repo documents that the legacy orbit-averaged or seed-transport family is too restrictive and generically fails the required rank geometry. The correct full-stabilizer-freedom polynomial chart for the fixed-point symmetric sector is referenced as future work, but is not implemented in the workspace. Without that chart, constructing a defensible polynomial ED-critical system for HomotopyContinuation.jl would require inventing mathematics not present in the repo.",
+  "generic_h_rank": 7,
+  "best_frobenius": null,
+  "eff_params": 21,
+  "best_solution": [],
+  "target_h_rank": 12
+}

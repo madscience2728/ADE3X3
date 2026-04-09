@@ -1,0 +1,24 @@
+{
+  "timings": {
+    "build_target_seconds": 0.0,
+    "find_start_pair_seconds": 1.462,
+    "build_system_seconds": 0.497,
+    "monodromy_seconds": 597.488
+  },
+  "status": "tracking_started",
+  "wall_time_seconds": 604.931,
+  "orbit_config": [
+    1,
+    6,
+    12
+  ],
+  "rank": 19,
+  "ed_degree": 1,
+  "real_solutions": null,
+  "note": "Monodromy finished and target tracking has started. The solve is currently inside the blocking path-tracking call.",
+  "generic_h_rank": 7,
+  "best_frobenius": null,
+  "eff_params": 24,
+  "best_solution": [],
+  "target_h_rank": 10
+}

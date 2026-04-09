@@ -1,0 +1,6 @@
+{"attempt_index": 0, "cpu_percent_avg": 41.612, "event": "smoke_profile", "target_cpu": 95.0, "threads": 3, "timestamp": 1775697481.3230004}
+{"attempt_index": 1, "cpu_percent_avg": 45.638, "event": "smoke_profile", "target_cpu": 95.0, "threads": 6, "timestamp": 1775697509.6147656}
+{"attempt_index": 2, "cpu_percent_avg": 56.087, "event": "smoke_profile", "target_cpu": 95.0, "threads": 12, "timestamp": 1775697537.9996064}
+{"attempt_index": 3, "cpu_percent_avg": 63.863, "event": "smoke_profile", "target_cpu": 95.0, "threads": 24, "timestamp": 1775697566.3694923}
+{"event": "process_exit_snapshot", "launch_index": 3, "payload": {"best_frobenius": 0.0, "best_solution": [], "ed_degree": 1, "eff_params": 0, "note": "Exact decomposition exists (Laderman). Emitted as requested placeholder.", "orbit_config": [], "rank": 23, "real_solutions": 1, "status": "placeholder", "timings": {}, "wall_time_seconds": 0.016}, "rank": 23, "threads": 24, "timestamp": 1775697592.895805}
+{"event": "process_exit_snapshot", "launch_index": 3, "payload": {"best_frobenius": 0.0, "best_solution": [], "ed_degree": 1, "eff_params": 0, "note": "Standard algorithm. Emitted as requested placeholder.", "orbit_config": [], "rank": 27, "real_solutions": 1, "status": "placeholder", "timings": {}, "wall_time_seconds": 0.025}, "rank": 27, "threads": 24, "timestamp": 1775697593.8999374}

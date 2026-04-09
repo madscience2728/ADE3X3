@@ -1,0 +1,25 @@
+{
+  "timings": {
+    "build_target_seconds": 0.0,
+    "find_start_pair_seconds": 1.273,
+    "build_system_seconds": 0.567,
+    "monodromy_seconds": 143.535
+  },
+  "status": "monodromy_complete",
+  "wall_time_seconds": 145.477,
+  "orbit_config": [
+    1,
+    6,
+    8,
+    12
+  ],
+  "rank": 22,
+  "ed_degree": 1,
+  "real_solutions": null,
+  "note": "Monodromy finished and ED degree was recorded. Tracking to the actual tensor is still in progress.",
+  "generic_h_rank": null,
+  "best_frobenius": null,
+  "eff_params": 30,
+  "best_solution": [],
+  "target_h_rank": null
+}

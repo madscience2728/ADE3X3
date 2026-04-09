@@ -1,0 +1,13 @@
+{
+  "timings": {},
+  "status": "placeholder",
+  "wall_time_seconds": 0.017,
+  "orbit_config": [],
+  "rank": 23,
+  "ed_degree": 1,
+  "real_solutions": 1,
+  "note": "Exact decomposition exists (Laderman). Emitted as requested placeholder.",
+  "best_frobenius": 0.0,
+  "eff_params": 0,
+  "best_solution": []
+}

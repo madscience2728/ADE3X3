@@ -1,0 +1,84 @@
+{
+  "timestamp": "2026-04-06T02:43:37.572639",
+  "elapsed_s": 69.19701480865479,
+  "quit_reason": "RAM limit exceeded (60.1GB > 60.0GB)",
+  "rank_completion_reason": {
+    "13": "stopped by RAM guard",
+    "19": "stopped by RAM guard",
+    "20": "stopped by RAM guard",
+    "21": "stopped by RAM guard",
+    "22": "stopped by RAM guard",
+    "23": "stopped by RAM guard",
+    "27": "stopped by RAM guard"
+  },
+  "worker_failure_notes": {},
+  "ranks": [
+    13,
+    19,
+    20,
+    21,
+    22,
+    23,
+    27
+  ],
+  "max_states": 50000,
+  "n_operators": 13,
+  "results": {
+    "13": {
+      "total_leaves": 0,
+      "unique_configurations": 0,
+      "explored": 550,
+      "best_axioms": [],
+      "best_depth": 0,
+      "configurations": []
+    },
+    "19": {
+      "total_leaves": 0,
+      "unique_configurations": 0,
+      "explored": 1750,
+      "best_axioms": [],
+      "best_depth": 0,
+      "configurations": []
+    },
+    "20": {
+      "total_leaves": 0,
+      "unique_configurations": 0,
+      "explored": 3500,
+      "best_axioms": [],
+      "best_depth": 0,
+      "configurations": []
+    },
+    "21": {
+      "total_leaves": 0,
+      "unique_configurations": 0,
+      "explored": 1650,
+      "best_axioms": [],
+      "best_depth": 0,
+      "configurations": []
+    },
+    "22": {
+      "total_leaves": 0,
+      "unique_configurations": 0,
+      "explored": 2450,
+      "best_axioms": [],
+      "best_depth": 0,
+      "configurations": []
+    },
+    "23": {
+      "total_leaves": 0,
+      "unique_configurations": 0,
+      "explored": 1950,
+      "best_axioms": [],
+      "best_depth": 0,
+      "configurations": []
+    },
+    "27": {
+      "total_leaves": 0,
+      "unique_configurations": 0,
+      "explored": 1050,
+      "best_axioms": [],
+      "best_depth": 0,
+      "configurations": []
+    }
+  }
+}

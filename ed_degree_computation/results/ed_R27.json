@@ -1,0 +1,13 @@
+{
+  "timings": {},
+  "status": "placeholder",
+  "wall_time_seconds": 0.023,
+  "orbit_config": [],
+  "rank": 27,
+  "ed_degree": 1,
+  "real_solutions": 1,
+  "note": "Standard algorithm. Emitted as requested placeholder.",
+  "best_frobenius": 0.0,
+  "eff_params": 0,
+  "best_solution": []
+}

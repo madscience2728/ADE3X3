@@ -1,0 +1,205 @@
+{
+  "timestamp": "2026-04-06T01:12:31.520188",
+  "elapsed_s": 21.519474029541016,
+  "ranks": [
+    19
+  ],
+  "max_states": 500,
+  "n_operators": 13,
+  "results": {
+    "19": {
+      "total_leaves": 14009,
+      "unique_configurations": 6,
+      "explored": 0,
+      "best_axioms": [
+        "A2",
+        "A4"
+      ],
+      "best_depth": 2,
+      "configurations": [
+        {
+          "satisfied": [
+            "A2",
+            "A4"
+          ],
+          "depth": 2,
+          "path": [
+            [
+              "root",
+              "root\u2192A4 (K=10, AB=1, AC=7, BC=10, ABC=1)",
+              "A4"
+            ],
+            [
+              "root",
+              "root\u2192A2 (G-stable, |S|=19)",
+              "A2"
+            ]
+          ],
+          "constraints": {
+            "kernel_dim": 10,
+            "generic_pair_dim": 1,
+            "dim_ABC": 1,
+            "minimal_rank": false,
+            "support_size": 19,
+            "stability": "G-stable"
+          }
+        },
+        {
+          "satisfied": [
+            "A4",
+            "A6"
+          ],
+          "depth": 2,
+          "path": [
+            [
+              "root",
+              "root\u2192A4 (K=10, AB=1, AC=7, BC=10, ABC=1)",
+              "A4"
+            ],
+            [
+              "root",
+              "root\u2192A6 (blocks={(0, 0, 0): 8, (0, 0, 1): 4, (0, 1, 0): 4, (0, 1, 1): 2, (1, 1, 1): 1}, cd_compat=False)",
+              "A6"
+            ]
+          ],
+          "constraints": {
+            "kernel_dim": 10,
+            "generic_pair_dim": 1,
+            "dim_ABC": 1,
+            "minimal_rank": false,
+            "cd_compatible": false,
+            "cd_block_types": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                1,
+                1
+              ],
+              [
+                1,
+                1,
+                1
+              ]
+            ]
+          }
+        },
+        {
+          "satisfied": [
+            "A2",
+            "A7"
+          ],
+          "depth": 2,
+          "path": [
+            [
+              "root",
+              "root\u2192A2 (H-stable(order=4), |S|=19)",
+              "A2"
+            ],
+            [
+              "A2",
+              "A2\u2192A7 shape=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9) dims=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1]",
+              "A7"
+            ]
+          ],
+          "constraints": {
+            "support_size": 19,
+            "stability": "H-stable(order=4)"
+          }
+        },
+        {
+          "satisfied": [
+            "A4"
+          ],
+          "depth": 1,
+          "path": [
+            [
+              "root",
+              "root\u2192A4 (K=10, AB=1, AC=4, BC=6, ABC=1)",
+              "A4"
+            ]
+          ],
+          "constraints": {
+            "kernel_dim": 10,
+            "generic_pair_dim": 1,
+            "dim_ABC": 1,
+            "minimal_rank": false
+          }
+        },
+        {
+          "satisfied": [
+            "A6"
+          ],
+          "depth": 1,
+          "path": [
+            [
+              "root",
+              "root\u2192A6 (blocks={(0, 0, 0): 8, (0, 0, 1): 4, (1, 0, 0): 4, (1, 0, 1): 2, (1, 1, 1): 1}, cd_compat=False)",
+              "A6"
+            ]
+          ],
+          "constraints": {
+            "cd_compatible": false,
+            "cd_block_types": [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ],
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                1
+              ],
+              [
+                1,
+                1,
+                1
+              ]
+            ]
+          }
+        },
+        {
+          "satisfied": [
+            "A2"
+          ],
+          "depth": 1,
+          "path": [
+            [
+              "root",
+              "root\u2192A2 (H-stable(order=2), |S|=19)",
+              "A2"
+            ]
+          ],
+          "constraints": {
+            "support_size": 19,
+            "stability": "H-stable(order=2)"
+          }
+        }
+      ]
+    }
+  }
+}

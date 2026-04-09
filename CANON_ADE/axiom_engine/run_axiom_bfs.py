@@ -29,7 +29,7 @@ from CANON_ADE.axiom_engine.operators import OPERATORS
 ALL_AXIOMS = ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A6b', 'A7']
 AXIOM_NAMES = {
     'A1': 'Conservation',  'A2': 'Parity Partition', 'A3': 'Fiber Sums',
-    'A4': 'Relation Module', 'A5': 'Coord Liberation', 'A6': 'CD Parity',
+    'A4': 'Relation Module', 'A5': 'Coord Liberation', 'A6': 'CD Bridge',
     'A6b': 'CD Fiber', 'A7': 'Grassmannian',
 }
 

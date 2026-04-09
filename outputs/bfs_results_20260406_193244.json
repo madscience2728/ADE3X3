@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-04-06T19:32:44.566400",
+  "elapsed_s": 840.2520000934601,
+  "emergency_shutdown": true,
+  "quit_reason": "System available RAM dropped to 16.0GB with reserve floor 16.0GB",
+  "rank_completion_reason": {
+    "13": "emergency RAM shutdown",
+    "20": "emergency RAM shutdown",
+    "27": "emergency RAM shutdown"
+  },
+  "worker_failure_notes": {},
+  "ranks": [
+    13,
+    20,
+    27
+  ],
+  "max_states": 10000,
+  "n_operators": 13,
+  "results": {
+    "13": {
+      "total_leaves": 0,
+      "unique_configurations": 0,
+      "explored": 600,
+      "best_axioms": [],
+      "best_depth": 0,
+      "configurations": []
+    },
+    "20": {
+      "total_leaves": 0,
+      "unique_configurations": 0,
+      "explored": 400,
+      "best_axioms": [],
+      "best_depth": 0,
+      "configurations": []
+    },
+    "27": {
+      "total_leaves": 0,
+      "unique_configurations": 0,
+      "explored": 300,
+      "best_axioms": [],
+      "best_depth": 0,
+      "configurations": []
+    }
+  }
+}

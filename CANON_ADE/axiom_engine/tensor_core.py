@@ -5,7 +5,6 @@ All axiom evaluators build on this.
 import numpy as np
 from itertools import permutations, product as iproduct, combinations
 from functools import lru_cache
-import torch
 
 # ═══════════════════════════════════════════════════════════════
 # T_MATMUL: The 3×3 matrix multiplication tensor (9×9×9)
@@ -63,9 +62,8 @@ def kept_triples_for_rank(R):
         return [ALL27]
     if R == 19:
         return [KEPT19]
-    # For other ranks, enumerate G-stable subsets
+    # For other ranks, enumerate G-stable subsets (unions of full orbits)
     orbits = [ORBIT_0, ORBIT_1, ORBIT_2, ORBIT_3]
-    orbit_sizes = [len(o) for o in orbits]
     results = []
     for mask in range(16):
         selected = []
@@ -74,13 +72,169 @@ def kept_triples_for_rank(R):
                 selected.extend(orbits[i])
         if len(selected) == R:
             results.append(sorted(selected))
-    # Also try partial orbit selections for non-exact matches
-    # R=20: keep 19 + 1 from O3 (but need G-stable — O3 is transitive, so all or none)
-    # R=13: O0(1) + O2(12) = 13
-    # R=20: O0(1) + O1(6) + O2(12) + partial O3 — not G-stable
-    # Actually G-stable subsets must be unions of entire orbits
-    # Possible: {},{O0},{O1},{O2},{O3},{O0,O1},{O0,O2},{O0,O3},...all subsets
-    # Sizes: 0,1,6,12,8,7,13,9,18,14,20,19,26,21,27
+    return results if results else None
+
+
+def _compute_stabilizer_classes(orbit):
+    """
+    Partition an orbit into stabilizer-equivalence classes.
+    Two triples are equivalent if they have the same stabilizer subgroup.
+    Returns list of (stabilizer_order, [triples]) pairs, sorted by stabilizer order.
+    """
+    classes = {}
+    for t in orbit:
+        stab = frozenset(
+            (pi, eps) for pi, eps in GROUP
+            if act_on_triple(pi, eps, t) == t
+        )
+        stab_order = len(stab)
+        if stab_order not in classes:
+            classes[stab_order] = []
+        classes[stab_order].append(t)
+    return sorted(classes.items())
+
+
+# Pre-compute sub-orbit structure for each orbit under G
+# Each sub-orbit is a minimal G-stable subset within the orbit
+def _compute_sub_orbits(orbit):
+    """
+    Compute all G-orbits within a set of triples.
+    Since ORBIT_0..3 are already full orbits, this decomposes them
+    into sub-orbits under proper subgroups if any structure exists.
+
+    Actually: G acts transitively on each ORBIT_i by construction.
+    For partial selections, we instead enumerate all subsets that are
+    stable under some subgroup H ≤ G.
+
+    We compute: for each subgroup H of G (up to conjugacy), which
+    H-stable subsets of the orbit exist?
+
+    For tractability, we use stabilizer-refined enumeration:
+    group the orbit elements by their stabilizer conjugacy class,
+    then enumerate valid selections that form a union of H-cosets.
+    """
+    if len(orbit) <= 1:
+        return [orbit]
+
+    orbit_set = set(orbit)
+    # Compute orbits of each element under the full group
+    # Since ORBIT_i is one full G-orbit, any G-stable subset is all or nothing.
+    # To get partial selections, we need subgroup-stable subsets.
+
+    # Enumerate subgroups by their index-2 normal subgroups (the easy ones):
+    # S3 ≤ G has index 8; Z2^3 ≤ G has index 6; etc.
+    # For a practical approach: take each group element g, and compute
+    # the subset of orbit fixed by g. The union of such fixed-point sets
+    # gives subgroup-stable subsets.
+
+    # Fixed-point sets for each group element
+    fixed_sets = {}
+    for pi, eps in GROUP:
+        fixed = frozenset(t for t in orbit if act_on_triple(pi, eps, t) == t)
+        if len(fixed) > 0 and fixed != frozenset(orbit):
+            fixed_sets[fixed] = fixed_sets.get(fixed, 0) + 1
+
+    # Each unique fixed set is a candidate "pinned" sub-selection.
+    # Their complements within the orbit are also subgroup-stable.
+    sub_orbits = [sorted(fs) for fs in fixed_sets]
+    # Also add complements
+    for fs in list(fixed_sets.keys()):
+        comp = frozenset(orbit_set - fs)
+        if 0 < len(comp) < len(orbit):
+            sub_orbits.append(sorted(comp))
+
+    # Deduplicate
+    seen = set()
+    unique = []
+    for so in sub_orbits:
+        key = tuple(so)
+        if key not in seen:
+            seen.add(key)
+            unique.append(so)
+
+    return unique
+
+
+def kept_triples_for_rank_extended(R):
+    """
+    Return support sets of size R, including:
+    1. G-stable subsets (unions of full orbits) — same as kept_triples_for_rank
+    2. Stabilizer-refined subsets: partial orbit selections that are stable
+       under a subgroup H ≤ G.
+
+    This enables ranks 20, 21, 22, 23 which have no full-orbit decomposition.
+
+    Returns list of (triples_list, stability_tag) pairs.
+    stability_tag: 'G-stable' or 'H-stable(order=N)' describing the symmetry.
+    """
+    # First: full G-stable subsets
+    g_stable = kept_triples_for_rank(R)
+    results = []
+    if g_stable:
+        for kept in g_stable:
+            results.append((kept, 'G-stable'))
+
+    # Second: partial orbit selections via orbit splitting
+    orbits = [ORBIT_0, ORBIT_1, ORBIT_2, ORBIT_3]
+    orbit_sizes = [len(o) for o in orbits]  # [1, 6, 12, 8]
+
+    # For each orbit, compute available sub-selections (subgroup-stable subsets)
+    orbit_options = []  # list of lists of (subset, size)
+    for orb in orbits:
+        options = [([], 0)]  # empty selection
+        options.append((orb, len(orb)))  # full orbit
+
+        # Add subgroup-stable partial selections
+        sub = _compute_sub_orbits(orb)
+        for s in sub:
+            if 0 < len(s) < len(orb):
+                options.append((s, len(s)))
+
+        # Deduplicate by size + content
+        seen = set()
+        deduped = []
+        for triples, sz in options:
+            key = tuple(sorted(triples)) if triples else ()
+            if key not in seen:
+                seen.add(key)
+                deduped.append((triples, sz))
+        orbit_options.append(deduped)
+
+    # Cross-product: one selection per orbit, total size = R
+    from itertools import product as iproduct
+    seen_results = set()
+    for combo in iproduct(*orbit_options):
+        total = sum(sz for _, sz in combo)
+        if total != R:
+            continue
+        merged = []
+        for triples, _ in combo:
+            merged.extend(triples)
+        merged_key = tuple(sorted(merged))
+        if merged_key in seen_results:
+            continue
+        seen_results.add(merged_key)
+
+        # Determine stability: check what subgroup stabilizes this set
+        merged_set = set(merged)
+        stab_order = sum(
+            1 for pi, eps in GROUP
+            if all(act_on_triple(pi, eps, t) in merged_set for t in merged)
+        )
+        if stab_order == 48:
+            tag = 'G-stable'
+        elif stab_order > 1:
+            tag = f'H-stable(order={stab_order})'
+        else:
+            continue  # skip sets with trivial stabilizer — not algebraically meaningful
+
+        # Avoid duplicating what we already found
+        if tag == 'G-stable' and any(t == 'G-stable' for _, t in results
+                                      if tuple(sorted(_)) == merged_key):
+            continue
+
+        results.append((sorted(merged), tag))
+
     return results if results else None
 
 # ═══════════════════════════════════════════════════════════════
@@ -145,6 +299,8 @@ def compute_step51(alpha, beta):
 
 def compute_step51_torch(alpha, beta, device='cuda'):
     """GPU-accelerated Step-51 computation."""
+    import torch
+
     a = torch.as_tensor(alpha, dtype=torch.float64, device=device)
     b = torch.as_tensor(beta, dtype=torch.float64, device=device)
     R = a.shape[0]
