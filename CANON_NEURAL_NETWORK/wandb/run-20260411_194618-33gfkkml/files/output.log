@@ -1,0 +1,15 @@
+  [W2] N=27 s=2  step       1/200000  rel=1.000e+00  bits=-0.0  best=1.000e+00  lr=1.5e-07  t=1s
+  [W2] N=27 s=2  step    2000/200000  rel=2.196e-01  bits=2.2  best=2.196e-01  lr=3.0e-04  t=47s
+  [W2] N=27 s=2  step    4000/200000  rel=2.444e-02  bits=5.4  best=2.444e-02  lr=3.0e-04  t=96s
+  [W2] N=27 s=2  step    6000/200000  rel=1.661e-02  bits=5.9  best=1.661e-02  lr=3.0e-04  t=144s
+  [W2] N=27 s=2  step    8000/200000  rel=1.297e-02  bits=6.3  best=1.297e-02  lr=3.0e-04  t=194s
+  [W2] N=27 s=2  step   10000/200000  rel=1.115e-02  bits=6.5  best=1.115e-02  lr=3.0e-04  t=243s
+  [W2] N=27 s=2  step   12000/200000  rel=9.116e-03  bits=6.8  best=9.116e-03  lr=3.0e-04  t=292s
+  [W2] N=27 s=2  step   14000/200000  rel=7.731e-03  bits=7.0  best=7.731e-03  lr=3.0e-04  t=342s
+  [W2] N=27 s=2  step   16000/200000  rel=7.074e-03  bits=7.1  best=7.074e-03  lr=3.0e-04  t=393s
+  [W2] N=27 s=2  step   18000/200000  rel=6.340e-03  bits=7.3  best=6.340e-03  lr=3.0e-04  t=444s
+  [W2] N=27 s=2  step   20000/200000  rel=6.051e-03  bits=7.4  best=6.051e-03  lr=2.9e-04  t=495s
+  [W2] N=27 s=2  step   22000/200000  rel=6.101e-03  bits=7.4  best=6.051e-03  lr=2.9e-04  t=547s
+  [W2] N=27 s=2  step   24000/200000  rel=5.892e-03  bits=7.4  best=5.892e-03  lr=2.9e-04  t=602s
+  [W4] N=27 s=4  params=89314  device=cuda
+[34m[1mwandb[0m: [33mWARNING[0m Calling wandb.login() after wandb.init() has no effect.

@@ -59,5 +59,6 @@ htmlcov/
 .mypy_cache/
 .pytype/
 
+wand.txt
 outputs/exports/step84_*
 scripts/CANON_DATABASE/data/*.npy

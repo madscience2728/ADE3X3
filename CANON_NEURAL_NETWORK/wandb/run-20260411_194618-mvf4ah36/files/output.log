@@ -1,0 +1,32 @@
+  [W0] N=27 s=0  step       1/200000  rel=1.000e+00  bits=0.0  best=1.000e+00  lr=1.5e-07  t=0s
+  [W0] N=27 s=0  step    2000/200000  rel=1.919e-01  bits=2.4  best=1.919e-01  lr=3.0e-04  t=47s
+  [W0] N=27 s=0  step    4000/200000  rel=9.914e-03  bits=6.7  best=9.914e-03  lr=3.0e-04  t=97s
+  [W0] N=27 s=0  step    6000/200000  rel=7.643e-03  bits=7.0  best=7.643e-03  lr=3.0e-04  t=146s
+  [W0] N=27 s=0  step    8000/200000  rel=6.763e-03  bits=7.2  best=6.763e-03  lr=3.0e-04  t=195s
+  [W0] N=27 s=0  step   10000/200000  rel=6.765e-03  bits=7.2  best=6.763e-03  lr=3.0e-04  t=245s
+  [W0] N=27 s=0  step   12000/200000  rel=6.583e-03  bits=7.2  best=6.583e-03  lr=3.0e-04  t=294s
+  [W0] N=27 s=0  step   14000/200000  rel=6.361e-03  bits=7.3  best=6.361e-03  lr=3.0e-04  t=344s
+  [W0] N=27 s=0  step   16000/200000  rel=6.206e-03  bits=7.3  best=6.206e-03  lr=3.0e-04  t=394s
+  [W0] N=27 s=0  step   18000/200000  rel=6.114e-03  bits=7.4  best=6.114e-03  lr=3.0e-04  t=446s
+  [W0] N=27 s=0  step   20000/200000  rel=5.708e-03  bits=7.5  best=5.708e-03  lr=2.9e-04  t=497s
+  [W0] N=27 s=0  step   22000/200000  rel=5.718e-03  bits=7.5  best=5.708e-03  lr=2.9e-04  t=549s
+  [W0] N=27 s=0  step   24000/200000  rel=5.764e-03  bits=7.4  best=5.708e-03  lr=2.9e-04  t=605s
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\concurrent\futures\process.py", line 249, in _process_worker
+    call_item = call_queue.get(block=True)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\queues.py", line 103, in get
+    res = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\connection.py", line 216, in recv_bytes
+    buf = self._recv_bytes(maxlength)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\connection.py", line 321, in _recv_bytes
+    waitres = _winapi.WaitForMultipleObjects(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

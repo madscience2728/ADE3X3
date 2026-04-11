@@ -1,0 +1,28 @@
+  [W3] N=27 s=3  step       1/200000  rel=1.000e+00  bits=-0.0  best=1.000e+00  lr=1.5e-07  t=1s
+  [W3] N=27 s=3  step    2000/200000  rel=1.643e-01  bits=2.6  best=1.643e-01  lr=3.0e-04  t=47s
+  [W3] N=27 s=3  step    4000/200000  rel=1.297e-02  bits=6.3  best=1.297e-02  lr=3.0e-04  t=98s
+  [W3] N=27 s=3  step    6000/200000  rel=7.372e-03  bits=7.1  best=7.372e-03  lr=3.0e-04  t=146s
+  [W3] N=27 s=3  step    8000/200000  rel=6.824e-03  bits=7.2  best=6.824e-03  lr=3.0e-04  t=195s
+  [W3] N=27 s=3  step   10000/200000  rel=6.634e-03  bits=7.2  best=6.634e-03  lr=3.0e-04  t=245s
+  [W3] N=27 s=3  step   12000/200000  rel=6.449e-03  bits=7.3  best=6.449e-03  lr=3.0e-04  t=295s
+  [W3] N=27 s=3  step   14000/200000  rel=6.262e-03  bits=7.3  best=6.262e-03  lr=3.0e-04  t=345s
+  [W3] N=27 s=3  step   16000/200000  rel=5.942e-03  bits=7.4  best=5.942e-03  lr=3.0e-04  t=395s
+  [W3] N=27 s=3  step   18000/200000  rel=5.940e-03  bits=7.4  best=5.940e-03  lr=3.0e-04  t=447s
+  [W3] N=27 s=3  step   20000/200000  rel=5.848e-03  bits=7.4  best=5.848e-03  lr=2.9e-04  t=498s
+  [W3] N=27 s=3  step   22000/200000  rel=5.609e-03  bits=7.5  best=5.609e-03  lr=2.9e-04  t=551s
+  [W3] N=27 s=3  step   24000/200000  rel=5.768e-03  bits=7.4  best=5.609e-03  lr=2.9e-04  t=607s
+Process SpawnProcess-4:
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\concurrent\futures\process.py", line 249, in _process_worker
+    call_item = call_queue.get(block=True)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\queues.py", line 102, in get
+    with self._rlock:
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\synchronize.py", line 95, in __enter__
+    return self._semlock.__enter__()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
