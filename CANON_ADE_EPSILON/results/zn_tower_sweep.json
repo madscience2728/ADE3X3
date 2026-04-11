@@ -1,0 +1,226 @@
+{
+  "2": [
+    {
+      "level": 0,
+      "dim": 1,
+      "violations": 0,
+      "total": 1,
+      "S_assoc": 1.0,
+      "predicted": 0.5
+    },
+    {
+      "level": 1,
+      "dim": 2,
+      "violations": 0,
+      "total": 8,
+      "S_assoc": 1.0,
+      "predicted": 0.5
+    },
+    {
+      "level": 2,
+      "dim": 4,
+      "violations": 0,
+      "total": 64,
+      "S_assoc": 1.0,
+      "predicted": 0.5
+    },
+    {
+      "level": 3,
+      "dim": 8,
+      "violations": 168,
+      "total": 512,
+      "S_assoc": 0.671875,
+      "predicted": 0.5
+    },
+    {
+      "level": 4,
+      "dim": 16,
+      "violations": 1848,
+      "total": 4096,
+      "S_assoc": 0.548828125,
+      "predicted": 0.5
+    },
+    {
+      "level": 5,
+      "dim": 32,
+      "violations": 15960,
+      "total": 32768,
+      "S_assoc": 0.512939453125,
+      "predicted": 0.5
+    },
+    {
+      "level": 6,
+      "dim": 64,
+      "violations": 130200,
+      "total": 262144,
+      "S_assoc": 0.503326416015625,
+      "predicted": 0.5
+    },
+    {
+      "level": 7,
+      "dim": 128,
+      "violations": 1046808,
+      "total": 2097152,
+      "S_assoc": 0.5008430480957031,
+      "predicted": 0.5
+    }
+  ],
+  "2_fit": {
+    "L": 0.5,
+    "B": 14.00000000000003,
+    "D": -24.000000000000068,
+    "residual": 2.3419308123748788e-30
+  },
+  "3": [
+    {
+      "level": 0,
+      "dim": 1,
+      "violations": 0,
+      "total": 1,
+      "S_assoc": 1.0,
+      "predicted": 0.6666666666666666
+    },
+    {
+      "level": 1,
+      "dim": 3,
+      "violations": 4,
+      "total": 27,
+      "S_assoc": 0.8518518518518519,
+      "predicted": 0.6666666666666666
+    },
+    {
+      "level": 2,
+      "dim": 9,
+      "violations": 216,
+      "total": 729,
+      "S_assoc": 0.7037037037037037,
+      "predicted": 0.6666666666666666
+    },
+    {
+      "level": 3,
+      "dim": 27,
+      "violations": 8780,
+      "total": 19683,
+      "S_assoc": 0.5539297871259463,
+      "predicted": 0.6666666666666666
+    },
+    {
+      "level": 4,
+      "dim": 81,
+      "violations": 263984,
+      "total": 531441,
+      "S_assoc": 0.5032675311088155,
+      "predicted": 0.6666666666666666
+    }
+  ],
+  "3_fit": {
+    "L": 0.5124511976363847,
+    "B": 21.939895848401484,
+    "D": -56.65724999721813,
+    "residual": 0.0003612435483455481
+  },
+  "4": [
+    {
+      "level": 0,
+      "dim": 1,
+      "violations": 0,
+      "total": 1,
+      "S_assoc": 1.0,
+      "predicted": 0.75
+    },
+    {
+      "level": 1,
+      "dim": 4,
+      "violations": 12,
+      "total": 64,
+      "S_assoc": 0.8125,
+      "predicted": 0.75
+    },
+    {
+      "level": 2,
+      "dim": 16,
+      "violations": 1536,
+      "total": 4096,
+      "S_assoc": 0.625,
+      "predicted": 0.75
+    },
+    {
+      "level": 3,
+      "dim": 64,
+      "violations": 119808,
+      "total": 262144,
+      "S_assoc": 0.54296875,
+      "predicted": 0.75
+    }
+  ],
+  "4_fit": {
+    "L": 0.536309523809524,
+    "B": 28.79999999999998,
+    "D": -97.52380952380946,
+    "residual": 6.162975822039155e-32
+  },
+  "5": [
+    {
+      "level": 0,
+      "dim": 1,
+      "violations": 0,
+      "total": 1,
+      "S_assoc": 1.0,
+      "predicted": 0.8
+    },
+    {
+      "level": 1,
+      "dim": 5,
+      "violations": 24,
+      "total": 125,
+      "S_assoc": 0.808,
+      "predicted": 0.8
+    },
+    {
+      "level": 2,
+      "dim": 25,
+      "violations": 6000,
+      "total": 15625,
+      "S_assoc": 0.616,
+      "predicted": 0.8
+    }
+  ],
+  "5_fit": {
+    "L": 0.6082642268776792,
+    "B": 4.795224169798448,
+    "D": 0.9908507912978456,
+    "residual": 6.162975822039155e-32
+  },
+  "7": [
+    {
+      "level": 0,
+      "dim": 1,
+      "violations": 0,
+      "total": 1,
+      "S_assoc": 1.0,
+      "predicted": 0.8571428571428571
+    },
+    {
+      "level": 1,
+      "dim": 7,
+      "violations": 60,
+      "total": 343,
+      "S_assoc": 0.8250728862973761,
+      "predicted": 0.8571428571428571
+    },
+    {
+      "level": 2,
+      "dim": 49,
+      "violations": 41160,
+      "total": 117649,
+      "S_assoc": 0.6501457725947521,
+      "predicted": 0.8571428571428571
+    }
+  ],
+  "7_fit": {
+    "L": 0.6465663236206669,
+    "B": 8.568829556048096,
+    "D": 1.24594410577461,
+    "residual": 4.930380657631324e-32
+  }
+}

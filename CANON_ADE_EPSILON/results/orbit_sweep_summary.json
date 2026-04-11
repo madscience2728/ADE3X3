@@ -1,0 +1,79 @@
+[
+  {
+    "config": "R19_O0O1O2",
+    "R": 19,
+    "desc": "O0+O1+O2 baseline",
+    "constrained_best_eps": 1.7966360890705761,
+    "constrained_eps2": 3.227901236550815,
+    "constrained_mean_eps": 2.379452222489427,
+    "free_best_eps": 1.4165493797439002,
+    "free_eps2": 2.006612145252828,
+    "free_mean_eps": 1.798739789520052
+  },
+  {
+    "config": "R20_O0O1O2_1xO3",
+    "R": 20,
+    "desc": "O0+O1+O2 + 1 from O3",
+    "constrained_best_eps": 1.4197572563112102,
+    "constrained_eps2": 2.0157106668483356,
+    "constrained_mean_eps": 2.1796240916738876,
+    "free_best_eps": 1.0024970975750007,
+    "free_eps2": 1.0050004306463005,
+    "free_mean_eps": 1.528550266700964
+  },
+  {
+    "config": "R21_O0O1O2_2xO3",
+    "R": 21,
+    "desc": "O0+O1+O2 + 2 from O3",
+    "constrained_best_eps": 1.0114694661355077,
+    "constrained_eps2": 1.0230704809244489,
+    "constrained_mean_eps": 1.9622383834052461,
+    "free_best_eps": 0.06319208632805083,
+    "free_eps2": 0.003993239774491829,
+    "free_mean_eps": 0.7952951289264695
+  },
+  {
+    "config": "R22_O0O1O2_3xO3",
+    "R": 22,
+    "desc": "O0+O1+O2 + 3 from O3",
+    "constrained_best_eps": 0.04829724017984766,
+    "constrained_eps2": 0.0023326234089898917,
+    "constrained_mean_eps": 1.5894181433237633,
+    "free_best_eps": 0.0073409290196950775,
+    "free_eps2": 5.3889238872201335e-05,
+    "free_mean_eps": 0.5152431685344661
+  },
+  {
+    "config": "R13_O0O2",
+    "R": 13,
+    "desc": "O0+O2 only",
+    "constrained_best_eps": 3.317007938317687,
+    "constrained_eps2": 11.002541662862551,
+    "constrained_mean_eps": 3.5514460395908634,
+    "free_best_eps": 3.1623812641173363,
+    "free_eps2": 10.000655259640363,
+    "free_mean_eps": 3.3453250630945264
+  },
+  {
+    "config": "R15_partial",
+    "R": 15,
+    "desc": "O0+O1 + 8 from O2",
+    "constrained_best_eps": 2.8329125864145315,
+    "constrained_eps2": 8.02539372226587,
+    "constrained_mean_eps": 3.198479086951481,
+    "free_best_eps": 2.828653203722586,
+    "free_eps2": 8.00127894693005,
+    "free_mean_eps": 3.008842302264118
+  },
+  {
+    "config": "R7_O0O1",
+    "R": 7,
+    "desc": "O0+O1 only (Strassen analog)",
+    "constrained_best_eps": 4.243255987727342,
+    "constrained_eps2": 18.005221377383943,
+    "constrained_mean_eps": 4.417985868599704,
+    "free_best_eps": 4.311529286784037,
+    "free_eps2": 18.589284790796466,
+    "free_mean_eps": 4.400852940655836
+  }
+]

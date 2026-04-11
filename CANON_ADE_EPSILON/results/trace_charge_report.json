@@ -1,0 +1,107 @@
+[
+  {
+    "file": "results\\gated_search\\rank13_best.json",
+    "rank": 13,
+    "frobenius": 3.162382856366572,
+    "trace_charge_Q": 1.0167451678281934,
+    "abs_Q_minus_3": 1.9832548321718066
+  },
+  {
+    "file": "results\\gated_search\\rank19_best.json",
+    "rank": 19,
+    "frobenius": 1.4165639241370744,
+    "trace_charge_Q": 2.6924709851284003,
+    "abs_Q_minus_3": 0.30752901487159967
+  },
+  {
+    "file": "results\\gated_search\\rank20_best.json",
+    "rank": 20,
+    "frobenius": 1.0025091353462097,
+    "trace_charge_Q": 2.6513521729821576,
+    "abs_Q_minus_3": 0.34864782701784236
+  },
+  {
+    "file": "results\\gated_search\\rank21_best.json",
+    "rank": 21,
+    "frobenius": 0.06352259530679936,
+    "trace_charge_Q": 3.00469761752224,
+    "abs_Q_minus_3": 0.004697617522240183
+  },
+  {
+    "file": "results\\gated_search\\rank21_gated_best.json",
+    "rank": 21,
+    "frobenius": 0.0877773606779856,
+    "trace_charge_Q": 3.0150924548767954,
+    "abs_Q_minus_3": 0.015092454876795447
+  },
+  {
+    "file": "results\\gated_search\\rank22_best.json",
+    "rank": 22,
+    "frobenius": 0.007371575977260139,
+    "trace_charge_Q": 3.002058082640904,
+    "abs_Q_minus_3": 0.002058082640903791
+  },
+  {
+    "file": "results\\gated_search\\rank23_best.json",
+    "rank": 23,
+    "frobenius": 1.605634682933996e-07,
+    "trace_charge_Q": 3.0000000236782918,
+    "abs_Q_minus_3": 2.3678291771744853e-08
+  },
+  {
+    "file": "results\\gated_search\\rank27_best.json",
+    "rank": 27,
+    "frobenius": 0.0,
+    "trace_charge_Q": 3.0,
+    "abs_Q_minus_3": 0.0
+  },
+  {
+    "file": "results\\cliff_search\\rank13_best.json",
+    "rank": 13,
+    "frobenius": 3.3166386717519,
+    "trace_charge_Q": 1.3801191102155619,
+    "abs_Q_minus_3": 1.6198808897844381
+  },
+  {
+    "file": "results\\cliff_search\\rank19_best.json",
+    "rank": 19,
+    "frobenius": 1.7322201684552598,
+    "trace_charge_Q": 3.0782151097526658,
+    "abs_Q_minus_3": 0.07821510975266577
+  },
+  {
+    "file": "results\\cliff_search\\rank20_best.json",
+    "rank": 20,
+    "frobenius": 1.0274018189057155,
+    "trace_charge_Q": 2.974813873559116,
+    "abs_Q_minus_3": 0.025186126440884138
+  },
+  {
+    "file": "results\\cliff_search\\rank21_best.json",
+    "rank": 21,
+    "frobenius": 0.09020851702243063,
+    "trace_charge_Q": 3.015323582679565,
+    "abs_Q_minus_3": 0.015323582679565018
+  },
+  {
+    "file": "results\\frob_search_r19.json",
+    "rank": "?",
+    "frobenius": NaN,
+    "trace_charge_Q": 3.0032219416385857,
+    "abs_Q_minus_3": 0.0032219416385856903
+  },
+  {
+    "file": "results\\rank22_best.json",
+    "rank": 22,
+    "frobenius": 0.007592920141144066,
+    "trace_charge_Q": 3.002096042516749,
+    "abs_Q_minus_3": 0.002096042516749108
+  },
+  {
+    "file": "results\\rank22_gauged_norm.json",
+    "rank": 22,
+    "frobenius": 0.007592920141143372,
+    "trace_charge_Q": 3.0020960425167784,
+    "abs_Q_minus_3": 0.002096042516778418
+  }
+]

@@ -1,0 +1,302 @@
+[
+  {
+    "file": "results\\gated_search\\rank13_best.json",
+    "rank": 13,
+    "frobenius": 3.162382856366572,
+    "alpha_rank_profile": [
+      10,
+      3,
+      0
+    ],
+    "beta_rank_profile": [
+      7,
+      6,
+      0
+    ],
+    "gamma_rank_profile": [
+      9,
+      4,
+      0
+    ]
+  },
+  {
+    "file": "results\\gated_search\\rank19_best.json",
+    "rank": 19,
+    "frobenius": 1.4165639241370744,
+    "alpha_rank_profile": [
+      15,
+      4,
+      0
+    ],
+    "beta_rank_profile": [
+      13,
+      6,
+      0
+    ],
+    "gamma_rank_profile": [
+      17,
+      2,
+      0
+    ]
+  },
+  {
+    "file": "results\\gated_search\\rank20_best.json",
+    "rank": 20,
+    "frobenius": 1.0025091353462097,
+    "alpha_rank_profile": [
+      13,
+      7,
+      0
+    ],
+    "beta_rank_profile": [
+      15,
+      5,
+      0
+    ],
+    "gamma_rank_profile": [
+      17,
+      3,
+      0
+    ]
+  },
+  {
+    "file": "results\\gated_search\\rank21_best.json",
+    "rank": 21,
+    "frobenius": 0.06352259530679936,
+    "alpha_rank_profile": [
+      13,
+      8,
+      0
+    ],
+    "beta_rank_profile": [
+      16,
+      5,
+      0
+    ],
+    "gamma_rank_profile": [
+      20,
+      1,
+      0
+    ]
+  },
+  {
+    "file": "results\\gated_search\\rank21_gated_best.json",
+    "rank": 21,
+    "frobenius": 0.0877773606779856,
+    "alpha_rank_profile": [
+      13,
+      8,
+      0
+    ],
+    "beta_rank_profile": [
+      16,
+      5,
+      0
+    ],
+    "gamma_rank_profile": [
+      18,
+      3,
+      0
+    ]
+  },
+  {
+    "file": "results\\gated_search\\rank22_best.json",
+    "rank": 22,
+    "frobenius": 0.007371575977260139,
+    "alpha_rank_profile": [
+      17,
+      5,
+      0
+    ],
+    "beta_rank_profile": [
+      17,
+      5,
+      0
+    ],
+    "gamma_rank_profile": [
+      15,
+      7,
+      0
+    ]
+  },
+  {
+    "file": "results\\gated_search\\rank23_best.json",
+    "rank": 23,
+    "frobenius": 1.605634682933996e-07,
+    "alpha_rank_profile": [
+      15,
+      8,
+      0
+    ],
+    "beta_rank_profile": [
+      14,
+      9,
+      0
+    ],
+    "gamma_rank_profile": [
+      17,
+      6,
+      0
+    ]
+  },
+  {
+    "file": "results\\gated_search\\rank27_best.json",
+    "rank": 27,
+    "frobenius": 0.0,
+    "alpha_rank_profile": [
+      27,
+      0,
+      0
+    ],
+    "beta_rank_profile": [
+      27,
+      0,
+      0
+    ],
+    "gamma_rank_profile": [
+      27,
+      0,
+      0
+    ]
+  },
+  {
+    "file": "results\\cliff_search\\rank13_best.json",
+    "rank": 13,
+    "frobenius": 3.3166386717519,
+    "alpha_rank_profile": [
+      8,
+      4,
+      1
+    ],
+    "beta_rank_profile": [
+      10,
+      3,
+      0
+    ],
+    "gamma_rank_profile": [
+      9,
+      4,
+      0
+    ]
+  },
+  {
+    "file": "results\\cliff_search\\rank19_best.json",
+    "rank": 19,
+    "frobenius": 1.7322201684552598,
+    "alpha_rank_profile": [
+      8,
+      11,
+      0
+    ],
+    "beta_rank_profile": [
+      19,
+      0,
+      0
+    ],
+    "gamma_rank_profile": [
+      14,
+      5,
+      0
+    ]
+  },
+  {
+    "file": "results\\cliff_search\\rank20_best.json",
+    "rank": 20,
+    "frobenius": 1.0274018189057155,
+    "alpha_rank_profile": [
+      15,
+      5,
+      0
+    ],
+    "beta_rank_profile": [
+      3,
+      16,
+      1
+    ],
+    "gamma_rank_profile": [
+      4,
+      14,
+      2
+    ]
+  },
+  {
+    "file": "results\\cliff_search\\rank21_best.json",
+    "rank": 21,
+    "frobenius": 0.09020851702243063,
+    "alpha_rank_profile": [
+      13,
+      8,
+      0
+    ],
+    "beta_rank_profile": [
+      16,
+      5,
+      0
+    ],
+    "gamma_rank_profile": [
+      18,
+      3,
+      0
+    ]
+  },
+  {
+    "file": "results\\frob_search_r19.json",
+    "rank": "?",
+    "frobenius": NaN,
+    "alpha_rank_profile": [
+      10,
+      9,
+      0
+    ],
+    "beta_rank_profile": [
+      15,
+      4,
+      0
+    ],
+    "gamma_rank_profile": [
+      17,
+      2,
+      0
+    ]
+  },
+  {
+    "file": "results\\rank22_best.json",
+    "rank": 22,
+    "frobenius": 0.007592920141144066,
+    "alpha_rank_profile": [
+      17,
+      5,
+      0
+    ],
+    "beta_rank_profile": [
+      18,
+      4,
+      0
+    ],
+    "gamma_rank_profile": [
+      15,
+      7,
+      0
+    ]
+  },
+  {
+    "file": "results\\rank22_gauged_norm.json",
+    "rank": 22,
+    "frobenius": 0.007592920141143372,
+    "alpha_rank_profile": [
+      17,
+      5,
+      0
+    ],
+    "beta_rank_profile": [
+      18,
+      4,
+      0
+    ],
+    "gamma_rank_profile": [
+      15,
+      7,
+      0
+    ]
+  }
+]

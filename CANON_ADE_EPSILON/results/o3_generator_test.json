@@ -1,0 +1,80 @@
+[
+  {
+    "orbit_idx": 0,
+    "canonical": "((1, 1, 1), (1, 1, 2), (1, 2, 1))",
+    "orbit_size": 24,
+    "representative": [
+      [
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        2
+      ],
+      [
+        1,
+        2,
+        1
+      ]
+    ],
+    "best_eps": 0.03211959003854474,
+    "eps_sq": 0.0010316680642441826,
+    "mean_eps": 1.5227496707113641,
+    "matches_prediction": false
+  },
+  {
+    "orbit_idx": 1,
+    "canonical": "((1, 1, 1), (1, 1, 2), (2, 2, 1))",
+    "orbit_size": 24,
+    "representative": [
+      [
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        2
+      ],
+      [
+        2,
+        2,
+        1
+      ]
+    ],
+    "best_eps": 1.0000037718703314,
+    "eps_sq": 1.0000075437548899,
+    "mean_eps": 1.6443756494430597,
+    "matches_prediction": false
+  },
+  {
+    "orbit_idx": 2,
+    "canonical": "((1, 1, 1), (1, 2, 2), (2, 1, 2))",
+    "orbit_size": 8,
+    "representative": [
+      [
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        2,
+        2
+      ],
+      [
+        2,
+        1,
+        2
+      ]
+    ],
+    "best_eps": 1.0001669220331728,
+    "eps_sq": 1.000333871929311,
+    "mean_eps": 1.7146902866649951,
+    "matches_prediction": false
+  }
+]

@@ -1,0 +1,520 @@
+[
+  {
+    "world": {
+      "name": "border",
+      "number_system": "real",
+      "rank_notion": "cp_border",
+      "equality": "epsilon_real",
+      "symmetry": "none"
+    },
+    "natural_rank": "\u2208 [17, 21]",
+    "conservation_laws": [
+      "border_rank \u2264 rank",
+      "known: 17 \u2264 border_rank \u2264 21"
+    ],
+    "emergent_symmetries": [
+      "degeneration: rank-R tensors approaching T form a variety",
+      "secant variety geometry controls border rank"
+    ],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8
+    },
+    "conservation_holds": true,
+    "conservation_value": 27,
+    "gate3_obstruction": "gate3 IS the border rank obstruction: \u03b5_F > 0 means not on secant variety",
+    "drops_out": [
+      "border_rank \u2208 [17, 21] (known bounds)",
+      "loaded 9 empirical \u03b5_F values from existing results",
+      "R=7: best \u03b5_F=4.243256",
+      "R=13: best \u03b5_F=3.162381",
+      "R=15: best \u03b5_F=2.828653",
+      "R=19: best \u03b5_F=1.416549",
+      "R=20: best \u03b5_F=1.002497",
+      "R=21: best \u03b5_F=0.063192",
+      "R=22: best \u03b5_F=0.007341",
+      "R=23: best \u03b5_F=0.000000",
+      "R=27: best \u03b5_F=0.000000",
+      "smallest R with \u03b5_F < 0.1: R=21 (\u03b5_F=0.063192)",
+      "suggests border_rank \u2264 21"
+    ],
+    "surprise_level": "HIGH"
+  },
+  {
+    "world": {
+      "name": "tropical",
+      "number_system": "tropical",
+      "rank_notion": "tropical",
+      "equality": "exact",
+      "symmetry": "none"
+    },
+    "natural_rank": 9,
+    "conservation_laws": [
+      "tropical_rank = n\u00b2 = 9",
+      "no sign cancellation in tropical world",
+      "permanent replaces determinant"
+    ],
+    "emergent_symmetries": [
+      "no_sign_symmetry: all terms have same tropical weight",
+      "tropical convexity: rank-1 locus is a tropical variety"
+    ],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8
+    },
+    "conservation_holds": false,
+    "conservation_value": null,
+    "gate3_obstruction": "undefined: no epsilon in tropical world",
+    "drops_out": [
+      "tropical_rank = 9 (equals n\u00b2)",
+      "tropical rank = standard flattening rank (no cancellation gain)",
+      "Strassen-type improvements IMPOSSIBLE in tropical world",
+      "sub-cubic algorithms REQUIRE sign cancellation"
+    ],
+    "surprise_level": "HIGH"
+  },
+  {
+    "world": {
+      "name": "E6",
+      "number_system": "real",
+      "rank_notion": "cp_exact",
+      "equality": "exact",
+      "symmetry": "E6_weight"
+    },
+    "natural_rank": "E6 predicts: border rank \u2264 dim(stabilizer orbit closure)",
+    "conservation_laws": [
+      "Casimir eigenvalue: C\u2082(27) = 12 = 3 \u00d7 C\u2082(fund)",
+      "trace_charge = 3 = rank of each SU(3) factor",
+      "orbit_match: {1,6,12,8} = E6 weight depths"
+    ],
+    "emergent_symmetries": [
+      "E6 Weyl group (order 51840) extends G (order 48)",
+      "ratio 1080 gives 1080 additional symmetries",
+      "triality: SU(3)^3 \u2282 E6 makes three matrix dimensions equivalent",
+      "minuscule representation: all weight multiplicities = 1"
+    ],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8,
+      "E6_depths": {
+        "depth_0": 1,
+        "depth_1": 6,
+        "depth_2": 12,
+        "depth_3": 8
+      },
+      "match": true
+    },
+    "conservation_holds": true,
+    "conservation_value": 27,
+    "gate3_obstruction": "E6 predicts: obstruction = weight not in dominant chamber",
+    "drops_out": [
+      "orbit sizes {1,6,12,8} EXACTLY match weight depth decomposition of E6 27-dim rep",
+      "(3,3,3) trifundamental of SU(3)^3 \u2282 E6 is EXACTLY the matmul index structure",
+      "G = Z2\u2240S3 (order 48) embeds in Weyl(E6) (order 51840), ratio = 1080",
+      "E6 Casimir / SU(3)^3 Casimir = 3 = n",
+      "MATCH CONFIRMED: matmul orbits = E6 weight depths",
+      "T_matmul is a highest-weight vector in the E6 fundamental"
+    ],
+    "surprise_level": "HIGH"
+  },
+  {
+    "world": {
+      "name": "F2",
+      "number_system": "F2",
+      "rank_notion": "boolean",
+      "equality": "exact",
+      "symmetry": "G_full"
+    },
+    "natural_rank": 9,
+    "conservation_laws": [
+      "R + eta = 9",
+      "trace_charge = 3 mod p"
+    ],
+    "emergent_symmetries": [
+      "F2_additive: all entries are 0 or 1, XOR arithmetic",
+      "char_2_simplification: many polynomial identities collapse"
+    ],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8
+    },
+    "conservation_holds": false,
+    "conservation_value": 9,
+    "gate3_obstruction": "undefined over finite field",
+    "drops_out": [
+      "flattening_rank=9 over F_2",
+      "all coefficients binary \u2014 CP decomposition is combinatorial"
+    ],
+    "surprise_level": "MEDIUM"
+  },
+  {
+    "world": {
+      "name": "F3",
+      "number_system": "F3",
+      "rank_notion": "cp_exact",
+      "equality": "modular_p",
+      "symmetry": "G_full"
+    },
+    "natural_rank": 9,
+    "conservation_laws": [
+      "R + eta = 9",
+      "trace_charge = 3 mod p"
+    ],
+    "emergent_symmetries": [
+      "F3_natural: index range {0,1,2} = F_3, coordinate arithmetic is native",
+      "char_3_simplification: many polynomial identities collapse"
+    ],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8
+    },
+    "conservation_holds": false,
+    "conservation_value": 9,
+    "gate3_obstruction": "undefined over finite field",
+    "drops_out": [
+      "flattening_rank=9 over F_3",
+      "index arithmetic IS field arithmetic \u2014 no representation overhead"
+    ],
+    "surprise_level": "MEDIUM"
+  },
+  {
+    "world": {
+      "name": "F5",
+      "number_system": "F5",
+      "rank_notion": "cp_exact",
+      "equality": "modular_p",
+      "symmetry": "G_full"
+    },
+    "natural_rank": 9,
+    "conservation_laws": [
+      "R + eta = 9",
+      "trace_charge = 3 mod p"
+    ],
+    "emergent_symmetries": [],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8
+    },
+    "conservation_holds": false,
+    "conservation_value": 9,
+    "gate3_obstruction": false,
+    "drops_out": [],
+    "surprise_level": "MEDIUM"
+  },
+  {
+    "world": {
+      "name": "F7",
+      "number_system": "F7",
+      "rank_notion": "cp_exact",
+      "equality": "modular_p",
+      "symmetry": "G_full"
+    },
+    "natural_rank": 9,
+    "conservation_laws": [
+      "R + eta = 9",
+      "trace_charge = 3 mod p"
+    ],
+    "emergent_symmetries": [],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8
+    },
+    "conservation_holds": false,
+    "conservation_value": 9,
+    "gate3_obstruction": false,
+    "drops_out": [],
+    "surprise_level": "MEDIUM"
+  },
+  {
+    "world": {
+      "name": "nonneg",
+      "number_system": "real",
+      "rank_notion": "nonneg",
+      "equality": "exact",
+      "symmetry": "none"
+    },
+    "natural_rank": "\u2208 [9, 27]",
+    "conservation_laws": [
+      "nonneg_rank \u2265 real_rank \u2265 9",
+      "nonneg_rank \u2264 27 (trivial decomposition)"
+    ],
+    "emergent_symmetries": [
+      "no_cancellation: nonneg factors cannot cancel",
+      "monotone_decomposition: each term only adds mass"
+    ],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8
+    },
+    "conservation_holds": true,
+    "conservation_value": 27,
+    "gate3_obstruction": "amplified: nonneg constraint blocks cancellation-based shortcuts",
+    "drops_out": [
+      "nonneg_rank \u2265 9 (flattening bound)",
+      "trivial nonneg decomposition at R=27",
+      "gap between real and nonneg rank measures CANCELLATION VALUE",
+      "if nonneg_rank >> real_rank, cancellation is essential \u2014 not artifact"
+    ],
+    "surprise_level": "MEDIUM"
+  },
+  {
+    "world": {
+      "name": "2adic_d1",
+      "number_system": "p_adic_2",
+      "rank_notion": "cp_epsilon",
+      "equality": "epsilon_2adic",
+      "symmetry": "G_full"
+    },
+    "natural_rank": "9 exact + 0 approximate = 9",
+    "conservation_laws": [
+      "unit_rank + epsilon_rank = 9",
+      "Smith filtration: {'p^0': 27}"
+    ],
+    "emergent_symmetries": [],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8
+    },
+    "conservation_holds": false,
+    "conservation_value": 9,
+    "gate3_obstruction": "mapped to p-divisibility: 0 obstructed directions",
+    "drops_out": [
+      "unit_rank=9 (exact directions)",
+      "full_rank=9 (including approximate)",
+      "epsilon_directions=0",
+      "2-adic depth 1: effective precision = 1 bits",
+      "depth=1 is F_2 limit"
+    ],
+    "surprise_level": "LOW"
+  },
+  {
+    "world": {
+      "name": "2adic_d7",
+      "number_system": "p_adic_2",
+      "rank_notion": "cp_epsilon",
+      "equality": "epsilon_2adic",
+      "symmetry": "G_full"
+    },
+    "natural_rank": "9 exact + 0 approximate = 9",
+    "conservation_laws": [
+      "unit_rank + epsilon_rank = 9",
+      "Smith filtration: {'p^0': 27}"
+    ],
+    "emergent_symmetries": [],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8
+    },
+    "conservation_holds": false,
+    "conservation_value": 9,
+    "gate3_obstruction": "mapped to p-divisibility: 0 obstructed directions",
+    "drops_out": [
+      "unit_rank=9 (exact directions)",
+      "full_rank=9 (including approximate)",
+      "epsilon_directions=0",
+      "2-adic depth 7: effective precision = 7 bits",
+      "depth=7 \u2248 bfloat16 mantissa"
+    ],
+    "surprise_level": "LOW"
+  },
+  {
+    "world": {
+      "name": "2adic_d23",
+      "number_system": "p_adic_2",
+      "rank_notion": "cp_epsilon",
+      "equality": "epsilon_2adic",
+      "symmetry": "G_full"
+    },
+    "natural_rank": "9 exact + 0 approximate = 9",
+    "conservation_laws": [
+      "unit_rank + epsilon_rank = 9",
+      "Smith filtration: {'p^0': 27}"
+    ],
+    "emergent_symmetries": [],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8
+    },
+    "conservation_holds": false,
+    "conservation_value": 9,
+    "gate3_obstruction": "mapped to p-divisibility: 0 obstructed directions",
+    "drops_out": [
+      "unit_rank=9 (exact directions)",
+      "full_rank=9 (including approximate)",
+      "epsilon_directions=0",
+      "2-adic depth 23: effective precision = 23 bits",
+      "depth=23 \u2248 float32 mantissa"
+    ],
+    "surprise_level": "LOW"
+  },
+  {
+    "world": {
+      "name": "3adic_d3",
+      "number_system": "p_adic_3",
+      "rank_notion": "cp_epsilon",
+      "equality": "epsilon_2adic",
+      "symmetry": "G_full"
+    },
+    "natural_rank": "9 exact + 0 approximate = 9",
+    "conservation_laws": [
+      "unit_rank + epsilon_rank = 9",
+      "Smith filtration: {'p^0': 27}"
+    ],
+    "emergent_symmetries": [],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8
+    },
+    "conservation_holds": false,
+    "conservation_value": 9,
+    "gate3_obstruction": "mapped to p-divisibility: 0 obstructed directions",
+    "drops_out": [
+      "unit_rank=9 (exact directions)",
+      "full_rank=9 (including approximate)",
+      "epsilon_directions=0"
+    ],
+    "surprise_level": "LOW"
+  },
+  {
+    "world": {
+      "name": "no_sym",
+      "number_system": "real",
+      "rank_notion": "cp_exact",
+      "equality": "exact",
+      "symmetry": "none"
+    },
+    "natural_rank": "free_parameters = 27 (from 27 orbits)",
+    "conservation_laws": [
+      "27 orbits under none",
+      "27 free parameters in symmetric decomposition"
+    ],
+    "emergent_symmetries": [
+      "symmetry_breaking: 0 constraints released"
+    ],
+    "orbit_structure": {
+      "t_0": 1,
+      "t_1": 1,
+      "t_2": 1,
+      "t_3": 1,
+      "t_4": 1,
+      "t_5": 1,
+      "t_6": 1,
+      "t_7": 1,
+      "t_8": 1,
+      "t_9": 1,
+      "t_10": 1,
+      "t_11": 1,
+      "t_12": 1,
+      "t_13": 1,
+      "t_14": 1,
+      "t_15": 1,
+      "t_16": 1,
+      "t_17": 1,
+      "t_18": 1,
+      "t_19": 1,
+      "t_20": 1,
+      "t_21": 1,
+      "t_22": 1,
+      "t_23": 1,
+      "t_24": 1,
+      "t_25": 1,
+      "t_26": 1
+    },
+    "conservation_holds": true,
+    "conservation_value": 27,
+    "gate3_obstruction": "depends on orbit merging pattern",
+    "drops_out": [
+      "none: 27 orbits, 27 free params",
+      "constraint density: 0/27 = 0.00%"
+    ],
+    "surprise_level": "LOW"
+  },
+  {
+    "world": {
+      "name": "parity_only",
+      "number_system": "real",
+      "rank_notion": "cp_exact",
+      "equality": "exact",
+      "symmetry": "G_parity_only"
+    },
+    "natural_rank": "free_parameters = 8 (from 8 orbits)",
+    "conservation_laws": [
+      "8 orbits under G_parity_only",
+      "8 free parameters in symmetric decomposition"
+    ],
+    "emergent_symmetries": [
+      "symmetry_breaking: 19 constraints released"
+    ],
+    "orbit_structure": {
+      "(0, 0, 0)": 1,
+      "(0, 0, 1)": 2,
+      "(0, 1, 0)": 2,
+      "(0, 1, 1)": 4,
+      "(1, 0, 0)": 2,
+      "(1, 0, 1)": 4,
+      "(1, 1, 0)": 4,
+      "(1, 1, 1)": 8
+    },
+    "conservation_holds": true,
+    "conservation_value": 27,
+    "gate3_obstruction": "depends on orbit merging pattern",
+    "drops_out": [
+      "G_parity_only: 8 orbits, 8 free params",
+      "constraint density: 19/27 = 70.37%"
+    ],
+    "surprise_level": "LOW"
+  },
+  {
+    "world": {
+      "name": "full_sym",
+      "number_system": "real",
+      "rank_notion": "cp_exact",
+      "equality": "exact",
+      "symmetry": "G_full"
+    },
+    "natural_rank": "free_parameters = 4 (from 4 orbits)",
+    "conservation_laws": [
+      "4 orbits under G_full",
+      "4 free parameters in symmetric decomposition"
+    ],
+    "emergent_symmetries": [],
+    "orbit_structure": {
+      "O0": 1,
+      "O1": 6,
+      "O2": 12,
+      "O3": 8
+    },
+    "conservation_holds": true,
+    "conservation_value": 27,
+    "gate3_obstruction": "depends on orbit merging pattern",
+    "drops_out": [
+      "G_full: 4 orbits, 4 free params",
+      "constraint density: 23/27 = 85.19%"
+    ],
+    "surprise_level": "LOW"
+  }
+]
