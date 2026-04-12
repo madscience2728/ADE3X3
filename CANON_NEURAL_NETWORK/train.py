@@ -33,10 +33,26 @@ from data import sample_batch, frobenius_relative_error
 from model import KethVaraiMachine
 
 SUCCESS_THRESHOLD = 1e-5  # relative Frobenius error target
+CHECKPOINT_EVERY = 5_000  # save checkpoint every N steps
 
 
 def _default_device() -> str:
     return "cuda" if torch.cuda.is_available() else "cpu"
+
+
+def _save_checkpoint(path, model, optimizer, scheduler, scaler,
+                     step, best_rel_err, last_improvement, log, elapsed_s):
+    torch.save({
+        "model": model.state_dict(),
+        "optimizer": optimizer.state_dict(),
+        "scheduler": scheduler.state_dict(),
+        "scaler": scaler.state_dict(),
+        "step": step,
+        "best_rel_err": best_rel_err,
+        "last_improvement": last_improvement,
+        "log": log,
+        "elapsed_s": elapsed_s,
+    }, path)
 
 
 def train(
@@ -55,6 +71,7 @@ def train(
     wandb_project: str = "keth-varai",
     lambda_entropy: float = 1e-3,  # channel entropy regularization weight
     input_noise_std: float = 0.05,  # Gaussian noise on A,B inputs during training
+    checkpoint_dir: str = "checkpoints",  # directory for checkpoint files
 ) -> dict:
     if device_str == "auto":
         device_str = _default_device()
@@ -65,7 +82,7 @@ def train(
         torch.cuda.manual_seed_all(seed)
 
     model = KethVaraiMachine(
-        N=N, d=d, encoder_depth=encoder_depth, encoder_width=encoder_width
+        N=N, latent_dim=d, encoder_depth=encoder_depth, encoder_width=encoder_width
     ).to(device)
 
     total_params = sum(p.numel() for p in model.parameters())
@@ -88,12 +105,12 @@ def train(
         except Exception as e:
             print(f"  {tag}  [wandb] init failed ({e.__class__.__name__}): {e} — continuing without wandb")
 
-    # Optimizer: AdamW with weight decay on encoder, bare Adam on bottleneck/decoder
-    enc_params = list(model.enc_a.parameters()) + list(model.enc_b.parameters())
-    bilin_params = list(model.U.parameters()) + list(model.V.parameters()) + list(model.W.parameters())
+    # Optimizer: AdamW with weight decay on encoder, bare Adam on hyper-heads
+    enc_params = list(model.encoder.parameters())
+    head_params = list(model.head_U.parameters()) + list(model.head_V.parameters()) + list(model.head_W.parameters())
     optimizer = torch.optim.AdamW([
-        {"params": enc_params,   "lr": lr, "weight_decay": 1e-4},
-        {"params": bilin_params, "lr": lr, "weight_decay": 0.0},
+        {"params": enc_params,  "lr": lr, "weight_decay": 1e-4},
+        {"params": head_params, "lr": lr, "weight_decay": 0.0},
     ])
 
     # Warmup (2k steps) then cosine decay to 1e-6
@@ -116,8 +133,27 @@ def train(
     t0 = time.time()
     plateau_patience = 20_000   # steps without improvement before we give up
     last_improvement = 0
+    start_step = 1
 
-    for step in range(1, max_steps + 1):
+    # Checkpoint paths
+    os.makedirs(checkpoint_dir, exist_ok=True)
+    ckpt_path = os.path.join(checkpoint_dir, f"ckpt_N{N}_s{seed}.pt")
+
+    # Resume from checkpoint if available
+    if os.path.exists(ckpt_path):
+        ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
+        model.load_state_dict(ckpt["model"])
+        optimizer.load_state_dict(ckpt["optimizer"])
+        scheduler.load_state_dict(ckpt["scheduler"])
+        scaler.load_state_dict(ckpt["scaler"])
+        start_step = ckpt["step"] + 1
+        best_rel_err = ckpt["best_rel_err"]
+        last_improvement = ckpt["last_improvement"]
+        log = ckpt.get("log", [])
+        t0 = time.time() - ckpt.get("elapsed_s", 0)
+        print(f"  {tag}  RESUMED from step {start_step - 1}, best={best_rel_err:.3e}")
+
+    for step in range(start_step, max_steps + 1):
         model.train()
         A, B, C = sample_batch(batch_size, device)
 
@@ -133,10 +169,7 @@ def train(
             rec_loss = frobenius_relative_error(C_hat.float(), C.float())
             # Channel entropy regularization: penalize load concentration
             # -H = sum(p * log(p)), we SUBTRACT it to MAXIMIZE entropy (add to loss)
-            u_norms = model.U.weight.norm(dim=1)
-            v_norms = model.V.weight.norm(dim=1)
-            w_norms = model.W.weight.norm(dim=0)
-            act = (u_norms * v_norms * w_norms).clamp(min=1e-12)
+            act = model.channel_norms(A_noisy, B_noisy).mean(dim=0).clamp(min=1e-12)
             p_act = act / act.sum()
             neg_entropy = (p_act * p_act.log()).sum()  # negative entropy (minimizing this = maximizing entropy)
             loss = rec_loss + lambda_entropy * neg_entropy
@@ -189,12 +222,12 @@ def train(
                 # Grad norms per parameter group
                 enc_grad = sum(
                     p.grad.norm().item() ** 2
-                    for p in list(model.enc_a.parameters()) + list(model.enc_b.parameters())
+                    for p in model.encoder.parameters()
                     if p.grad is not None
                 ) ** 0.5
                 bilin_grad = sum(
                     p.grad.norm().item() ** 2
-                    for p in list(model.U.parameters()) + list(model.V.parameters()) + list(model.W.parameters())
+                    for p in list(model.head_U.parameters()) + list(model.head_V.parameters()) + list(model.head_W.parameters())
                     if p.grad is not None
                 ) ** 0.5
                 metrics["grad/encoder_norm"] = enc_grad
@@ -202,10 +235,7 @@ def train(
 
                 # Channel activity: per-channel |u_k| * |v_k| (proxy for effective rank)
                 with torch.no_grad():
-                    u_norms = model.U.weight.norm(dim=1)   # (N,)
-                    v_norms = model.V.weight.norm(dim=1)   # (N,)
-                    w_norms = model.W.weight.norm(dim=0)   # (N,)
-                    channel_activity = (u_norms * v_norms * w_norms).cpu()
+                    channel_activity = model.channel_norms(Av, Bv).mean(dim=0).cpu()
                     sorted_act, _ = channel_activity.sort(descending=True)
                     metrics["channels/active"] = (channel_activity > channel_activity.max() * 0.01).sum().item()
                     metrics["channels/top1_frac"] = (sorted_act[0] / sorted_act.sum()).item()
@@ -215,29 +245,31 @@ def train(
                         * (channel_activity / channel_activity.sum() + 1e-10)
                     ).sum().item()
 
-                    # Encoder output statistics (phi_A on eval batch)
+                    # Encoder latent statistics
                     with torch.amp.autocast(device_type=device.type, enabled=use_amp):
-                        phi_a = model.enc_a(Av)
-                        phi_b = model.enc_b(Bv)
-                    metrics["encoder/phi_a_mean"] = phi_a.mean().item()
-                    metrics["encoder/phi_a_std"] = phi_a.std().item()
-                    metrics["encoder/phi_b_std"] = phi_b.std().item()
-                    metrics["encoder/phi_a_dead_frac"] = (phi_a.abs() < 1e-4).float().mean().item()
-
-                    # Decoder weight spread
-                    metrics["decoder/W_std"] = model.W.weight.std().item()
-                    metrics["decoder/W_max"] = model.W.weight.abs().max().item()
+                        latent = model.encoder(torch.cat([Av, Bv], dim=1))
+                    metrics["encoder/latent_mean"] = latent.mean().item()
+                    metrics["encoder/latent_std"] = latent.std().item()
+                    metrics["encoder/latent_dead_frac"] = (latent.abs() < 1e-4).float().mean().item()
 
                 wb_run.log(metrics, step=step)
 
             if best_rel_err < SUCCESS_THRESHOLD:
                 print(f"  {tag}  ✓ SUCCESS at step {step}: best={best_rel_err:.3e}")
+                # Save final checkpoint
+                _save_checkpoint(ckpt_path, model, optimizer, scheduler, scaler,
+                                 step, best_rel_err, last_improvement, log, time.time() - t0)
                 break
 
             # Plateau guard: stop wasting time if stuck
             if step - last_improvement > plateau_patience and step > warmup_steps * 2:
                 print(f"  {tag}  ✗ PLATEAU at step {step}: no improvement for {plateau_patience} steps")
                 break
+
+            # Periodic checkpoint
+            if step % CHECKPOINT_EVERY == 0:
+                _save_checkpoint(ckpt_path, model, optimizer, scheduler, scaler,
+                                 step, best_rel_err, last_improvement, log, time.time() - t0)
 
     if wb_run is not None:
         wb_run.summary["best_rel_err"] = best_rel_err
@@ -273,6 +305,7 @@ def main():
     parser.add_argument("--log_every", type=int, default=500)
     parser.add_argument("--device", type=str, default="auto")
     parser.add_argument("--out_dir", type=str, default="results")
+    parser.add_argument("--checkpoint_dir", type=str, default="checkpoints")
     parser.add_argument("--wandb", action="store_true", help="Log to Weights & Biases")
     parser.add_argument("--wandb_project", type=str, default="keth-varai")
     args = parser.parse_args()
@@ -296,6 +329,7 @@ def main():
         device_str=args.device,
         use_wandb=args.wandb,
         wandb_project=args.wandb_project,
+        checkpoint_dir=args.checkpoint_dir,
     )
 
     out_path = os.path.join(args.out_dir, f"run_N{args.N}_s{args.seed}.json")

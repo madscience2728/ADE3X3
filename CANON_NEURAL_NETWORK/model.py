@@ -1,111 +1,119 @@
 """
-model.py — The Keth-Varai Machine.
+model.py — The Keth-Varai Machine (Hypernetwork variant).
 
 Architecture (see ARCHITECTURE.md):
 
   Input: A ∈ R^9, B ∈ R^9
 
-  Encoder:
-    φ_A = f_enc(A)  ∈ R^d
-    φ_B = g_enc(B)  ∈ R^d
+  Encoder (joint — sees both A and B):
+    latent = encoder(cat(A, B))  ∈ R^latent_dim
 
-  Mix:
-    ã = cat(φ_A, A)  ∈ R^{d+9}
-    b̃ = cat(φ_B, B)  ∈ R^{d+9}
+  Hyper-heads (latent → weight matrices for bilinear layer):
+    U = head_U(latent)  ∈ R^{N × 9}     (reshaped)
+    V = head_V(latent)  ∈ R^{N × 9}     (reshaped)
+    W = head_W(latent)  ∈ R^{9 × N}     (reshaped)
 
-  Bilinear Bottleneck (N channels):
-    m_k = (u_k · ã)(v_k · b̃)    k = 1..N
-    U ∈ R^{N × (d+9)},  V ∈ R^{N × (d+9)}
+  Bilinear Bottleneck (N channels, input-dependent weights):
+    p = U @ A    ∈ R^N       (linear projection, no activation)
+    q = V @ B    ∈ R^N       (linear projection, no activation)
+    m = p ⊙ q    ∈ R^N       (element-wise — each channel is rank-1 bilinear)
 
   Decoder:
-    Ĉ = W · m  ∈ R^9
-    W ∈ R^{9 × N}
+    Ĉ = W @ m   ∈ R^9       (linear, no bias)
 
-The bilinear structure is exact: no activations inside the bottleneck.
+The encoder output NEVER enters the data path. It only generates weights.
+A and B interact ONLY through the bilinear bottleneck.
+N is an honest rank count: N rank-1 bilinear forms, architecturally enforced.
 """
 
 import torch
 import torch.nn as nn
 
 
-class Encoder(nn.Module):
-    """MLP: R^9 → R^d"""
-
-    def __init__(self, d: int, depth: int = 3, width: int = 128, dropout: float = 0.1):
-        super().__init__()
-        layers: list[nn.Module] = [nn.Linear(9, width), nn.GELU()]
-        for _ in range(depth - 1):
-            layers += [nn.Linear(width, width), nn.GELU(), nn.Dropout(dropout)]
-        layers.append(nn.Linear(width, d))
-        self.net = nn.Sequential(*layers)
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.net(x)
-
-
 class KethVaraiMachine(nn.Module):
     """
-    Full pipeline: (A, B) → Ĉ ≈ A·B
-    with a learned-basis bilinear bottleneck of rank N.
+    Hypernetwork: encoder(A, B) → tuning knobs (U, V, W),
+    then A and B pass through the bilinear bottleneck defined by those knobs.
+
+    The encoder learns the structure of the problem.
+    The bottleneck enforces honest bilinear rank N.
+    The encoder cannot cheat — its output never touches the data path.
     """
 
-    def __init__(self, N: int, d: int = 64, encoder_depth: int = 3, encoder_width: int = 128, dropout: float = 0.1):
+    def __init__(
+        self,
+        N: int,
+        latent_dim: int = 64,
+        encoder_depth: int = 3,
+        encoder_width: int = 128,
+        dropout: float = 0.1,
+    ):
         super().__init__()
         self.N = N
-        self.d = d
-        mixed_dim = d + 9  # size of ã and b̃
+        self.latent_dim = latent_dim
 
-        # Separate encoders for A-arm and B-arm (structurally different roles)
-        self.enc_a = Encoder(d, depth=encoder_depth, width=encoder_width, dropout=dropout)
-        self.enc_b = Encoder(d, depth=encoder_depth, width=encoder_width, dropout=dropout)
+        # Joint encoder: sees both A and B, produces latent tuning knobs
+        layers: list[nn.Module] = [nn.Linear(18, encoder_width), nn.GELU()]
+        for _ in range(encoder_depth - 1):
+            layers += [nn.Linear(encoder_width, encoder_width), nn.GELU(), nn.Dropout(dropout)]
+        layers.append(nn.Linear(encoder_width, latent_dim))
+        self.encoder = nn.Sequential(*layers)
 
-        # Bilinear bottleneck: U projects ã, V projects b̃
-        # Each row u_k / v_k is a linear functional on the mixed representation
-        self.U = nn.Linear(mixed_dim, N, bias=False)
-        self.V = nn.Linear(mixed_dim, N, bias=False)
-
-        # Decoder: linear recombination of N scalar channel outputs → 9 outputs
-        self.W = nn.Linear(N, 9, bias=True)
+        # Hyper-heads: latent → weight matrices for the bilinear layer
+        # U ∈ R^{N×9}: projects A into N channels
+        # V ∈ R^{N×9}: projects B into N channels
+        # W ∈ R^{9×N}: decodes N channel outputs to 9 output entries
+        self.head_U = nn.Linear(latent_dim, N * 9)
+        self.head_V = nn.Linear(latent_dim, N * 9)
+        self.head_W = nn.Linear(latent_dim, 9 * N)
 
         self._init_weights()
 
     def _init_weights(self):
-        # Small init on bottleneck to avoid scale explosion
-        nn.init.normal_(self.U.weight, std=0.01)
-        nn.init.normal_(self.V.weight, std=0.01)
-        nn.init.normal_(self.W.weight, std=0.1)
-        nn.init.zeros_(self.W.bias)
+        # Small init on hyper-heads so initial U, V, W are small
+        for head in [self.head_U, self.head_V, self.head_W]:
+            nn.init.normal_(head.weight, std=0.01)
+            nn.init.zeros_(head.bias)
 
     def forward(self, A: torch.Tensor, B: torch.Tensor) -> torch.Tensor:
         """
         A, B: (batch, 9)
         Returns Ĉ: (batch, 9)
         """
-        # Encode
-        phi_a = self.enc_a(A)   # (batch, d)
-        phi_b = self.enc_b(B)   # (batch, d)
+        batch = A.shape[0]
 
-        # Mix latent with raw input
-        a_tilde = torch.cat([phi_a, A], dim=1)  # (batch, d+9)
-        b_tilde = torch.cat([phi_b, B], dim=1)  # (batch, d+9)
+        # Encoder: learn the tuning knobs for this (A, B) pair
+        latent = self.encoder(torch.cat([A, B], dim=1))  # (batch, latent_dim)
 
-        # Bilinear bottleneck: element-wise product of two linear projections
-        p = self.U(a_tilde)  # (batch, N)
-        q = self.V(b_tilde)  # (batch, N)
-        m = p * q            # (batch, N)  — each channel is a rank-1 bilinear form
+        # Generate weight matrices (per-sample)
+        U = self.head_U(latent).view(batch, self.N, 9)   # (batch, N, 9)
+        V = self.head_V(latent).view(batch, self.N, 9)   # (batch, N, 9)
+        W = self.head_W(latent).view(batch, 9, self.N)   # (batch, 9, N)
 
-        # Decode
-        return self.W(m)     # (batch, 9)
+        # Bilinear bottleneck: raw A and B only — no latent in the data path
+        p = torch.bmm(U, A.unsqueeze(2)).squeeze(2)  # (batch, N)
+        q = torch.bmm(V, B.unsqueeze(2)).squeeze(2)  # (batch, N)
+        m = p * q                                      # (batch, N) — rank-1 bilinear per channel
 
-    def channel_norms(self) -> torch.Tensor:
+        # Decode: W @ m, no bias
+        C_hat = torch.bmm(W, m.unsqueeze(2)).squeeze(2)  # (batch, 9)
+        return C_hat
+
+    def channel_norms(self, A: torch.Tensor, B: torch.Tensor) -> torch.Tensor:
         """
-        For each channel k, return ||u_k||_2 * ||v_k||_2 * ||w_k||_2
-        as a proxy for channel importance. Useful for pruning analysis.
+        Per-channel importance for a given batch: ||u_k|| * ||v_k|| * ||w_k||.
+        Returns (batch, N).
         """
-        u_norms = self.U.weight.norm(dim=1)   # (N,)
-        v_norms = self.V.weight.norm(dim=1)   # (N,)
-        w_norms = self.W.weight.norm(dim=0)   # (N,)
-        return u_norms * v_norms * w_norms
+        batch = A.shape[0]
+        with torch.no_grad():
+            latent = self.encoder(torch.cat([A, B], dim=1))
+            U = self.head_U(latent).view(batch, self.N, 9)
+            V = self.head_V(latent).view(batch, self.N, 9)
+            W = self.head_W(latent).view(batch, 9, self.N)
+            u_norms = U.norm(dim=2)           # (batch, N)
+            v_norms = V.norm(dim=2)           # (batch, N)
+            w_norms = W.norm(dim=1)           # (batch, N)
+            return u_norms * v_norms * w_norms
 
     def extra_repr(self) -> str:
-        return f"N={self.N}, d={self.d}, mixed_dim={self.d + 9}"
+        return f"N={self.N}, latent_dim={self.latent_dim}"

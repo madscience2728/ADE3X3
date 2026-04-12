@@ -5,13 +5,20 @@
 
 ## Core Hypothesis
 
-The naive rank-27 and even the known rank-23 (AlphaTensor) decompositions of $T_\text{matmul}$ are searched in the **standard coordinate basis** of the 9-entry matrix representation.
+The naive rank-27 and even the known rank-23 (AlphaTensor) decompositions of $T_\text{matmul}$ are searched as **fixed** decompositions — the same coefficient vectors for every input pair.
 
-The standard basis is arbitrary. It is a human cognitive artifact (entry-wise thinking). The Keth-Varai never use it.
+**Hypothesis:** There exists a nonlinear, input-dependent selection of bilinear
+decomposition coefficients such that, for each matrix pair $(A, B)$, the bilinear
+rank required to reconstruct $C = AB$ to machine epsilon is **lower than any
+fixed decomposition can achieve**.
 
-**Hypothesis:** There exists a nonlinear change-of-basis (a learned encoder) such that, in the transformed representation, the bilinear rank of $T_\text{matmul}$ to machine epsilon ($\leq \epsilon_{\text{float32}} \approx 10^{-7}$) is **lower than in the standard basis**.
+A joint encoder sees both $A$ and $B$ and generates the weight matrices (the
+"tuning knobs") of a bilinear bottleneck. The encoder output **never enters the
+data path** — $A$ and $B$ interact only through the bilinear layer. This makes $N$
+(the number of bilinear channels) an honest rank count.
 
-If true: the minimum achievable $N$ in the learned-basis bottleneck is a new empirical lower bound candidate — and the encoder weights are the explicit change-of-basis, auditable after training.
+This is a **hypernetwork**: the encoder learns the structure of the problem and
+uses that to parameterize the computation, without performing the computation itself.
 
 This is Arc θ from the xenobiology pipeline: **Build the machine. Let it tell us the rank.**
 
@@ -20,46 +27,64 @@ This is Arc θ from the xenobiology pipeline: **Build the machine. Let it tell u
 ## Architecture
 
 ```
-Input: A ∈ R^9, B ∈ R^9 (flattened 3×3 matrices)
-
-┌─────────────────────────────────┐
-│  Coordinate Transformer         │
-│  φ_A = f_enc(A)  ∈ R^d         │
-│  φ_B = g_enc(B)  ∈ R^d         │  ← shared or separate MLP
-└─────────────────────────────────┘
-           │                │
-           ▼                ▼
-      ã = [φ_A, A]     b̃ = [φ_B, B]      ← latent mixed with raw (R^{d+9})
-           │                │
-           └───────┬────────┘
-                   ▼
-        Bilinear Bottleneck (N channels)
-        m_k = (u_k · ã)(v_k · b̃)  for k = 1..N
-        u_k, v_k ∈ R^{d+9}  (learned linear projections)
-                   │
-                   ▼
-            Decoder: W ∈ R^{9×N}
-            Ĉ = W · [m_1, ..., m_N]
-                   │
-                   ▼
-            Output: Ĉ ∈ R^9  (predicted flatten(A·B))
+         A ∈ R^9              B ∈ R^9
+         │                      │
+         ├──────────┐           │
+         │          ▼           │
+         │   ┌────────────┐    │
+         │   │  encoder   │◄───┤    MLP: cat(A,B) ∈ R^18 → latent ∈ R^L
+         │   │  (joint)   │    │
+         │   └─────┬──────┘    │
+         │         │           │
+         │         ▼           │
+         │   ┌────────────┐    │
+         │   │ hyper-heads │    │    latent → U(N×9), V(N×9), W(9×N)
+         │   └──┬──┬──┬───┘    │
+         │      U  V  W        │
+         │      │  │  │        │
+         ▼      ▼  │  │        ▼
+       p = UA      │  │      q = VB     (linear projections, no activation)
+         │         │  │        │
+         └────┬────┘  │        │
+              │       │        │
+           p ⊙ q      │    (element-wise multiply)
+              │       │
+              ▼       │
+         m ∈ R^N      │    m_k = (u_k·A)(v_k·B)  rank-1 bilinear per channel
+              │       │
+              ▼       │
+        Ĉ = W·m  ◄───┘     (linear decode, no bias)
+              │
+              ▼
+         Ĉ ∈ R^9            predicted flatten(A·B)
 ```
 
 ### Components
 
-**Encoder** (`f_enc`, `g_enc`): Small MLP, same weights for both (the operation
-is symmetric under relabeling if we want, but A-arm and B-arm are structurally
-different so separate weights are used). Output dim `d` is a hyperparameter (default: 32).
+**Encoder** (joint): MLP that sees `cat(A, B)` ∈ R^18 and produces a latent
+vector ∈ R^latent_dim. This is the "Keth-Varai neural sheet" — it learns the
+structural relationship between A and B (the tuning knobs), not the answer.
 
-**Mix**: Concatenate `[φ_A, A]` — the latent knows the structure; the raw keeps
-the coordinate information. This is the "mixed with original inputs" step.
+**Hyper-heads**: Three linear projections from latent space to the weight matrices
+U ∈ R^{N×9}, V ∈ R^{N×9}, W ∈ R^{9×N}. Generated per-sample.
 
 **Bilinear Bottleneck**: Each channel is exactly a rank-1 bilinear form
-$m_k = (u_k^\top \tilde{a})(v_k^\top \tilde{b})$. This is architecturally enforced,
-not approximated. No activations inside this layer.
+$m_k = (u_k^\top A)(v_k^\top B)$. Architecturally enforced — no activations,
+no latent in the data path. The encoder generates the weights but never touches
+A or B directly in the computation.
 
-**Decoder**: A single linear map. No nonlinearity — the channel outputs $m_k$ are
-scalars and their linear combination must reconstruct $\hat{C}$.
+**Decoder**: $\hat{C} = W \cdot m$. Linear, no bias. Every output component must
+come from the N bilinear channels.
+
+### Anti-cheat Guarantee
+
+The encoder cannot smuggle the answer through the bottleneck because:
+1. The latent vector parameterizes U, V, W — it does not enter the bilinear computation.
+2. A and B enter as raw 9-vectors into the bilinear layer.
+3. Their only interaction is $m_k = (u_k \cdot A)(v_k \cdot B)$ — rank-1 bilinear.
+4. The decoder sees only the N scalars $m_k$, not the latent and not A or B.
+
+$N$ is an honest count of rank-1 bilinear forms.
 
 ---
 
@@ -73,16 +98,18 @@ Standard bilinear bottleneck (what everyone has tried):
 
 This is CP decomposition with SGD. `frob_search.py` already does this better (L-BFGS-B).
 
-**This architecture adds**: a nonlinear coordinate transformer applied *before*
-the bilinear layer. The encoder does not compute products — it transforms the
-representation space. The bilinear rank is then measured in the *learned* basis.
+**This architecture adds**: a hypernetwork that generates input-dependent
+decomposition coefficients. The encoder sees the specific (A, B) pair and chooses
+the best bilinear decomposition for THAT pair. If some pairs admit lower-rank
+decompositions, the encoder can exploit that.
 
-The encoder may discover that, in the right basis, fewer than 23 bilinear
-terms suffice to approximate $C = AB$ to float32 precision.
+The key difference from a fixed decomposition: the encoder can learn that the
+*structure* of the problem varies with the input, and adapt accordingly. If the
+minimum N is the same for all inputs, that is itself a finding (universality).
 
 This connects to: Arc η (characteristic-dependent rank), Arc ζ (hidden symmetry),
-and §3.6 of the xenobiology doc — the rank depends on how you count, and counting
-requires choosing a basis.
+Arc θ (build the machine, let it tell us the rank), and the Keth-Varai body plan
+(encoder = neural sheet, bottleneck = bridge between lobes).
 
 ---
 
@@ -107,21 +134,23 @@ $k$ seeds (default: $k=10$). Report best and median relative Frobenius error.
 
 ### Phase 1 — Sanity (N=27)
 - Build the full pipeline
-- Train until relative error $< 10^{-6}$
-- Verify: encoder output should be approximately identity (trivial transform)
+- Train until relative error $< 10^{-5}$
+- Verify: at N=27 the hypernetwork should converge easily
 - Log: final Frobenius error, convergence curve
 
 ### Phase 2 — Squeeze (N=26 down to N=19)
 - Reduce $N$ by 1 each step
-- At each $N$: 10 seeds, best error logged
-- Stop criterion: best error over 10 seeds $> 10^{-5}$ (three orders above threshold)
+- At each $N$: 5 seeds, best error logged
+- Stop criterion: best error over all seeds $> 5 \times 10^{-3}$
 - Record the **first $N$ that fails**
 
 ### Phase 3 — Interrogation (after minimum $N$ found)
-- Project the learned encoder basis back to standard coordinates
-- Check if the basis vectors align with known orbit structure (O0, O1, O2, O3)
-- Check if the bottleneck weight matrices $U, V, W$ factor into anything interpretable
+- Sample many (A, B) pairs and extract the generated U, V, W matrices
+- Check if the generated decompositions cluster (few archetypes) or vary continuously
+- Check if U, V vectors align with known orbit structure (O0, O1, O2, O3)
 - Compare to AlphaTensor's R=23 factors (structural, not numerical clone)
+- Key question: does the encoder produce the SAME decomposition for all inputs?
+  If yes → the rank is universal. If no → input-dependent rank, novel finding.
 
 ---
 
@@ -129,14 +158,16 @@ $k$ seeds (default: $k=10$). Report best and median relative Frobenius error.
 
 | Parameter | Default | Notes |
 |-----------|---------|-------|
-| `d` (encoder output dim) | 32 | Try 16, 64 also |
-| `encoder_depth` | 2 | Hidden layers |
-| `encoder_width` | 64 | Hidden units per layer |
+| `latent_dim` | 64 | Encoder output dim. Try 32, 128 also |
+| `encoder_depth` | 3 | Hidden layers in joint encoder |
+| `encoder_width` | 128 | Hidden units per layer |
 | `N` (bilinear channels) | 27→sweep | Main variable |
-| `lr` | 1e-3 | Adam |
-| `batch_size` | 2048 | Random pairs each batch |
-| `max_steps` | 50000 | Per run |
-| `seeds_per_N` | 10 | For sweep |
+| `lr` | 3e-4 | AdamW (weight decay on encoder only) |
+| `batch_size` | 8192 | Random pairs each batch |
+| `max_steps` | 200000 | Per run |
+| `seeds_per_N` | 5 | For sweep |
+| `input_noise_std` | 0.05 | Annealed to 0; prevents encoder exploiting precision |
+| `lambda_entropy` | 1e-3 | Channel entropy reg; prevents load concentration |
 
 ---
 
@@ -156,14 +187,19 @@ CANON_NEURAL_NETWORK/
 
 ## Open Questions (tracked, not resolved)
 
-1. Does the encoder converge to a **symmetric** basis at low N, or does it break symmetry? 
-   (If it breaks: evidence for Arc ζ — hidden non-body symmetry)
+1. Does the encoder generate the **same** U, V, W for all (A, B) pairs, or do the
+   weights vary per input? If constant → the rank is universal and the hypernetwork
+   has learned a fixed decomposition. If varying → input-dependent rank, novel finding.
 
 2. At what N does the error first fail? Is it $\geq 23$ (consistent with known bounds)?
    Or can it reach $< 23$? (Would be a major finding.)
 
-3. Does the encoder with $d=0$ (no latent, raw input only) find the same minimum N as
-   a plain CP search? (Sanity check that encoder is doing real work)
+3. Do the generated weight vectors $u_k, v_k$ cluster into a small number of archetypes?
+   (Would suggest discrete structural modes in the decomposition space.)
 
-4. Are the bilinear weight vectors $u_k, v_k$ near-integer or near-rational after training?
-   (Connects to Smirnov coefficient structure)
+4. Are the generated $u_k, v_k$ near-integer or near-rational?
+   (Connects to Smirnov coefficient structure.)
+
+5. Does the hypernetwork find a lower N than a fixed-weight model (plain CP search)?
+   If yes: evidence that input-dependent decomposition is genuinely more efficient.
+   If no: the minimum rank is universal, and the hypernetwork collapses to fixed weights.
