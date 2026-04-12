@@ -69,8 +69,8 @@ def train(
     worker_id: int = 0,        # for parallel runs: prefix log lines
     use_wandb: bool = False,
     wandb_project: str = "keth-varai",
-    lambda_entropy: float = 1e-3,  # channel entropy regularization weight
-    input_noise_std: float = 0.05,  # Gaussian noise on A,B inputs during training
+    lambda_entropy: float = 0.0,   # channel entropy reg (disabled: fights true decomposition)
+    input_noise_std: float = 0.0,   # input noise (disabled: conflicts with constant-output goal)
     checkpoint_dir: str = "checkpoints",  # directory for checkpoint files
 ) -> dict:
     if device_str == "auto":
@@ -160,21 +160,27 @@ def train(
         A, B, C = sample_batch(batch_size, device)
 
         with torch.amp.autocast(device_type=device.type, enabled=use_amp):
-            # Input noise: annealed from input_noise_std → 0 over training
-            # Prevents encoder from locking into a stable-but-wrong basis early
-            noise_scale = input_noise_std * max(0.0, 1.0 - step / max_steps)
-            A_noisy = A + noise_scale * torch.randn_like(A)
-            B_noisy = B + noise_scale * torch.randn_like(B)
-            C_hat = model(A_noisy, B_noisy)
-            # Relative Frobenius loss: mean_i(||C_hat_i - C_i||_F / ||C_i||_F)
-            # Matches eval metric; prevents bias toward high-magnitude pairs
+            # Optional input noise (annealed). Off by default — hurts convergence
+            # when the ideal output is input-independent.
+            if input_noise_std > 0:
+                noise_scale = input_noise_std * max(0.0, 1.0 - step / max_steps)
+                A_in = A + noise_scale * torch.randn_like(A)
+                B_in = B + noise_scale * torch.randn_like(B)
+            else:
+                A_in, B_in = A, B
+
+            C_hat = model(A_in, B_in)
             rec_loss = frobenius_relative_error(C_hat.float(), C.float())
-            # Channel entropy regularization: penalize load concentration
-            # -H = sum(p * log(p)), we SUBTRACT it to MAXIMIZE entropy (add to loss)
-            act = model.channel_norms(A_noisy, B_noisy).mean(dim=0).clamp(min=1e-12)
-            p_act = act / act.sum()
-            neg_entropy = (p_act * p_act.log()).sum()  # negative entropy (minimizing this = maximizing entropy)
-            loss = rec_loss + lambda_entropy * neg_entropy
+
+            # Optional entropy reg. Off by default — penalizes non-uniform
+            # channel norms, which fights the true decomposition.
+            if lambda_entropy > 0:
+                act = model.channel_norms(A_in, B_in).mean(dim=0).clamp(min=1e-12)
+                p_act = act / act.sum()
+                neg_entropy = (p_act * p_act.log()).sum()
+                loss = rec_loss + lambda_entropy * neg_entropy
+            else:
+                loss = rec_loss
 
         optimizer.zero_grad(set_to_none=True)
         scaler.scale(loss).backward()
@@ -217,7 +223,7 @@ def train(
                     "loss/rel_err": rel_err,
                     "loss/bits": bits,
                     "loss/best_rel_err": best_rel_err,
-                    "loss/noise_scale": input_noise_std * max(0.0, 1.0 - step / max_steps),
+                    "loss/noise_scale": input_noise_std * max(0.0, 1.0 - step / max_steps) if input_noise_std > 0 else 0.0,
                     "train/lr": current_lr,
                 }
 
@@ -253,6 +259,18 @@ def train(
                     metrics["encoder/latent_mean"] = latent.mean().item()
                     metrics["encoder/latent_std"] = latent.std().item()
                     metrics["encoder/latent_dead_frac"] = (latent.abs() < 1e-4).float().mean().item()
+
+                    # Collapse diagnostic: if the encoder has learned, U/V/W
+                    # should be ~constant across the batch (std ≈ 0).
+                    # collapse_ratio = std(U across batch) / mean(|U|)
+                    # Near 0 → encoder outputs constant weights (good).
+                    # Near 1 → encoder is thrashing (bad).
+                    U_batch = model.head_U(latent).view(-1, model.N, 9)
+                    V_batch = model.head_V(latent).view(-1, model.N, 9)
+                    W_batch = model.head_W(latent).view(-1, 9, model.N)
+                    metrics["collapse/U_ratio"] = (U_batch.std(dim=0).mean() / U_batch.abs().mean().clamp(min=1e-12)).item()
+                    metrics["collapse/V_ratio"] = (V_batch.std(dim=0).mean() / V_batch.abs().mean().clamp(min=1e-12)).item()
+                    metrics["collapse/W_ratio"] = (W_batch.std(dim=0).mean() / W_batch.abs().mean().clamp(min=1e-12)).item()
 
                 wb_run.log(metrics, step=step)
 

@@ -19,6 +19,8 @@ import time
 import torch
 import torch.nn as nn
 
+from data import frobenius_relative_error
+
 
 class DirectDecomp(nn.Module):
     """Fixed U, V, W — no encoder, no input-dependence."""
@@ -48,7 +50,8 @@ def sample_batch(batch_size, device):
 
 
 def relative_error(C_hat, C):
-    return (C_hat - C).norm() / C.norm()
+    """Per-sample mean relative Frobenius error (matches full model metric)."""
+    return frobenius_relative_error(C_hat, C)
 
 
 def main():
