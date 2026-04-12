@@ -44,11 +44,11 @@ def functional_distance(model_a: KethVaraiMachine, model_b: KethVaraiMachine,
     Returns a scalar distance (mean L2 over batch).
     """
     with torch.no_grad():
-        lat_b = model_b.encoder(torch.cat([A, B], dim=1))
+        lat_b = model_b._encode(torch.cat([A, B], dim=1))
         U_b = model_b.head_U(lat_b).view(-1, model_b.N, 9)
         V_b = model_b.head_V(lat_b).view(-1, model_b.N, 9)
 
-    lat_a = model_a.encoder(torch.cat([A, B], dim=1))
+    lat_a = model_a._encode(torch.cat([A, B], dim=1))
     U_a = model_a.head_U(lat_a).view(-1, model_a.N, 9)
     V_a = model_a.head_V(lat_a).view(-1, model_a.N, 9)
 

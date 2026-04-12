@@ -252,9 +252,9 @@ def run_workload(workload):
                 result = train(
                     N=N,
                     seed=s,
-                    d=64,
-                    encoder_depth=3,
-                    encoder_width=128,
+                    d=256,
+                    encoder_depth=16,
+                    encoder_width=576,
                     lr=3e-4,
                     batch_size=batch_size,
                     max_steps=steps,

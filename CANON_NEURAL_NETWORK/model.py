@@ -30,6 +30,48 @@ import torch
 import torch.nn as nn
 
 
+class ResBlock(nn.Module):
+    """Pre-norm residual block: LayerNorm → Linear → GELU → Dropout → Linear → Add."""
+
+    def __init__(self, width: int, dropout: float = 0.1):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.LayerNorm(width),
+            nn.Linear(width, width),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(width, width),
+            nn.Dropout(dropout),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return x + self.net(x)
+
+
+class AttnBlock(nn.Module):
+    """Pre-norm self-attention residual block over 9 matrix-position tokens."""
+
+    def __init__(self, d_model: int, n_heads: int = 4, dropout: float = 0.1):
+        super().__init__()
+        self.n_tokens = 9
+        self.d_token = d_model // self.n_tokens
+        assert d_model % self.n_tokens == 0, f"encoder_width must be divisible by 9, got {d_model}"
+        self.norm = nn.LayerNorm(self.d_token)
+        self.attn = nn.MultiheadAttention(
+            self.d_token, n_heads, dropout=dropout, batch_first=True
+        )
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # x: (batch, d_model) → (batch, 9, d_token)
+        batch = x.shape[0]
+        tokens = x.view(batch, self.n_tokens, self.d_token)
+        normed = self.norm(tokens)
+        attn_out, _ = self.attn(normed, normed, normed)
+        tokens = tokens + self.dropout(attn_out)
+        return tokens.view(batch, -1)  # back to (batch, d_model)
+
+
 class KethVaraiMachine(nn.Module):
     """
     Hypernetwork: encoder(A, B) → tuning knobs (U, V, W),
@@ -43,21 +85,34 @@ class KethVaraiMachine(nn.Module):
     def __init__(
         self,
         N: int,
-        latent_dim: int = 64,
-        encoder_depth: int = 3,
-        encoder_width: int = 128,
+        latent_dim: int = 256,
+        encoder_depth: int = 16,
+        encoder_width: int = 576,
         dropout: float = 0.1,
     ):
         super().__init__()
         self.N = N
         self.latent_dim = latent_dim
 
-        # Joint encoder: sees both A and B, produces latent tuning knobs
-        layers: list[nn.Module] = [nn.Linear(18, encoder_width), nn.GELU()]
-        for _ in range(encoder_depth - 1):
-            layers += [nn.Linear(encoder_width, encoder_width), nn.GELU(), nn.Dropout(dropout)]
-        layers.append(nn.Linear(encoder_width, latent_dim))
-        self.encoder = nn.Sequential(*layers)
+        # Joint encoder: input projection + residual blocks + output projection
+        self.encoder = nn.Sequential(
+            nn.Linear(18, encoder_width),
+            nn.GELU(),
+        )
+
+        # Interleaved ResBlocks + attention: attention every 4th block
+        blocks = []
+        for i in range(encoder_depth):
+            blocks.append(ResBlock(encoder_width, dropout))
+            if (i + 1) % 4 == 0:
+                blocks.append(AttnBlock(encoder_width, n_heads=4, dropout=dropout))
+
+        self.encoder_blocks = nn.Sequential(*blocks)
+
+        self.encoder_head = nn.Sequential(
+            nn.LayerNorm(encoder_width),
+            nn.Linear(encoder_width, latent_dim),
+        )
 
         # Hyper-heads: latent → weight matrices for the bilinear layer
         # U ∈ R^{N×9}: projects A into N channels
@@ -68,6 +123,12 @@ class KethVaraiMachine(nn.Module):
         self.head_W = nn.Linear(latent_dim, 9 * N)
 
         self._init_weights()
+
+    def _encode(self, x: torch.Tensor) -> torch.Tensor:
+        """Input projection → residual blocks → output projection."""
+        h = self.encoder(x)
+        h = self.encoder_blocks(h)
+        return self.encoder_head(h)
 
     def _init_weights(self):
         # Small init on hyper-heads so initial U, V, W are small
@@ -83,7 +144,7 @@ class KethVaraiMachine(nn.Module):
         batch = A.shape[0]
 
         # Encoder: learn the tuning knobs for this (A, B) pair
-        latent = self.encoder(torch.cat([A, B], dim=1))  # (batch, latent_dim)
+        latent = self._encode(torch.cat([A, B], dim=1))  # (batch, latent_dim)
 
         # Generate weight matrices (per-sample)
         U = self.head_U(latent).view(batch, self.N, 9)   # (batch, N, 9)
@@ -106,7 +167,7 @@ class KethVaraiMachine(nn.Module):
         """
         batch = A.shape[0]
         with torch.no_grad():
-            latent = self.encoder(torch.cat([A, B], dim=1))
+            latent = self._encode(torch.cat([A, B], dim=1))
             U = self.head_U(latent).view(batch, self.N, 9)
             V = self.head_V(latent).view(batch, self.N, 9)
             W = self.head_W(latent).view(batch, 9, self.N)

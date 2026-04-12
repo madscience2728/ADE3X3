@@ -58,9 +58,9 @@ def _save_checkpoint(path, model, optimizer, scheduler, scaler,
 def train(
     N: int,
     seed: int,
-    d: int = 64,
-    encoder_depth: int = 3,
-    encoder_width: int = 128,
+    d: int = 256,
+    encoder_depth: int = 16,
+    encoder_width: int = 576,
     lr: float = 3e-4,
     batch_size: int = 8192,
     max_steps: int = 200_000,
@@ -106,7 +106,9 @@ def train(
             print(f"  {tag}  [wandb] init failed ({e.__class__.__name__}): {e} — continuing without wandb")
 
     # Optimizer: AdamW with weight decay on encoder, bare Adam on hyper-heads
-    enc_params = list(model.encoder.parameters())
+    enc_params = (list(model.encoder.parameters())
+                  + list(model.encoder_blocks.parameters())
+                  + list(model.encoder_head.parameters()))
     head_params = list(model.head_U.parameters()) + list(model.head_V.parameters()) + list(model.head_W.parameters())
     optimizer = torch.optim.AdamW([
         {"params": enc_params,  "lr": lr, "weight_decay": 1e-4},
@@ -222,7 +224,7 @@ def train(
                 # Grad norms per parameter group
                 enc_grad = sum(
                     p.grad.norm().item() ** 2
-                    for p in model.encoder.parameters()
+                    for p in enc_params
                     if p.grad is not None
                 ) ** 0.5
                 bilin_grad = sum(
@@ -247,7 +249,7 @@ def train(
 
                     # Encoder latent statistics
                     with torch.amp.autocast(device_type=device.type, enabled=use_amp):
-                        latent = model.encoder(torch.cat([Av, Bv], dim=1))
+                        latent = model._encode(torch.cat([Av, Bv], dim=1))
                     metrics["encoder/latent_mean"] = latent.mean().item()
                     metrics["encoder/latent_std"] = latent.std().item()
                     metrics["encoder/latent_dead_frac"] = (latent.abs() < 1e-4).float().mean().item()
@@ -296,9 +298,9 @@ def main():
     parser = argparse.ArgumentParser(description="Train Keth-Varai Machine")
     parser.add_argument("--N", type=int, default=27)
     parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--d", type=int, default=64)
-    parser.add_argument("--encoder_depth", type=int, default=3)
-    parser.add_argument("--encoder_width", type=int, default=128)
+    parser.add_argument("--d", type=int, default=256)
+    parser.add_argument("--encoder_depth", type=int, default=16)
+    parser.add_argument("--encoder_width", type=int, default=576)
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--batch_size", type=int, default=8192)
     parser.add_argument("--steps", type=int, default=200_000)
