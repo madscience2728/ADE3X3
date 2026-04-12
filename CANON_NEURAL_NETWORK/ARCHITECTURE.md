@@ -171,17 +171,54 @@ $k$ seeds (default: $k=10$). Report best and median relative Frobenius error.
 
 ---
 
-## Files to Build
+## Files
 
 ```
 CANON_NEURAL_NETWORK/
     ARCHITECTURE.md         ← this file
-    model.py                ← BilinearBottleneck and KethVaraiMachine classes
-    train.py                ← single run, configurable N and seed
+    model.py                ← KethVaraiMachine hypernetwork
+    train.py                ← single run, configurable N and seed, checkpointing
+    explorer.py             ← CPU explorer: repelled from GPU model, finds alt basins
     sweep.py                ← loop N from 27 down, multi-seed, log results
     data.py                 ← matrix pair generator
-    results/                ← training logs, sweep table
+    checkpoints/            ← resumable training state (.pt files)
+    discoveries/            ← alternative decompositions found by explorer
+    results/                ← completed run logs, sweep table
 ```
+
+---
+
+## Dual-Network Strategy: Exploit + Explore
+
+The system runs two copies of the hypernetwork simultaneously:
+
+**GPU (Exploit)**: Standard training loop. Minimizes reconstruction error.
+Finds the nearest good decomposition via gradient descent. This is `train.py`.
+
+**CPU (Explore)**: Same architecture, different objective. Minimizes
+reconstruction error MINUS a repulsion term that pushes it away from
+the GPU model's current solution. This is `explorer.py`.
+
+```
+GPU loss = reconstruction_error
+CPU loss = reconstruction_error - λ * distance_from_gpu
+```
+
+The explorer periodically loads the GPU model's latest checkpoint and
+measures functional distance: for the same (A, B) batch, how different
+are the generated U, V weight vectors? Closer = stronger repulsion.
+
+When the explorer finds a solution that is both accurate (rel_err < threshold)
+and distant from the GPU model (distance > 0.5), it saves a **discovery** —
+an alternative decomposition that the GPU's basin couldn't find.
+
+The CPU is slow but doesn't need speed. It's searching, not optimizing.
+The slower pace actually helps exploration (less likely to collapse).
+
+**Key questions this answers:**
+- Are there multiple valid decomposition basins at a given N?
+- Do different basins have different structural properties?
+- Can the GPU warm-start from a discovery to escape plateaus?
 
 ---
 

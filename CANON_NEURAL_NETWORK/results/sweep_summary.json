@@ -1,9 +1,9 @@
 [
   {
     "N": 27,
-    "best_err": 999.0,
-    "median_err": 999.0,
+    "best_err": 0.0010533381719142199,
+    "median_err": 0.0010533381719142199,
     "successes": 0,
-    "total_seeds": 5
+    "total_seeds": 1
   }
 ]

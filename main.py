@@ -12,6 +12,8 @@ import json
 import time
 import math
 import glob
+import subprocess
+import signal
 
 # Keep BLAS single-threaded — parallelism is at the process level
 for _v in ('OMP_NUM_THREADS', 'MKL_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'BLAS_NUM_THREADS'):
@@ -46,37 +48,46 @@ WORKLOADS = {
     },
     "2": {
         "name": "Smoke Test",
-        "desc": "N=27→23, 2 seeds each, 20k steps. Quick viability check.",
-        "N_range": (27, 23),
-        "seeds": 2,
+        "desc": "N=27→9, 1 seed each, 20k steps. Quick viability check.",
+        "N_range": (27, 9),
+        "seeds": 1,
         "steps": 20_000,
         "batch_size": 8192,
         "log_every": 500,
     },
     "3": {
         "name": "10-Minute Run",
-        "desc": "N=27→21, 3 seeds each, 50k steps.",
-        "N_range": (27, 21),
-        "seeds": 3,
+        "desc": "N=27→9, 1 seed each, 50k steps.",
+        "N_range": (27, 9),
+        "seeds": 1,
         "steps": 50_000,
         "batch_size": 8192,
         "log_every": 1000,
     },
     "4": {
         "name": "1-Hour Run",
-        "desc": "N=27→19, 5 seeds each, 200k steps.",
-        "N_range": (27, 19),
-        "seeds": 5,
+        "desc": "N=27→9, 1 seed each, 200k steps.",
+        "N_range": (27, 9),
+        "seeds": 1,
         "steps": 200_000,
         "batch_size": 8192,
         "log_every": 2000,
     },
     "5": {
         "name": "Overnight (Unlimited)",
-        "desc": "N=27→15, 10 seeds each, 500k steps. Full sweep.",
-        "N_range": (27, 15),
-        "seeds": 10,
+        "desc": "N=19→9, 1 seed each, 500k steps. Full sweep.",
+        "N_range": (19, 9),
+        "seeds": 1,
         "steps": 500_000,
+        "batch_size": 8192,
+        "log_every": 5000,
+    },
+    "6": {
+        "name": "Overday (Unlimited)",
+        "desc": "N=19→9, 4 seeds each, 50k steps.",
+        "N_range": (19, 9),
+        "seeds": 4,
+        "steps": 50_000,
         "batch_size": 8192,
         "log_every": 5000,
     },
@@ -84,6 +95,8 @@ WORKLOADS = {
 
 RESULTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "CANON_NEURAL_NETWORK", "results")
 CHECKPOINT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "CANON_NEURAL_NETWORK", "checkpoints")
+DISCOVERY_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "CANON_NEURAL_NETWORK", "discoveries")
+EXPLORER_SCRIPT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "CANON_NEURAL_NETWORK", "explorer.py")
 ABORT_THRESHOLD = 5e-3
 
 
@@ -163,8 +176,15 @@ def show_menu():
         print(f"    [{key}]  {wl['name']}")
         print(f"         {wl['desc']}")
         print(f"         N={start_N}→{end_N}, {wl['seeds']} seeds, {wl['steps']//1000}k steps\n")
+    print(f"    [e]  Launch CPU explorer (standalone)")
     print(f"    [c]  Clear checkpoints & results")
     print(f"    [q]  Quit\n")
+
+    # Show discoveries
+    if os.path.isdir(DISCOVERY_DIR):
+        discs = glob.glob(os.path.join(DISCOVERY_DIR, "discovery_*.pt"))
+        if discs:
+            print(f"  ★ {len(discs)} discoveries in {DISCOVERY_DIR}")
 
 
 def show_sweep_summary(summary):
@@ -296,16 +316,102 @@ def run_workload(workload):
 
 
 def clear_data():
-    confirm = input("  Delete all checkpoints and results? [y/N] ").strip().lower()
+    confirm = input("  Delete all checkpoints, results, and discoveries? [y/N] ").strip().lower()
     if confirm != 'y':
         print("  Cancelled.")
         return
     import shutil
-    for d in [CHECKPOINT_DIR, RESULTS_DIR]:
+    for d in [CHECKPOINT_DIR, RESULTS_DIR, DISCOVERY_DIR]:
         if os.path.isdir(d):
             shutil.rmtree(d)
             print(f"  Deleted {d}")
     print("  Done.\n")
+
+
+# ═══════════════════════════════════════════════════════════════
+# CPU EXPLORER
+# ═══════════════════════════════════════════════════════════════
+
+def launch_explorer(N: int):
+    """Launch the CPU explorer fleet as a background subprocess for a given N."""
+    cmd = [
+        sys.executable, EXPLORER_SCRIPT,
+        "--N", str(N),
+        "--workers", "0",  # auto-detect: cpu_count // 2
+        "--gpu_checkpoint_dir", CHECKPOINT_DIR,
+        "--discovery_dir", DISCOVERY_DIR,
+        "--checkpoint_dir", CHECKPOINT_DIR,
+    ]
+    proc = subprocess.Popen(
+        cmd,
+        cwd=os.path.dirname(EXPLORER_SCRIPT),
+        stdout=None,  # shares parent stdout
+        stderr=None,
+    )
+    return proc
+
+
+def run_workload_with_explorer(workload):
+    """Run GPU sweep + CPU explorer in parallel."""
+    start_N, end_N = workload["N_range"]
+
+    # Ask which N to explore (default: the lowest in the range — that's the hard one)
+    print(f"\n  Explorer will search for alternative basins on CPU.")
+    explore_N = end_N
+    try:
+        raw = input(f"  Explore N [{end_N}]: ").strip()
+        if raw:
+            explore_N = max(9, int(raw))
+    except (ValueError, EOFError):
+        pass
+
+    print(f"  Launching CPU explorer for N={explore_N}...")
+    explorer_proc = launch_explorer(explore_N)
+    print(f"  Explorer PID={explorer_proc.pid}")
+
+    try:
+        result = run_workload(workload)
+    finally:
+        # Don't kill explorer — let it keep running after sweep finishes
+        if explorer_proc.poll() is None:
+            print(f"\n  CPU explorer still running (PID={explorer_proc.pid}).")
+            print(f"  It will keep exploring in the background.")
+            print(f"  Discoveries → {DISCOVERY_DIR}")
+
+    return result
+
+
+def run_explorer_standalone():
+    """Launch the CPU explorer as a standalone process."""
+    try:
+        raw = input("  Explore N [23]: ").strip()
+        explore_N = max(9, int(raw)) if raw else 23
+    except (ValueError, EOFError):
+        explore_N = 23
+
+    print(f"  Launching CPU explorer for N={explore_N}...")
+    explorer_proc = launch_explorer(explore_N)
+    print(f"  Explorer PID={explorer_proc.pid}")
+    print(f"  Running in foreground. Ctrl+C to stop (checkpoint saved).\n")
+
+    try:
+        explorer_proc.wait()
+    except KeyboardInterrupt:
+        print(f"\n  Stopping explorer...")
+        explorer_proc.terminate()
+        try:
+            explorer_proc.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            explorer_proc.kill()
+
+    # Report discoveries
+    if os.path.isdir(DISCOVERY_DIR):
+        discs = glob.glob(os.path.join(DISCOVERY_DIR, f"discovery_N{explore_N}_*.pt"))
+        if discs:
+            print(f"\n  ★ Found {len(discs)} discoveries for N={explore_N}")
+            for d in discs:
+                ckpt = torch.load(d, map_location="cpu", weights_only=False)
+                print(f"    {os.path.basename(d)}: err={ckpt['rel_err']:.3e} dist={ckpt['distance']:.3f}")
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -323,12 +429,28 @@ def main():
         elif choice == 'c':
             clear_data()
             continue
+        elif choice == 'e':
+            run_explorer_standalone()
+            input("  Press Enter to return to menu...")
+            continue
 
         if choice not in WORKLOADS:
             print(f"  Invalid choice: {choice!r}")
             continue
 
-        run_workload(WORKLOADS[choice])
+        # Ask about explorer
+        use_explorer = False
+        if torch.cuda.is_available():
+            try:
+                ex = input("  Launch CPU explorer in parallel? [y/N] ").strip().lower()
+                use_explorer = ex == 'y'
+            except EOFError:
+                pass
+
+        if use_explorer:
+            run_workload_with_explorer(WORKLOADS[choice])
+        else:
+            run_workload(WORKLOADS[choice])
         input("  Press Enter to return to menu...")
 
 
