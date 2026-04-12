@@ -91,6 +91,15 @@ WORKLOADS = {
         "batch_size": 8192,
         "log_every": 5000,
     },
+    "7": {
+        "name": "Sanity 23 Check",
+        "desc": "N=23 only, 1 seed, 150k steps. Verify the pipeline runs.",
+        "N_range": (23, 23),
+        "seeds": 1,
+        "steps": 150_000,
+        "batch_size": 4096,
+        "log_every": 100,
+    },
 }
 
 RESULTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "CANON_NEURAL_NETWORK", "results")

@@ -62,3 +62,6 @@ htmlcov/
 wand.txt
 outputs/exports/step84_*
 scripts/CANON_DATABASE/data/*.npy
+CANON_OSCILLATOR/results/oscillator_N23_s0.pt
+CANON_OSCILLATOR/results/oscillator_N23_s0.json
+CANON_NEURAL_NETWORK/checkpoints/ckpt_N19_s0.pt
