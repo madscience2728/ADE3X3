@@ -51,7 +51,7 @@ class ResBlock(nn.Module):
 class AttnBlock(nn.Module):
     """Pre-norm self-attention residual block over 9 matrix-position tokens."""
 
-    def __init__(self, d_model: int, n_heads: int = 4, dropout: float = 0.1):
+    def __init__(self, d_model: int, n_heads: int = 4, dropout: float = 0.1):  # n_heads exposed via KethVaraiMachine
         super().__init__()
         self.n_tokens = 9
         self.d_token = d_model // self.n_tokens
@@ -89,6 +89,8 @@ class KethVaraiMachine(nn.Module):
         encoder_depth: int = 16,
         encoder_width: int = 576,
         dropout: float = 0.1,
+        n_heads: int = 4,
+        attn_every: int = 4,
     ):
         super().__init__()
         self.N = N
@@ -100,12 +102,12 @@ class KethVaraiMachine(nn.Module):
             nn.GELU(),
         )
 
-        # Interleaved ResBlocks + attention: attention every 4th block
+        # Interleaved ResBlocks + attention: 1 AttnBlock every `attn_every` ResBlocks
         blocks = []
         for i in range(encoder_depth):
             blocks.append(ResBlock(encoder_width, dropout))
-            if (i + 1) % 4 == 0:
-                blocks.append(AttnBlock(encoder_width, n_heads=4, dropout=dropout))
+            if attn_every > 0 and (i + 1) % attn_every == 0:
+                blocks.append(AttnBlock(encoder_width, n_heads=n_heads, dropout=dropout))
 
         self.encoder_blocks = nn.Sequential(*blocks)
 
@@ -118,9 +120,22 @@ class KethVaraiMachine(nn.Module):
         # U ∈ R^{N×9}: projects A into N channels
         # V ∈ R^{N×9}: projects B into N channels
         # W ∈ R^{9×N}: decodes N channel outputs to 9 output entries
-        self.head_U = nn.Linear(latent_dim, N * 9)
-        self.head_V = nn.Linear(latent_dim, N * 9)
-        self.head_W = nn.Linear(latent_dim, 9 * N)
+        head_hidden = latent_dim * 2
+        self.head_U = nn.Sequential(
+            nn.Linear(latent_dim, head_hidden),
+            nn.GELU(),
+            nn.Linear(head_hidden, N * 9),
+        )
+        self.head_V = nn.Sequential(
+            nn.Linear(latent_dim, head_hidden),
+            nn.GELU(),
+            nn.Linear(head_hidden, N * 9),
+        )
+        self.head_W = nn.Sequential(
+            nn.Linear(latent_dim, head_hidden),
+            nn.GELU(),
+            nn.Linear(head_hidden, 9 * N),
+        )
 
         self._init_weights()
 
@@ -131,10 +146,12 @@ class KethVaraiMachine(nn.Module):
         return self.encoder_head(h)
 
     def _init_weights(self):
-        # Small init on hyper-heads so initial U, V, W are small
+        # Small init on hyper-head output layers so initial U, V, W are small
         for head in [self.head_U, self.head_V, self.head_W]:
-            nn.init.normal_(head.weight, std=0.01)
-            nn.init.zeros_(head.bias)
+            # Last layer in each Sequential gets small init
+            last = head[-1]
+            nn.init.normal_(last.weight, std=0.01)
+            nn.init.zeros_(last.bias)
 
     def forward(self, A: torch.Tensor, B: torch.Tensor) -> torch.Tensor:
         """

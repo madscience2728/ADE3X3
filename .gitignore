@@ -65,3 +65,7 @@ scripts/CANON_DATABASE/data/*.npy
 CANON_OSCILLATOR/results/oscillator_N23_s0.pt
 CANON_OSCILLATOR/results/oscillator_N23_s0.json
 CANON_NEURAL_NETWORK/checkpoints/ckpt_N19_s0.pt
+CANON_NEURAL_NETWORK/results/benchmark_ckpts/full_N20_s0_full.pt
+/CANON_NEURAL_NETWORK/results/benchmark_ckpts
+/CANON_NEURAL_NETWORK/results/benchmark_ckpts
+/checkpoints

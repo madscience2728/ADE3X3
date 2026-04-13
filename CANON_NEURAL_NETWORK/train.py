@@ -32,8 +32,8 @@ except ImportError:
 from data import sample_batch, frobenius_relative_error
 from model import KethVaraiMachine
 
-SUCCESS_THRESHOLD = 1e-5  # relative Frobenius error target
-CHECKPOINT_EVERY = 5_000  # save checkpoint every N steps
+SUCCESS_THRESHOLD = 1e-8  # relative Frobenius error target
+CHECKPOINT_EVERY = 1_000  # save checkpoint every N steps
 
 
 def _default_device() -> str:
@@ -61,6 +61,8 @@ def train(
     d: int = 256,
     encoder_depth: int = 16,
     encoder_width: int = 576,
+    n_heads: int = 4,
+    attn_every: int = 4,
     lr: float = 3e-4,
     batch_size: int = 8192,
     max_steps: int = 200_000,
@@ -82,7 +84,8 @@ def train(
         torch.cuda.manual_seed_all(seed)
 
     model = KethVaraiMachine(
-        N=N, latent_dim=d, encoder_depth=encoder_depth, encoder_width=encoder_width
+        N=N, latent_dim=d, encoder_depth=encoder_depth, encoder_width=encoder_width,
+        n_heads=n_heads, attn_every=attn_every,
     ).to(device)
 
     total_params = sum(p.numel() for p in model.parameters())
@@ -98,7 +101,8 @@ def train(
                 name=f"N{N}_s{seed}",
                 group=f"N{N}",
                 config=dict(N=N, seed=seed, d=d, encoder_depth=encoder_depth,
-                            encoder_width=encoder_width, lr=lr, batch_size=batch_size,
+                            encoder_width=encoder_width, n_heads=n_heads, attn_every=attn_every,
+                            lr=lr, batch_size=batch_size,
                             max_steps=max_steps, device=device_str, params=total_params),
                 reinit="finish_previous",
             )
@@ -106,23 +110,32 @@ def train(
             print(f"  {tag}  [wandb] init failed ({e.__class__.__name__}): {e} — continuing without wandb")
 
     # Optimizer: AdamW with weight decay on encoder, bare Adam on hyper-heads
+    # Heads get 0.5× encoder LR — they're a meta-learning problem and need
+    # more stable convergence than the encoder.
     enc_params = (list(model.encoder.parameters())
                   + list(model.encoder_blocks.parameters())
                   + list(model.encoder_head.parameters()))
     head_params = list(model.head_U.parameters()) + list(model.head_V.parameters()) + list(model.head_W.parameters())
     optimizer = torch.optim.AdamW([
         {"params": enc_params,  "lr": lr, "weight_decay": 1e-4},
-        {"params": head_params, "lr": lr, "weight_decay": 0.0},
+        {"params": head_params, "lr": lr * 0.5, "weight_decay": 0.0},
     ])
 
-    # Warmup (2k steps) then cosine decay to 1e-6
-    warmup_steps = 2_000
+    # Schedule: linear warmup (5k steps) → cosine annealing with warm restarts.
+    # Restarts let the optimizer escape saddle points and local minima that cause
+    # the oscillation/plateau pattern seen around 8-9 bits.
+    warmup_steps = 5_000
+    restart_period = 50_000  # T_0 for CosineAnnealingWarmRestarts
+    eta_min_ratio = 1e-3     # min LR as fraction of peak
 
     def lr_lambda(step: int) -> float:
         if step < warmup_steps:
             return step / max(1, warmup_steps)
-        progress = (step - warmup_steps) / max(1, max_steps - warmup_steps)
-        return max(1e-3, 0.5 * (1.0 + math.cos(math.pi * progress)))
+        # Cosine annealing with warm restarts (T_mult=1)
+        t = step - warmup_steps
+        cycle_pos = t % restart_period
+        progress = cycle_pos / restart_period
+        return max(eta_min_ratio, 0.5 * (1.0 + math.cos(math.pi * progress)))
 
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
 
@@ -185,7 +198,9 @@ def train(
         optimizer.zero_grad(set_to_none=True)
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
-        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        # Per-group grad clipping: prevents encoder gradients from starving heads
+        torch.nn.utils.clip_grad_norm_(enc_params, 1.0)
+        torch.nn.utils.clip_grad_norm_(head_params, 1.0)
         scaler.step(optimizer)
         scaler.update()
         scheduler.step()
@@ -303,6 +318,8 @@ def train(
         "d": d,
         "encoder_depth": encoder_depth,
         "encoder_width": encoder_width,
+        "n_heads": n_heads,
+        "attn_every": attn_every,
         "device": device_str,
         "best_rel_err": best_rel_err,
         "success": success,
@@ -314,15 +331,19 @@ def train(
 
 def main():
     parser = argparse.ArgumentParser(description="Train Keth-Varai Machine")
-    parser.add_argument("--N", type=int, default=27)
-    parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--d", type=int, default=256)
-    parser.add_argument("--encoder_depth", type=int, default=16)
-    parser.add_argument("--encoder_width", type=int, default=576)
+    parser.add_argument("--N", type=int, default=19)
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--d", type=int, default=1024)
+    parser.add_argument("--encoder_depth", type=int, default=64)
+    parser.add_argument("--encoder_width", type=int, default=1152)
+    parser.add_argument("--n_heads", type=int, default=8,
+                        help="Attention heads per transformer block")
+    parser.add_argument("--attn_every", type=int, default=4,
+                        help="Insert 1 AttnBlock every N ResBlocks (0 = no attention)")
     parser.add_argument("--lr", type=float, default=3e-4)
-    parser.add_argument("--batch_size", type=int, default=8192)
-    parser.add_argument("--steps", type=int, default=200_000)
-    parser.add_argument("--log_every", type=int, default=500)
+    parser.add_argument("--batch_size", type=int, default=4096)
+    parser.add_argument("--steps", type=int, default=1_000_000)
+    parser.add_argument("--log_every", type=int, default=100)
     parser.add_argument("--device", type=str, default="auto")
     parser.add_argument("--out_dir", type=str, default="results")
     parser.add_argument("--checkpoint_dir", type=str, default="checkpoints")
@@ -342,6 +363,8 @@ def main():
         d=args.d,
         encoder_depth=args.encoder_depth,
         encoder_width=args.encoder_width,
+        n_heads=args.n_heads,
+        attn_every=args.attn_every,
         lr=args.lr,
         batch_size=args.batch_size,
         max_steps=args.steps,
