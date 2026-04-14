@@ -59,12 +59,13 @@ def train(
     N: int,
     seed: int,
     d: int = 256,
-    encoder_depth: int = 16,
-    encoder_width: int = 576,
+    encoder_depth: int = 8,
+    encoder_width: int = 972,
     n_heads: int = 4,
     attn_every: int = 4,
+    expanded_products: bool = True,
     lr: float = 3e-4,
-    batch_size: int = 8192,
+    batch_size: int = 4096,
     max_steps: int = 200_000,
     log_every: int = 500,
     device_str: str = "auto",
@@ -74,6 +75,7 @@ def train(
     lambda_entropy: float = 0.0,   # channel entropy reg (disabled: fights true decomposition)
     input_noise_std: float = 0.0,   # input noise (disabled: conflicts with constant-output goal)
     checkpoint_dir: str = "checkpoints",  # directory for checkpoint files
+    no_restarts: bool = False,  # single cosine decay instead of warm restarts
 ) -> dict:
     if device_str == "auto":
         device_str = _default_device()
@@ -85,7 +87,7 @@ def train(
 
     model = KethVaraiMachine(
         N=N, latent_dim=d, encoder_depth=encoder_depth, encoder_width=encoder_width,
-        n_heads=n_heads, attn_every=attn_every,
+        n_heads=n_heads, attn_every=attn_every, expanded_products=expanded_products,
     ).to(device)
 
     total_params = sum(p.numel() for p in model.parameters())
@@ -131,22 +133,27 @@ def train(
     def lr_lambda(step: int) -> float:
         if step < warmup_steps:
             return step / max(1, warmup_steps)
-        # Cosine annealing with warm restarts (T_mult=1)
         t = step - warmup_steps
-        cycle_pos = t % restart_period
-        progress = cycle_pos / restart_period
+        if no_restarts:
+            # Single cosine decay over entire remaining budget
+            total_decay = max_steps - warmup_steps
+            progress = min(t / total_decay, 1.0)
+        else:
+            # Cosine annealing with warm restarts (T_mult=1)
+            cycle_pos = t % restart_period
+            progress = cycle_pos / restart_period
         return max(eta_min_ratio, 0.5 * (1.0 + math.cos(math.pi * progress)))
 
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
 
     # AMP scaler — only active on CUDA
     use_amp = device.type == "cuda"
-    scaler = torch.amp.GradScaler(enabled=use_amp)
+    scaler = torch.cuda.amp.GradScaler(enabled=use_amp)
 
     best_rel_err = math.inf
     log: list[dict] = []
     t0 = time.time()
-    plateau_patience = 20_000   # steps without improvement before we give up
+    plateau_patience = 100_000   # steps without improvement before we give up
     last_improvement = 0
     start_step = 1
 
@@ -227,10 +234,24 @@ def train(
             log.append(entry)
 
             bits = -math.log2(rel_err) if rel_err > 0 else float('inf')
+
+            # Collapse diagnostic (always computed, not just wandb)
+            with torch.no_grad():
+                with torch.amp.autocast(device_type=device.type, enabled=use_amp):
+                    latent_diag = model._encode(torch.cat([Av, Bv], dim=1))
+                latent_diag = latent_diag.float()
+                U_batch = model.head_U(latent_diag).view(-1, model.N, 9)
+                V_batch = model.head_V(latent_diag).view(-1, model.N, 9)
+                W_batch = model.head_W(latent_diag).view(-1, 9, model.N)
+                u_collapse = (U_batch.std(dim=0).mean() / U_batch.abs().mean().clamp(min=1e-12)).item()
+                v_collapse = (V_batch.std(dim=0).mean() / V_batch.abs().mean().clamp(min=1e-12)).item()
+                w_collapse = (W_batch.std(dim=0).mean() / W_batch.abs().mean().clamp(min=1e-12)).item()
+
             print(
                 f"  {tag}  step {step:7d}/{max_steps}"
                 f"  rel={rel_err:.3e}  bits={bits:.1f}  best={best_rel_err:.3e}"
                 f"  lr={current_lr:.1e}  t={elapsed:.0f}s"
+                f"  U={u_collapse:.3f} V={v_collapse:.3f} W={w_collapse:.3f}"
             )
 
             if wb_run is not None:
@@ -333,20 +354,24 @@ def main():
     parser = argparse.ArgumentParser(description="Train Keth-Varai Machine")
     parser.add_argument("--N", type=int, default=19)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--d", type=int, default=1024)
-    parser.add_argument("--encoder_depth", type=int, default=64)
-    parser.add_argument("--encoder_width", type=int, default=1152)
-    parser.add_argument("--n_heads", type=int, default=8,
+    parser.add_argument("--d", type=int, default=256)
+    parser.add_argument("--encoder_depth", type=int, default=8)
+    parser.add_argument("--encoder_width", type=int, default=972,
+                        help="Must be divisible by 81 (expanded) or 9 (legacy)")
+    parser.add_argument("--n_heads", type=int, default=4,
                         help="Attention heads per transformer block")
     parser.add_argument("--attn_every", type=int, default=4,
                         help="Insert 1 AttnBlock every N ResBlocks (0 = no attention)")
+    parser.add_argument("--no_expanded", action="store_true",
+                        help="Disable 81-product expanded input (use legacy 18-float input)")
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--batch_size", type=int, default=4096)
-    parser.add_argument("--steps", type=int, default=1_000_000)
+    parser.add_argument("--steps", type=int, default=200_000)
     parser.add_argument("--log_every", type=int, default=100)
     parser.add_argument("--device", type=str, default="auto")
     parser.add_argument("--out_dir", type=str, default="results")
     parser.add_argument("--checkpoint_dir", type=str, default="checkpoints")
+    parser.add_argument("--no_restarts", action="store_true", help="Single cosine decay instead of warm restarts")
     parser.add_argument("--wandb", action="store_true", help="Log to Weights & Biases")
     parser.add_argument("--wandb_project", type=str, default="keth-varai")
     args = parser.parse_args()
@@ -357,6 +382,9 @@ def main():
     print(f"  Keth-Varai Machine  |  N={args.N}  seed={args.seed}")
     print(f"{'='*60}")
 
+    expanded = not args.no_expanded
+    print(f"  products={'81 expanded' if expanded else '18 legacy'}")
+
     result = train(
         N=args.N,
         seed=args.seed,
@@ -365,6 +393,7 @@ def main():
         encoder_width=args.encoder_width,
         n_heads=args.n_heads,
         attn_every=args.attn_every,
+        expanded_products=expanded,
         lr=args.lr,
         batch_size=args.batch_size,
         max_steps=args.steps,
@@ -373,6 +402,7 @@ def main():
         use_wandb=args.wandb,
         wandb_project=args.wandb_project,
         checkpoint_dir=args.checkpoint_dir,
+        no_restarts=args.no_restarts,
     )
 
     out_path = os.path.join(args.out_dir, f"run_N{args.N}_s{args.seed}.json")

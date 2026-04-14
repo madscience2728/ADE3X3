@@ -49,13 +49,14 @@ class ResBlock(nn.Module):
 
 
 class AttnBlock(nn.Module):
-    """Pre-norm self-attention residual block over 9 matrix-position tokens."""
+    """Pre-norm self-attention residual block over n_tokens tokens."""
 
-    def __init__(self, d_model: int, n_heads: int = 4, dropout: float = 0.1):  # n_heads exposed via KethVaraiMachine
+    def __init__(self, d_model: int, n_heads: int = 4, dropout: float = 0.1,
+                 n_tokens: int = 9):
         super().__init__()
-        self.n_tokens = 9
+        self.n_tokens = n_tokens
         self.d_token = d_model // self.n_tokens
-        assert d_model % self.n_tokens == 0, f"encoder_width must be divisible by 9, got {d_model}"
+        assert d_model % self.n_tokens == 0, f"encoder_width must be divisible by {n_tokens}, got {d_model}"
         self.norm = nn.LayerNorm(self.d_token)
         self.attn = nn.MultiheadAttention(
             self.d_token, n_heads, dropout=dropout, batch_first=True
@@ -91,14 +92,25 @@ class KethVaraiMachine(nn.Module):
         dropout: float = 0.1,
         n_heads: int = 4,
         attn_every: int = 4,
+        expanded_products: bool = True,
     ):
         super().__init__()
         self.N = N
         self.latent_dim = latent_dim
+        self.expanded_products = expanded_products
+
+        # Input dimension: 81 bilinear products (expanded) or 18 raw entries
+        if expanded_products:
+            input_dim = 81  # A[i,s] * B[t,j] for all i,s,t,j ∈ {0,1,2}
+            n_tokens = 81
+        else:
+            input_dim = 18
+            n_tokens = 9
+        self.n_tokens = n_tokens
 
         # Joint encoder: input projection + residual blocks + output projection
         self.encoder = nn.Sequential(
-            nn.Linear(18, encoder_width),
+            nn.Linear(input_dim, encoder_width),
             nn.GELU(),
         )
 
@@ -107,7 +119,8 @@ class KethVaraiMachine(nn.Module):
         for i in range(encoder_depth):
             blocks.append(ResBlock(encoder_width, dropout))
             if attn_every > 0 and (i + 1) % attn_every == 0:
-                blocks.append(AttnBlock(encoder_width, n_heads=n_heads, dropout=dropout))
+                blocks.append(AttnBlock(encoder_width, n_heads=n_heads, dropout=dropout,
+                                        n_tokens=n_tokens))
 
         self.encoder_blocks = nn.Sequential(*blocks)
 
@@ -139,8 +152,27 @@ class KethVaraiMachine(nn.Module):
 
         self._init_weights()
 
+    def _compute_products(self, A: torch.Tensor, B: torch.Tensor) -> torch.Tensor:
+        """
+        Compute all 81 bilinear products A[i,s] * B[t,j].
+        A, B: (batch, 9) — flattened 3×3 matrices.
+        Returns: (batch, 81) — products ordered as (i,s,t,j) in row-major.
+
+        The 27 products where s==t are the Sigma (live) coordinates.
+        The 54 products where s!=t are the Delta (dead-X) coordinates.
+        The attention learns which products to combine and cancel.
+        """
+        # A[i,s] = A_flat[3*i + s], B[t,j] = B_flat[3*t + j]
+        # Product[i,s,t,j] = A[3*i+s] * B[3*t+j]
+        # Reshape: A → (batch, 9, 1), B → (batch, 1, 9) → outer product (batch, 9, 9) → flatten to 81
+        return (A.unsqueeze(2) * B.unsqueeze(1)).view(-1, 81)
+
     def _encode(self, x: torch.Tensor) -> torch.Tensor:
         """Input projection → residual blocks → output projection."""
+        if self.expanded_products:
+            # x is cat(A, B) with shape (batch, 18); compute 81 products
+            A, B = x[:, :9], x[:, 9:]
+            x = self._compute_products(A, B)
         h = self.encoder(x)
         h = self.encoder_blocks(h)
         return self.encoder_head(h)
