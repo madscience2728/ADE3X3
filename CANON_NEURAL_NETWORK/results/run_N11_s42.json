@@ -1,0 +1,46 @@
+{
+  "N": 11,
+  "seed": 42,
+  "d": 128,
+  "encoder_depth": 2,
+  "encoder_width": 192,
+  "n_heads": 4,
+  "attn_every": 0,
+  "device": "cuda",
+  "best_rel_err": 0.9999957084655762,
+  "success": false,
+  "steps_run": 5,
+  "total_params": 365225,
+  "log": [
+    {
+      "step": 1,
+      "rel_err": 0.9999957084655762,
+      "best_rel_err": 0.9999957084655762,
+      "elapsed_s": 0.5
+    },
+    {
+      "step": 2,
+      "rel_err": 0.9999958872795105,
+      "best_rel_err": 0.9999957084655762,
+      "elapsed_s": 0.5
+    },
+    {
+      "step": 3,
+      "rel_err": 0.9999964833259583,
+      "best_rel_err": 0.9999957084655762,
+      "elapsed_s": 0.6
+    },
+    {
+      "step": 4,
+      "rel_err": 0.9999963045120239,
+      "best_rel_err": 0.9999957084655762,
+      "elapsed_s": 0.7
+    },
+    {
+      "step": 5,
+      "rel_err": 0.9999969601631165,
+      "best_rel_err": 0.9999957084655762,
+      "elapsed_s": 0.7
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+﻿
+======================================================================
+  EXPERIMENT 1: N sweep on 2├ù2 with MLP-w12-d2
+  Looking for cliff in bits/step at N=6ΓåÆ7 (Strassen's theorem)
+======================================================================
+
+  N=5  params= 1140  bits=2.11  bits/step=0.0106  best_err=2.042e-01
+  N=6  params= 1296  bits=2.55  bits/step=0.0128  best_err=1.033e-01
+  N=7  params= 1452  bits=3.78  bits/step=0.0189  best_err=2.562e-02
+  N=8  params= 1608  bits=6.52  bits/step=0.0326  best_err=9.098e-03
+
+  CLIFF ANALYSIS (bits/step ratio between consecutive N):
+    N=5ΓåÆ6:  0.0106 ΓåÆ 0.0128  ratio=1.21├ù
+    N=6ΓåÆ7:  0.0128 ΓåÆ 0.0189  ratio=1.48├ù
+    N=7ΓåÆ8:  0.0189 ΓåÆ 0.0326  ratio=1.73├ù
+
+  CONTROL (direct decomposition, same steps):
+    N=5  bits=0.82  bits/step=0.0041
+    N=6  bits=1.21  bits/step=0.0061
+    N=7  bits=1.81  bits/step=0.0090
+    N=8  bits=6.65  bits/step=0.0332
+
+======================================================================
+  EXPERIMENT 2: Budget sweep at N=7 on 2├ù2
+  Bilinear cost = 84. Sweeping selector overhead multiplier k.
+======================================================================
+
+  k= 1  budget=  168  actual=   84  direct_N7                  bits=1.81  bits/step=0.0090
+  k= 2  budget=  252  actual=   84  direct_N7                  bits=1.81  bits/step=0.0090
+  k= 3  budget=  336  actual=   84  direct_N7                  bits=1.81  bits/step=0.0090
+  k= 5  budget=  504  actual=   84  direct_N7                  bits=1.81  bits/step=0.0090
+  k= 8  budget=  756  actual=  732  mlp_w6_d2_N7               bits=2.89  bits/step=0.0145
+  k=12  budget= 1092  actual=  964  mlp_w8_d2_N7               bits=3.21  bits/step=0.0161
+  k=18  budget= 1596  actual= 1452  mlp_w12_d2_N7              bits=3.78  bits/step=0.0189
+
+  OPTIMAL: k=18  budget=1596  bits/step=0.0189
+  For 3├ù3 at N=23: bilinear=345, budget=6555
+
+======================================================================
+  EXPERIMENT 3: Weight extraction from MLP-w12-d2 at N=7
+  Looking for near-integer structure in U, V, W after 200 steps
+======================================================================
+
+  Best seed=0  error=2.562e-02  bits=5.29
+
+  Input-dependence (std across 100 inputs):
+    U: 0.0009
+    V: 0.0009
+    W: 0.0010
+  ΓåÆ COLLAPSED: U, V, W are approximately constant (input-independent)
+  ΓåÆ The hypernetwork found a fixed decomposition
+
+  Near-integer analysis (mean U, V, W):
+    U: shape=[7, 4]  mean_residual=0.1794  max_residual=0.3636  frac<0.1: 25.0%  frac<0.3: 78.6%
+    V: shape=[7, 4]  mean_residual=0.2278  max_residual=0.4915  frac<0.1: 21.4%  frac<0.3: 71.4%
+    W: shape=[4, 7]  mean_residual=0.1609  max_residual=0.4150  frac<0.1: 35.7%  frac<0.3: 92.9%
+
+  Mean U (7├ù4):
+    ch0: [1.136, -0.038, -0.312, 0.01]  Γëê [1, 0, 0, 0]
+    ch1: [-0.145, 0.003, -1.364, 0.036]  Γëê [0, 0, -1, 0]
+    ch2: [-0.685, 0.8, -0.158, 0.185]  Γëê [-1, 1, 0, 0]
+    ch3: [0.695, 1.061, -0.187, -0.298]  Γëê [1, 1, 0, 0]
+    ch4: [0.1, -0.111, 0.919, -1.08]  Γëê [0, 0, 1, -1]
+    ch5: [-0.723, -1.104, -0.172, -0.255]  Γëê [-1, -1, 0, 0]
+    ch6: [-0.755, -1.32, 0.81, -0.335]  Γëê [-1, -1, 1, 0]
+
+  Mean V (7├ù4):
+    ch0: [-0.899, 0.157, 0.585, -0.107]  Γëê [-1, 0, 1, 0]
+    ch1: [-0.595, -0.522, -0.508, -0.449]  Γëê [-1, -1, -1, 0]
+    ch2: [-0.252, 0.918, 0.162, -0.607]  Γëê [0, 1, 0, -1]
+    ch3: [0.046, -0.018, 1.407, -0.259]  Γëê [0, 0, 1, 0]
+    ch4: [0.024, 0.018, 0.822, 0.732]  Γëê [0, 0, 1, 1]
+    ch5: [-0.28, 1.021, -0.244, 0.875]  Γëê [0, 1, 0, 1]
+    ch6: [-0.174, 0.769, 1.168, 0.426]  Γëê [0, 1, 1, 0]
+
+  Mean W (4├ù7):
+    ch0: [-0.99, 0.27, -0.177, 0.248, 0.046, 0.227, -0.379]  Γëê [-1, 0, 0, 0, 0, 0, 0]
+    ch1: [-0.273, 0.071, -0.979, -0.274, 0.253, -0.263, -0.415]  Γëê [0, 0, -1, 0, 0, 0, 0]
+    ch2: [0.106, 0.98, 0.023, -1.065, -0.205, 0.827, -0.888]  Γëê [0, 1, 0, -1, 0, 1, -1]
+    ch3: [0.029, 0.276, 0.103, 1.206, -1.102, -0.937, 1.096]  Γëê [0, 0, 0, 1, -1, -1, 1]
+
+  Verification: rounded-to-integer decomposition
+    Integer U,V,W error: 1.222e+00  bits: -0.3
+    Γ£ù Integer rounding destroys the decomposition. Weights are not near-integer.

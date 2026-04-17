@@ -34,3 +34,31 @@ def frobenius_relative_error(C_pred: torch.Tensor, C_true: torch.Tensor) -> torc
     diff = (C_pred - C_true).view(-1, 9)
     true_norm = C_true.view(-1, 9).norm(dim=1).clamp(min=1e-12)
     return (diff.norm(dim=1) / true_norm).mean()
+
+
+def elementwise_relative_error(C_pred: torch.Tensor, C_true: torch.Tensor) -> torch.Tensor:
+    """
+    Mean per-element L1 error, scaled by the Frobenius norm of each sample:
+      mean over batch of ( sum_j |pred_ij - true_ij| ) / ||true_i||_F
+    Each element gets independent gradient pressure without blowing up on near-zero entries.
+    """
+    diff = (C_pred - C_true).view(-1, 9).abs()
+    scale = C_true.view(-1, 9).norm(dim=1, keepdim=True).clamp(min=1e-12)  # (batch, 1)
+    return (diff / scale).mean()
+
+
+def worstcase_logsumexp(C_pred: torch.Tensor, C_true: torch.Tensor, temp: float) -> torch.Tensor:
+    """
+    Smooth worst-case approximation via log-sum-exp over per-entry relative errors.
+
+    For each sample i and entry j, compute |pred_ij - true_ij| / ||true_i||_F.
+    Then apply logsumexp across ALL (i,j) entries with temperature `temp`:
+      loss = temp * logsumexp( per_entry_errors / temp )
+
+    As temp → 0 this converges to max(per_entry_errors).
+    Provides gradient pressure on the worst entries/samples in the batch.
+    """
+    diff = (C_pred - C_true).view(-1, 9).abs()
+    scale = C_true.view(-1, 9).norm(dim=1, keepdim=True).clamp(min=1e-12)
+    per_entry = diff / scale  # (batch, 9)
+    return temp * torch.logsumexp(per_entry.reshape(-1) / temp, dim=0)

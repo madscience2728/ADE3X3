@@ -32,9 +32,20 @@ def run(ckpt_path, n_samples=20000, method="both", device_str="cuda"):
     step, best_err = ckpt["step"], ckpt["best_rel_err"]
     state = ckpt["model"]
 
-    head_U_w = state["head_U.2.weight"]
+    # Detect head type and infer N
+    if "head_U.4.weight" in state:
+        # 3-layer GELU head: layers 0, 2, 4 — output is layer 4
+        head_U_w = state["head_U.4.weight"]
+        latent_dim = state["head_U.0.weight"].shape[1]
+    elif "head_U.2.weight" in state:
+        # 2-layer head: layers 0, 2 — output is layer 2
+        head_U_w = state["head_U.2.weight"]
+        latent_dim = state["head_U.0.weight"].shape[1]
+    else:
+        # Linear head
+        head_U_w = state["head_U.weight"]
+        latent_dim = state["head_U.weight"].shape[1]
     N = head_U_w.shape[0] // 9
-    latent_dim = state["head_U.0.weight"].shape[1]
     encoder_width = state["encoder.0.weight"].shape[0]
     block_keys = [k for k in state if k.startswith("encoder_blocks.") and k.endswith(".net.1.weight")]
     encoder_depth = len(block_keys)
@@ -42,11 +53,21 @@ def run(ckpt_path, n_samples=20000, method="both", device_str="cuda"):
     n_attn = len(attn_keys)
     attn_every = encoder_depth // max(n_attn, 1) if n_attn else 0
 
+    # Infer n_heads: d_token must be divisible by n_heads
+    n_tokens = 81  # expanded products
+    d_token = encoder_width // n_tokens
+    # Try common n_heads values that divide d_token
+    n_heads = 4
+    for candidate in [8, 4, 2, 1]:
+        if d_token % candidate == 0:
+            n_heads = candidate
+            break
+
     print(f"Step={step}, best={best_err:.4e}, N={N}, latent={latent_dim}")
 
     model = KethVaraiMachine(
         N=N, latent_dim=latent_dim, encoder_depth=encoder_depth,
-        encoder_width=encoder_width, n_heads=8, attn_every=attn_every,
+        encoder_width=encoder_width, n_heads=n_heads, attn_every=attn_every,
     ).to(device)
     model.load_state_dict(state)
     model.eval()

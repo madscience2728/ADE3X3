@@ -93,11 +93,15 @@ class KethVaraiMachine(nn.Module):
         n_heads: int = 4,
         attn_every: int = 4,
         expanded_products: bool = True,
+        linear_heads: bool = False,
+        head_depth: int = 1,
+        head_width: int = 256,
     ):
         super().__init__()
         self.N = N
         self.latent_dim = latent_dim
         self.expanded_products = expanded_products
+        self.linear_heads = linear_heads
 
         # Input dimension: 81 bilinear products (expanded) or 18 raw entries
         if expanded_products:
@@ -133,24 +137,27 @@ class KethVaraiMachine(nn.Module):
         # U ∈ R^{N×9}: projects A into N channels
         # V ∈ R^{N×9}: projects B into N channels
         # W ∈ R^{9×N}: decodes N channel outputs to 9 output entries
-        head_hidden = latent_dim * 2
-        self.head_U = nn.Sequential(
-            nn.Linear(latent_dim, head_hidden),
-            nn.GELU(),
-            nn.Linear(head_hidden, N * 9),
-        )
-        self.head_V = nn.Sequential(
-            nn.Linear(latent_dim, head_hidden),
-            nn.GELU(),
-            nn.Linear(head_hidden, N * 9),
-        )
-        self.head_W = nn.Sequential(
-            nn.Linear(latent_dim, head_hidden),
-            nn.GELU(),
-            nn.Linear(head_hidden, 9 * N),
-        )
+        self.head_U = self._build_head(latent_dim, N * 9, head_depth, head_width, linear_heads)
+        self.head_V = self._build_head(latent_dim, N * 9, head_depth, head_width, linear_heads)
+        self.head_W = self._build_head(latent_dim, 9 * N, head_depth, head_width, linear_heads)
 
         self._init_weights()
+
+    @staticmethod
+    def _build_head(in_dim: int, out_dim: int, depth: int, width: int,
+                    linear: bool) -> nn.Module:
+        """Build a hyper-head with configurable depth.
+        depth=0 or linear=True → single Linear (no nonlinearity).
+        depth=1 → Linear→GELU→Linear (shallow nonlinear, default nano).
+        depth=2+ → deep MLP.
+        """
+        if linear or depth == 0:
+            return nn.Linear(in_dim, out_dim)
+        layers: list[nn.Module] = [nn.Linear(in_dim, width), nn.GELU()]
+        for _ in range(depth - 1):
+            layers += [nn.Linear(width, width), nn.GELU()]
+        layers.append(nn.Linear(width, out_dim))
+        return nn.Sequential(*layers)
 
     def _compute_products(self, A: torch.Tensor, B: torch.Tensor) -> torch.Tensor:
         """
@@ -178,12 +185,16 @@ class KethVaraiMachine(nn.Module):
         return self.encoder_head(h)
 
     def _init_weights(self):
-        # Small init on hyper-head output layers so initial U, V, W are small
         for head in [self.head_U, self.head_V, self.head_W]:
-            # Last layer in each Sequential gets small init
-            last = head[-1]
-            nn.init.normal_(last.weight, std=0.01)
-            nn.init.zeros_(last.bias)
+            if isinstance(head, nn.Linear):
+                # Pure linear head — small init
+                nn.init.normal_(head.weight, std=0.01)
+                nn.init.zeros_(head.bias)
+            else:
+                # Sequential — small init on last layer
+                last = head[-1]
+                nn.init.normal_(last.weight, std=0.01)
+                nn.init.zeros_(last.bias)
 
     def forward(self, A: torch.Tensor, B: torch.Tensor) -> torch.Tensor:
         """

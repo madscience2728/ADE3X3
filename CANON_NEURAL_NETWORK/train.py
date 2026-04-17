@@ -29,7 +29,7 @@ try:
 except ImportError:
     _WANDB_AVAILABLE = False
 
-from data import sample_batch, frobenius_relative_error
+from data import sample_batch, frobenius_relative_error, elementwise_relative_error, worstcase_logsumexp
 from model import KethVaraiMachine
 
 SUCCESS_THRESHOLD = 1e-8  # relative Frobenius error target
@@ -41,8 +41,9 @@ def _default_device() -> str:
 
 
 def _save_checkpoint(path, model, optimizer, scheduler, scaler,
-                     step, best_rel_err, last_improvement, log, elapsed_s):
-    torch.save({
+                     step, best_rel_err, last_improvement, log, elapsed_s,
+                     plateau_scheduler=None):
+    data = {
         "model": model.state_dict(),
         "optimizer": optimizer.state_dict(),
         "scheduler": scheduler.state_dict(),
@@ -52,7 +53,10 @@ def _save_checkpoint(path, model, optimizer, scheduler, scaler,
         "last_improvement": last_improvement,
         "log": log,
         "elapsed_s": elapsed_s,
-    }, path)
+    }
+    if plateau_scheduler is not None:
+        data["plateau_scheduler"] = plateau_scheduler.state_dict()
+    torch.save(data, path)
 
 
 def train(
@@ -74,8 +78,17 @@ def train(
     wandb_project: str = "keth-varai",
     lambda_entropy: float = 0.0,   # channel entropy reg (disabled: fights true decomposition)
     input_noise_std: float = 0.0,   # input noise (disabled: conflicts with constant-output goal)
+    l1_weight: float = 0.0,    # weight for per-element relative L1 loss (0 = Frobenius only)
     checkpoint_dir: str = "checkpoints",  # directory for checkpoint files
-    no_restarts: bool = False,  # single cosine decay instead of warm restarts
+    no_restarts: bool = True,   # single decay (default); False = warm restarts
+    use_plateau: bool = True,   # ReduceLROnPlateau (adaptive); False = cosine schedule
+    no_amp: bool = False,       # disable AMP, force fp32
+    linear_heads: bool = False,  # pure linear heads (depth=0)
+    head_depth: int = 1,         # hyper-head hidden layers
+    head_width: int = 256,       # hyper-head hidden width
+    worst_case: bool = False,    # use logsumexp worst-case loss instead of Frobenius mean
+    worst_temp_start: float = 1.0,  # logsumexp temperature at step 0
+    worst_temp_end: float = 0.01,   # logsumexp temperature at final step
 ) -> dict:
     if device_str == "auto":
         device_str = _default_device()
@@ -88,6 +101,7 @@ def train(
     model = KethVaraiMachine(
         N=N, latent_dim=d, encoder_depth=encoder_depth, encoder_width=encoder_width,
         n_heads=n_heads, attn_every=attn_every, expanded_products=expanded_products,
+        linear_heads=linear_heads, head_depth=head_depth, head_width=head_width,
     ).to(device)
 
     total_params = sum(p.numel() for p in model.parameters())
@@ -123,32 +137,43 @@ def train(
         {"params": head_params, "lr": lr * 0.5, "weight_decay": 0.0},
     ])
 
-    # Schedule: linear warmup (5k steps) → cosine annealing with warm restarts.
-    # Restarts let the optimizer escape saddle points and local minima that cause
-    # the oscillation/plateau pattern seen around 8-9 bits.
+    # Schedule
     warmup_steps = 5_000
-    restart_period = 50_000  # T_0 for CosineAnnealingWarmRestarts
-    eta_min_ratio = 1e-3     # min LR as fraction of peak
+    eta_min_ratio = 1e-3
 
-    def lr_lambda(step: int) -> float:
-        if step < warmup_steps:
-            return step / max(1, warmup_steps)
-        t = step - warmup_steps
-        if no_restarts:
-            # Single cosine decay over entire remaining budget
-            total_decay = max_steps - warmup_steps
-            progress = min(t / total_decay, 1.0)
-        else:
-            # Cosine annealing with warm restarts (T_mult=1)
-            cycle_pos = t % restart_period
-            progress = cycle_pos / restart_period
-        return max(eta_min_ratio, 0.5 * (1.0 + math.cos(math.pi * progress)))
-
-    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
+    if use_plateau:
+        # Warmup via LambdaLR, then ReduceLROnPlateau takes over
+        def warmup_lambda(step: int) -> float:
+            if step < warmup_steps:
+                return step / max(1, warmup_steps)
+            return 1.0
+        warmup_scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, warmup_lambda)
+        plateau_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, mode='min', factor=0.5, patience=10_000,
+            min_lr=lr * eta_min_ratio, threshold=1e-3, threshold_mode='rel',
+        )
+        scheduler = warmup_scheduler  # start with warmup
+    else:
+        restart_period = 50_000
+        def lr_lambda(step: int) -> float:
+            if step < warmup_steps:
+                return step / max(1, warmup_steps)
+            t = step - warmup_steps
+            if no_restarts:
+                total_decay = max_steps - warmup_steps
+                progress = min(t / total_decay, 1.0)
+            else:
+                cycle_pos = t % restart_period
+                progress = cycle_pos / restart_period
+            return max(eta_min_ratio, 0.5 * (1.0 + math.cos(math.pi * progress)))
+        scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
+        plateau_scheduler = None
 
     # AMP scaler — only active on CUDA
-    use_amp = device.type == "cuda"
+    use_amp = device.type == "cuda" and not no_amp
     scaler = torch.cuda.amp.GradScaler(enabled=use_amp)
+    if no_amp:
+        print(f"  {tag}  AMP DISABLED — pure fp32")
 
     best_rel_err = math.inf
     log: list[dict] = []
@@ -167,6 +192,8 @@ def train(
         model.load_state_dict(ckpt["model"])
         optimizer.load_state_dict(ckpt["optimizer"])
         scheduler.load_state_dict(ckpt["scheduler"])
+        if use_plateau and "plateau_scheduler" in ckpt:
+            plateau_scheduler.load_state_dict(ckpt["plateau_scheduler"])
         scaler.load_state_dict(ckpt["scaler"])
         start_step = ckpt["step"] + 1
         best_rel_err = ckpt["best_rel_err"]
@@ -190,7 +217,19 @@ def train(
                 A_in, B_in = A, B
 
             C_hat = model(A_in, B_in)
-            rec_loss = frobenius_relative_error(C_hat.float(), C.float())
+            frob_loss = frobenius_relative_error(C_hat.float(), C.float())
+            if worst_case:
+                # Log-linear temperature anneal
+                progress = min(step / max_steps, 1.0)
+                wc_temp = worst_temp_start * (worst_temp_end / worst_temp_start) ** progress
+                l1_loss = elementwise_relative_error(C_hat.float(), C.float())
+                wc_loss = worstcase_logsumexp(C_hat.float(), C.float(), wc_temp)
+                rec_loss = 0.5 * l1_loss + 0.5 * wc_loss
+            elif l1_weight > 0:
+                l1_loss = elementwise_relative_error(C_hat.float(), C.float())
+                rec_loss = (1.0 - l1_weight) * frob_loss + l1_weight * l1_loss
+            else:
+                rec_loss = frob_loss
 
             # Optional entropy reg. Off by default — penalizes non-uniform
             # channel norms, which fights the true decomposition.
@@ -210,7 +249,12 @@ def train(
         torch.nn.utils.clip_grad_norm_(head_params, 1.0)
         scaler.step(optimizer)
         scaler.update()
-        scheduler.step()
+        if use_plateau:
+            warmup_scheduler.step()
+            if step >= warmup_steps:
+                plateau_scheduler.step(rec_loss.item())
+        else:
+            scheduler.step()
 
         if step % log_every == 0 or step == 1:
             model.eval()
@@ -218,6 +262,18 @@ def train(
                 Av, Bv, Cv = sample_batch(16_384, device)
                 C_hat_v = model(Av, Bv)
                 rel_err = frobenius_relative_error(C_hat_v.float(), Cv.float()).item()
+                # Per-element diagnostics: which output element has worst error?
+                elem_err = (C_hat_v.float() - Cv.float()).abs().view(-1, 9)
+                elem_scale = Cv.float().abs().view(-1, 9).clamp(min=1e-12)
+                per_elem = (elem_err / elem_scale).mean(dim=0)  # (9,)
+                worst_elem = per_elem.argmax().item()
+                worst_val = per_elem[worst_elem].item()
+
+            # Worst-case diagnostic: max relative error across all entries in val batch
+            with torch.no_grad():
+                wc_diff = (C_hat_v.float() - Cv.float()).abs().view(-1, 9)
+                wc_scale = Cv.float().view(-1, 9).norm(dim=1, keepdim=True).clamp(min=1e-12)
+                max_rel = (wc_diff / wc_scale).max().item()
 
             if rel_err < best_rel_err:
                 best_rel_err = rel_err
@@ -247,11 +303,20 @@ def train(
                 v_collapse = (V_batch.std(dim=0).mean() / V_batch.abs().mean().clamp(min=1e-12)).item()
                 w_collapse = (W_batch.std(dim=0).mean() / W_batch.abs().mean().clamp(min=1e-12)).item()
 
+            wc_info = ""
+            if worst_case:
+                wc_temp_now = worst_temp_start * (worst_temp_end / worst_temp_start) ** min(step / max_steps, 1.0)
+                wc_info = f"  maxrel={max_rel:.3e} T={wc_temp_now:.3f}"
+            else:
+                wc_info = f"  maxrel={max_rel:.3e}"
+
             print(
                 f"  {tag}  step {step:7d}/{max_steps}"
                 f"  rel={rel_err:.3e}  bits={bits:.1f}  best={best_rel_err:.3e}"
                 f"  lr={current_lr:.1e}  t={elapsed:.0f}s"
                 f"  U={u_collapse:.3f} V={v_collapse:.3f} W={w_collapse:.3f}"
+                f"  worst=C[{worst_elem}]:{worst_val:.3f}"
+                f"{wc_info}"
             )
 
             if wb_run is not None:
@@ -314,7 +379,8 @@ def train(
                 print(f"  {tag}  ✓ SUCCESS at step {step}: best={best_rel_err:.3e}")
                 # Save final checkpoint
                 _save_checkpoint(ckpt_path, model, optimizer, scheduler, scaler,
-                                 step, best_rel_err, last_improvement, log, time.time() - t0)
+                                 step, best_rel_err, last_improvement, log, time.time() - t0,
+                                 plateau_scheduler=plateau_scheduler if use_plateau else None)
                 break
 
             # Plateau guard: stop wasting time if stuck
@@ -325,7 +391,8 @@ def train(
             # Periodic checkpoint
             if step % CHECKPOINT_EVERY == 0:
                 _save_checkpoint(ckpt_path, model, optimizer, scheduler, scaler,
-                                 step, best_rel_err, last_improvement, log, time.time() - t0)
+                                 step, best_rel_err, last_improvement, log, time.time() - t0,
+                                 plateau_scheduler=plateau_scheduler if use_plateau else None)
 
     if wb_run is not None:
         wb_run.summary["best_rel_err"] = best_rel_err
@@ -352,26 +419,38 @@ def train(
 
 def main():
     parser = argparse.ArgumentParser(description="Train Keth-Varai Machine")
-    parser.add_argument("--N", type=int, default=19)
+    parser.add_argument("--N", type=int, default=11)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--d", type=int, default=256)
-    parser.add_argument("--encoder_depth", type=int, default=8)
-    parser.add_argument("--encoder_width", type=int, default=972,
-                        help="Must be divisible by 81 (expanded) or 9 (legacy)")
+    parser.add_argument("--d", type=int, default=128)
+    parser.add_argument("--encoder_depth", type=int, default=2)
+    parser.add_argument("--encoder_width", type=int, default=192,
+                        help="Must be divisible by 81 (expanded) or 9 (legacy) if using attention")
     parser.add_argument("--n_heads", type=int, default=4,
                         help="Attention heads per transformer block")
-    parser.add_argument("--attn_every", type=int, default=4,
+    parser.add_argument("--attn_every", type=int, default=0,
                         help="Insert 1 AttnBlock every N ResBlocks (0 = no attention)")
+    parser.add_argument("--head_depth", type=int, default=1,
+                        help="Hyper-head hidden layers (0=linear, 1=shallow GELU, 2+=deep)")
+    parser.add_argument("--head_width", type=int, default=256,
+                        help="Hyper-head hidden layer width")
     parser.add_argument("--no_expanded", action="store_true",
                         help="Disable 81-product expanded input (use legacy 18-float input)")
-    parser.add_argument("--lr", type=float, default=3e-4)
-    parser.add_argument("--batch_size", type=int, default=4096)
+    parser.add_argument("--lr", type=float, default=1e-3)
+    parser.add_argument("--batch_size", type=int, default=16384)
     parser.add_argument("--steps", type=int, default=200_000)
-    parser.add_argument("--log_every", type=int, default=100)
+    parser.add_argument("--log_every", type=int, default=200)
     parser.add_argument("--device", type=str, default="auto")
     parser.add_argument("--out_dir", type=str, default="results")
     parser.add_argument("--checkpoint_dir", type=str, default="checkpoints")
-    parser.add_argument("--no_restarts", action="store_true", help="Single cosine decay instead of warm restarts")
+    parser.add_argument("--restarts", action="store_true", help="Use cosine warm restarts instead of plateau")
+    parser.add_argument("--no_plateau", action="store_true", help="Disable ReduceLROnPlateau (use cosine schedule)")
+    parser.add_argument("--l1_weight", type=float, default=0.5,
+                        help="Weight for per-element relative L1 loss (0=Frobenius only, 0.5=equal mix)")
+    parser.add_argument("--no_amp", action="store_true", help="Disable AMP, force fp32 (slower but higher precision)")
+    parser.add_argument("--linear_heads", action="store_true", help="Use pure linear heads (depth=0, ignores head_depth)")
+    parser.add_argument("--no_worst_case", action="store_true", help="Disable logsumexp worst-case loss, use Frobenius mean")
+    parser.add_argument("--worst_temp_start", type=float, default=1.0, help="Initial logsumexp temperature")
+    parser.add_argument("--worst_temp_end", type=float, default=0.01, help="Final logsumexp temperature")
     parser.add_argument("--wandb", action="store_true", help="Log to Weights & Biases")
     parser.add_argument("--wandb_project", type=str, default="keth-varai")
     args = parser.parse_args()
@@ -402,7 +481,16 @@ def main():
         use_wandb=args.wandb,
         wandb_project=args.wandb_project,
         checkpoint_dir=args.checkpoint_dir,
-        no_restarts=args.no_restarts,
+        no_restarts=not args.restarts,
+        use_plateau=not args.no_plateau,
+        l1_weight=args.l1_weight,
+        no_amp=args.no_amp,
+        linear_heads=args.linear_heads,
+        head_depth=args.head_depth,
+        head_width=args.head_width,
+        worst_case=not args.no_worst_case,
+        worst_temp_start=args.worst_temp_start,
+        worst_temp_end=args.worst_temp_end,
     )
 
     out_path = os.path.join(args.out_dir, f"run_N{args.N}_s{args.seed}.json")

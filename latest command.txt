@@ -1,0 +1,1 @@
+python train.py --N 11 --seed 42069 --no_amp --d 1024 --encoder_depth 8 --encoder_width 972 --lr 3e-4 --batch_size 4096 --steps 1000000 --log_every 200 --worst_case
